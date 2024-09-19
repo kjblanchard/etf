@@ -4,22 +4,30 @@
 extern "C" {
 #endif
 typedef SDL_AudioStream SDL_AudioStream;
+typedef struct OggVorbis_File OggVorbis_File;
+typedef struct vorbis_info vorbis_info;
 
 typedef struct {
-	const char* Filename;
+	char* Filename;
+	int Loops;
 	uint64_t LoopStart;
 	uint64_t LoopEnd;
 	uint64_t CurrentLoopBytesRead;
-	int SampleRate;
+	short* Buffer;
+	bool CanPlay;
+	bool IsPlaying;
+	OggVorbis_File* VorbisFile;
+	vorbis_info* VorbisInfo;
 	SDL_AudioStream* Stream;
-	short *Buffer;
-	int Channels;
 
 } sgBgm;
 
-void sgBgmInit(sgBgm* bgm);
+sgBgm* sgBgmNew(void);
+void sgBgmLoad(sgBgm* bgm);
+void sgBgmPlay(sgBgm* bgm);
+void sgBgmStop(sgBgm* bgm);
 void sgBgmUpdate(sgBgm* bgm);
-void sgBgmDestroy(sgBgm* bgm);
+void sgBgmDelete(sgBgm* bgm);
 
 #ifdef __cplusplus
 }
