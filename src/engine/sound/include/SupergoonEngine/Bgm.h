@@ -3,11 +3,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-typedef SDL_AudioStream SDL_AudioStream;
+typedef struct SDL_AudioStream SDL_AudioStream;
 typedef struct OggVorbis_File OggVorbis_File;
 typedef struct vorbis_info vorbis_info;
 
-typedef struct {
+typedef struct sgBgm {
 	char* Filename;
 	int Loops;
 	uint64_t LoopStart;
@@ -19,6 +19,7 @@ typedef struct {
 	OggVorbis_File* VorbisFile;
 	vorbis_info* VorbisInfo;
 	SDL_AudioStream* Stream;
+	float Volume;
 
 } sgBgm;
 
@@ -28,6 +29,7 @@ void sgBgmPlay(sgBgm* bgm);
 void sgBgmStop(sgBgm* bgm);
 void sgBgmUpdate(sgBgm* bgm);
 void sgBgmDelete(sgBgm* bgm);
+void sgBgmUpdateVolume(sgBgm* bgm, float volume);
 
 #ifdef __cplusplus
 }

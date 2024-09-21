@@ -2,6 +2,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SupergoonEngine/Bgm.h>
+#include <SupergoonEngine/Sfx.h>
 
 #include <SupergoonEngine/json.hpp>
 #include <fstream>
@@ -12,6 +13,7 @@ using json = nlohmann::json;
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 sgBgm *_bgm;
+sgSfx *sfx;
 bool bgmLoaded = false;
 
 SDL_AppResult SDL_AppInit(void **, int, char *[]) {
@@ -29,7 +31,10 @@ SDL_AppResult SDL_AppInit(void **, int, char *[]) {
 		return SDL_APP_FAILURE;
 	}
 	_bgm = sgBgmNew();
+	sfx = sgSfxNew();
+	sfx->Volume = 0.25;
 	SDL_asprintf(&_bgm->Filename, "%sassets/town2.ogg", SDL_GetBasePath());
+	SDL_asprintf(&sfx->Filename, "%sassets/transition.ogg", SDL_GetBasePath());
 	return SDL_APP_CONTINUE;
 }
 
@@ -40,15 +45,22 @@ SDL_AppResult SDL_AppEvent(void *, SDL_Event *event) {
 	return SDL_APP_CONTINUE;
 }
 
+static int ticks = 0;
 SDL_AppResult SDL_AppIterate(void *) {
 	if (!bgmLoaded) {
 		sgBgmLoad(_bgm);
-		sgBgmPlay(_bgm);
+		// sgBgmPlay(_bgm);
+		sgSfxLoad(sfx);
 		bgmLoaded = true;
+	}
+	if (ticks % 10 == 0) {
+		puts("Playing");
+		sgSfxPlay(sfx);
 	}
 	sgBgmUpdate(_bgm);
 	SDL_RenderClear(renderer);
 	SDL_RenderPresent(renderer);
+	++ticks;
 	return SDL_APP_CONTINUE;
 }
 

@@ -2,7 +2,10 @@
 set(LIBRARY_TARGET_NAME SupergoonEngineSound)
 cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
-add_library(${LIBRARY_TARGET_NAME} STATIC src/Bgm.c)
+add_library(${LIBRARY_TARGET_NAME} STATIC src/Bgm.c
+    src/Sfx.c
+)
+
 target_compile_options(${LIBRARY_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_libraries(${LIBRARY_TARGET_NAME}
     PRIVATE
