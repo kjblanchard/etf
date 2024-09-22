@@ -21,6 +21,10 @@ if(BUILD_ENGINE)
     add_subdirectory(src/engine)
 endif()
 
+if(BUILD_GAME)
+    add_subdirectory(src/game)
+endif()
+
 set(FOLDERS_TO_COPY assets)
 install(DIRECTORY ${FOLDERS_TO_COPY}
     DESTINATION ${INSTALL_DIR}

@@ -1,20 +1,25 @@
+
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SupergoonEngine/Bgm.h>
 #include <SupergoonEngine/Sfx.h>
 
+#include <Supergoon/Game.hpp>
 #include <SupergoonEngine/json.hpp>
 #include <fstream>
 #include <istream>
 #include <string>
 using json = nlohmann::json;
+using namespace Supergoon;
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 sgBgm *_bgm;
 sgSfx *sfx;
 bool bgmLoaded = false;
+Game *game;
+bool _gameInitialized = false;
 
 SDL_AppResult SDL_AppInit(void **, int, char *[]) {
 	char *jsonPath = NULL;
@@ -22,7 +27,7 @@ SDL_AppResult SDL_AppInit(void **, int, char *[]) {
 	std::ifstream fileStream(jsonPath);
 	SDL_free(jsonPath);
 	auto j = json::parse(fileStream);
-	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD)) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't initialize SDL!", SDL_GetError(), NULL);
 		return SDL_APP_FAILURE;
 	}
@@ -30,11 +35,6 @@ SDL_AppResult SDL_AppInit(void **, int, char *[]) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), NULL);
 		return SDL_APP_FAILURE;
 	}
-	_bgm = sgBgmNew();
-	sfx = sgSfxNew();
-	sfx->Volume = 0.25;
-	SDL_asprintf(&_bgm->Filename, "%sassets/town2.ogg", SDL_GetBasePath());
-	SDL_asprintf(&sfx->Filename, "%sassets/transition.ogg", SDL_GetBasePath());
 	return SDL_APP_CONTINUE;
 }
 
@@ -45,25 +45,27 @@ SDL_AppResult SDL_AppEvent(void *, SDL_Event *event) {
 	return SDL_APP_CONTINUE;
 }
 
-static int ticks = 0;
 SDL_AppResult SDL_AppIterate(void *) {
-	if (!bgmLoaded) {
-		sgBgmLoad(_bgm);
-		// sgBgmPlay(_bgm);
-		sgSfxLoad(sfx);
-		bgmLoaded = true;
+	if (!game) {
+		return SDL_APP_CONTINUE;
 	}
-	if (ticks % 10 == 0) {
-		puts("Playing");
-		sgSfxPlay(sfx);
+	if (!_gameInitialized) {
+		game->Initialize();
+		game->Start();
+		_gameInitialized = true;
 	}
-	sgBgmUpdate(_bgm);
+	game->Update(0);
 	SDL_RenderClear(renderer);
+	game->Draw();
 	SDL_RenderPresent(renderer);
-	++ticks;
 	return SDL_APP_CONTINUE;
 }
 
 void SDL_AppQuit(void *) {
-	sgBgmDelete(_bgm);
+}
+Game::Game() {
+	SDL_assert(!game);
+	game = this;
+}
+void Game::Initialize() {
 }
