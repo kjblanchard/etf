@@ -1,20 +1,22 @@
+#include <Supergoon/Bgm.hpp>
 #include <Supergoon/Game.hpp>
 #include <iostream>
 using namespace Supergoon;
 class BlackjackGame : public Game {
    public:
-	void Start();
-	void Update(double deltaTime);
-	void Draw();
+	void Start() override;
+	void Update(double deltaTime) override;
+	void Draw() override;
 };
 
 void BlackjackGame::Start() {
-	puts("Start");
+	Sound().LoadBgm("town2");
+	Sound().PlayBgm();
 }
 void BlackjackGame::Update(double) {
-	puts("Update");
 }
 
 void BlackjackGame::Draw() {
-	puts("Draw");
 }
+
+auto gamer = BlackjackGame();

@@ -5,9 +5,11 @@
 #include <SupergoonEngine/Bgm.h>
 #include <SupergoonEngine/Sfx.h>
 
+#include <Supergoon/Bgm.hpp>
 #include <Supergoon/Game.hpp>
 #include <SupergoonEngine/json.hpp>
 #include <fstream>
+#include <iostream>
 #include <istream>
 #include <string>
 using json = nlohmann::json;
@@ -15,9 +17,9 @@ using namespace Supergoon;
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
-sgBgm *_bgm;
-sgSfx *sfx;
-bool bgmLoaded = false;
+// sgBgm *_bgm;
+// sgSfx *sfx;
+// bool bgmLoaded = false;
 Game *game;
 bool _gameInitialized = false;
 
@@ -54,6 +56,7 @@ SDL_AppResult SDL_AppIterate(void *) {
 		game->Start();
 		_gameInitialized = true;
 	}
+	game->InternalUpdate();
 	game->Update(0);
 	SDL_RenderClear(renderer);
 	game->Draw();
@@ -66,6 +69,10 @@ void SDL_AppQuit(void *) {
 Game::Game() {
 	SDL_assert(!game);
 	game = this;
+	_bgm = new Bgm();
 }
 void Game::Initialize() {
+}
+void Game::InternalUpdate() {
+	_bgm->Update();
 }

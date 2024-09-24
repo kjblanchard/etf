@@ -1,6 +1,7 @@
 #pragma once
 
 namespace Supergoon {
+class Bgm;
 class Game {
    public:
 	Game();
@@ -12,7 +13,11 @@ class Game {
 	virtual void Update(double deltaTime) = 0;
 	//  Happens after update
 	virtual void Draw() = 0;
+	void InternalUpdate();
+
+	inline Bgm& Sound() { return *_bgm; }
 
    private:
+	class Bgm* _bgm = nullptr;
 };
 }  // namespace Supergoon
