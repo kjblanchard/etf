@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
 add_library(${LIBRARY_TARGET_NAME} STATIC src/Bgm.c
     src/Sfx.c
+    src/Stream.c
 )
 
 target_compile_options(${LIBRARY_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})

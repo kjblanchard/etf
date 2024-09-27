@@ -5,8 +5,8 @@
 #include <SupergoonEngine/Bgm.h>
 #include <SupergoonEngine/Sfx.h>
 
-#include <Supergoon/Bgm.hpp>
 #include <Supergoon/Game.hpp>
+#include <Supergoon/Sound.hpp>
 #include <SupergoonEngine/json.hpp>
 #include <fstream>
 #include <iostream>
@@ -52,6 +52,7 @@ SDL_AppResult SDL_AppIterate(void *) {
 		return SDL_APP_CONTINUE;
 	}
 	if (!_gameInitialized) {
+		game->Sound().InitializeSound();
 		game->Initialize();
 		game->Start();
 		_gameInitialized = true;
@@ -69,7 +70,7 @@ void SDL_AppQuit(void *) {
 Game::Game() {
 	SDL_assert(!game);
 	game = this;
-	_bgm = new Bgm();
+	_bgm = new class Sound();
 }
 void Game::Initialize() {
 }

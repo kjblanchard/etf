@@ -1,7 +1,7 @@
 #pragma once
 
 namespace Supergoon {
-class Bgm;
+class Sound;
 class Game {
    public:
 	Game();
@@ -15,9 +15,9 @@ class Game {
 	virtual void Draw() = 0;
 	void InternalUpdate();
 
-	inline Bgm& Sound() { return *_bgm; }
+	inline Sound& Sound() { return *_bgm; }
 
    private:
-	class Bgm* _bgm = nullptr;
+	class Sound* _bgm = nullptr;
 };
 }  // namespace Supergoon

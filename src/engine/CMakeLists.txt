@@ -12,7 +12,7 @@ add_library(${LIBRARY_TARGET_NAME}
     STATIC
     src/Game.cpp
     src/Video.cpp
-    src/Bgm.cpp
+    src/Sound.cpp
 )
 target_compile_options(${LIBRARY_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_directories(${LIBRARY_TARGET_NAME} PUBLIC /usr/local/share/dotnet/shared/Microsoft.NETCore.App/6.0.16/ /usr/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-arm64/6.0.16/runtimes/osx-arm64/native/
@@ -24,7 +24,7 @@ target_link_libraries(${LIBRARY_TARGET_NAME}
     nethost
 )
 target_include_directories(${LIBRARY_TARGET_NAME}
-    PRIVATE
+    PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/external/include
     ${CMAKE_CURRENT_SOURCE_DIR}/sound/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include
