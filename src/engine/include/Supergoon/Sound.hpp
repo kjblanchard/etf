@@ -1,5 +1,6 @@
 #pragma once
 #include <SupergoonEngine/Stream.h>
+#include <Supergoon/Content/Sfx.hpp>
 
 #include <queue>
 #include <string>
@@ -27,8 +28,9 @@ class Sound {
 	void SetGlobalBgmVolume(float volume);
 
 	//  Preloads a sfx, useful if you want to load the sound previously, but not used currently as all sounds are just batched.
-	void LoadSfx(std::string filename, float volume = 1.0);
+	void LoadSfx(std::string& filename, float volume = 1.0);
 	void PlaySfx(std::string filename, float volume = 1.0);
+	void PlaySfx(Sfx* sfx, float volume = 1.0);
 
    private:
 	//  Updates all internal bgms

@@ -27,7 +27,7 @@ bool Sound::LoadBgm(std::string filename, float volume, int loops) {
 		SDL_LogWarn(SG_LOG_LEVEL_sound, "Volume passed in for %s is %f which is below 0 or greater than 1, setting to 1\n", filename.c_str(), volume);
 		volume = 1.0;
 	}
-	char *fullPath = NULL;
+	char* fullPath = NULL;
 	SDL_asprintf(&fullPath, "%sassets/%s%s", SDL_GetBasePath(), filename.c_str(), ".ogg");
 	auto bgm = sgBgmNew();
 	bgm->Filename = fullPath;
@@ -72,7 +72,7 @@ void Sound::SetPlayingBgmVolume(float volume) {
 	UpdatePlayingBgmVolume();
 }
 
-void Sound::LoadSfx(std::string, float) {
+void Sound::LoadSfx(std::string& fileName, float) {
 }
 void Sound::PlaySfx(std::string filename, float) {
 	if (_usableSfxStreams.empty()) {
@@ -91,8 +91,31 @@ void Sound::PlaySfx(std::string filename, float) {
 	}
 	auto stream = _usableSfxStreams.front();
 	auto fullFilename = SDL_GetBasePath() + std::string("assets/") + filename + ".ogg";
+	// auto thing = Content::GetOrCreateContent<Sfx>(fullFilename);
+	auto thing = Content::GetOrCreateContent<Sfx>(filename);
 	// SDL_asprintf(&fullPath, "%sassets/%s%s", SDL_GetBasePath(), filename.c_str(), ".ogg");
-	sgSfxPlayOneShot(fullFilename.c_str(), stream);
+	sgSfxPlay(thing->SgSfx(), stream);
+	// sgSfxPlayOneShot(fullFilename.c_str(), stream);
+	_playingStreams.push_back(stream);
+	_usableSfxStreams.pop();
+}
+void Sound::PlaySfx(Sfx* sfx, float volume) {
+	if (_usableSfxStreams.empty()) {
+		puts("Empty");
+		for (auto it = _playingStreams.begin(); it != _playingStreams.end();) {
+			if (sgStreamIsFinished(*it)) {
+				_usableSfxStreams.push(*it);
+				it = _playingStreams.erase(it);
+			} else {
+				++it;
+			}
+		}
+		if (_usableSfxStreams.empty()) {
+			return;
+		}
+	}
+	auto stream = _usableSfxStreams.front();
+	sgSfxPlay(sfx->SgSfx(), stream);
 	_playingStreams.push_back(stream);
 	_usableSfxStreams.pop();
 }

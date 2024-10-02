@@ -14,9 +14,6 @@ sgSfx* sgSfxNew(void) {
 	sfx->Buffer = NULL;
 	sfx->BufferLength = 0;
 	sfx->Volume = 1.0f;
-	// sfx->VorbisFile = SDL_malloc(sizeof(*sfx->VorbisFile));
-	// sfx->VorbisInfo = NULL;
-	// sfx->Stream = NULL;
 	return sfx;
 }
 
@@ -59,14 +56,16 @@ void sgSfxPlay(sgSfx* sfx, sgStream* stream) {
 }
 void sgSfxPlayOneShot(const char* filename, sgStream* stream) {
 	sgSfx* sfx = sgSfxNew();
-	sfx->Filename =  strdup(filename);
+	sfx->Filename = strdup(filename);
 	sgSfxLoad(sfx);
 	sgSfxPlay(sfx, stream);
 	sgSfxDelete(sfx);
 }
 
 void sgSfxDelete(sgSfx* sfx) {
-	SDL_free(sfx->Filename);
+	if (sfx->Filename) {
+		SDL_free(sfx->Filename);
+	}
 	SDL_free(sfx->Buffer);
 	// ov_clear(sfx->VorbisFile);
 	// SDL_ClearAudioStream(sfx->Stream);

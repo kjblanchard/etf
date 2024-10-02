@@ -4,9 +4,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-typedef struct SDL_AudioStream SDL_AudioStream;
-typedef struct OggVorbis_File OggVorbis_File;
-typedef struct vorbis_info vorbis_info;
 typedef struct sgStream sgStream;
 
 	typedef struct sgSfx {
@@ -16,9 +13,6 @@ typedef struct sgStream sgStream;
 	//  between 0 and 1.0f;
 	float Volume;
 	SDL_AudioSpec spec;
-	// OggVorbis_File* VorbisFile;
-	// vorbis_info* VorbisInfo;
-	// SDL_AudioStream* Stream;
 
 } sgSfx;
 
