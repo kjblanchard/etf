@@ -1,7 +1,7 @@
 #pragma once
 #include <SupergoonEngine/Stream.h>
-#include <Supergoon/Content/Sfx.hpp>
 
+#include <Supergoon/Content/Sfx.hpp>
 #include <queue>
 #include <string>
 typedef struct sgBgm sgBgm;
@@ -9,10 +9,10 @@ typedef struct sgSfx sgSfx;
 namespace Supergoon {
 class Sound {
    public:
-	Sound();
+	//  Initializes the Supergoon Sound
 	void InitializeSound();
 	/**
-	 * @brief
+	 * @brief Loads a bgm into the main BGM slot of sound
 	 * @param filename name of the file to load, assumes .ogg
 	 * @param volume 0 - 1.0
 	 * @param loops -1 is infinite, else number of loops
@@ -26,17 +26,14 @@ class Sound {
 	void SetPlayingBgmVolume(float volume);
 	//  Sets the global volume multiplier for bgm, 0 - 1.0f
 	void SetGlobalBgmVolume(float volume);
-
-	//  Preloads a sfx, useful if you want to load the sound previously, but not used currently as all sounds are just batched.
-	void LoadSfx(std::string& filename, float volume = 1.0);
-	void PlaySfx(std::string filename, float volume = 1.0);
 	void PlaySfx(Sfx* sfx, float volume = 1.0);
 
    private:
 	//  Updates all internal bgms
 	void Update();
+	void CheckForStaleSfxStreams();
 	void UpdatePlayingBgmVolume();
-	const int _totalSfxStreams = 4;
+	const size_t _totalSfxStreams = 4;
 	float _globalBgmVolume = 1.0f;
 	float _playingBgmVolume = 0;
 	std::vector<std::unique_ptr<sgStream>> _sfxStreams;

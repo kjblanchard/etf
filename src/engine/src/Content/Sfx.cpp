@@ -13,8 +13,11 @@ sgSfx* Sfx::SgSfx() {
 }
 
 Sfx::~Sfx() {
-	sgSfxDelete(_sfx);
+	UnloadContent();
 }
 void Sfx::Load() {
 	sgSfxLoad(_sfx);
+}
+void Sfx::Unload() {
+	sgSfxDelete(_sfx);
 }

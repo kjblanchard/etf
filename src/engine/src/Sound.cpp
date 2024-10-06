@@ -4,13 +4,11 @@
 #include <SupergoonEngine/Sfx.h>
 #include <SupergoonEngine/Stream.h>
 
+#include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Sound.hpp>
 #include <SupergoonEngine/Log.hpp>
 
 namespace Supergoon {
-Sound::Sound() {
-	puts("What");
-}
 void Sound::InitializeSound() {
 	for (size_t i = 0; i < _totalSfxStreams; i++) {
 		auto stream = sgStreamNew();
@@ -18,6 +16,7 @@ void Sound::InitializeSound() {
 		_usableSfxStreams.push(stream);
 	}
 }
+
 bool Sound::LoadBgm(std::string filename, float volume, int loops) {
 	if (_bgm) {
 		sgBgmDelete(_bgm);
@@ -38,6 +37,7 @@ bool Sound::LoadBgm(std::string filename, float volume, int loops) {
 	_playingBgmVolume = volume;
 	return true;
 }
+
 void Sound::PlayBgm() {
 	if (!_bgm || !_bgm->CanPlay) {
 		return;
@@ -49,6 +49,9 @@ void Sound::Update() {
 	if (_bgm) {
 		sgBgmUpdate(_bgm);
 	}
+	if (_usableSfxStreams.empty()) {
+		CheckForStaleSfxStreams();
+	}
 }
 void Sound::UpdatePlayingBgmVolume() {
 	if (!_bgm) {
@@ -56,6 +59,7 @@ void Sound::UpdatePlayingBgmVolume() {
 	}
 	sgBgmUpdateVolume(_bgm, _globalBgmVolume * _playingBgmVolume);
 }
+
 void Sound::SetGlobalBgmVolume(float volume) {
 	if (volume < 0 || volume > 1.0) {
 		return;
@@ -72,47 +76,21 @@ void Sound::SetPlayingBgmVolume(float volume) {
 	UpdatePlayingBgmVolume();
 }
 
-void Sound::LoadSfx(std::string& fileName, float) {
-}
-void Sound::PlaySfx(std::string filename, float) {
-	if (_usableSfxStreams.empty()) {
-		puts("Empty");
-		for (auto it = _playingStreams.begin(); it != _playingStreams.end();) {
-			if (sgStreamIsFinished(*it)) {
-				_usableSfxStreams.push(*it);
-				it = _playingStreams.erase(it);
-			} else {
-				++it;
-			}
-		}
-		if (_usableSfxStreams.empty()) {
-			return;
+void Sound::CheckForStaleSfxStreams() {
+	for (auto it = _playingStreams.begin(); it != _playingStreams.end();) {
+		if (sgStreamIsFinished(*it)) {
+			_usableSfxStreams.push(*it);
+			it = _playingStreams.erase(it);
+		} else {
+			++it;
 		}
 	}
-	auto stream = _usableSfxStreams.front();
-	auto fullFilename = SDL_GetBasePath() + std::string("assets/") + filename + ".ogg";
-	// auto thing = Content::GetOrCreateContent<Sfx>(fullFilename);
-	auto thing = Content::GetOrCreateContent<Sfx>(filename);
-	// SDL_asprintf(&fullPath, "%sassets/%s%s", SDL_GetBasePath(), filename.c_str(), ".ogg");
-	sgSfxPlay(thing->SgSfx(), stream);
-	// sgSfxPlayOneShot(fullFilename.c_str(), stream);
-	_playingStreams.push_back(stream);
-	_usableSfxStreams.pop();
 }
-void Sound::PlaySfx(Sfx* sfx, float volume) {
+
+void Sound::PlaySfx(Sfx* sfx, float) {
 	if (_usableSfxStreams.empty()) {
-		puts("Empty");
-		for (auto it = _playingStreams.begin(); it != _playingStreams.end();) {
-			if (sgStreamIsFinished(*it)) {
-				_usableSfxStreams.push(*it);
-				it = _playingStreams.erase(it);
-			} else {
-				++it;
-			}
-		}
-		if (_usableSfxStreams.empty()) {
-			return;
-		}
+		SDL_LogWarn(SG_LOG_LEVEL_sound, "No SFX buffers available to play sound %s\n", sfx->Filepath().c_str());
+		return;
 	}
 	auto stream = _usableSfxStreams.front();
 	sgSfxPlay(sfx->SgSfx(), stream);
