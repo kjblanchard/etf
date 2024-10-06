@@ -3,10 +3,11 @@
 #include <Supergoon/Content/Sfx.hpp>
 #include <Supergoon/Game.hpp>
 #include <Supergoon/Sound.hpp>
+#include <Supergoon/Widgets/Widgets.hpp>
 #include <iostream>
 using namespace Supergoon;
-static int ticks = 0;
-static Sfx* _sfx;
+// static int ticks = 0;
+// static Sfx* _sfx;
 class BlackjackGame : public Game {
    public:
 	void Start() override;
@@ -15,9 +16,9 @@ class BlackjackGame : public Game {
 };
 
 void BlackjackGame::Start() {
-	Sound().LoadBgm("town2");
-	_sfx = ContentRegistry::CreateContent<Sfx>("transition").get();
-	_sfx->Load();
+	// Sound().LoadBgm("town2");
+	// _sfx = ContentRegistry::CreateContent<Sfx>("transition").get();
+	// _sfx->Load();
 }
 void BlackjackGame::Update(double) {
 	// ++ticks;
@@ -27,6 +28,7 @@ void BlackjackGame::Update(double) {
 }
 
 void BlackjackGame::Draw() {
+	Widgets::ShowWidgets();
 }
 
 auto gamer = BlackjackGame();

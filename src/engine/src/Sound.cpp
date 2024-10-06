@@ -27,7 +27,7 @@ bool Sound::LoadBgm(std::string filename, float volume, int loops) {
 		volume = 1.0;
 	}
 	char* fullPath = NULL;
-	SDL_asprintf(&fullPath, "%sassets/%s%s", SDL_GetBasePath(), filename.c_str(), ".ogg");
+	SDL_asprintf(&fullPath, "%sassets/bgm/%s%s", SDL_GetBasePath(), filename.c_str(), ".ogg");
 	auto bgm = sgBgmNew();
 	bgm->Filename = fullPath;
 	bgm->Loops = loops;

@@ -5,7 +5,7 @@
 using namespace Supergoon;
 Sfx::Sfx(std::string filename) : Content(filename) {
 	_sfx = sgSfxNew();
-	auto fullFilename = SDL_GetBasePath() + std::string("assets/") + filename + ".ogg";
+	auto fullFilename = SDL_GetBasePath() + std::string("assets/sfx/") + filename + ".ogg";
 	_sfx->Filename = strdup(fullFilename.c_str());
 }
 sgSfx* Sfx::SgSfx() {

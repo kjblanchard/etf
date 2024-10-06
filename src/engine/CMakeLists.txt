@@ -16,6 +16,10 @@ add_library(${LIBRARY_TARGET_NAME}
     src/Content/Sfx.cpp
     src/Content/Content.cpp
     src/Content/ContentRegistry.cpp
+
+    src/Widgets/Widgets.cpp
+    src/Widgets/Sound.cpp
+    src/Widgets/Content.cpp
 )
 target_compile_options(${LIBRARY_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_libraries(${LIBRARY_TARGET_NAME}

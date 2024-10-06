@@ -21,7 +21,7 @@
 using json = nlohmann::json;
 using namespace Supergoon;
 
-Game *game;
+Game *Game::_game = nullptr;
 bool _gameInitialized = false;
 
 SDL_AppResult SDL_AppInit(void **, int, char *[]) {
@@ -39,7 +39,7 @@ SDL_AppResult SDL_AppInit(void **, int, char *[]) {
 
 SDL_AppResult SDL_AppEvent(void *, SDL_Event *event) {
 #ifdef imgui
-	if (game && _gameInitialized) {
+	if (Game::Instance() && _gameInitialized) {
 		ImGui_ImplSDL3_ProcessEvent(event);
 	}
 #endif
@@ -50,11 +50,11 @@ SDL_AppResult SDL_AppEvent(void *, SDL_Event *event) {
 }
 
 SDL_AppResult SDL_AppIterate(void *) {
-	if (!game) {
+	if (!Game::Instance()) {
 		return SDL_APP_CONTINUE;
 	}
 	if (!_gameInitialized) {
-		if (!SDL_CreateWindowAndRenderer("examples/audio/load-wav", 640, 480, 0, &game->window, &game->renderer)) {
+		if (!SDL_CreateWindowAndRenderer("examples/audio/load-wav", 640, 480, 0, &Game::Instance()->window, &Game::Instance()->renderer)) {
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), NULL);
 			return SDL_APP_FAILURE;
 		}
@@ -65,17 +65,17 @@ SDL_AppResult SDL_AppIterate(void *) {
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;	   // IF using Docking Branch
-		ImGui_ImplSDL3_InitForSDLRenderer(game->window, game->Renderer());
-		ImGui_ImplSDLRenderer3_Init(game->Renderer());
+		ImGui_ImplSDL3_InitForSDLRenderer(Game::Instance()->window, Game::Instance()->Renderer());
+		ImGui_ImplSDLRenderer3_Init(Game::Instance()->Renderer());
 #endif
-		game->Sound().InitializeSound();
-		game->Initialize();
-		game->Start();
+		Game::Instance()->Sound().InitializeSound();
+		Game::Instance()->Initialize();
+		Game::Instance()->Start();
 		_gameInitialized = true;
 	}
-	game->InternalUpdate();
-	game->Update(0);
-	SDL_RenderClear(game->renderer);
+	Game::Instance()->InternalUpdate();
+	Game::Instance()->Update(0);
+	SDL_RenderClear(Game::Instance()->renderer);
 #ifdef imgui
 	ImGui_ImplSDLRenderer3_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
@@ -83,20 +83,20 @@ SDL_AppResult SDL_AppIterate(void *) {
 	ImGui::ShowDemoWindow();
 #endif
 
-	game->Draw();
+	Game::Instance()->Draw();
 	ImGui::Render();
 #ifdef imgui
-	ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), game->Renderer());
+	ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), Game::Instance()->Renderer());
 #endif
-	SDL_RenderPresent(game->renderer);
+	SDL_RenderPresent(Game::Instance()->renderer);
 	return SDL_APP_CONTINUE;
 }
 
 void SDL_AppQuit(void *) {
 }
 Game::Game() {
-	SDL_assert(!game);
-	game = this;
+	SDL_assert(!Game::Instance());
+	_game = this;
 	_bgm = new class Sound();
 }
 void Game::Initialize() {

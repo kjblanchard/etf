@@ -1,7 +1,7 @@
 #pragma once
 
-#include <SDL3/SDL_video.h>
 #include <SDL3/SDL_render.h>
+#include <SDL3/SDL_video.h>
 
 namespace Supergoon {
 class Sound;
@@ -19,6 +19,7 @@ class Game {
 	void InternalUpdate();
 	inline Sound& Sound() { return *_bgm; }
 
+	static inline Game* Instance() { return _game; }
 	inline SDL_Window* Window() { return window; }
 	inline SDL_Renderer* Renderer() { return renderer; }
 	SDL_Window* window;
@@ -26,5 +27,6 @@ class Game {
 
    private:
 	class Sound* _bgm = nullptr;
+	static Game* _game;
 };
 }  // namespace Supergoon

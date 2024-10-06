@@ -40,6 +40,7 @@ class ContentRegistry {
 
    private:
 	static std::unordered_map<std::string, std::shared_ptr<Content>> _loadedContent;
+	friend class ContentWidget;
 };
 
 }  // namespace Supergoon
