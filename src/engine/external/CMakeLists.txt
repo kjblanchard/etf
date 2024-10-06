@@ -11,7 +11,15 @@ set(FULL_COMPILE_OPTIONS
 )
 cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
-add_library(${LIBRARY_TARGET_NAME} STATIC src/main.cpp)
+add_library(${LIBRARY_TARGET_NAME} STATIC
+src/imgui_impl_sdl3.cpp
+src/imgui_impl_sdlrenderer3.cpp
+src/imgui_demo.cpp
+src/imgui_tables.cpp
+src/imgui_widgets.cpp
+src/imgui_draw.cpp
+src/imgui.cpp
+)
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
 find_library(LIB_VORBIS
     REQUIRED

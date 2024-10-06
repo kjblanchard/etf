@@ -1,3 +1,4 @@
+
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Sfx.hpp>
 #include <Supergoon/Game.hpp>
@@ -19,10 +20,10 @@ void BlackjackGame::Start() {
 	_sfx->Load();
 }
 void BlackjackGame::Update(double) {
-	++ticks;
-	if (ticks % 60 == 0) {
-		Sound().PlaySfx(_sfx, 1.0f);
-	}
+	// ++ticks;
+	// if (ticks % 60 == 0) {
+	// 	Sound().PlaySfx(_sfx, 1.0f);
+	// }
 }
 
 void BlackjackGame::Draw() {
