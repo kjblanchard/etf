@@ -53,6 +53,13 @@ void Sound::PauseBgm() {
 	if (!_bgm || !_bgm->IsPlaying) {
 		return;
 	}
+	sgBgmPause(_bgm);
+}
+
+void Sound::StopBgm() {
+	if (!_bgm) {
+		return;
+	}
 	sgBgmStop(_bgm);
 }
 

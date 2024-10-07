@@ -114,6 +114,10 @@ void SoundWidgets::ShowSoundDebugWindow() {
 			if (ImGui::Button("Pause")) {
 				Game::Instance()->Sound().PauseBgm();
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Stop")) {
+				Game::Instance()->Sound().StopBgm();
+			}
 		}
 	}
 	if (ImGui::CollapsingHeader("Sfx")) {

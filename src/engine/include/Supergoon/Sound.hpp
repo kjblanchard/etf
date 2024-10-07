@@ -24,6 +24,8 @@ class Sound {
 	void PlayBgm();
 	// Pauses bgm in bgm slot
 	void PauseBgm();
+	// Pauses bgm in bgm slot
+	void StopBgm();
 	//  Sets current playing bgm volume, 0 - 1.0f
 	void SetPlayingBgmVolume(float volume);
 	//  Sets the global volume multiplier for bgm, 0 - 1.0f

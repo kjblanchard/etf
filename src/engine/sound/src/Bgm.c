@@ -63,12 +63,12 @@ static void loadDataToStream(sgBgm *bgm) {
 	while (total_buffer_bytes_read < BGM_BUFFER_SIZE) {
 		// Request size should be either the full request size, or until we can fill our buffer.
 		requestSize = (total_buffer_bytes_read + requestSize <= BGM_BUFFER_SIZE)
-						   ? requestSize
-						   : BGM_BUFFER_SIZE - total_buffer_bytes_read;
+						  ? requestSize
+						  : BGM_BUFFER_SIZE - total_buffer_bytes_read;
 		//   Update to not go past the loop end
 		requestSize = (total_buffer_bytes_read + requestSize + bgm->CurrentLoopBytesRead <= bgm->LoopEnd)
-						   ? requestSize
-						   : bgm->LoopEnd - (total_buffer_bytes_read + bgm->CurrentLoopBytesRead);
+						  ? requestSize
+						  : bgm->LoopEnd - (total_buffer_bytes_read + bgm->CurrentLoopBytesRead);
 		if (requestSize == 0) {
 			// We are at the end of the loop point and should loop or stop.
 			if (bgm->Loops == 0) {
@@ -141,11 +141,19 @@ void sgBgmPlay(sgBgm *bgm) {
 	SDL_ResumeAudioStreamDevice(bgm->Stream);
 }
 
-void sgBgmStop(sgBgm *bgm) {
+void sgBgmPause(sgBgm *bgm) {
 	if (!bgm->IsPlaying) {
 		return;
 	}
 	SDL_PauseAudioStreamDevice(bgm->Stream);
+	bgm->IsPlaying = false;
+}
+
+void sgBgmStop(sgBgm *bgm) {
+	SDL_PauseAudioStreamDevice(bgm->Stream);
+	ov_pcm_seek_lap(bgm->VorbisFile, 0);
+	SDL_ClearAudioStream(bgm->Stream);
+	loadDataToStream(bgm);
 	bgm->IsPlaying = false;
 }
 
@@ -165,11 +173,10 @@ void sgBgmDelete(sgBgm *bgm) {
 	SDL_free(bgm);
 }
 
-void sgBgmUpdateVolume(sgBgm* bgm, float volume) {
+void sgBgmUpdateVolume(sgBgm *bgm, float volume) {
 	if (!bgm->Stream || volume > 1.0 || volume < 0) {
 		return;
 	}
 	bgm->Volume = volume;
 	SDL_SetAudioStreamGain(bgm->Stream, volume);
-
 }

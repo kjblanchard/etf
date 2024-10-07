@@ -27,6 +27,7 @@ typedef struct sgBgm {
 sgBgm* sgBgmNew(void);
 void sgBgmLoad(sgBgm* bgm);
 void sgBgmPlay(sgBgm* bgm);
+void sgBgmPause(sgBgm* bgm);
 void sgBgmStop(sgBgm* bgm);
 void sgBgmUpdate(sgBgm* bgm);
 void sgBgmDelete(sgBgm* bgm);
