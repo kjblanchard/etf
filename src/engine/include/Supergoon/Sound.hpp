@@ -22,6 +22,8 @@ class Sound {
 	bool LoadBgm(std::string filename, float volume = 1.0, int loops = -1);
 	// Plays a bgm loaded into the bgm slot
 	void PlayBgm();
+	// Pauses bgm in bgm slot
+	void PauseBgm();
 	//  Sets current playing bgm volume, 0 - 1.0f
 	void SetPlayingBgmVolume(float volume);
 	//  Sets the global volume multiplier for bgm, 0 - 1.0f

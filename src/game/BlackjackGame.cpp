@@ -16,15 +16,8 @@ class BlackjackGame : public Game {
 };
 
 void BlackjackGame::Start() {
-	// Sound().LoadBgm("town2");
-	// _sfx = ContentRegistry::CreateContent<Sfx>("transition").get();
-	// _sfx->Load();
 }
 void BlackjackGame::Update(double) {
-	// ++ticks;
-	// if (ticks % 60 == 0) {
-	// 	Sound().PlaySfx(_sfx, 1.0f);
-	// }
 }
 
 void BlackjackGame::Draw() {

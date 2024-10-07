@@ -4,7 +4,7 @@
 namespace Supergoon {
 void Widgets::ShowWidgets() {
 	ContentWidget::ShowContentDebugWindow();
-	ShowSoundDebugWindow();
+	SoundWidgets::ShowSoundDebugWindow();
 }
 
 }  // namespace Supergoon

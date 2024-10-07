@@ -1,7 +1,9 @@
 #pragma once
 
 namespace Supergoon {
+class SoundWidgets {
+   public:
+	static void ShowSoundDebugWindow();
+};
 
-    void ShowSoundDebugWindow();
-
-}
+}  // namespace Supergoon

@@ -13,6 +13,7 @@ namespace Supergoon {
 
 std::vector<std::string> bgmNames;
 std::vector<std::string> sfxNames;
+static bool inited = false;
 static void HelpMarker(const char* desc) {
 	ImGui::TextDisabled("(?)");
 	if (ImGui::BeginItemTooltip()) {
@@ -46,7 +47,7 @@ static void GetFiles() {
 	SDL_free(sfxFiles);
 }
 
-void ShowSoundDebugWindow() {
+void SoundWidgets::ShowSoundDebugWindow() {
 	static bool p_open = true;
 	static bool no_titlebar = false;
 	static bool no_scrollbar = false;
@@ -74,6 +75,10 @@ void ShowSoundDebugWindow() {
 	if (no_docking) window_flags |= ImGuiWindowFlags_NoDocking;
 	if (unsaved_document) window_flags |= ImGuiWindowFlags_UnsavedDocument;
 	if (no_close) p_open = NULL;  // Don't pass our bool* to Begin
+	if (!inited) {
+		GetFiles();
+		inited = true;
+	}
 
 	if (!ImGui::Begin("Sound", &p_open, window_flags)) {
 		// Early out if the window is collapsed, as an optimization.
@@ -104,6 +109,10 @@ void ShowSoundDebugWindow() {
 				std::vector<std::string> result(std::sregex_token_iterator(song.begin(), song.end(), dotRegex, -1), std::sregex_token_iterator());
 				Game::Instance()->Sound().LoadBgm(result[0]);
 				Game::Instance()->Sound().PlayBgm();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Pause")) {
+				Game::Instance()->Sound().PauseBgm();
 			}
 		}
 	}

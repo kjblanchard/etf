@@ -18,6 +18,12 @@ void Sound::InitializeSound() {
 }
 
 bool Sound::LoadBgm(std::string filename, float volume, int loops) {
+	char* fullPath = NULL;
+	SDL_asprintf(&fullPath, "%sassets/bgm/%s%s", SDL_GetBasePath(), filename.c_str(), ".ogg");
+	if (_bgm && !strcmp(_bgm->Filename, fullPath)) {
+		SDL_free(fullPath);
+		return false;
+	}
 	if (_bgm) {
 		sgBgmDelete(_bgm);
 		_bgm = nullptr;
@@ -26,8 +32,6 @@ bool Sound::LoadBgm(std::string filename, float volume, int loops) {
 		SDL_LogWarn(SG_LOG_LEVEL_sound, "Volume passed in for %s is %f which is below 0 or greater than 1, setting to 1\n", filename.c_str(), volume);
 		volume = 1.0;
 	}
-	char* fullPath = NULL;
-	SDL_asprintf(&fullPath, "%sassets/bgm/%s%s", SDL_GetBasePath(), filename.c_str(), ".ogg");
 	auto bgm = sgBgmNew();
 	bgm->Filename = fullPath;
 	bgm->Loops = loops;
@@ -45,6 +49,13 @@ void Sound::PlayBgm() {
 	sgBgmPlay(_bgm);
 }
 
+void Sound::PauseBgm() {
+	if (!_bgm || !_bgm->IsPlaying) {
+		return;
+	}
+	sgBgmStop(_bgm);
+}
+
 void Sound::Update() {
 	if (_bgm) {
 		sgBgmUpdate(_bgm);
@@ -53,6 +64,7 @@ void Sound::Update() {
 		CheckForStaleSfxStreams();
 	}
 }
+
 void Sound::UpdatePlayingBgmVolume() {
 	if (!_bgm) {
 		return;
