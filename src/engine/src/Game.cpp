@@ -4,6 +4,7 @@
 #include <SDL3/SDL_main.h>
 #include <SupergoonEngine/Bgm.h>
 #include <SupergoonEngine/Sfx.h>
+#include <SupergoonEngine/debug.h>
 
 #include <Supergoon/Game.hpp>
 #include <Supergoon/Sound.hpp>
@@ -34,6 +35,7 @@ SDL_AppResult SDL_AppInit(void **, int, char *[]) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't initialize SDL!", SDL_GetError(), NULL);
 		return SDL_APP_FAILURE;
 	}
+	sgInitializeDebugLogFile();
 	return SDL_APP_CONTINUE;
 }
 

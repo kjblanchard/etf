@@ -7,6 +7,7 @@
 typedef struct sgBgm sgBgm;
 typedef struct sgSfx sgSfx;
 namespace Supergoon {
+class Tween;
 class Sound {
    public:
 	//  Initializes the Supergoon Sound
@@ -26,6 +27,7 @@ class Sound {
 	void PauseBgm();
 	// Pauses bgm in bgm slot
 	void StopBgm();
+	void StopBgmFadeout();
 	//  Sets current playing bgm volume, 0 - 1.0f
 	void SetPlayingBgmVolume(float volume);
 	//  Sets the global volume multiplier for bgm, 0 - 1.0f
@@ -43,7 +45,10 @@ class Sound {
 	std::vector<std::unique_ptr<sgStream>> _sfxStreams;
 	std::vector<sgStream*> _playingStreams;
 	std::queue<sgStream*> _usableSfxStreams;
+	float _bgmOriginalVolume = 0;
+	bool _fadingOut = false;
 	sgBgm* _bgm;
+	Tween* _bgmTween;
 	friend class Game;
 };
 }  // namespace Supergoon

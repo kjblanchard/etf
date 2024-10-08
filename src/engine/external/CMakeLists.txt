@@ -19,6 +19,8 @@ src/imgui_tables.cpp
 src/imgui_widgets.cpp
 src/imgui_draw.cpp
 src/imgui.cpp
+src/easing.c
+src/debug.c
 )
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
 find_library(LIB_VORBIS

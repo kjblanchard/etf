@@ -13,6 +13,7 @@ add_library(${LIBRARY_TARGET_NAME}
     src/Game.cpp
     src/Video.cpp
     src/Sound.cpp
+    src/Tween.cpp
     src/Content/Sfx.cpp
     src/Content/Content.cpp
     src/Content/ContentRegistry.cpp

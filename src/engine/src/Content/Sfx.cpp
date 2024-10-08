@@ -18,6 +18,11 @@ Sfx::~Sfx() {
 void Sfx::Load() {
 	sgSfxLoad(_sfx);
 }
+
 void Sfx::Unload() {
 	sgSfxDelete(_sfx);
+}
+
+std::string const Sfx::Filepath() {
+	return _sfx->Filename;
 }

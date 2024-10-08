@@ -24,6 +24,7 @@ class Game {
 	inline SDL_Renderer* Renderer() { return renderer; }
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+	static inline double DeltaTime() { return .003; }
 
    private:
 	class Sound* _bgm = nullptr;

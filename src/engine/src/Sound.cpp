@@ -3,9 +3,11 @@
 #include <SupergoonEngine/Bgm.h>
 #include <SupergoonEngine/Sfx.h>
 #include <SupergoonEngine/Stream.h>
+#include <SupergoonEngine/debug.h>
 
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Sound.hpp>
+#include <Supergoon/Tween.hpp>
 #include <SupergoonEngine/Log.hpp>
 
 namespace Supergoon {
@@ -38,7 +40,7 @@ bool Sound::LoadBgm(std::string filename, float volume, int loops) {
 	bgm->Volume = volume * _globalBgmVolume;
 	sgBgmLoad(bgm);
 	_bgm = bgm;
-	_playingBgmVolume = volume;
+	_bgmOriginalVolume = _playingBgmVolume = volume;
 	return true;
 }
 
@@ -46,6 +48,7 @@ void Sound::PlayBgm() {
 	if (!_bgm || !_bgm->CanPlay) {
 		return;
 	}
+	SetPlayingBgmVolume(_bgmOriginalVolume);
 	sgBgmPlay(_bgm);
 }
 
@@ -63,6 +66,14 @@ void Sound::StopBgm() {
 	sgBgmStop(_bgm);
 }
 
+void Sound::StopBgmFadeout() {
+	if (!_bgm || !_bgm->IsPlaying || _fadingOut) {
+		return;
+	}
+	_bgmTween = new Tween(1.0, 0, 3, Supergoon::Easings::Linear);
+	_fadingOut = true;
+}
+
 void Sound::Update() {
 	if (_bgm) {
 		sgBgmUpdate(_bgm);
@@ -70,12 +81,23 @@ void Sound::Update() {
 	if (_usableSfxStreams.empty()) {
 		CheckForStaleSfxStreams();
 	}
+	if (!_bgmTween) return;
+	if (!_bgmTween->Complete()) {
+		_bgmTween->Update();
+		SetPlayingBgmVolume(_bgmTween->Value());
+	} else {
+		StopBgm();
+		SDL_free(_bgmTween);
+		_bgmTween = nullptr;
+		_fadingOut = false;
+	}
 }
 
 void Sound::UpdatePlayingBgmVolume() {
 	if (!_bgm) {
 		return;
 	}
+	sgLogWarn("Changing to volume %f", _globalBgmVolume * _playingBgmVolume);
 	sgBgmUpdateVolume(_bgm, _globalBgmVolume * _playingBgmVolume);
 }
 

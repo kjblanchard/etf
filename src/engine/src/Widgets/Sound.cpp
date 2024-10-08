@@ -118,6 +118,10 @@ void SoundWidgets::ShowSoundDebugWindow() {
 			if (ImGui::Button("Stop")) {
 				Game::Instance()->Sound().StopBgm();
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Stop Fadeout")) {
+				Game::Instance()->Sound().StopBgmFadeout();
+			}
 		}
 	}
 	if (ImGui::CollapsingHeader("Sfx")) {
