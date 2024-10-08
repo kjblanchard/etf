@@ -1,10 +1,10 @@
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_log.h>
+// #include <SDL3/SDL_log.h>
+#include <SupergoonEngine/log.h>
 #include <SupergoonEngine/Bgm.h>
 #include <stdlib.h>
 #include <vorbis/vorbisfile.h>
 
-#include <SupergoonEngine/Log.hpp>
 
 #define BGM_NUM_BUFFERS 4														   // Amount of "Buffers" we should have buffered in the SDL stream
 #define BGM_BUFFER_SIZE 8192													   // 8kb
@@ -14,7 +14,8 @@
 static void getLoopPointsFromVorbisComments(sgBgm *bgm, double *loopBegin, double *loopEnd) {
 	vorbis_comment *vc = ov_comment(bgm->VorbisFile, -1);
 	if (!vc) {
-		SDL_LogWarn(SG_LOG_LEVEL_sound, "Error retrieving vorbis comments for %s , setting to 0", bgm->Filename);
+		// SDL_LogWarn(SG_LOG_LEVEL_sound, "Error retrieving vorbis comments for %s , setting to 0", bgm->Filename);
+		sgLogWarn("Error retrieving vorbis comments for %s , setting to 0", bgm->Filename);
 		*loopBegin = *loopEnd = 0;
 		return;
 	}
@@ -85,7 +86,7 @@ static void loadDataToStream(sgBgm *bgm) {
 		// Actually read the file into our memory buffer
 		int current_pass_bytes_read = ov_read(bgm->VorbisFile, (char *)bgm->Buffer + total_buffer_bytes_read, requestSize, 0, sizeof(short), 1, 0);
 		if (current_pass_bytes_read == 0) {
-			SDL_LogError(SG_LOG_LEVEL_sound, "We reached the end of the song somehow, probably something is wrong with loops\n");
+			sgLogWarn("We reached the end of the song somehow, probably something is wrong with loops\n");
 			break;
 		}
 		total_buffer_bytes_read += current_pass_bytes_read;
@@ -124,7 +125,7 @@ void sgBgmLoad(sgBgm *bgm) {
 	const SDL_AudioSpec srcspec = {SDL_AUDIO_S16LE, bgm->VorbisInfo->channels, bgm->VorbisInfo->rate};
 	bgm->Stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &srcspec, NULL, NULL);
 	if (bgm->Stream == NULL) {
-		SDL_LogError(SG_LOG_LEVEL_sound, "Stream failed to create: %s\n", SDL_GetError());
+		sgLogWarn("Stream failed to create: %s\n", SDL_GetError());
 		return;
 	}
 	bgm->CanPlay = true;

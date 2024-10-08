@@ -1,8 +1,8 @@
 #include <SupergoonEngine/easing.h>
-#include <SupergoonEngine/debug.h>
+#include <SupergoonEngine/log.h>
 
-#include <Supergoon/Tween.hpp>
 #include <Supergoon/Game.hpp>
+#include <Supergoon/Tween.hpp>
 
 using namespace Supergoon;
 Tween::Tween(float start, float end, float duration, Easings ease) : _begin(start), _end(end), _duration(duration), _easeType(ease) {

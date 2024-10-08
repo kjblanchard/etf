@@ -4,7 +4,7 @@
 #include <SDL3/SDL_main.h>
 #include <SupergoonEngine/Bgm.h>
 #include <SupergoonEngine/Sfx.h>
-#include <SupergoonEngine/debug.h>
+#include <Supergoon/Log.hpp>
 
 #include <Supergoon/Game.hpp>
 #include <Supergoon/Sound.hpp>

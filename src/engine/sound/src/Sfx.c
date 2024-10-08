@@ -1,11 +1,9 @@
 #include <SDL3/SDL_audio.h>
-#include <SDL3/SDL_log.h>
 #include <SDL3/SDL_misc.h>
 #include <SupergoonEngine/Sfx.h>
 #include <SupergoonEngine/Stream.h>
+#include <SupergoonEngine/log.h>
 #include <vorbis/vorbisfile.h>
-
-#include <SupergoonEngine/Log.hpp>
 #define VORBIS_REQUEST_SIZE 4096  // Size of vorbis requests, usually recommend to be 4096
 
 sgSfx* sgSfxNew(void) {
@@ -21,7 +19,7 @@ void sgSfxLoad(sgSfx* sfx) {
 	OggVorbis_File ovf;
 	int result = ov_fopen(sfx->Filename, &ovf);
 	if (result != 0) {
-		SDL_LogError(0, "Could not open audio in %s: %d\n", sfx->Filename, result);
+		sgLogError("Could not open audio in %s: %d\n", sfx->Filename, result);
 		return;
 	}
 	vorbis_info* ovi = ov_info(&ovf, -1);
@@ -43,14 +41,14 @@ void sgSfxLoad(sgSfx* sfx) {
 
 void sgSfxPlay(sgSfx* sfx, sgStream* stream) {
 	if (!stream || !sfx->Buffer) {
-		SDL_LogWarn(SG_LOG_LEVEL_sound, "Trying to play a sfx without setting a stream or loading properly: %s", sfx->Filename);
+		sgLogWarn("Trying to play a sfx without setting a stream or loading properly: %s", sfx->Filename);
 		return;
 	}
 	SDL_SetAudioStreamFormat(stream->stream, &sfx->spec, NULL);
 	SDL_SetAudioStreamGain(stream->stream, sfx->Volume);
 	bool result = SDL_PutAudioStreamData(stream->stream, sfx->Buffer, sfx->BufferLength);
 	if (!result) {
-		SDL_LogWarn(SG_LOG_LEVEL_sound, "Could not put data into stream for %s: %s", sfx->Filename, SDL_GetError());
+		sgLogWarn("Could not put data into stream for %s: %s", sfx->Filename, SDL_GetError());
 	}
 	SDL_ResumeAudioStreamDevice(stream->stream);
 }

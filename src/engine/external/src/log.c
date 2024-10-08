@@ -1,9 +1,10 @@
 #include <SDL3/SDL_filesystem.h>
-#include <SupergoonEngine/debug.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
+#include <SupergoonEngine/log.h>
 
 #define MAX_LOG_SIZE 200
 
@@ -139,5 +140,6 @@ void sgLogCritical(const char *fmt, ...) {
 }
 
 void sgSetLogLevel(int newLevel) {
-	logLevel = newLevel;
+	logLevel = (sgLogLevel)newLevel;
 }
+

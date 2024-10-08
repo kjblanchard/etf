@@ -1,14 +1,12 @@
 #include <SDL3/SDL_filesystem.h>
-#include <SDL3/SDL_log.h>
 #include <SupergoonEngine/Bgm.h>
 #include <SupergoonEngine/Sfx.h>
 #include <SupergoonEngine/Stream.h>
-#include <SupergoonEngine/debug.h>
+#include <SupergoonEngine/log.h>
 
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Sound.hpp>
 #include <Supergoon/Tween.hpp>
-#include <SupergoonEngine/Log.hpp>
 
 namespace Supergoon {
 void Sound::InitializeSound() {
@@ -31,7 +29,7 @@ bool Sound::LoadBgm(std::string filename, float volume, int loops) {
 		_bgm = nullptr;
 	}
 	if (volume < 0 || volume > 1.0) {
-		SDL_LogWarn(SG_LOG_LEVEL_sound, "Volume passed in for %s is %f which is below 0 or greater than 1, setting to 1\n", filename.c_str(), volume);
+		sgLogWarn("Volume passed in for %s is %f which is below 0 or greater than 1, setting to 1\n", filename.c_str(), volume);
 		volume = 1.0;
 	}
 	auto bgm = sgBgmNew();
@@ -130,7 +128,7 @@ void Sound::CheckForStaleSfxStreams() {
 
 void Sound::PlaySfx(Sfx* sfx, float) {
 	if (_usableSfxStreams.empty()) {
-		SDL_LogWarn(SG_LOG_LEVEL_sound, "No SFX buffers available to play sound %s\n", sfx->Filepath().c_str());
+		sgLogWarn("No SFX buffers available to play sound %s\n", sfx->Filepath().c_str());
 		return;
 	}
 	auto stream = _usableSfxStreams.front();

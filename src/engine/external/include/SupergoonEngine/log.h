@@ -1,3 +1,4 @@
+#pragma once
 /**
  * @file debug.h
  * @author Kevin Blanchard (kevin@supergoon.com)
@@ -9,10 +10,6 @@
  *
  */
 
-#pragma once
-#ifdef __cplusplus
-extern "C" {
-#endif
 /**
  * @brief Wraps a function, or a line (so that you can return and define a variable) and measure it and display the time it took, identifier is a descriptive name for it
  *
@@ -21,6 +18,9 @@ extern "C" {
  * @brief The level that we should show debug events at.
  *
  */
+#ifdef __cplusplus
+extern "C" {
+#endif
 typedef enum sgLogLevel {
 	Log_LDefault = 0,
 	Log_LDebug = 1,
@@ -74,6 +74,7 @@ void sgLogError(const char *format, ...);
 void sgLogCritical(const char *fmt, ...);
 
 void sgSetLogLevel(int newLevel);
+
 #ifdef __cplusplus
 }
 #endif
