@@ -1,5 +1,12 @@
 {
-    "debug": {
-        "level": 2
+    "window": {
+        "x": 1024,
+        "y": 576,
+        "title": "Supergoon Blackjack!"
+    },
+    "world": {
+        "x": 512,
+        "y": 288
     }
 }
+

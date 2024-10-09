@@ -68,7 +68,7 @@ void Sound::StopBgmFadeout() {
 	if (!_bgm || !_bgm->IsPlaying || _fadingOut) {
 		return;
 	}
-	_bgmTween = new Tween(1.0, 0, 3, Supergoon::Easings::Linear);
+	_bgmTween = new Tween(1.0, 0, 1, Supergoon::Easings::Linear);
 	_fadingOut = true;
 }
 
