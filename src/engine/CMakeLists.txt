@@ -14,6 +14,7 @@ add_library(${LIBRARY_TARGET_NAME}
     src/Video.cpp
     src/Sound.cpp
     src/Tween.cpp
+    src/Events.cpp
     src/Content/Sfx.cpp
     src/Content/Content.cpp
     src/Content/ContentRegistry.cpp
@@ -21,6 +22,8 @@ add_library(${LIBRARY_TARGET_NAME}
     src/Widgets/Widgets.cpp
     src/Widgets/Sound.cpp
     src/Widgets/Content.cpp
+    src/Graphics/Graphics.cpp
+
 )
 target_compile_options(${LIBRARY_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_libraries(${LIBRARY_TARGET_NAME}

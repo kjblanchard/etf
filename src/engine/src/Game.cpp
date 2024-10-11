@@ -7,11 +7,11 @@
 #include <SupergoonEngine/clock.h>
 #ifdef imgui
 #include <SupergoonEngine/imgui.h>
-#include <SupergoonEngine/imgui_impl_sdl3.h>
-#include <SupergoonEngine/imgui_impl_sdlrenderer3.h>
 #endif
 
+#include <Supergoon/Events.hpp>
 #include <Supergoon/Game.hpp>
+#include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/Log.hpp>
 #include <Supergoon/Sound.hpp>
 #include <SupergoonEngine/json.hpp>
@@ -38,15 +38,7 @@ SDL_AppResult SDL_AppInit(void **, int, char *[]) {
 }
 
 SDL_AppResult SDL_AppEvent(void *, SDL_Event *event) {
-// 	geUpdateControllerLastFrame();
-#ifdef imgui
-	ImGui_ImplSDL3_ProcessEvent(event);
-#endif
-	if (event->type == SDL_EVENT_QUIT) {
-		return SDL_APP_SUCCESS;
-	}
-	// 	geUpdateKeyboard();
-	return SDL_APP_CONTINUE;
+	return (SDL_AppResult)_gameInternal->HandleEvent(event);
 }
 
 SDL_AppResult SDL_AppIterate(void *) {
@@ -58,6 +50,9 @@ SDL_AppResult SDL_AppIterate(void *) {
 void SDL_AppQuit(void *) {
 }
 
+int Game::HandleEvent(SDL_Event *event) {
+	return _events->HandleEvent(event);
+}
 Game::Game() {
 	SDL_assert(!Game::Instance());
 	_game = this;
@@ -73,23 +68,25 @@ void Game::Initialize() {
 	int windowWidth = j["window"]["x"];
 	int windowHeight = j["window"]["y"];
 	std::string windowTitle = j["window"]["title"];
-	if (!SDL_CreateWindowAndRenderer(windowTitle.c_str(), windowWidth, windowHeight, 0, &Game::Instance()->window, &Game::Instance()->renderer)) {
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), NULL);
-		sgLogCritical("Could not load window");
-	}
 	_sound = new class Sound();
-	geClockStart(&_clock);
-#ifdef imgui
+	_graphics = new Graphics();
+	_events = new Events();
+	_graphics->CreateWindow(windowWidth, windowHeight, windowTitle);
 
+	geClockStart(&_clock);
+	InitializeImGui();
+	_graphics->InitializeImGui();
+	Game::Instance()->Sound().InitializeSound();
+}
+
+void Game::InitializeImGui() {
+#ifdef imgui
 	ImGui::CreateContext();
 	ImGuiIO &io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;	   // IF using Docking Branch
-	ImGui_ImplSDL3_InitForSDLRenderer(Game::Instance()->window, Game::Instance()->Renderer());
-	ImGui_ImplSDLRenderer3_Init(Game::Instance()->Renderer());
 #endif
-	Game::Instance()->Sound().InitializeSound();
 }
 
 void Game::InternalUpdate() {
@@ -99,28 +96,10 @@ void Game::InternalUpdate() {
 }
 
 void Game::InternalDraw() {
-	SDL_RenderClear(_gameInternal->renderer);
-
-	// Render imgui
-#ifdef imgui
-	ImGui_ImplSDLRenderer3_NewFrame();
-	ImGui_ImplSDL3_NewFrame();
-	ImGui::NewFrame();
-#endif
+	_graphics->DrawStart();
 	Draw();
-
-	// Draw imgui
-#ifdef imgui
-	ImGui::ShowDemoWindow();
-	ImGui::Render();
-	ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), Game::Instance()->Renderer());
-#endif
-	ImGui::Render();
-	// Draw imgui
-#ifdef imgui
-	ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), Game::Instance()->Renderer());
-#endif
-	SDL_RenderPresent(Game::Instance()->renderer);
+	_graphics->DrawImGui();
+	_graphics->DrawEnd();
 }
 
 double Game::DeltaTime() {
