@@ -1,15 +1,15 @@
 #include <SDL3/SDL.h>
 // #include <SDL3/SDL_log.h>
-#include <SupergoonEngine/log.h>
 #include <SupergoonEngine/Bgm.h>
+#include <SupergoonEngine/log.h>
 #include <stdlib.h>
 #include <vorbis/vorbisfile.h>
 
-
-#define BGM_NUM_BUFFERS 4														   // Amount of "Buffers" we should have buffered in the SDL stream
-#define BGM_BUFFER_SIZE 8192													   // 8kb
-#define VORBIS_REQUEST_SIZE 4096												   // Size of vorbis requests, usually recommend to be 4096
-#define MINIMUM_STREAM_SIZE (BGM_BUFFER_SIZE * BGM_NUM_BUFFERS) - BGM_BUFFER_SIZE  // If our sdl stream is less than this, add another buffer
+#define BGM_NUM_BUFFERS 4		  // Amount of "Buffers" we should have buffered in the SDL stream
+#define BGM_BUFFER_SIZE 8192	  // 8kb
+#define VORBIS_REQUEST_SIZE 4096  // Size of vorbis requests, usually recommend to be 4096
+// #define MINIMUM_STREAM_SIZE (BGM_BUFFER_SIZE * BGM_NUM_BUFFERS) - BGM_BUFFER_SIZE  // If our sdl stream is less than this, add another buffer
+#define MINIMUM_STREAM_SIZE BGM_BUFFER_SIZE *BGM_NUM_BUFFERS  // If our sdl stream is less than this, add another buffer
 
 static void getLoopPointsFromVorbisComments(sgBgm *bgm, double *loopBegin, double *loopEnd) {
 	vorbis_comment *vc = ov_comment(bgm->VorbisFile, -1);
