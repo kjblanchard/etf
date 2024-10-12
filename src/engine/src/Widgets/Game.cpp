@@ -1,11 +1,11 @@
 #include <SupergoonEngine/imgui.h>
 
+#include <Supergoon/Events.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
-
-// #include <Supergoon/Content/Content.hpp>
-// #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Widgets/Game.hpp>
 namespace Supergoon {
+
+bool GameWidget::_isFocusedLastFrame = true;
 
 void GameWidget::ShowGameDebugWindow() {
 	static bool p_open = true;
@@ -40,6 +40,11 @@ void GameWidget::ShowGameDebugWindow() {
 		// Early out if the window is collapsed, as an optimization.
 		ImGui::End();
 		return;
+	}
+	bool isFocused = ImGui::IsWindowFocused();
+	if (_isFocusedLastFrame != isFocused) {
+		Events::PushEvent(Events::BuiltinEvents.ImGuiFocusedEvent, isFocused);
+		_isFocusedLastFrame = isFocused;
 	}
 	auto graphics = Graphics::Instance();
 
