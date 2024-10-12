@@ -63,11 +63,14 @@ void Game::Initialize() {
 	auto j = json::parse(fileStream);
 	int windowWidth = j["window"]["x"];
 	int windowHeight = j["window"]["y"];
+	int worldWidth = j["world"]["x"];
+	int worldHeight = j["world"]["y"];
 	std::string windowTitle = j["window"]["title"];
 	_sound = new class Sound();
 	_graphics = new Graphics();
 	_events = new Events();
 	_graphics->CreateWindow(windowWidth, windowHeight, windowTitle);
+	_graphics->SetWindowScaling(worldWidth, worldHeight);
 	geClockStart(&_clock);
 	InitializeImGui();
 	_graphics->InitializeImGui();

@@ -10,6 +10,8 @@
 using namespace Supergoon;
 Graphics* Graphics::_instance = nullptr;
 void Graphics::CreateWindow(int width, int height, std::string name) {
+	_windowWidth = width;
+	_windowHeight = height;
 	auto flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 	if (!SDL_CreateWindowAndRenderer(name.c_str(), width, height, flags, &_window, &_renderer)) {
 		sgLogCritical("Could not load window, error, %s", SDL_GetError());
@@ -19,12 +21,16 @@ void Graphics::InitializeImGui() {
 #ifdef imgui
 	ImGui_ImplSDL3_InitForSDLRenderer(_window, _renderer);
 	ImGui_ImplSDLRenderer3_Init(_renderer);
+	_imguiGameTexture = CreateRenderTargetTexture(_logicalWidth, _logicalHeight);
 #endif
 }
 
 void Graphics::DrawStart() {
 	SDL_RenderClear(_renderer);
 #ifdef imgui
+	ClearRenderTargetTexture(_imguiGameTexture);
+	// Draw everything to this target instead when building with imgui.
+	SDL_SetRenderTarget(_renderer, _imguiGameTexture);
 	ImGui_ImplSDLRenderer3_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
 	ImGui::NewFrame();
@@ -34,11 +40,26 @@ void Graphics::DrawStart() {
 void Graphics::DrawImGui() {
 	// Draw imgui
 #ifdef imgui
+	SDL_SetRenderTarget(_renderer, NULL);
 	ImGui::ShowDemoWindow();
 	ImGui::Render();
 	ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), _renderer);
 	ImGui::Render();
 	ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), _renderer);
+#endif
+}
+
+void Graphics::SetWindowScaling(int worldx, int worldY) {
+	_logicalWidth = worldx;
+	_logicalHeight = worldY;
+#ifndef imgui
+	auto display = SDL_GetPrimaryDisplay();
+	auto mode = SDL_GetCurrentDisplayMode(display);
+	if (!mode) {
+		sgLogWarn("Could not get display info for some reason!");
+	}
+	_refreshRate = mode->refresh_rate ? mode->refresh_rate : 60;
+	SDL_SetRenderLogicalPresentation(_renderer, worldx, worldY, SDL_LOGICAL_PRESENTATION_INTEGER_SCALE, SDL_SCALEMODE_NEAREST);
 #endif
 }
 void Graphics::DrawEnd() {
@@ -53,6 +74,7 @@ SDL_Texture* Graphics::CreateRenderTargetTexture(int width, int height, Color co
 	if (SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND) != true) {
 		sgLogError("Error setting blend mode: %s", SDL_GetError());
 	}
+	SDL_SetTextureScaleMode(image, SDL_SCALEMODE_NEAREST);
 	SDL_SetTextureBlendMode(image, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(_renderer, 255, color.G, color.B, color.A);
 	SDL_RenderClear(_renderer);

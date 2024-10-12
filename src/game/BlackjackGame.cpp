@@ -31,7 +31,9 @@ void BlackjackGame::Update() {
 
 void BlackjackGame::Draw() {
 	level->Draw();
+#ifdef imgui
 	Widgets::ShowWidgets();
+#endif
 }
 
 REGISTER_GAME(BlackjackGame);
