@@ -1,0 +1,14 @@
+{ "columns":69,
+ "image":"..\/img\/house.png",
+ "imageheight":608,
+ "imagewidth":1104,
+ "margin":0,
+ "name":"house",
+ "spacing":0,
+ "tilecount":2622,
+ "tiledversion":"1.8.6",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.8"
+}

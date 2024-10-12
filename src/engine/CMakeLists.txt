@@ -18,11 +18,17 @@ add_library(${LIBRARY_TARGET_NAME}
     src/Content/Sfx.cpp
     src/Content/Content.cpp
     src/Content/ContentRegistry.cpp
+    src/Content/Image.cpp
 
     src/Widgets/Widgets.cpp
     src/Widgets/Sound.cpp
     src/Widgets/Content.cpp
     src/Graphics/Graphics.cpp
+    src/World/Level.cpp
+    src/World/TiledMap.cpp
+    src/World/World.cpp
+
+    src/ECS/GameObject.cpp
 
 )
 target_compile_options(${LIBRARY_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})

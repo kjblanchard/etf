@@ -50,15 +50,11 @@ SDL_AppResult SDL_AppIterate(void *) {
 void SDL_AppQuit(void *) {
 }
 
-int Game::HandleEvent(SDL_Event *event) {
-	return _events->HandleEvent(event);
-}
 Game::Game() {
 	SDL_assert(!Game::Instance());
 	_game = this;
 	_gameInternal = _game;
 }
-
 void Game::Initialize() {
 	char *jsonPath = NULL;
 	SDL_asprintf(&jsonPath, "%sassets/config.json", SDL_GetBasePath());
@@ -72,11 +68,14 @@ void Game::Initialize() {
 	_graphics = new Graphics();
 	_events = new Events();
 	_graphics->CreateWindow(windowWidth, windowHeight, windowTitle);
-
 	geClockStart(&_clock);
 	InitializeImGui();
 	_graphics->InitializeImGui();
 	Game::Instance()->Sound().InitializeSound();
+}
+
+int Game::HandleEvent(SDL_Event *event) {
+	return _events->HandleEvent(event);
 }
 
 void Game::InitializeImGui() {

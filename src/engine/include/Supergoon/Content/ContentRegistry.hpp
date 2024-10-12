@@ -23,8 +23,8 @@ class ContentRegistry {
 	 * @param key the filepath for this
 	 * @return std::shared_ptr<T> A shared_ptr to reference this content with
 	 */
-	template <typename T>
-	static std::shared_ptr<T> CreateContent(const std::string& key) {
+	template <typename T, typename... Args>
+	static std::shared_ptr<T> CreateContent(const std::string& key, Args&&... args) {
 		auto it = _loadedContent.find(key);
 		if (it != _loadedContent.end()) {
 			std::shared_ptr<T> specificContent = std::dynamic_pointer_cast<T>(it->second);
@@ -33,7 +33,7 @@ class ContentRegistry {
 			}
 		}
 		// If content doesn't exist or is expired, load it and store it in the map
-		std::shared_ptr<T> newContent = std::make_shared<T>(key);
+		std::shared_ptr<T> newContent = std::make_shared<T>(key, std::forward<Args>(args)...);
 		_loadedContent[key] = newContent;
 		return newContent;
 	}

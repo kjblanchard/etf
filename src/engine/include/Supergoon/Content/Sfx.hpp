@@ -7,8 +7,8 @@ class Sfx : public Content {
 	virtual void Load() override;
 	virtual void Unload() override;
 	inline virtual std::string Type() override { return "Sfx"; }
-	sgSfx* SgSfx();
 	virtual const std::string Filepath() override;
+	sgSfx* SgSfx();
 	Sfx(std::string filename);
 	~Sfx();
 

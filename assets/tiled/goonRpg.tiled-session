@@ -1,0 +1,37 @@
+{
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "debugSouth.tmj": {
+            "scale": 0.9974999999999999,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 317.2932330827068,
+                "y": 194.98746867167927
+            }
+        },
+        "debugTown.tmj": {
+            "scale": 1.3343749999999999,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 304.6370023419204,
+                "y": 144.26229508196724
+            }
+        },
+        "debugTownHome.tmj": {
+            "scale": 3.169140625,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 128.26821151238752,
+                "y": 80.30568223838284
+            }
+        }
+    },
+    "last.imagePath": "/Users/kevin/git/c/sgEngine/assets/img",
+    "openFiles": [
+    ],
+    "project": "goonRpg.tiled-project",
+    "recentFiles": [
+    ]
+}

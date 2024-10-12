@@ -1,0 +1,60 @@
+{
+    "automappingRulesFile": "",
+    "commands": [
+    ],
+    "extensionsPath": ".",
+    "folders": [
+        "."
+    ],
+    "objectTypesFile": "",
+    "propertyTypes": [
+        {
+            "id": 3,
+            "name": "Direction",
+            "storageType": "int",
+            "type": "enum",
+            "values": [
+                "North",
+                "East",
+                "South",
+                "West"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 2,
+            "members": [
+                {
+                    "name": "loadLocation",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "loadMap",
+                    "type": "string",
+                    "value": ""
+                }
+            ],
+            "name": "Exit",
+            "type": "class"
+        },
+        {
+            "id": 1,
+            "members": [
+                {
+                    "name": "direction",
+                    "propertyType": "Direction",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "loadLocation",
+                    "type": "int",
+                    "value": 0
+                }
+            ],
+            "name": "Start",
+            "type": "class"
+        }
+    ]
+}

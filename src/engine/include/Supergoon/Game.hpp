@@ -10,6 +10,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+// Registers the game, this function needs to be defined in the derived class of game, by using the REGISTER_GAME macro and is the only requirement to use the engine.
 void sgRegisterGame();
 #ifdef __cplusplus
 }

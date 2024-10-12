@@ -12,18 +12,21 @@ set(FULL_COMPILE_OPTIONS
 cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
 add_library(${LIBRARY_TARGET_NAME} STATIC
-src/imgui_impl_sdl3.cpp
-src/imgui_impl_sdlrenderer3.cpp
-src/imgui_demo.cpp
-src/imgui_tables.cpp
-src/imgui_widgets.cpp
-src/imgui_draw.cpp
-src/imgui.cpp
-src/easing.c
-src/log.c
-src/clock.c
+    src/imgui_impl_sdl3.cpp
+    src/imgui_impl_sdlrenderer3.cpp
+    src/imgui_demo.cpp
+    src/imgui_tables.cpp
+    src/imgui_widgets.cpp
+    src/imgui_draw.cpp
+    src/imgui.cpp
+    src/easing.c
+    src/log.c
+    src/clock.c
+    src/primitives/rectangle.c
+    src/primitives/point.c
 )
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
+find_package(PNG REQUIRED)
 find_library(LIB_VORBIS
     REQUIRED
     PATH_SUFFIXES .a
@@ -44,9 +47,17 @@ target_link_directories(${LIBRARY_TARGET_NAME}
     PUBLIC
     /usr/local/lib
 )
+
+if(WIN32 OR(MACOS AND GOON_FULL_MACOS_BUILD))
+    set(PNG_LIB_NAME png_static)
+else()
+    set(PNG_LIB_NAME png)
+endif(WIN32 OR(MACOS AND GOON_FULL_MACOS_BUILD))
+
 target_link_libraries(${LIBRARY_TARGET_NAME}
     INTERFACE
     SDL3::SDL3-static
+    ${PNG_LIB_NAME}
     vorbis vorbisenc vorbisfile ogg
 )
 target_include_directories(${LIBRARY_TARGET_NAME}
