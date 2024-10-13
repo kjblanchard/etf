@@ -31,6 +31,8 @@ class Level {
 	void Draw();
 	void RestartLevel();
 	void CreateBackgroundImage();
+	int cameraX = 0;
+	int cameraY = 0;
 
    private:
 	/**

@@ -5,6 +5,8 @@
 #include <SupergoonEngine/Bgm.h>
 #include <SupergoonEngine/Sfx.h>
 #include <SupergoonEngine/clock.h>
+#include <SupergoonEngine/input/joystick.h>
+#include <SupergoonEngine/input/keyboard.h>
 #ifdef imgui
 #include <SupergoonEngine/imgui.h>
 #endif
@@ -31,6 +33,9 @@ SDL_AppResult SDL_AppInit(void **, int, char *[]) {
 		return SDL_APP_FAILURE;
 	}
 	sgInitializeDebugLogFile();
+	geInitializeKeyboard();
+	geInitializeJoysticks();
+
 	sgRegisterGame();
 	_gameInternal->Initialize();
 	_gameInternal->Start();
@@ -42,8 +47,10 @@ SDL_AppResult SDL_AppEvent(void *, SDL_Event *event) {
 }
 
 SDL_AppResult SDL_AppIterate(void *) {
+	geUpdateKeyboard();
 	_gameInternal->InternalUpdate();
 	_gameInternal->InternalDraw();
+	geUpdateControllerLastFrame();
 	return SDL_APP_CONTINUE;
 }
 

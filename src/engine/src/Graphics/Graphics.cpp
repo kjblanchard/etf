@@ -1,4 +1,5 @@
 #include <SupergoonEngine/log.h>
+#include <SDL3/SDL_hints.h>
 
 #include <Supergoon/Content/Image.hpp>
 #ifdef imgui
@@ -12,6 +13,7 @@ Graphics* Graphics::_instance = nullptr;
 void Graphics::CreateWindow(int width, int height, std::string name) {
 	_windowWidth = width;
 	_windowHeight = height;
+	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
 	auto flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 	if (!SDL_CreateWindowAndRenderer(name.c_str(), width, height, flags, &_window, &_renderer)) {
 		sgLogCritical("Could not load window, error, %s", SDL_GetError());

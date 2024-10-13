@@ -5,6 +5,7 @@
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/World/Level.hpp>
+#include <algorithm>
 int SCREEN_WIDTH = 512;
 int SCREEN_HEIGHT = 288;
 
@@ -150,7 +151,7 @@ void Level::CreateBackgroundImage() {
 		return;
 	// _background = new Image(_name, _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight);
 	auto thing = ContentRegistry::CreateContent<Image, int, int>(_name, _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight);
-    ContentRegistry::LoadContent(*thing);
+	ContentRegistry::LoadContent(*thing);
 	_background = thing.get();
 	for (auto &group : _mapData->Groups) {
 		if (group.Name != "background") {
@@ -200,19 +201,47 @@ void Level::LoadSolidObjects() {
 	// _gameObjects.push_back(NewSolidObject(bottom));
 	// _gameObjects.push_back(NewSolidObject(left));
 }
+// cc.Box.x = pl->Location.x - (SCREEN_WIDTH / 2);
+// cc.Box.y = pl->Location.y - (SCREEN_HEIGHT / 2);
+// if (cc.Box.x < 0) {
+// 	cc.Box.x = 0;
+// } else if (cc.Box.x > cc.Bounds.x - SCREEN_WIDTH) {
+// 	cc.Box.x = std::max(cc.Bounds.x - SCREEN_WIDTH, 0);
+// }
+// if (cc.Box.y < 0) {
+// 	cc.Box.y = 0;
+// } else if (cc.Box.y > (cc.Bounds.y - SCREEN_HEIGHT)) {
+// 	cc.Box.y = cc.Bounds.y - SCREEN_HEIGHT;
+// }
 
 void Level::Draw() {
 	if (_background) {
 		auto s = RectangleF();
-		s.X = 0;
-		s.Y = 0;
-		s.W = SCREEN_WIDTH;
-		s.H = SCREEN_HEIGHT;
+		auto size = GetSize();
+		s.X = cameraX;
+		s.Y = cameraY;
+		if (size.x > SCREEN_WIDTH) {
+			cameraX = std::max(0, std::min(cameraX, size.x - SCREEN_WIDTH));
+		} else {
+			cameraX = 0;  // Center or fix the camera if the map width is smaller than the screen
+		}
+
+		if (size.y > SCREEN_HEIGHT) {
+			cameraY = std::max(0, std::min(cameraY, size.y - SCREEN_HEIGHT));
+		} else {
+			cameraY = 0;  // Center or fix the camera if the map height is smaller than the screen
+		}
+		// s.W = SCREEN_WIDTH;
+		// s.H = SCREEN_HEIGHT;
+		s.W = size.x <= SCREEN_WIDTH ? size.x : SCREEN_WIDTH;
+		s.H = size.y <= SCREEN_HEIGHT ? size.y : SCREEN_HEIGHT;
 		auto d = RectangleF();
 		d.X = 0;
 		d.Y = 0;
-		d.W = SCREEN_WIDTH;
-		d.H = SCREEN_HEIGHT;
+		// d.W = SCREEN_WIDTH;
+		// d.H = SCREEN_HEIGHT;
+		d.W = size.x <= SCREEN_WIDTH ? size.x : SCREEN_WIDTH;
+		d.H = size.y <= SCREEN_HEIGHT ? size.y : SCREEN_HEIGHT;
 		_background->Draw(s, d);
 	}
 }
