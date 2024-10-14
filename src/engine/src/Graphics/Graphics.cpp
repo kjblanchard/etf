@@ -1,5 +1,7 @@
-#include <SupergoonEngine/log.h>
+#include <SDL3/SDL.h>
 #include <SDL3/SDL_hints.h>
+#include <SDL3/SDL_rect.h>
+#include <SupergoonEngine/log.h>
 
 #include <Supergoon/Content/Image.hpp>
 #ifdef imgui
@@ -10,6 +12,26 @@
 #include <Supergoon/Graphics/Graphics.hpp>
 using namespace Supergoon;
 Graphics* Graphics::_instance = nullptr;
+
+void Graphics::DrawRect(RectangleF& dstRect, Color color) {
+	SDL_SetRenderDrawColor(_renderer, color.R, color.G, color.B, color.A);
+	SDL_RenderRect(_renderer, (SDL_FRect*)&dstRect);
+	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
+}
+
+// void geUtilsDrawRectF(geRectangleF* dstRect, geColor* color) {
+// 	SDL_Renderer* r = geGlobalRenderer();
+// 	SDL_SetRenderDrawColor(r, color->R, color->G, color->B, color->A);
+// 	SDL_RenderDrawRectF(r, (SDL_FRect*)dstRect);
+// 	SDL_SetRenderDrawColor(r, 0, 0, 0, 255);
+// }
+
+// void geUtilsDrawFilledRect(geRectangle* dstRect, geColor* color) {
+// 	SDL_Renderer* r = geGlobalRenderer();
+// 	SDL_SetRenderDrawColor(r, color->R, color->G, color->B, color->A);
+// 	SDL_RenderFillRect(r, (SDL_Rect*)dstRect);
+// 	SDL_SetRenderDrawColor(r, 0, 0, 0, 255);
+// }
 void Graphics::CreateWindow(int width, int height, std::string name) {
 	_windowWidth = width;
 	_windowHeight = height;

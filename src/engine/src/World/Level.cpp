@@ -21,7 +21,12 @@ Level::Level(const char *filename)
 	: _background(nullptr) {
 	_name = filename;
 	_mapData = std::make_unique<TiledMap>(filename);
+	_physicsWorld = std::make_unique<PhysicsWorld>();
 	LoadSurfaces();
+}
+
+void Level::PhysicsUpdate() {
+	_physicsWorld->Update();
 }
 
 Level::~Level() {
@@ -221,15 +226,15 @@ void Level::Draw() {
 		s.X = cameraX;
 		s.Y = cameraY;
 		if (size.x > SCREEN_WIDTH) {
-			cameraX = std::max(0, std::min(cameraX, size.x - SCREEN_WIDTH));
+			s.X = std::max(0, std::min(cameraX, size.x - SCREEN_WIDTH));
 		} else {
-			cameraX = 0;  // Center or fix the camera if the map width is smaller than the screen
+			s.X = 0;  // Center or fix the camera if the map width is smaller than the screen
 		}
 
 		if (size.y > SCREEN_HEIGHT) {
-			cameraY = std::max(0, std::min(cameraY, size.y - SCREEN_HEIGHT));
+			s.Y = std::max(0, std::min(cameraY, size.y - SCREEN_HEIGHT));
 		} else {
-			cameraY = 0;  // Center or fix the camera if the map height is smaller than the screen
+			s.Y = 0;  // Center or fix the camera if the map height is smaller than the screen
 		}
 		// s.W = SCREEN_WIDTH;
 		// s.H = SCREEN_HEIGHT;
@@ -238,10 +243,10 @@ void Level::Draw() {
 		auto d = RectangleF();
 		d.X = 0;
 		d.Y = 0;
-		// d.W = SCREEN_WIDTH;
-		// d.H = SCREEN_HEIGHT;
-		d.W = size.x <= SCREEN_WIDTH ? size.x : SCREEN_WIDTH;
-		d.H = size.y <= SCREEN_HEIGHT ? size.y : SCREEN_HEIGHT;
+		d.W = SCREEN_WIDTH;
+		d.H = SCREEN_HEIGHT;
+		// d.W = size.x <= SCREEN_WIDTH ? size.x : SCREEN_WIDTH;
+		// d.H = size.y <= SCREEN_HEIGHT ? size.y : SCREEN_HEIGHT;
 		_background->Draw(s, d);
 	}
 }

@@ -22,6 +22,8 @@ set(SRC_FILES
     src/World/Level.cpp
     src/World/TiledMap.cpp
     src/World/World.cpp
+    src/Physics/Physics.cpp
+    src/Physics/RigidbodyComponent.cpp
     src/ECS/GameObject.cpp
 )
 

@@ -3,6 +3,7 @@
 
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
+#include <Supergoon/Physics/Physics.hpp>
 #include <Supergoon/World/TiledMap.hpp>
 #include <memory>
 #include <tuple>
@@ -28,11 +29,15 @@ class Level {
 	// std::vector<TiledMap::TiledObject> GetAllObjects();
 	// inline std::vector<TiledMap::TiledObject> GetAllSolidObjects() const { return _mapData->SolidObjects; }
 	// Panel *LoadPanel;
+	void PhysicsUpdate();
 	void Draw();
 	void RestartLevel();
 	void CreateBackgroundImage();
+	inline PhysicsWorld &Physics() { return *_physicsWorld.get(); }
 	int cameraX = 0;
 	int cameraY = 0;
+	// float *cameraFollowX;
+	// float *cameraFollowY;
 
    private:
 	/**
@@ -60,5 +65,6 @@ class Level {
 	// geImage *_background;
 	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;
+	std::unique_ptr<PhysicsWorld> _physicsWorld;
 };
 }  // namespace Supergoon

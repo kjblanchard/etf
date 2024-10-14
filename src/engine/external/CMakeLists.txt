@@ -29,6 +29,8 @@ add_library(${LIBRARY_TARGET_NAME} STATIC
 )
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
 find_package(PNG REQUIRED)
+set(BOX2D_INCLUDE_DIR /Users/kevin/local/box2d/include) # Path to Box2D headers
+set(BOX2D_LIBRARIES /usr/local/lib/libbox2d.a) # Path to Box2D library
 find_library(LIB_VORBIS
     REQUIRED
     PATH_SUFFIXES .a
@@ -60,11 +62,13 @@ target_link_libraries(${LIBRARY_TARGET_NAME}
     INTERFACE
     SDL3::SDL3-static
     ${PNG_LIB_NAME}
+    ${BOX2D_LIBRARIES}
     vorbis vorbisenc vorbisfile ogg
 )
 target_include_directories(${LIBRARY_TARGET_NAME}
     PUBLIC
     /usr/local/include
+    ${BOX2D_INCLUDE_DIR}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
