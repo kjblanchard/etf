@@ -14,6 +14,8 @@ set(SRC_FILES
     src/Sound.cpp
     src/Tween.cpp
     src/Events.cpp
+    src/Aseprite/AsepriteAnimation.cpp
+    src/Aseprite/AsepriteDocument.cpp
     src/Content/Sfx.cpp
     src/Content/Content.cpp
     src/Content/ContentRegistry.cpp

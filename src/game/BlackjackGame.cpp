@@ -37,20 +37,19 @@ class BlackjackGame : public Game {
 void BlackjackGame::Start() {
 	level = new Level("debugTown");
 	level->CreateBackgroundImage();
-	// ContentRegistry::LoadAllContent();
-	// LoadPlayers();
-	// ContentRegistry::LoadAllContent();
+	LoadPlayers();
+	ContentRegistry::LoadAllContent();
 }
 
 void BlackjackGame::Update() {
-	// level->PhysicsUpdate();
-	// UpdateLocationsForRbs();
-	// PlayerInput();
+	level->PhysicsUpdate();
+	UpdateLocationsForRbs();
+	PlayerInput();
 }
 
 void BlackjackGame::Draw() {
 	level->Draw();
-	// DrawImages();
+	DrawImages();
 
 #ifdef imgui
 	Widgets::ShowWidgets();

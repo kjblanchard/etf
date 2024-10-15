@@ -61,7 +61,7 @@ class Level {
 
    private:
 	std::string _name;
-	Image *_background;
+	std::shared_ptr<Image> _background;
 	// geImage *_background;
 	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;

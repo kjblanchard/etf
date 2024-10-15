@@ -4,6 +4,7 @@
 #include <Supergoon/Content/Content.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
+#include <Supergoon/ECS/GameStateComponent.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
 int SCREEN_WIDTH = 512;
@@ -14,8 +15,6 @@ extern std::unordered_map<std::string, std::function<GameObject *(TiledMap::Tile
 }
 using namespace Supergoon;
 static std::vector<std::pair<std::string, Image *>> _imagesCache;
-// static Level *lastLevel = nullptr;
-// static const int _bufferSize = 255;
 
 Level::Level(const char *filename)
 	: _background(nullptr) {
@@ -23,6 +22,14 @@ Level::Level(const char *filename)
 	_mapData = std::make_unique<TiledMap>(filename);
 	_physicsWorld = std::make_unique<PhysicsWorld>();
 	LoadSurfaces();
+	LoadAllGameObjects();
+	// Add gamestate object to level
+	auto go = new GameObject();
+	auto gamestate = GameState();
+	gamestate.CurrentLevel = this;
+	gamestate.PlayerSpawnLocation = 0;
+	go->AddComponent<GameState>(gamestate);
+	AddGameObjectToLevel(go);
 }
 
 void Level::PhysicsUpdate() {
@@ -52,8 +59,6 @@ void Level::LoadSurfaces() {
 				char *fullPath = NULL;
 				SDL_asprintf(&fullPath, "%sassets/tiled/%s", SDL_GetBasePath(), tile.Image.c_str());
 				if (!CheckIfTilesetIsCached(fullPath)) {
-					// auto i = geImageNewFromFile(buf);
-					// auto i = new Image(std::string(fullPath));
 					auto i = ContentRegistry::CreateContent<Image>(fullPath);
 					_imagesCache.push_back({tile.Image, i.get()});
 				}
@@ -62,7 +67,6 @@ void Level::LoadSurfaces() {
 			char *fullPath = NULL;
 			SDL_asprintf(&fullPath, "%sassets/tiled/%s", SDL_GetBasePath(), tileset.Image.c_str());
 			if (!CheckIfTilesetIsCached(fullPath)) {
-				// auto i = new Image(fullPath);
 				auto i = ContentRegistry::CreateContent<Image>(fullPath);
 				_imagesCache.push_back({tileset.Image, i.get()});
 			}
@@ -96,10 +100,6 @@ Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	printf("Could not find loaded surface for gid %ud\n", gid);
 	return nullptr;
 }
-
-// static void LevelLoaded() {
-// 	State::IsLoadingMap = false;
-// }
 
 void Level::LoadNewLevel() {
 	// auto l = new Supergoon::Level(Bba::State::NextMapName.c_str());
@@ -154,10 +154,8 @@ void Level::RestartLevel() {
 void Level::CreateBackgroundImage() {
 	if (_background)
 		return;
-	// _background = new Image(_name, _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight);
-	auto thing = ContentRegistry::CreateContent<Image, int, int>(_name, _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight);
-	ContentRegistry::LoadContent(*thing);
-	_background = thing.get();
+	_background = ContentRegistry::CreateContent<Image, int, int>(_name, _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight);
+	ContentRegistry::LoadAllContent();
 	for (auto &group : _mapData->Groups) {
 		if (group.Name != "background") {
 			continue;
@@ -206,18 +204,6 @@ void Level::LoadSolidObjects() {
 	// _gameObjects.push_back(NewSolidObject(bottom));
 	// _gameObjects.push_back(NewSolidObject(left));
 }
-// cc.Box.x = pl->Location.x - (SCREEN_WIDTH / 2);
-// cc.Box.y = pl->Location.y - (SCREEN_HEIGHT / 2);
-// if (cc.Box.x < 0) {
-// 	cc.Box.x = 0;
-// } else if (cc.Box.x > cc.Bounds.x - SCREEN_WIDTH) {
-// 	cc.Box.x = std::max(cc.Bounds.x - SCREEN_WIDTH, 0);
-// }
-// if (cc.Box.y < 0) {
-// 	cc.Box.y = 0;
-// } else if (cc.Box.y > (cc.Bounds.y - SCREEN_HEIGHT)) {
-// 	cc.Box.y = cc.Bounds.y - SCREEN_HEIGHT;
-// }
 
 void Level::Draw() {
 	if (_background) {
