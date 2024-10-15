@@ -11,6 +11,7 @@ class RigidbodyComponent {
 	RigidbodyComponent(Level& level, Vector2 loc = Vector2(0));
 	~RigidbodyComponent();
 	Vector2 Location();
+	void SetVelocity(Vector2 vel);
 	void ApplyForceToBody(Vector2 force);
 
    private:

@@ -1,6 +1,7 @@
 #pragma once
 namespace Supergoon {
 struct Vector2 {
+	inline Vector2() : X(0), Y(0){};
 	inline Vector2(float xy) {
 		X = xy;
 		Y = xy;

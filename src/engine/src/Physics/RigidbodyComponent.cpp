@@ -7,7 +7,6 @@ using namespace Supergoon;
 #define SCREENHEIGHT 288
 RigidbodyComponent::RigidbodyComponent(Level& id, Vector2 loc) {
 	b2BodyDef bodyDef = b2DefaultBodyDef();
-	// bodyDef.type = b2_dynamicBody;	// Dynamic allows movement
 	bodyDef.position = SdlLocToBoxVec(0, 0);
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.gravityScale = 0.0f;
@@ -25,6 +24,9 @@ RigidbodyComponent::~RigidbodyComponent() {
 Vector2 RigidbodyComponent::Location() {
 	return BoxToSdlVector(b2Body_GetPosition(_body));
 }
+void RigidbodyComponent::SetVelocity(Vector2 vel) {
+	b2Body_SetLinearVelocity(_body, b2Vec2{vel.X, vel.Y});
+}
 
 b2Vec2 RigidbodyComponent::SdlLocToBoxVec(int x, int y) {
 	b2Vec2 box2dPoint;
@@ -33,10 +35,6 @@ b2Vec2 RigidbodyComponent::SdlLocToBoxVec(int x, int y) {
 	return box2dPoint;
 }
 Vector2 RigidbodyComponent::BoxToSdlVector(b2Vec2 loc) {
-	// gePoint sdlPoint;
-	// sdlPoint.x = static_cast<int>(x);
-	// sdlPoint.y = static_cast<int>(SCREENHEIGHT - y);  // screenHeight is the height of your SDL window
-	// return sdlPoint;
 	return Vector2(loc.x, (float)(int)SCREENHEIGHT - loc.y);
 }
 void RigidbodyComponent::ApplyForceToBody(Vector2 force) {
