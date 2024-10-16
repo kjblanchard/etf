@@ -3,11 +3,13 @@
 // #include <BbAdventures/components/AnimationComponent.hpp>
 // #include <BbAdventures/components/LocationComponent.hpp>
 // #include <BbAdventures/shared/state.hpp>
-#include <Components/Location.hpp>
 #include <Components/AnimationComponent.hpp>
+#include <Components/Location.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
+#include <Supergoon/ECS/CameraComponent.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
+#include <Supergoon/ECS/GameStateComponent.hpp>
 #include <Supergoon/Game.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <memory>
@@ -40,8 +42,11 @@ void Supergoon::UpdateAnimationComponents() {
 void Supergoon::DrawAnimationComponents() {
 	GameObject::ForEach<AnimationComponent, LocationComponent>([](GameObject, AnimationComponent& a, LocationComponent& l) {
 		auto s = a.Animation->FrameCoords();
+		auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+		auto& cc = c->GetComponent<CameraComponent>();
+		// TODO why do we need to get camera here.
 		// 0 is for camera X and Camera Y
-		auto d = RectangleF{(float)(int)(l.Location.X + a.Offset.x) - 0, (float)(int)(l.Location.Y + a.Offset.y) - 0, (float)s.W, (float)s.H};
+		auto d = RectangleF{(float)(int)(l.Location.X + a.Offset.x) - (int)cc.Box.X, (float)(int)(l.Location.Y + a.Offset.y) - (int)cc.Box.Y, (float)s.W, (float)s.H};
 		a.AnimationImage->Draw(s, d);
 	});
 }
