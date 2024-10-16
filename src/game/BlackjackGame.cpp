@@ -18,6 +18,7 @@
 #include <Systems/ImageSystem.hpp>
 #include <Systems/LocationSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
+#include <Systems/DebugDrawSystem.hpp>
 namespace Supergoon {
 std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap = {
 	{"Start", [](TiledMap::TiledObject &object) {
@@ -60,6 +61,7 @@ void BlackjackGame::Draw() {
 
 #ifdef imgui
 	Widgets::ShowWidgets();
+	DrawDebugBoxes();
 #endif
 }
 

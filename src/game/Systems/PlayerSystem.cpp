@@ -16,7 +16,7 @@ using namespace Supergoon;
 
 static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState& gameState) {
 	auto go = new GameObject();
-	auto playerRb = RigidbodyComponent(*gameState.CurrentLevel);
+	auto playerRb = RigidbodyComponent(*gameState.CurrentLevel, gePoint{32, 32}, Vector2{playerSpawn.Location.X, playerSpawn.Location.Y});
 	// auto playerImage = ImageComponent();
 	auto playerLocation = LocationComponent();
 	auto playerComponent = PlayerComponent();

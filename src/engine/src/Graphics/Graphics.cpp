@@ -36,7 +36,8 @@ void Graphics::CreateWindow(int width, int height, std::string name) {
 	_windowWidth = width;
 	_windowHeight = height;
 	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
-	auto flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY;
+	// auto flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY;
+	auto flags = SDL_WINDOW_RESIZABLE;
 	if (!SDL_CreateWindowAndRenderer(name.c_str(), width, height, flags, &_window, &_renderer)) {
 		sgLogCritical("Could not load window, error, %s", SDL_GetError());
 	}

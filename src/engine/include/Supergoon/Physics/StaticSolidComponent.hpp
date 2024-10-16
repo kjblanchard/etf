@@ -7,14 +7,12 @@
 
 namespace Supergoon {
 class Level;
-class RigidbodyComponent {
+struct StaticSolidComponent {
    public:
-	RigidbodyComponent(Level& level, gePoint size = gePoint{0, 0}, Vector2 loc = Vector2(0));
-	~RigidbodyComponent();
+	StaticSolidComponent(Level& level, gePoint size = gePoint{0, 0}, Vector2 loc = Vector2(0));
+	~StaticSolidComponent();
 	Vector2 Location();
 	gePoint Size();
-	void SetVelocity(Vector2 vel);
-	void ApplyForceToBody(Vector2 force);
 
    private:
 	gePoint _size;
