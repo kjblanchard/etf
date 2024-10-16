@@ -58,6 +58,7 @@ class Level {
 	//  */
 	Image *GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset);
 	void StartBgm();
+	GameObject *NewSolidObject(TiledMap::TiledObject &);
 
    private:
 	std::string _name;

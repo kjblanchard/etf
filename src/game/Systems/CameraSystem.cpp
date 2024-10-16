@@ -4,7 +4,7 @@
 // #include <BbAdventures/components/PlayerComponent.hpp>
 // #include <BbAdventures/shared/constants.hpp>
 // #include <BbAdventures/shared/state.hpp>
-#include <Components/Location.hpp>
+#include <Supergoon/ECS/Location.hpp>
 #include <Components/Player.hpp>
 #include <Supergoon/ECS/CameraComponent.hpp>
 #include <Supergoon/ECS/GameObject.hpp>

@@ -1,6 +1,6 @@
 #include <Components/AnimationComponent.hpp>
 #include <Components/Image.hpp>
-#include <Components/Location.hpp>
+#include <Supergoon/ECS/Location.hpp>
 #include <Components/Player.hpp>
 #include <Components/PlayerSpawnComponent.hpp>
 #include <Supergoon/Content/Content.hpp>
@@ -24,7 +24,6 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	playerAnimation.AnimationName = "player" + std::to_string(playerComponent.PlayerNum + 1);
 	playerAnimation.Offset = gePoint{0, 0};
 	playerAnimation.AnimationSpeed = 1.0;
-	// playerImage.Image = ContentRegistry::CreateContent<Image>("assets/img/player1.png");
 	playerComponent.PlayerNum = 0;
 	playerComponent.Direction = Directions::South;
 

@@ -7,6 +7,7 @@ message(STATUS "Starting ${EXECUTABLE_TARGET_NAME} library initialization")
 add_executable(${EXECUTABLE_TARGET_NAME}
     BlackjackGame.cpp
     Entities/PlayerStart.cpp
+    Entities/Solid.cpp
     Systems/PlayerSystem.cpp
     Systems/ImageSystem.cpp
     Systems/LocationSystem.cpp

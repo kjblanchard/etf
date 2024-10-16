@@ -6,6 +6,8 @@
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/ECS/CameraComponent.hpp>
 #include <Supergoon/ECS/GameStateComponent.hpp>
+#include <Supergoon/ECS/Location.hpp>
+#include <Supergoon/Physics/StaticSolidComponent.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
 int SCREEN_WIDTH = 512;
@@ -24,6 +26,7 @@ Level::Level(const char *filename)
 	_physicsWorld = std::make_unique<PhysicsWorld>();
 	LoadSurfaces();
 	LoadAllGameObjects();
+	LoadSolidObjects();
 	// Add gamestate object to level
 	auto go = new GameObject();
 	auto gamestate = GameState();
@@ -192,12 +195,22 @@ void Level::CreateBackgroundImage() {
 		}
 	}
 }
+GameObject *Level::NewSolidObject(TiledMap::TiledObject &t) {
+	auto go = new GameObject();
+	auto s = StaticSolidComponent(*this, gePoint{t.Width, t.Height}, Vector2{(float)t.X, (float)t.Y});
+	auto l = LocationComponent();
+	l.Location.X = s.Location().X;
+	l.Location.Y = s.Location().Y;
+	go->AddComponent<StaticSolidComponent>(s);
+	go->AddComponent<LocationComponent>(l);
+	return go;
+}
 
 void Level::LoadSolidObjects() {
-	// for (auto &solid : _mapData->SolidObjects) {
-	// 	auto go = NewSolidObject(solid);
-	// 	_gameObjects.push_back(go);
-	// }
+	for (auto &solid : _mapData->SolidObjects) {
+		auto go = NewSolidObject(solid);
+		_gameObjects.push_back(go);
+	}
 	// const int boxSize = 16;
 	// auto size = GetSize();
 	// geRectangle top = {0, 0, size.x, boxSize};

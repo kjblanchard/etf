@@ -1,4 +1,4 @@
-#include <Components/Location.hpp>
+#include <Supergoon/ECS/Location.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
 #include <Supergoon/Physics/RigidbodyComponent.hpp>
 #include <Systems/LocationSystem.hpp>
