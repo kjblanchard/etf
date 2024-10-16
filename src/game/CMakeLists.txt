@@ -11,6 +11,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Systems/ImageSystem.cpp
     Systems/LocationSystem.cpp
     Systems/AsepriteSystem.cpp
+    Systems/CameraSystem.cpp
 )
 target_compile_options(${EXECUTABLE_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_libraries(${EXECUTABLE_TARGET_NAME}

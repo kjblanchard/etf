@@ -6,6 +6,7 @@
 #include <Supergoon/Content/Content.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
+#include <Supergoon/ECS/CameraComponent.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
 #include <Supergoon/ECS/GameStateComponent.hpp>
 #include <Supergoon/Input.hpp>
@@ -81,6 +82,7 @@ static void loadPlayerEach(GameObject go, PlayerSpawnComponent& ps) {
 	if (ps.SpawnLocationId != stateComponent.PlayerSpawnLocation) {
 		return;
 	}
+
 	loadPlayer(go, ps, stateComponent);
 }
 

@@ -13,10 +13,11 @@
 #include <Supergoon/Sound.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
 #include <Supergoon/World/Level.hpp>
+#include <Systems/AsepriteSystem.hpp>
+#include <Systems/CameraSystem.hpp>
 #include <Systems/ImageSystem.hpp>
 #include <Systems/LocationSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
-#include <Systems/AsepriteSystem.hpp>
 namespace Supergoon {
 std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap = {
 	{"Start", [](TiledMap::TiledObject &object) {
@@ -49,6 +50,7 @@ void BlackjackGame::Update() {
 	UpdateLocationsForRbs();
 	PlayerInput();
 	UpdateAnimationComponents();
+	UpdateCamera();
 }
 
 void BlackjackGame::Draw() {

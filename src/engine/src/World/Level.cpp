@@ -4,6 +4,7 @@
 #include <Supergoon/Content/Content.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
+#include <Supergoon/ECS/CameraComponent.hpp>
 #include <Supergoon/ECS/GameStateComponent.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
@@ -26,9 +27,13 @@ Level::Level(const char *filename)
 	// Add gamestate object to level
 	auto go = new GameObject();
 	auto gamestate = GameState();
+	auto camera = CameraComponent();
+	camera.Bounds.x = GetSize().x;
+	camera.Bounds.y = GetSize().y;
 	gamestate.CurrentLevel = this;
 	gamestate.PlayerSpawnLocation = 0;
 	go->AddComponent<GameState>(gamestate);
+	go->AddComponent<CameraComponent>(camera);
 	AddGameObjectToLevel(go);
 }
 
@@ -211,19 +216,6 @@ void Level::Draw() {
 		auto size = GetSize();
 		s.X = cameraX;
 		s.Y = cameraY;
-		if (size.x > SCREEN_WIDTH) {
-			s.X = std::max(0, std::min(cameraX, size.x - SCREEN_WIDTH));
-		} else {
-			s.X = 0;  // Center or fix the camera if the map width is smaller than the screen
-		}
-
-		if (size.y > SCREEN_HEIGHT) {
-			s.Y = std::max(0, std::min(cameraY, size.y - SCREEN_HEIGHT));
-		} else {
-			s.Y = 0;  // Center or fix the camera if the map height is smaller than the screen
-		}
-		// s.W = SCREEN_WIDTH;
-		// s.H = SCREEN_HEIGHT;
 		s.W = size.x <= SCREEN_WIDTH ? size.x : SCREEN_WIDTH;
 		s.H = size.y <= SCREEN_HEIGHT ? size.y : SCREEN_HEIGHT;
 		auto d = RectangleF();
@@ -231,8 +223,6 @@ void Level::Draw() {
 		d.Y = 0;
 		d.W = SCREEN_WIDTH;
 		d.H = SCREEN_HEIGHT;
-		// d.W = size.x <= SCREEN_WIDTH ? size.x : SCREEN_WIDTH;
-		// d.H = size.y <= SCREEN_HEIGHT ? size.y : SCREEN_HEIGHT;
 		_background->Draw(s, d);
 	}
 }
