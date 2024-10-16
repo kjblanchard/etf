@@ -3,47 +3,52 @@
 // #include <BbAdventures/components/AnimationComponent.hpp>
 // #include <BbAdventures/components/LocationComponent.hpp>
 // #include <BbAdventures/shared/state.hpp>
+#include <Components/Location.hpp>
 #include <Components/AnimationComponent.hpp>
+#include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/Content/Image.hpp>
+#include <Supergoon/ECS/GameObject.hpp>
+#include <Supergoon/Game.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <memory>
 using namespace Supergoon;
 void loadAnimationComponent(AnimationComponent& a) {
 	a.Animation = new AsepriteAnimation(a.AnimationName);
+	a.AnimationImage = ContentRegistry::CreateContent<Image>(a.Animation->Filename());
 	// a.AnimationImage = geImageNewFromFile(a.Animation->Filename().c_str());
 }
 
 void Supergoon::LoadAnimationComponents() {
-	// 	GameObject::ForEach<AnimationComponent>([](GameObject, AnimationComponent& a) {
-	// 		loadAnimationComponent(a);
-	// }
+	GameObject::ForEach<AnimationComponent>([](GameObject, AnimationComponent& a) {
+		loadAnimationComponent(a);
+	});
 }
 void Supergoon::UpdateAnimationComponents() {
+	auto deltatime = (float)Game::Instance()->DeltaTime();
+	auto msTime = deltatime * 1000;
+
+	GameObject::ForEach<AnimationComponent>([&msTime](GameObject, AnimationComponent& a) {
+		if (a.Animation == nullptr) {
+			loadAnimationComponent(a);
+		}
+		if (!a.Playing) {
+			return;
+		}
+		a.Animation->UpdateAnimation(msTime * a.AnimationSpeed);
+	});
 }
 void Supergoon::DrawAnimationComponents() {
+	GameObject::ForEach<AnimationComponent, LocationComponent>([](GameObject, AnimationComponent& a, LocationComponent& l) {
+		auto s = a.Animation->FrameCoords();
+		// 0 is for camera X and Camera Y
+		auto d = RectangleF{(float)(int)(l.Location.X + a.Offset.x) - 0, (float)(int)(l.Location.Y + a.Offset.y) - 0, (float)s.W, (float)s.H};
+		a.AnimationImage->Draw(s, d);
+	});
 }
 void Supergoon::FreeAnimationComponents() {
 }
 
-// void UpdateAnimationComponents() {
-// 	auto msTime = State::DeltaTime * 1000;
-
-// 	GameObject::ForEach<AnimationComponent>([&msTime](GameObject, AnimationComponent& a) {
-// 		if(a.Animation == nullptr) {
-// 			loadAnimationComponent(a);
-// 		}
-// 		if (!a.Playing) {
-// 			return;
-// 		}
-// 		a.Animation->UpdateAnimation(msTime * a.AnimationSpeed);
-// 	});
-// }
-
 // void DrawAnimationComponents() {
-// 	GameObject::ForEach<AnimationComponent, LocationComponent>([](GameObject, AnimationComponent& a, LocationComponent& l) {
-// 		auto s = a.Animation->FrameCoords();
-// 		auto d = geRectangleF{(l.Location.x + a.Offset.x) - State::CameraX, (l.Location.y + a.Offset.y) - State::CameraY, (float)s.w, (float)s.h};
-// 		geImageDrawF(a.AnimationImage, &s, &d);
-// 	});
 // }
 
 // void FreeAnimationComponents() {

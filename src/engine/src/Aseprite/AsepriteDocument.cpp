@@ -1,28 +1,15 @@
-// #include <BbAdventures/aseprite/AsepriteDocument.hpp>
-// #include <GoonEngine/debug.h>
-// #include <GoonEngine/utils.h>
 #include <SDL3/SDL.h>
+
 #include <Supergoon/Aseprite/AsepriteDocument.hpp>
 #include <Supergoon/Log.hpp>
 #include <SupergoonEngine/json.hpp>
 #include <fstream>
 #include <istream>
-// #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 using namespace Supergoon;
-// #ifdef GN_PLATFORM_MACOS
-// static const char *_asepritePrefix = "../Resources/assets/aseprite/";
-// #else
-static const char *_asepritePrefix = "assets/aseprite/";
-// #endif
 AsepriteDocument::AsepriteDocument(std::string p) {
-	auto fullPathNoType = _asepritePrefix + p;
-	auto fullPathJson = fullPathNoType + ".json";
-	// char buf[1000];
 	char *fullPath = NULL;
-	SDL_asprintf(&fullPath, "%sassets/aseprite/%s", SDL_GetBasePath(), fullPathJson.c_str());
-	// geGetLoadFilename(buf, sizeof(buf), fullPathJson.c_str());
-
+	SDL_asprintf(&fullPath, "%sassets/aseprite/%s.json", SDL_GetBasePath(), p.c_str());
 	std::ifstream fileStream(fullPath);
 	auto j = json::parse(fileStream);
 	for (const auto &frameJson : j["frames"]) {

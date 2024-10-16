@@ -13,7 +13,7 @@ class AsepriteAnimation {
 	void Load();
 	void UpdateAnimation(double d);
 	void PlayAnimation(std::string a);
-	Rectangle& FrameCoords();
+	RectangleF& FrameCoords();
 
    private:
 	void UpdateRect();
@@ -23,7 +23,7 @@ class AsepriteAnimation {
 	int _nextFrame;
 	float _frameTime;
 	bool _reverse = false;	// pingpong
-	std::unique_ptr<Rectangle> _rect;
+	std::unique_ptr<RectangleF> _rect;
 	std::shared_ptr<AsepriteDocument> _aseDocument;
 	static std::unordered_map<std::string, std::shared_ptr<AsepriteDocument>> _asepriteDocuments;
 };

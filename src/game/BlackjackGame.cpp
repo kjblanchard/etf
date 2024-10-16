@@ -16,6 +16,7 @@
 #include <Systems/ImageSystem.hpp>
 #include <Systems/LocationSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
+#include <Systems/AsepriteSystem.hpp>
 namespace Supergoon {
 std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap = {
 	{"Start", [](TiledMap::TiledObject &object) {
@@ -38,6 +39,8 @@ void BlackjackGame::Start() {
 	level = new Level("debugTown");
 	level->CreateBackgroundImage();
 	LoadPlayers();
+	LoadAnimationComponents();
+
 	ContentRegistry::LoadAllContent();
 }
 
@@ -45,10 +48,12 @@ void BlackjackGame::Update() {
 	level->PhysicsUpdate();
 	UpdateLocationsForRbs();
 	PlayerInput();
+	UpdateAnimationComponents();
 }
 
 void BlackjackGame::Draw() {
 	level->Draw();
+	DrawAnimationComponents();
 	DrawImages();
 
 #ifdef imgui

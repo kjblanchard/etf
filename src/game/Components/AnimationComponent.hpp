@@ -11,7 +11,7 @@ struct AnimationComponent {
 	AsepriteAnimation* Animation;
 	std::string AnimationName;
 	float AnimationSpeed;
-	Image* AnimationImage;
+	std::shared_ptr<Image> AnimationImage;
 	gePoint Offset;
 	bool Playing;
 };

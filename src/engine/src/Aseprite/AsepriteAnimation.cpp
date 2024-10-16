@@ -1,13 +1,9 @@
-#include <Supergoon/Log.hpp>
 #include <SDL3/SDL.h>
-// #include <GoonEngine/debug.h>
-// #include <GoonEngine/utils.h>
 
 #include <Supergoon/Aseprite/AsepriteAnimation.hpp>
 #include <Supergoon/Aseprite/AsepriteDocument.hpp>
+#include <Supergoon/Log.hpp>
 
-// #include <BbAdventures/aseprite/AsepriteAnimation.hpp>
-// #include <BbAdventures/aseprite/AsepriteDocument.hpp>
 using namespace Supergoon;
 
 std::unordered_map<std::string, std::shared_ptr<AsepriteDocument>> AsepriteAnimation::_asepriteDocuments;
@@ -18,7 +14,7 @@ std::unordered_map<std::string, std::shared_ptr<AsepriteDocument>> AsepriteAnima
 // #endif
 
 AsepriteAnimation::AsepriteAnimation(std::string n) : _animNum(0), _frame(0), _nextFrame(0), _frameTime(0), _aseDocument(nullptr) {
-	_rect = std::make_unique<Rectangle>();
+	_rect = std::make_unique<RectangleF>();
 	_filePath = n;
 	Load();
 }
@@ -29,7 +25,7 @@ std::string AsepriteAnimation::Filename() {
 	// auto f = _animationPrefix+ _aseDocument->meta.image;
 	// char buf[1000];
 
-	char *fullPath = NULL;
+	char* fullPath = NULL;
 	SDL_asprintf(&fullPath, "%sassets/img/%s", SDL_GetBasePath(), _aseDocument->meta.image.c_str());
 	// geGetLoadFilename(buf, sizeof(buf), f.c_str());
 	return fullPath;
@@ -98,6 +94,6 @@ void AsepriteAnimation::UpdateRect() {
 	_rect->H = _aseDocument->frames[_frame].frame.h;
 }
 
-Rectangle& AsepriteAnimation::FrameCoords() {
+RectangleF& AsepriteAnimation::FrameCoords() {
 	return *(_rect.get());
 }
