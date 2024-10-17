@@ -25,8 +25,7 @@ set(SRC_FILES
     src/World/TiledMap.cpp
     src/World/World.cpp
     src/Physics/Physics.cpp
-    src/Physics/RigidbodyComponent.cpp
-    src/Physics/StaticSolidComponent.cpp
+    src/Physics/StaticObjectComponent.cpp
     src/ECS/GameObject.cpp
 )
 

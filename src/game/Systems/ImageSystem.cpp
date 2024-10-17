@@ -1,7 +1,7 @@
 #include "ImageSystem.hpp"
 
 #include <Components/Image.hpp>
-#include <Supergoon/ECS/Location.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
 #include <Supergoon/Rectangle.hpp>
 #include <Systems/ImageSystem.hpp>

@@ -1,7 +1,5 @@
 #pragma once
 #include <SupergoonEngine/prim/point.h>
-#include <box2d/id.h>
-#include <box2d/types.h>
 
 #include <Supergoon/Vector2.hpp>
 
@@ -16,6 +14,5 @@ struct StaticSolidComponent {
 
    private:
 	gePoint _size;
-	b2BodyId _body;
 };
 }  // namespace Supergoon

@@ -1,8 +1,8 @@
-#include <Supergoon/ECS/Location.hpp>
 #include <Entities/Solid.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
-#include <Supergoon/ECS/GameStateComponent.hpp>
-#include <Supergoon/Physics/StaticSolidComponent.hpp>
+#include <Supergoon/Physics/StaticObjectComponent.hpp>
 using namespace Supergoon;
 
 GameObject* Supergoon::NewSolidObject(RectangleF& r) {

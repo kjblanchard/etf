@@ -4,11 +4,11 @@
 // #include <BbAdventures/components/PlayerComponent.hpp>
 // #include <BbAdventures/shared/constants.hpp>
 // #include <BbAdventures/shared/state.hpp>
-#include <Supergoon/ECS/Location.hpp>
 #include <Components/Player.hpp>
-#include <Supergoon/ECS/CameraComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/ECS/Components/CameraComponent.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
-#include <Supergoon/ECS/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <algorithm>
 namespace Supergoon {
 int SCREEN_WIDTH = 512;

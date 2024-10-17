@@ -1,6 +1,5 @@
 
 #include <SupergoonEngine/log.h>
-#include <box2d/box2d.h>
 
 #include <Entities/PlayerStart.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
@@ -9,16 +8,15 @@
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/Input.hpp>
 #include <Supergoon/Physics/Physics.hpp>
-#include <Supergoon/Physics/RigidbodyComponent.hpp>
 #include <Supergoon/Sound.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <Systems/CameraSystem.hpp>
+#include <Systems/DebugDrawSystem.hpp>
 #include <Systems/ImageSystem.hpp>
 #include <Systems/LocationSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
-#include <Systems/DebugDrawSystem.hpp>
 namespace Supergoon {
 std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap = {
 	{"Start", [](TiledMap::TiledObject &object) {
@@ -47,7 +45,6 @@ void BlackjackGame::Start() {
 }
 
 void BlackjackGame::Update() {
-	level->PhysicsUpdate();
 	UpdateLocationsForRbs();
 	PlayerInput();
 	UpdateAnimationComponents();

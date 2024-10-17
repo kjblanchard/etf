@@ -4,10 +4,9 @@
 #include <Supergoon/Content/Content.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
-#include <Supergoon/ECS/CameraComponent.hpp>
-#include <Supergoon/ECS/GameStateComponent.hpp>
-#include <Supergoon/ECS/Location.hpp>
-#include <Supergoon/Physics/StaticSolidComponent.hpp>
+#include <Supergoon/ECS/Components/CameraComponent.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
 int SCREEN_WIDTH = 512;
@@ -23,7 +22,7 @@ Level::Level(const char *filename)
 	: _background(nullptr) {
 	_name = filename;
 	_mapData = std::make_unique<TiledMap>(filename);
-	_physicsWorld = std::make_unique<PhysicsWorld>();
+	// _physicsWorld = std::make_unique<PhysicsWorld>();
 	LoadSurfaces();
 	LoadAllGameObjects();
 	LoadSolidObjects();
@@ -38,10 +37,6 @@ Level::Level(const char *filename)
 	go->AddComponent<GameState>(gamestate);
 	go->AddComponent<CameraComponent>(camera);
 	AddGameObjectToLevel(go);
-}
-
-void Level::PhysicsUpdate() {
-	_physicsWorld->Update();
 }
 
 Level::~Level() {
@@ -197,11 +192,11 @@ void Level::CreateBackgroundImage() {
 }
 GameObject *Level::NewSolidObject(TiledMap::TiledObject &t) {
 	auto go = new GameObject();
-	auto s = StaticSolidComponent(*this, gePoint{t.Width, t.Height}, Vector2{(float)t.X, (float)t.Y});
+	// auto s = StaticSolidComponent(*this, gePoint{t.Width, t.Height}, Vector2{(float)t.X, (float)t.Y});
 	auto l = LocationComponent();
-	l.Location.X = s.Location().X;
-	l.Location.Y = s.Location().Y;
-	go->AddComponent<StaticSolidComponent>(s);
+	// l.Location.X = s.Location().X;
+	// l.Location.Y = s.Location().Y;
+	// go->AddComponent<StaticSolidComponent>(s);
 	go->AddComponent<LocationComponent>(l);
 	return go;
 }

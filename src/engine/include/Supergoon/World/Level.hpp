@@ -26,18 +26,11 @@ class Level {
 	inline gePoint GetSize() { return gePoint{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
 	inline void AddGameObjectToLevel(GameObject *g) { _gameObjects.push_back(g); }
 	void LoadAllGameObjects();
-	// std::vector<TiledMap::TiledObject> GetAllObjects();
-	// inline std::vector<TiledMap::TiledObject> GetAllSolidObjects() const { return _mapData->SolidObjects; }
-	// Panel *LoadPanel;
-	void PhysicsUpdate();
 	void Draw();
 	void RestartLevel();
 	void CreateBackgroundImage();
-	inline PhysicsWorld &Physics() { return *_physicsWorld.get(); }
 	int cameraX = 0;
 	int cameraY = 0;
-	// float *cameraFollowX;
-	// float *cameraFollowY;
 
    private:
 	/**
@@ -46,16 +39,6 @@ class Level {
 	void LoadSurfaces();
 	bool CheckIfTilesetIsCached(const std::string &name) const;
 	void LoadSolidObjects();
-	/**
-	 * @brief Create a Background Atlas object and blits everything to it
-	 */
-	// /**
-	//  * @brief Get the Surface For Gid object
-	//  *
-	//  * @param gid gid of the tile
-	//  * @param tileset the tileset for this tile
-	//  * @return struct SDL_Surface* The loaded surface
-	//  */
 	Image *GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset);
 	void StartBgm();
 	GameObject *NewSolidObject(TiledMap::TiledObject &);
@@ -63,9 +46,7 @@ class Level {
    private:
 	std::string _name;
 	std::shared_ptr<Image> _background;
-	// geImage *_background;
 	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;
-	std::unique_ptr<PhysicsWorld> _physicsWorld;
 };
 }  // namespace Supergoon

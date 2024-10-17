@@ -4,12 +4,12 @@
 // #include <BbAdventures/components/LocationComponent.hpp>
 // #include <BbAdventures/shared/state.hpp>
 #include <Components/AnimationComponent.hpp>
-#include <Supergoon/ECS/Location.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
-#include <Supergoon/ECS/CameraComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/ECS/Components/CameraComponent.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
-#include <Supergoon/ECS/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/Game.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <memory>

@@ -4,4 +4,5 @@ namespace Supergoon {
 struct LocationComponent {
 	Vector2 Location = {0,0};
 };
+
 }  // namespace Bba

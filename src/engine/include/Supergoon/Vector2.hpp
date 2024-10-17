@@ -13,6 +13,14 @@ struct Vector2 {
 	inline bool operator==(const Vector2& rhs) const {
 		return rhs.X == X && rhs.Y == Y;
 	}
+	inline void operator+=(const Vector2& rhs) {
+		X += rhs.X;
+		Y += rhs.Y;
+	}
+	inline void operator*=(const Vector2& rhs) {
+		X *= rhs.X;
+		Y *= rhs.Y;
+	}
 	float X = 0;
 	float Y = 0;
 };
