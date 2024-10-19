@@ -12,13 +12,13 @@ set(FULL_COMPILE_OPTIONS
 cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
 add_library(${LIBRARY_TARGET_NAME} STATIC
-    src/imgui_impl_sdl3.cpp
-    src/imgui_impl_sdlrenderer3.cpp
-    src/imgui_demo.cpp
-    src/imgui_tables.cpp
-    src/imgui_widgets.cpp
-    src/imgui_draw.cpp
-    src/imgui.cpp
+    src/imgui/imgui_impl_sdl3.cpp
+    src/imgui/imgui_impl_sdlrenderer3.cpp
+    src/imgui/imgui_demo.cpp
+    src/imgui/imgui_tables.cpp
+    src/imgui/imgui_widgets.cpp
+    src/imgui/imgui_draw.cpp
+    src/imgui/imgui.cpp
     src/easing.c
     src/log.c
     src/clock.c

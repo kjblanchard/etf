@@ -2,7 +2,7 @@
 
 // #include <Supergoon/Primitives/Point.hpp>
 #include <Supergoon/World/TiledMap.hpp>
-#include <SupergoonEngine/json.hpp>
+#include <SupergoonEngine/nlohmann/json.hpp>
 #include <fstream>
 #include <istream>
 using json = nlohmann::json;

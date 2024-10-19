@@ -1,4 +1,4 @@
-#include <Components/Player.hpp>
+#include <Components/PlayerComponent.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <algorithm>
 namespace Supergoon {

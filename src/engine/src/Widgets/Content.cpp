@@ -1,4 +1,4 @@
-#include <SupergoonEngine/imgui.h>
+#include <SupergoonEngine/imgui/imgui.h>
 
 #include <Supergoon/Content/Content.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>

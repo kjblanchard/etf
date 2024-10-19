@@ -5,8 +5,8 @@
 
 #include <Supergoon/Content/Image.hpp>
 #ifdef imgui
-#include <SupergoonEngine/imgui_impl_sdl3.h>
-#include <SupergoonEngine/imgui_impl_sdlrenderer3.h>
+#include <SupergoonEngine/imgui/imgui_impl_sdl3.h>
+#include <SupergoonEngine/imgui/imgui_impl_sdlrenderer3.h>
 #endif
 
 #include <Supergoon/Graphics/Graphics.hpp>

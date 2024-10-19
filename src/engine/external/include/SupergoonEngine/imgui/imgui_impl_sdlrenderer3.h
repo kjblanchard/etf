@@ -24,7 +24,7 @@
 // - Introduction, links and more at the top of imgui.cpp
 
 #pragma once
-#include <SupergoonEngine/imgui.h>
+#include <SupergoonEngine/imgui/imgui.h>
 // #include "imgui.h"      // IMGUI_IMPL_API
 #ifndef IMGUI_DISABLE
 

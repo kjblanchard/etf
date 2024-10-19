@@ -8,7 +8,7 @@
 #include <SupergoonEngine/input/joystick.h>
 #include <SupergoonEngine/input/keyboard.h>
 #ifdef imgui
-#include <SupergoonEngine/imgui.h>
+#include <SupergoonEngine/imgui/imgui.h>
 #endif
 
 #include <Supergoon/Events.hpp>
@@ -16,7 +16,7 @@
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/Log.hpp>
 #include <Supergoon/Sound.hpp>
-#include <SupergoonEngine/json.hpp>
+#include <SupergoonEngine/nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
 #include <istream>

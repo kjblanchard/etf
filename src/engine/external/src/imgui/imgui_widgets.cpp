@@ -40,9 +40,9 @@ Index of this file:
 #define IMGUI_DEFINE_MATH_OPERATORS
 #endif
 
-#include <SupergoonEngine/imgui.h>
+#include <SupergoonEngine/imgui/imgui.h>
 #ifndef IMGUI_DISABLE
-#include <SupergoonEngine/imgui_internal.h>
+#include <SupergoonEngine/imgui/imgui_internal.h>
 
 // System includes
 #include <stdint.h>     // intptr_t
@@ -3828,7 +3828,7 @@ bool ImGui::InputDouble(const char* label, double* v, double step, double step_f
 
 namespace ImStb
 {
-    #include <SupergoonEngine/imstb_textedit.h>
+    #include <SupergoonEngine/imgui/imstb_textedit.h>
 }
 
 bool ImGui::InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
@@ -4100,7 +4100,7 @@ static bool STB_TEXTEDIT_INSERTCHARS(ImGuiInputTextState* obj, int pos, const ch
 
 #define IMSTB_TEXTEDIT_IMPLEMENTATION
 #define IMSTB_TEXTEDIT_memmove memmove
-#include <SupergoonEngine/imstb_textedit.h>
+#include <SupergoonEngine/imgui/imstb_textedit.h>
 
 // stb_textedit internally allows for a single undo record to do addition and deletion, but somehow, calling
 // the stb_textedit_paste() function creates two separate records, so we perform it manually. (FIXME: Report to nothings/stb?)

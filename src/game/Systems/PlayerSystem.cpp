@@ -1,4 +1,4 @@
-#include <Components/Player.hpp>
+#include <Components/PlayerComponent.hpp>
 #include <Components/PlayerSpawnComponent.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Systems/PlayerSystem.hpp>

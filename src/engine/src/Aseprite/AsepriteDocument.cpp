@@ -2,7 +2,7 @@
 
 #include <Supergoon/Aseprite/AsepriteDocument.hpp>
 #include <Supergoon/Log.hpp>
-#include <SupergoonEngine/json.hpp>
+#include <SupergoonEngine/nlohmann/json.hpp>
 #include <fstream>
 #include <istream>
 using json = nlohmann::json;

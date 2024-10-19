@@ -1,4 +1,4 @@
-#include <SupergoonEngine/imgui.h>
+#include <SupergoonEngine/imgui/imgui.h>
 
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>

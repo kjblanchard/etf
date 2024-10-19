@@ -63,7 +63,7 @@ Index of this file:
 #ifdef IMGUI_USER_CONFIG
 #include IMGUI_USER_CONFIG
 #endif
-#include <SupergoonEngine/imconfig.h>
+#include <SupergoonEngine/imgui/imconfig.h>
 
 #ifndef IMGUI_DISABLE
 

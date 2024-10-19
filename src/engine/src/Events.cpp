@@ -4,7 +4,7 @@
 #include <Supergoon/Events.hpp>
 #include <algorithm>
 #ifdef imgui
-#include <SupergoonEngine/imgui_impl_sdl3.h>
+#include <SupergoonEngine/imgui/imgui_impl_sdl3.h>
 #endif
 using namespace Supergoon;
 

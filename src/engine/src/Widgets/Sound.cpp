@@ -1,5 +1,5 @@
 #include <SDL3/SDL_filesystem.h>
-#include <SupergoonEngine/imgui.h>
+#include <SupergoonEngine/imgui/imgui.h>
 
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Sfx.hpp>

@@ -1051,9 +1051,9 @@ CODE
 #define IMGUI_DEFINE_MATH_OPERATORS
 #endif
 
-#include <SupergoonEngine/imgui.h>
+#include <SupergoonEngine/imgui/imgui.h>
 #ifndef IMGUI_DISABLE
-#include <SupergoonEngine/imgui_internal.h>
+#include <SupergoonEngine/imgui/imgui_internal.h>
 
 // System includes
 #include <stdio.h>      // vsnprintf, sscanf, printf
