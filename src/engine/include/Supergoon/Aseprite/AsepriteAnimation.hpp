@@ -1,5 +1,5 @@
 #pragma once
-#include <Supergoon/Rectangle.hpp>
+#include <Supergoon/Primitives/Rectangle.hpp>
 #include <memory>
 #include <string>
 #include <unordered_map>

@@ -1,3 +1,4 @@
+#pragma once
 #include <SupergoonEngine/input/joystick.h>
 #include <SupergoonEngine/input/keyboard.h>
 namespace Supergoon {

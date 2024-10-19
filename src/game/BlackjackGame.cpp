@@ -1,16 +1,7 @@
 
-#include <SupergoonEngine/log.h>
 
 #include <Entities/PlayerStart.hpp>
-#include <Supergoon/Content/ContentRegistry.hpp>
-#include <Supergoon/Content/Sfx.hpp>
-#include <Supergoon/Game.hpp>
-#include <Supergoon/Graphics/Graphics.hpp>
-#include <Supergoon/Input.hpp>
-#include <Supergoon/Physics/Physics.hpp>
-#include <Supergoon/Sound.hpp>
-#include <Supergoon/Widgets/Widgets.hpp>
-#include <Supergoon/World/Level.hpp>
+#include <Supergoon/Supergoon.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/DebugDrawSystem.hpp>

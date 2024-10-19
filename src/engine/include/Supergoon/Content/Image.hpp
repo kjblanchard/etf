@@ -1,7 +1,7 @@
 #pragma once
-#include <Supergoon/Color.hpp>
 #include <Supergoon/Content/Content.hpp>
-#include <Supergoon/Rectangle.hpp>
+#include <Supergoon/Primitives/Color.hpp>
+#include <Supergoon/Primitives/Rectangle.hpp>
 #include <string>
 typedef struct SDL_Surface SDL_Surface;
 typedef struct SDL_Texture SDL_Texture;
@@ -19,7 +19,7 @@ class Image : public Content {
 	Image(std::string name, SDL_Surface* surface);
 	Image(std::string name, int width, int height);
 	~Image();
-    void Draw(RectangleF& src, RectangleF& dst);
+	void Draw(RectangleF& src, RectangleF& dst);
 	virtual void Load() override;
 	virtual void Unload() override;
 	virtual const std::string Filepath() override;

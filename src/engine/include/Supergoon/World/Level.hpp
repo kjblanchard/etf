@@ -1,6 +1,5 @@
 #pragma once
-#include <SupergoonEngine/prim/point.h>
-
+#include <Supergoon/Primitives/Point.hpp>
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
 #include <Supergoon/Physics/Physics.hpp>
@@ -23,7 +22,7 @@ class Level {
 	~Level();
 	static void LoadNewLevel();
 	const inline std::string &GetName() const { return _name; }
-	inline gePoint GetSize() { return gePoint{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
+	inline Point GetSize() { return Point{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
 	inline void AddGameObjectToLevel(GameObject *g) { _gameObjects.push_back(g); }
 	void LoadAllGameObjects();
 	void Draw();

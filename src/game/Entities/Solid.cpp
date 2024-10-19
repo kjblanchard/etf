@@ -1,8 +1,5 @@
 #include <Entities/Solid.hpp>
-#include <Supergoon/ECS/Components/GameStateComponent.hpp>
-#include <Supergoon/ECS/Components/LocationComponent.hpp>
-#include <Supergoon/ECS/GameObject.hpp>
-#include <Supergoon/Physics/StaticObjectComponent.hpp>
+#include <Supergoon/Supergoon.hpp>
 using namespace Supergoon;
 
 GameObject* Supergoon::NewSolidObject(RectangleF& r) {
@@ -27,7 +24,7 @@ GameObject* Supergoon::NewSolidObject(TiledMap::TiledObject& t) {
 		return nullptr;
 	}
 	auto& stateComponent = state->GetComponent<GameState>();
-	auto s = StaticSolidComponent(*stateComponent.CurrentLevel, gePoint{t.Width, t.Height}, Vector2{(float)t.X, (float)t.Y});
+	auto s = StaticSolidComponent(*stateComponent.CurrentLevel, Point{t.Width, t.Height}, Vector2{(float)t.X, (float)t.Y});
 	auto l = LocationComponent();
 	l.Location.X = s.Location().X;
 	l.Location.Y = s.Location().Y;

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <Supergoon/Rectangle.hpp>
+#include <Supergoon/Primitives/Rectangle.hpp>
 #include <variant>
 
 namespace Supergoon {

@@ -1,10 +1,8 @@
 #include "ImageSystem.hpp"
 
 #include <Components/Image.hpp>
-#include <Supergoon/ECS/Components/LocationComponent.hpp>
-#include <Supergoon/ECS/GameObject.hpp>
-#include <Supergoon/Rectangle.hpp>
 #include <Systems/ImageSystem.hpp>
+#include <Supergoon/Supergoon.hpp>
 using namespace Supergoon;
 static void drawImageEach(GameObject go, ImageComponent& imageComponent, LocationComponent& locationComponent) {
 	auto src = RectangleF{0, 0, 27, 31};

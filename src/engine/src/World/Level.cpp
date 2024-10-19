@@ -30,8 +30,8 @@ Level::Level(const char *filename)
 	auto go = new GameObject();
 	auto gamestate = GameState();
 	auto camera = CameraComponent();
-	camera.Bounds.x = GetSize().x;
-	camera.Bounds.y = GetSize().y;
+	camera.Bounds.X = GetSize().X;
+	camera.Bounds.Y = GetSize().Y;
 	gamestate.CurrentLevel = this;
 	gamestate.PlayerSpawnLocation = 0;
 	go->AddComponent<GameState>(gamestate);
@@ -224,8 +224,8 @@ void Level::Draw() {
 		auto size = GetSize();
 		s.X = cameraX;
 		s.Y = cameraY;
-		s.W = size.x <= SCREEN_WIDTH ? size.x : SCREEN_WIDTH;
-		s.H = size.y <= SCREEN_HEIGHT ? size.y : SCREEN_HEIGHT;
+		s.W = size.X <= SCREEN_WIDTH ? size.X : SCREEN_WIDTH;
+		s.H = size.Y <= SCREEN_HEIGHT ? size.Y : SCREEN_HEIGHT;
 		auto d = RectangleF();
 		d.X = 0;
 		d.Y = 0;

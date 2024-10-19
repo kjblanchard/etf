@@ -1,18 +1,18 @@
 #pragma once
-#include <SupergoonEngine/prim/point.h>
 
-#include <Supergoon/Vector2.hpp>
+#include <Supergoon/Primitives/Point.hpp>
+#include <Supergoon/Primitives/Vector2.hpp>
 
 namespace Supergoon {
 class Level;
 struct StaticSolidComponent {
    public:
-	StaticSolidComponent(Level& level, gePoint size = gePoint{0, 0}, Vector2 loc = Vector2(0));
+	StaticSolidComponent(Level& level, Point size = Point{0, 0}, Vector2 loc = Vector2(0));
 	~StaticSolidComponent();
 	Vector2 Location();
-	gePoint Size();
+	Point Size();
 
    private:
-	gePoint _size;
+	Point _size;
 };
 }  // namespace Supergoon

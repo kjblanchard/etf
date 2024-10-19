@@ -1,6 +1,6 @@
 #include <SDL3/SDL.h>
-#include <SupergoonEngine/prim/point.h>
 
+// #include <Supergoon/Primitives/Point.hpp>
 #include <Supergoon/World/TiledMap.hpp>
 #include <SupergoonEngine/json.hpp>
 #include <fstream>

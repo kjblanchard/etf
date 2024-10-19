@@ -1,7 +1,6 @@
 #pragma once
-#include <Supergoon/Rectangle.hpp>
+#include <Supergoon/Primitives/Rectangle.hpp>
 #include <Supergoon/World/TiledMap.hpp>
-// #include <BbAdventures/tiled/TiledMap.hpp>
 
 namespace Supergoon {
 class GameObject;

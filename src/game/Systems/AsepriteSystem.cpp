@@ -1,16 +1,5 @@
-// #include <BbAdventures/aseprite/AsepriteAnimation.hpp>
-// #include <BbAdventures/base/GameObject.hpp>
-// #include <BbAdventures/components/AnimationComponent.hpp>
-// #include <BbAdventures/components/LocationComponent.hpp>
-// #include <BbAdventures/shared/state.hpp>
 #include <Components/AnimationComponent.hpp>
-#include <Supergoon/Content/ContentRegistry.hpp>
-#include <Supergoon/Content/Image.hpp>
-#include <Supergoon/ECS/Components/LocationComponent.hpp>
-#include <Supergoon/ECS/Components/CameraComponent.hpp>
-#include <Supergoon/ECS/GameObject.hpp>
-#include <Supergoon/ECS/Components/GameStateComponent.hpp>
-#include <Supergoon/Game.hpp>
+#include <Supergoon/Supergoon.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <memory>
 using namespace Supergoon;
@@ -46,7 +35,7 @@ void Supergoon::DrawAnimationComponents() {
 		auto& cc = c->GetComponent<CameraComponent>();
 		// TODO why do we need to get camera here.
 		// 0 is for camera X and Camera Y
-		auto d = RectangleF{(float)(int)(l.Location.X + a.Offset.x) - (int)cc.Box.X, (float)(int)(l.Location.Y + a.Offset.y) - (int)cc.Box.Y, (float)s.W, (float)s.H};
+		auto d = RectangleF{(float)(int)(l.Location.X + a.Offset.X) - (int)cc.Box.X, (float)(int)(l.Location.Y + a.Offset.Y) - (int)cc.Box.Y, (float)s.W, (float)s.H};
 		a.AnimationImage->Draw(s, d);
 	});
 }

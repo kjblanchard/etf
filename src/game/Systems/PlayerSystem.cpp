@@ -21,7 +21,7 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	auto playerComponent = PlayerComponent();
 	auto playerAnimation = AnimationComponent();
 	playerAnimation.AnimationName = "player" + std::to_string(playerComponent.PlayerNum + 1);
-	playerAnimation.Offset = gePoint{0, 0};
+	playerAnimation.Offset = Point{0, 0};
 	playerAnimation.AnimationSpeed = 1.0;
 	playerComponent.PlayerNum = 0;
 	playerComponent.Direction = Directions::South;

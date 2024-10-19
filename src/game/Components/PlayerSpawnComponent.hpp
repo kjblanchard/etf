@@ -1,5 +1,5 @@
 #pragma once
-#include <Supergoon/Vector2.hpp>
+#include <Supergoon/Supergoon.hpp>
 namespace Supergoon {
 struct PlayerSpawnComponent {
 	Vector2 Location;
