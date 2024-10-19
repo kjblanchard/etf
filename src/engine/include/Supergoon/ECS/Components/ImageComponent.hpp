@@ -4,5 +4,6 @@
 namespace Supergoon {
 struct ImageComponent {
 	std::shared_ptr<Image> Image = nullptr;
+	RectangleF SourceRect;
 };
 }  // namespace Supergoon

@@ -114,3 +114,7 @@ void Game::InternalDraw() {
 double Game::DeltaTime() {
 	return geClockGetUpdateTimeSeconds();
 }
+
+double Game::DeltaTimeMS() {
+	return geClockGetUpdateTimeMilliseconds();
+}

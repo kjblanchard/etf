@@ -10,7 +10,6 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Entities/Solid.cpp
     Systems/PlayerSystem.cpp
     Systems/ImageSystem.cpp
-    Systems/LocationSystem.cpp
     Systems/AsepriteSystem.cpp
     Systems/CameraSystem.cpp
     Systems/DebugDrawSystem.cpp

@@ -9,6 +9,8 @@
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Components/SolidComponent.hpp>
+#include <Supergoon/ECS/Components/ImageComponent.hpp>
+#include <Supergoon/ECS/Components/AnimationComponent.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Game.hpp>

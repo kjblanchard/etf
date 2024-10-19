@@ -2,8 +2,6 @@
 #include <Supergoon/Supergoon.hpp>
 #include <algorithm>
 namespace Supergoon {
-int SCREEN_WIDTH = 512;
-int SCREEN_HEIGHT = 288;
 
 void getFollowTarget(CameraComponent& cc) {
 	GameObject::ForEach<PlayerComponent, LocationComponent>([&cc](GameObject, PlayerComponent& pc, LocationComponent& lc) {
@@ -26,17 +24,17 @@ void UpdateCamera() {
 		getFollowTarget(cc);
 	}
 	auto pl = cc.FollowTarget;
-	cc.Box.X = pl->Location.X - (SCREEN_WIDTH / 2);
-	cc.Box.Y = pl->Location.Y - (SCREEN_HEIGHT / 2);
+	cc.Box.X = pl->Location.X - (gc.WindowWidth / 2);
+	cc.Box.Y = pl->Location.Y - (gc.WindowHeight / 2);
 	if (cc.Box.X < 0) {
 		cc.Box.X = 0;
-	} else if (cc.Box.X > cc.Bounds.X - SCREEN_WIDTH) {
-		cc.Box.X = std::max(cc.Bounds.X - SCREEN_WIDTH, 0);
+	} else if (cc.Box.X > cc.Bounds.X - gc.WindowWidth) {
+		cc.Box.X = std::max(cc.Bounds.X - gc.WindowWidth, 0);
 	}
 	if (cc.Box.Y < 0) {
 		cc.Box.Y = 0;
-	} else if (cc.Box.Y > (cc.Bounds.Y - SCREEN_HEIGHT)) {
-		cc.Box.Y = cc.Bounds.Y - SCREEN_HEIGHT;
+	} else if (cc.Box.Y > (cc.Bounds.Y - gc.WindowHeight)) {
+		cc.Box.Y = cc.Bounds.Y - gc.WindowHeight;
 	}
 
 	gc.CurrentLevel->cameraX = (int)cc.Box.X;

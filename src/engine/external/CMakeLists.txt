@@ -22,10 +22,8 @@ add_library(${LIBRARY_TARGET_NAME} STATIC
     src/easing.c
     src/log.c
     src/clock.c
-    # src/primitives/rectangle.c
-    # src/primitives/point.c
     src/input/joystick.c
-    src/input/keyboard
+    src/input/keyboard.c
 )
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
 find_package(PNG REQUIRED)

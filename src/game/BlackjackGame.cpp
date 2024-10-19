@@ -1,12 +1,9 @@
-
-
 #include <Entities/PlayerStart.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/DebugDrawSystem.hpp>
 #include <Systems/ImageSystem.hpp>
-#include <Systems/LocationSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
 namespace Supergoon {
 std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap = {
@@ -17,7 +14,6 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 }
 using namespace Supergoon;
 Level *level;
-Image *character;
 
 class BlackjackGame : public Game {
    public:
@@ -36,7 +32,6 @@ void BlackjackGame::Start() {
 }
 
 void BlackjackGame::Update() {
-	UpdateLocationsForRbs();
 	PlayerInput();
 	UpdateAnimationComponents();
 	UpdateCamera();

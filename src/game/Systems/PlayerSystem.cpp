@@ -1,22 +1,11 @@
-#include <Components/AnimationComponent.hpp>
-#include <Components/Image.hpp>
 #include <Components/Player.hpp>
 #include <Components/PlayerSpawnComponent.hpp>
-#include <Supergoon/Content/Content.hpp>
-#include <Supergoon/Content/ContentRegistry.hpp>
-#include <Supergoon/Content/Image.hpp>
-#include <Supergoon/ECS/Components/CameraComponent.hpp>
-#include <Supergoon/ECS/Components/GameStateComponent.hpp>
-#include <Supergoon/ECS/Components/LocationComponent.hpp>
-#include <Supergoon/ECS/GameObject.hpp>
-#include <Supergoon/Game.hpp>
-#include <Supergoon/Input.hpp>
+#include <Supergoon/Supergoon.hpp>
 #include <Systems/PlayerSystem.hpp>
 using namespace Supergoon;
 
 static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState& gameState) {
 	auto go = new GameObject();
-	// auto playerImage = ImageComponent();
 	auto playerLocation = LocationComponent();
 	auto playerComponent = PlayerComponent();
 	auto playerAnimation = AnimationComponent();
@@ -25,11 +14,9 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	playerAnimation.AnimationSpeed = 1.0;
 	playerComponent.PlayerNum = 0;
 	playerComponent.Direction = Directions::South;
-
 	go->AddComponent<AnimationComponent>(playerAnimation);
 	go->AddComponent<LocationComponent>(playerLocation);
 	go->AddComponent<PlayerComponent>(playerComponent);
-	// go->AddComponent<ImageComponent>(playerImage);
 	gameState.CurrentLevel->AddGameObjectToLevel(go);
 }
 static void playerInput(GameObject go, PlayerComponent& player) {
@@ -64,7 +51,6 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	loc.Location += vel;
 	anim.Playing = moved;
 	if (newDirection != player.Direction) {
-		// Update the Animation for the new direction
 		auto letter = GetLetterForDirection(newDirection);
 		anim.Animation->PlayAnimation("walk" + std::string(letter));
 		player.Direction = newDirection;

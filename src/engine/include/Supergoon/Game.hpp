@@ -39,6 +39,7 @@ class Game {
 	inline Sound& Sound() { return *_sound; }
 	static inline Game* Instance() { return _game; }
 	static double DeltaTime();
+	static double DeltaTimeMS();
 	static inline void SetGameInstance(Game* game) { _game = game; };
 
    private:

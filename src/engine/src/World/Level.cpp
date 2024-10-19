@@ -7,6 +7,7 @@
 #include <Supergoon/ECS/Components/CameraComponent.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
 int SCREEN_WIDTH = 512;
@@ -34,6 +35,8 @@ Level::Level(const char *filename)
 	camera.Bounds.Y = GetSize().Y;
 	gamestate.CurrentLevel = this;
 	gamestate.PlayerSpawnLocation = 0;
+	gamestate.WindowHeight = Graphics::Instance().LogicalHeight();
+	gamestate.WindowWidth = Graphics::Instance().LogicalWidth();
 	go->AddComponent<GameState>(gamestate);
 	go->AddComponent<CameraComponent>(camera);
 	AddGameObjectToLevel(go);

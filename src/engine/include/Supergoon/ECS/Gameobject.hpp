@@ -76,4 +76,4 @@ void GameObject::ForEach(Func func) {
 	});
 }
 
-}  // namespace Bba
+}  // namespace Supergoon
