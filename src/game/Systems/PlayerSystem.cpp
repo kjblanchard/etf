@@ -14,6 +14,9 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	playerAnimation.AnimationSpeed = 1.0;
 	playerComponent.PlayerNum = 0;
 	playerComponent.Direction = Directions::South;
+	playerComponent.Body = RectangleF{2, 2, 20, 20};
+	playerLocation.Location.X = playerSpawn.Location.X;
+	playerLocation.Location.Y = playerSpawn.Location.Y;
 	go->AddComponent<AnimationComponent>(playerAnimation);
 	go->AddComponent<LocationComponent>(playerLocation);
 	go->AddComponent<PlayerComponent>(playerComponent);
@@ -52,40 +55,42 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	vel *= Vector2{deltatime, deltatime};
 	//
 	// Handle Collisions
-	auto playerRbRect = r.GetRectF();
-	// playerRbRect.x += l.Location.x + tryMoveSpeed.x;
-	// playerRbRect.y += l.Location.y + tryMoveSpeed.y;
-	// geVec2 desiredPosition = {l.Location.x + tryMoveSpeed.x, l.Location.y + tryMoveSpeed.y};
-	// bool collision = false;
-	// GameObject::ForEach<SolidObjectComponent>([&collision, &playerRbRect, &desiredPosition](GameObject, SolidObjectComponent s) {
-	// 	auto bcf = s.BoxColliderF();
-	// 	if (geRectangleFIsOverlap(&playerRbRect, &bcf)) {
-	// 		auto r = geRectangleFGetOverlapRect(&playerRbRect, &bcf);
-	// 		auto d = GetOverlapDirectionF(&playerRbRect, &r);
-	// 		switch (d) {
-	// 			case Directions::North:
-	// 				desiredPosition.y += r.h;
-	// 				collision = true;
-	// 				break;
-	// 			case Directions::East:
-	// 				desiredPosition.x -= r.w;
-	// 				collision = true;
-	// 				break;
-	// 			case Directions::South:
-	// 				desiredPosition.y -= r.h;
-	// 				collision = true;
-	// 				break;
-	// 			case Directions::West:
-	// 				desiredPosition.x += r.w;
-	// 				collision = true;
-	// 				break;
-	// 			default:
-	// 				break;
-	// 		}
-	// 	}
-	// });
-
-	loc.Location += vel;
+	auto desiredPosition = loc.Location;
+	desiredPosition.X += vel.X;
+	desiredPosition.Y += vel.Y;
+	GameObject::ForEach<SolidComponent, LocationComponent>([&desiredPosition, &player](GameObject, SolidComponent s, LocationComponent l) {
+		auto playerBodyRect = RectangleF{desiredPosition.X + player.Body.X, desiredPosition.Y + player.Body.Y, player.Body.W, player.Body.H};
+		auto bcf = RectangleF{l.Location.X, l.Location.Y, (float)s.Size.X, (float)s.Size.Y};
+		if (playerBodyRect.IsOverlap(&bcf)) {
+			auto r = playerBodyRect.GetOverlapRect(&bcf);
+			auto d = GetOverlapDirectionF(&playerBodyRect, &r);
+			switch (d) {
+				case Directions::North:
+					desiredPosition.Y += r.H;
+					// collision = true;
+					break;
+				case Directions::East:
+					desiredPosition.X -= r.W;
+					// collision = true;
+					break;
+				case Directions::South:
+					desiredPosition.Y -= r.H;
+					// collision = true;
+					break;
+				case Directions::West:
+					desiredPosition.X += r.W;
+					// collision = true;
+					break;
+				default:
+					break;
+			}
+		}
+	});
+	// loc.Location += vel;
+	if (moved) {
+		loc.Location.X = desiredPosition.X;
+		loc.Location.Y = desiredPosition.Y;
+	}
 	anim.Playing = moved;
 	if (newDirection != player.Direction) {
 		auto letter = GetLetterForDirection(newDirection);

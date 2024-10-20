@@ -1,6 +1,29 @@
+#include <Components/PlayerComponent.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Systems/DebugDrawSystem.hpp>
 using namespace Supergoon;
+static void drawPlayerBodyDebugBoxes(GameObject, LocationComponent& location, PlayerComponent& sb) {
+	// Get the camera and its position/box
+	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+	auto& cc = c->GetComponent<CameraComponent>();
+
+	// Get the static body position (centered) and size
+	Vector2 bodyPos = location.Location;  // Assuming this is the center of the physics body
+
+	// Adjust for camera position (subtract camera's top-left corner from body's position)
+	float adjustedX = bodyPos.X - cc.Box.X;
+	float adjustedY = bodyPos.Y - cc.Box.Y;
+	// Adjust for body offset
+	adjustedX += sb.Body.X;
+	adjustedY += sb.Body.Y;
+
+	// Create the destination rectangle (aligned with top-left corner)
+	auto dst = RectangleF{adjustedX, adjustedY, (float)sb.Body.W, (float)sb.Body.H};
+
+	// Draw the rectangle (debug visual)
+	auto graphics = Graphics::Instance();
+	graphics.DrawRect(dst, Color{255, 0, 0, 255});
+}
 
 static void drawStaticBodyDebugBoxes(GameObject, LocationComponent& location, SolidComponent& sb) {
 	// Get the camera and its position/box
@@ -28,5 +51,6 @@ static void drawStaticBodyDebugBoxes(GameObject, LocationComponent& location, So
 }
 
 void Supergoon::DrawDebugBoxes() {
+	GameObject::ForEach<LocationComponent, PlayerComponent>(drawPlayerBodyDebugBoxes);
 	GameObject::ForEach<LocationComponent, SolidComponent>(drawStaticBodyDebugBoxes);
 }

@@ -1,11 +1,6 @@
 #include <Components/PlayerSpawnComponent.hpp>
 #include <Entities/PlayerStart.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
-// #include <BbAdventures/base/GameObject.hpp>
-// #include <BbAdventures/components/PlayerSpawnComponent.hpp>
-// #include <BbAdventures/entities/PlayerStart.hpp>
-// #include <BbAdventures/shared/state.hpp>
-// namespace Bba {
 using namespace Supergoon;
 
 GameObject* Supergoon::NewPlayerSpawn(TiledMap::TiledObject& obj) {
