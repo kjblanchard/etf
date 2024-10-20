@@ -1,3 +1,4 @@
+#include <Debug/PlayerCollider.hpp>
 #include <Entities/PlayerStart.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Systems/AsepriteSystem.hpp>
@@ -45,6 +46,7 @@ void BlackjackGame::Draw() {
 #ifdef imgui
 	Widgets::ShowWidgets();
 	DrawDebugBoxes();
+	ShowPlayerColliderWindow();
 #endif
 }
 

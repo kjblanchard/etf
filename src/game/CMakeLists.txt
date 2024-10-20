@@ -4,6 +4,15 @@ set(EXECUTABLE_TARGET_NAME SupergoonBlackJack)
 #
 cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${EXECUTABLE_TARGET_NAME} library initialization")
+
+if(imgui)
+    set(DEBUG_FILES
+        Debug/PlayerCollider.cpp
+    )
+else()
+    set(DEBUG_FILES)
+endif(imgui)
+
 add_executable(${EXECUTABLE_TARGET_NAME}
     BlackjackGame.cpp
     Entities/PlayerStart.cpp
@@ -12,6 +21,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Systems/AsepriteSystem.cpp
     Systems/CameraSystem.cpp
     Systems/DebugDrawSystem.cpp
+    ${DEBUG_FILES}
 )
 target_compile_options(${EXECUTABLE_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_libraries(${EXECUTABLE_TARGET_NAME}

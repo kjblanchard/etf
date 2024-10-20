@@ -224,7 +224,7 @@ void Level::LoadSolidObjects() {
 	}
 	const int boxSize = 16;
 	auto size = GetSize();
-	Rectangle top = {0, 0, size.X, boxSize};
+	Rectangle top = {0, -boxSize, size.X, boxSize};
 	Rectangle right = {size.X + 1, 0, boxSize, size.Y};
 	Rectangle bottom = {0, size.Y + 1, size.X, boxSize};
 	Rectangle left = {-boxSize, 0, boxSize, size.Y};

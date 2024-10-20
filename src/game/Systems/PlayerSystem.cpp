@@ -14,7 +14,7 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	playerAnimation.AnimationSpeed = 1.0;
 	playerComponent.PlayerNum = 0;
 	playerComponent.Direction = Directions::South;
-	playerComponent.Body = RectangleF{2, 2, 20, 20};
+	playerComponent.Body = RectangleF{4, 7, 16, 27};
 	playerLocation.Location.X = playerSpawn.Location.X;
 	playerLocation.Location.Y = playerSpawn.Location.Y;
 	go->AddComponent<AnimationComponent>(playerAnimation);
@@ -22,6 +22,7 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	go->AddComponent<PlayerComponent>(playerComponent);
 	gameState.CurrentLevel->AddGameObjectToLevel(go);
 }
+
 static void playerInput(GameObject go, PlayerComponent& player) {
 	auto vel = Vector2();
 	auto& anim = go.GetComponent<AnimationComponent>();
@@ -53,7 +54,6 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	}
 	auto deltatime = (float)Game::Instance()->DeltaTime();
 	vel *= Vector2{deltatime, deltatime};
-	//
 	// Handle Collisions
 	auto desiredPosition = loc.Location;
 	desiredPosition.X += vel.X;
@@ -62,24 +62,20 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 		auto playerBodyRect = RectangleF{desiredPosition.X + player.Body.X, desiredPosition.Y + player.Body.Y, player.Body.W, player.Body.H};
 		auto bcf = RectangleF{l.Location.X, l.Location.Y, (float)s.Size.X, (float)s.Size.Y};
 		if (playerBodyRect.IsOverlap(&bcf)) {
-			auto r = playerBodyRect.GetOverlapRect(&bcf);
-			auto d = GetOverlapDirectionF(&playerBodyRect, &r);
-			switch (d) {
+			auto desiredPlayerOverlapRect = playerBodyRect.GetOverlapRect(&bcf);
+			auto direction = GetOverlapDirectionF(&playerBodyRect, &desiredPlayerOverlapRect);
+			switch (direction) {
 				case Directions::North:
-					desiredPosition.Y += r.H;
-					// collision = true;
+					desiredPosition.Y += desiredPlayerOverlapRect.H;
 					break;
 				case Directions::East:
-					desiredPosition.X -= r.W;
-					// collision = true;
+					desiredPosition.X -= desiredPlayerOverlapRect.W;
 					break;
 				case Directions::South:
-					desiredPosition.Y -= r.H;
-					// collision = true;
+					desiredPosition.Y -= desiredPlayerOverlapRect.H;
 					break;
 				case Directions::West:
-					desiredPosition.X += r.W;
-					// collision = true;
+					desiredPosition.X += desiredPlayerOverlapRect.W;
 					break;
 				default:
 					break;
