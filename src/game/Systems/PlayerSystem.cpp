@@ -88,8 +88,8 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	});
 	// loc.Location += vel;
 	if (moved) {
-		loc.Location.X = desiredPosition.X;
-		loc.Location.Y = desiredPosition.Y;
+		loc.Location.X = std::round(desiredPosition.X);
+		loc.Location.Y = std::round(desiredPosition.Y);
 	}
 	anim.Playing = moved;
 	if (newDirection != player.Direction) {
