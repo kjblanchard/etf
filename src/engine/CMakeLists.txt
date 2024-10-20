@@ -25,7 +25,6 @@ set(SRC_FILES
     src/World/TiledMap.cpp
     src/World/World.cpp
     src/Physics/Physics.cpp
-    src/Physics/StaticObjectComponent.cpp
     src/ECS/GameObject.cpp
 )
 
@@ -41,6 +40,7 @@ if(imgui)
 else()
     message(STATUS "ImGui is not enabled.")
 endif()
+
 add_library(${LIBRARY_TARGET_NAME}
     STATIC
     ${SRC_FILES}

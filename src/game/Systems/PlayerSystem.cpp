@@ -26,6 +26,8 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	auto speed = 100;
 	auto moved = false;
 	auto newDirection = player.Direction;
+	//
+	// Handle button presses
 	if (KeyDown(KeyboardKeys::Key_S)) {
 		vel.Y += speed;
 		moved = true;
@@ -48,6 +50,41 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	}
 	auto deltatime = (float)Game::Instance()->DeltaTime();
 	vel *= Vector2{deltatime, deltatime};
+	//
+	// Handle Collisions
+	auto playerRbRect = r.GetRectF();
+	// playerRbRect.x += l.Location.x + tryMoveSpeed.x;
+	// playerRbRect.y += l.Location.y + tryMoveSpeed.y;
+	// geVec2 desiredPosition = {l.Location.x + tryMoveSpeed.x, l.Location.y + tryMoveSpeed.y};
+	// bool collision = false;
+	// GameObject::ForEach<SolidObjectComponent>([&collision, &playerRbRect, &desiredPosition](GameObject, SolidObjectComponent s) {
+	// 	auto bcf = s.BoxColliderF();
+	// 	if (geRectangleFIsOverlap(&playerRbRect, &bcf)) {
+	// 		auto r = geRectangleFGetOverlapRect(&playerRbRect, &bcf);
+	// 		auto d = GetOverlapDirectionF(&playerRbRect, &r);
+	// 		switch (d) {
+	// 			case Directions::North:
+	// 				desiredPosition.y += r.h;
+	// 				collision = true;
+	// 				break;
+	// 			case Directions::East:
+	// 				desiredPosition.x -= r.w;
+	// 				collision = true;
+	// 				break;
+	// 			case Directions::South:
+	// 				desiredPosition.y -= r.h;
+	// 				collision = true;
+	// 				break;
+	// 			case Directions::West:
+	// 				desiredPosition.x += r.w;
+	// 				collision = true;
+	// 				break;
+	// 			default:
+	// 				break;
+	// 		}
+	// 	}
+	// });
+
 	loc.Location += vel;
 	anim.Playing = moved;
 	if (newDirection != player.Direction) {

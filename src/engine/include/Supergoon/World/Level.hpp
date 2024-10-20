@@ -1,8 +1,8 @@
 #pragma once
-#include <Supergoon/Primitives/Point.hpp>
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/ECS/GameObject.hpp>
 #include <Supergoon/Physics/Physics.hpp>
+#include <Supergoon/Primitives/Point.hpp>
 #include <Supergoon/World/TiledMap.hpp>
 #include <memory>
 #include <tuple>
@@ -41,6 +41,7 @@ class Level {
 	Image *GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset);
 	void StartBgm();
 	GameObject *NewSolidObject(TiledMap::TiledObject &);
+	GameObject *NewSolidObject(Rectangle r);
 
    private:
 	std::string _name;

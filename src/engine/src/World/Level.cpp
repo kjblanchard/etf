@@ -7,6 +7,7 @@
 #include <Supergoon/ECS/Components/CameraComponent.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/ECS/Components/SolidComponent.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
@@ -195,11 +196,23 @@ void Level::CreateBackgroundImage() {
 }
 GameObject *Level::NewSolidObject(TiledMap::TiledObject &t) {
 	auto go = new GameObject();
-	// auto s = StaticSolidComponent(*this, gePoint{t.Width, t.Height}, Vector2{(float)t.X, (float)t.Y});
 	auto l = LocationComponent();
-	// l.Location.X = s.Location().X;
-	// l.Location.Y = s.Location().Y;
-	// go->AddComponent<StaticSolidComponent>(s);
+	auto s = SolidComponent();
+	s.Size = Point{t.Width, t.Height};
+	l.Location.X = t.X;
+	l.Location.Y = t.Y;
+	go->AddComponent<SolidComponent>(s);
+	go->AddComponent<LocationComponent>(l);
+	return go;
+}
+GameObject *Level::NewSolidObject(Rectangle r) {
+	auto go = new GameObject();
+	auto l = LocationComponent();
+	auto s = SolidComponent();
+	s.Size = Point{r.W, r.H};
+	l.Location.X = r.X;
+	l.Location.Y = r.Y;
+	go->AddComponent<SolidComponent>(s);
 	go->AddComponent<LocationComponent>(l);
 	return go;
 }
@@ -209,16 +222,16 @@ void Level::LoadSolidObjects() {
 		auto go = NewSolidObject(solid);
 		_gameObjects.push_back(go);
 	}
-	// const int boxSize = 16;
-	// auto size = GetSize();
-	// geRectangle top = {0, 0, size.x, boxSize};
-	// geRectangle right = {size.x + 1, 0, boxSize, size.y};
-	// geRectangle bottom = {0, size.y + 1, size.x, boxSize};
-	// geRectangle left = {-boxSize, 0, boxSize, size.y};
-	// _gameObjects.push_back(NewSolidObject(top));
-	// _gameObjects.push_back(NewSolidObject(right));
-	// _gameObjects.push_back(NewSolidObject(bottom));
-	// _gameObjects.push_back(NewSolidObject(left));
+	const int boxSize = 16;
+	auto size = GetSize();
+	Rectangle top = {0, 0, size.X, boxSize};
+	Rectangle right = {size.X + 1, 0, boxSize, size.Y};
+	Rectangle bottom = {0, size.Y + 1, size.X, boxSize};
+	Rectangle left = {-boxSize, 0, boxSize, size.Y};
+	_gameObjects.push_back(NewSolidObject(top));
+	_gameObjects.push_back(NewSolidObject(right));
+	_gameObjects.push_back(NewSolidObject(bottom));
+	_gameObjects.push_back(NewSolidObject(left));
 }
 
 void Level::Draw() {

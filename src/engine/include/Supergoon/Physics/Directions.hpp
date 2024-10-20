@@ -1,3 +1,5 @@
+#pragma once
+namespace Supergoon {
 enum class Directions {
 	North,
 	East,
@@ -17,3 +19,5 @@ inline const char* GetLetterForDirection(Directions d) {
 	}
 	return "";
 }
+
+}  // namespace Supergoon

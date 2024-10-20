@@ -1,5 +1,5 @@
 #pragma once
-#include <Directions.hpp>
+#include <Supergoon/Physics/Directions.hpp>
 namespace Supergoon {
 struct PlayerComponent {
 	unsigned int PlayerNum;
