@@ -1,42 +1,40 @@
-{
-    "children": [
-        {
-            "type": "Image",
-            "name": "logoImage",
-            "visible": true,
-            "destination": {
-                "x": 50,
-                "y": 50,
-                "width": 100,
-                "height": 100
-            },
-            "source": {
-                "name": "supergoonLogo",
-                "x": 0,
-                "y": 0,
-                "width": 0,
-                "height": 0
-            }
-
+[
+    {
+        "type": "Image",
+        "name": "logoImage",
+        "visible": true,
+        "destination": {
+            "x": 50,
+            "y": 50,
+            "width": 100,
+            "height": 100
         },
-        {
-            "type": "Image",
-            "name": "logoImage2",
-            "visible": false,
-            "destination": {
-                "x": 0,
-                "y": 0,
-                "width": 0,
-                "height": 0
-            },
-            "source": {
-                "name": "supergoongameslogo",
-                "x": 0,
-                "y": 0,
-                "width": 0,
-                "height": 0
-            }
-
+        "source": {
+            "name": "supergoonLogo",
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
         }
-    ]
-}
+
+    },
+    {
+        "type": "Image",
+        "name": "logoImage2",
+        "visible": false,
+        "destination": {
+            "x": 0,
+            "y": 0,
+            "width": 100,
+            "height": 100
+        },
+        "source": {
+            "name": "supergoongameslogo",
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+        }
+
+    }
+]

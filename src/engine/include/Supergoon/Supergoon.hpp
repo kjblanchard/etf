@@ -28,6 +28,10 @@
 #include <Supergoon/Sound.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Supergoon/Tween.hpp>
+#include <Supergoon/UI/ImageObject.hpp>
+#include <Supergoon/UI/Panel.hpp>
+#include <Supergoon/UI/UIObject.hpp>
+#include <Supergoon/UI/UI.hpp>
 #include <Supergoon/Video.hpp>
 #include <Supergoon/Widgets/Content.hpp>
 #include <Supergoon/Widgets/Game.hpp>

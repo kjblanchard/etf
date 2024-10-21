@@ -26,6 +26,9 @@ set(SRC_FILES
     src/World/World.cpp
     src/Physics/Physics.cpp
     src/ECS/GameObject.cpp
+    src/UI/Panel.cpp
+    src/UI/UI.cpp
+    src/UI/ImageObject.cpp
 )
 
 # Conditionally append the widget files if ImGui is enabled

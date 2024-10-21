@@ -166,6 +166,7 @@ void Image::Load() {
 			break;
 		}
 	}
+	SDL_GetTextureSize(_image, &_width, &_height);
 }
 void Image::Unload() {
 }

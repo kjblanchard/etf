@@ -24,14 +24,16 @@ class Image : public Content {
 	virtual void Unload() override;
 	virtual const std::string Filepath() override;
 	inline virtual std::string Type() override { return "Image"; }
+	inline int Width() { return _width; }
+	inline int Height() { return _height; }
 	void DrawImageToImage(Image& src, RectangleF& srcRect, RectangleF& dstRect);
 	void SetAlpha(int alpha);
 
    private:
 	SDL_Texture* _image;
 	ImageType _imageType;
-	int _width;
-	int _height;
+	float _width;
+	float _height;
 	SDL_Surface* _surface = nullptr;
 
 	friend class Graphics;

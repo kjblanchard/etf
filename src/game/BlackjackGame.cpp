@@ -15,6 +15,7 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 }
 using namespace Supergoon;
 Level *level;
+Panel *ui;
 
 class BlackjackGame : public Game {
    public:
@@ -24,29 +25,31 @@ class BlackjackGame : public Game {
 };
 
 void BlackjackGame::Start() {
-	level = new Level("debugTown");
-	level->CreateBackgroundImage();
-	LoadPlayers();
-	LoadAnimationComponents();
+	ui = LoadUIFromFile("logos");
+	// level = new Level("debugTown");
+	// level->CreateBackgroundImage();
+	// LoadPlayers();
+	// LoadAnimationComponents();
 
 	ContentRegistry::LoadAllContent();
 }
 
 void BlackjackGame::Update() {
-	PlayerInput();
-	UpdateAnimationComponents();
-	UpdateCamera();
+	// PlayerInput();
+	// UpdateAnimationComponents();
+	// UpdateCamera();
 }
 
 void BlackjackGame::Draw() {
-	level->Draw();
-	DrawAnimationComponents();
-	DrawImages();
+	ui->Draw();
+	// level->Draw();
+	// DrawAnimationComponents();
+	// DrawImages();
 
 #ifdef imgui
 	Widgets::ShowWidgets();
-	DrawDebugBoxes();
-	ShowPlayerColliderWindow();
+	// DrawDebugBoxes();
+	// ShowPlayerColliderWindow();
 #endif
 }
 
