@@ -12,7 +12,8 @@ set(SRC_FILES
     src/Game.cpp
     src/Video.cpp
     src/Sound.cpp
-    src/Tween.cpp
+    src/Tween/Tween.cpp
+    src/Tween/Sequence.cpp
     src/Events.cpp
     src/Aseprite/AsepriteAnimation.cpp
     src/Aseprite/AsepriteDocument.cpp
@@ -29,6 +30,7 @@ set(SRC_FILES
     src/UI/Panel.cpp
     src/UI/UI.cpp
     src/UI/ImageObject.cpp
+    src/UI/UIObjectAnimator.cpp
 )
 
 # Conditionally append the widget files if ImGui is enabled

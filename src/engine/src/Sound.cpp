@@ -6,7 +6,7 @@
 
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Sound.hpp>
-#include <Supergoon/Tween.hpp>
+#include <Supergoon/Tween/Tween.hpp>
 
 namespace Supergoon {
 void Sound::InitializeSound() {

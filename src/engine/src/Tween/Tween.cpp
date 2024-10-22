@@ -2,7 +2,7 @@
 #include <SupergoonEngine/log.h>
 
 #include <Supergoon/Game.hpp>
-#include <Supergoon/Tween.hpp>
+#include <Supergoon/Tween/Tween.hpp>
 
 using namespace Supergoon;
 Tween::Tween(float start, float end, float duration, Easings ease) : _begin(start), _end(end), _duration(duration), _easeType(ease) {
