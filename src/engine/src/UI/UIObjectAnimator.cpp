@@ -1,34 +1,22 @@
 #include <Supergoon/UI/UIObjectAnimator.hpp>
 using namespace Supergoon;
 
-// static void updateInternal(const std::variant<float*, int*>& value, Tween* tween) {
-// 	// Use std::visit to handle the different types
-// 	std::visit([&tween](auto&& arg) {
-// 		using T = std::decay_t<decltype(arg)>;
-// 		if constexpr (std::is_same_v<T, int*>) {
-// 			*arg = tween->Value();
-// 		} else if constexpr (std::is_same_v<T, float*>) {
-// 			*arg = tween->Value();
-// 		}
-// 	},
-// 			   value);	// Pass the variant to std::visit
-// }
-
 UIObjectAnimatorBase::UIObjectAnimatorBase(float start, float end, float duration, float* value, UIObject* obj)
-	: tween(std::make_unique<Tween>(start, end, duration, value, Supergoon::Easings::Linear)), value(value), object(obj) {}
+	: object(obj) {
+	SequenceToPlay = std::make_unique<Sequence>();
+	SequenceToPlay->Tweens.push_back(std::make_shared<Tween>(start, end, duration, value, Supergoon::Easings::Linear));
+}
 UIObjectAnimatorBase::UIObjectAnimatorBase(float start, float end, float duration, int* value, UIObject* obj)
-	: tween(std::make_unique<Tween>(start, end, duration, value, Supergoon::Easings::Linear)), value(value), object(obj) {}
+	: object(obj) {
+	SequenceToPlay = std::make_unique<Sequence>();
+	SequenceToPlay->Tweens.push_back(std::make_shared<Tween>(start, end, duration, value, Supergoon::Easings::Linear));
+}
 
 void UIObjectAnimatorBase::Play() {
-	tween->Restart();
-	_playing = true;
+	SequenceToPlay->Restart();
 }
 void UIObjectAnimatorBase::Update() {
-	if (!_playing || tween->Complete()) {
-		return;
-	}
-	tween->Update();
-	// updateInternal(value, tween.get());
+	SequenceToPlay->Update();
 	object->Dirty = true;
 }
 void UIObjectAnimatorBase::Stop() {

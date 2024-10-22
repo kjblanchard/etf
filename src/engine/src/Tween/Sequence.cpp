@@ -11,3 +11,8 @@ void Sequence::Update() {
 		break;
 	}
 }
+void Sequence::Restart() {
+	for (auto &&tween : Tweens) {
+		tween->Restart();
+	}
+}

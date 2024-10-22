@@ -1,4 +1,5 @@
 #pragma once
+#include <Supergoon/Tween/Sequence.hpp>
 #include <Supergoon/Tween/Tween.hpp>
 #include <Supergoon/UI/UIObject.hpp>
 #include <memory>
@@ -16,8 +17,9 @@ struct UIObjectAnimatorBase {
 	void Update();
 	void Stop();
 	std::string Name;
-	std::unique_ptr<Tween> tween;
-	std::variant<float*, int*> value;
+	std::unique_ptr<Sequence> SequenceToPlay;
+	// std::unique_ptr<Tween> tween;
+	// std::variant<float*, int*> value;
 	UIObject* object;
 
    private:

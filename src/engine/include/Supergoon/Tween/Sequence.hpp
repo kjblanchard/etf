@@ -5,6 +5,7 @@
 namespace Supergoon {
 class Sequence {
    public:
+	void Restart();
 	void Update();
 	std::vector<std::shared_ptr<Tween>> Tweens;
 };
