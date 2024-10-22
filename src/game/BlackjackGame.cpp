@@ -38,6 +38,7 @@ void BlackjackGame::Update() {
 	// PlayerInput();
 	// UpdateAnimationComponents();
 	// UpdateCamera();
+	ui->UpdateInternal();
 }
 
 void BlackjackGame::Draw() {

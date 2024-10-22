@@ -2,11 +2,14 @@
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/Primitives/Rectangle.hpp>
 #include <Supergoon/UI/UIObject.hpp>
+#include <nlohmann/json_fwd.hpp>
 namespace Supergoon {
+class Panel;
 class ImageObject : public UIObject {
    public:
+	ImageObject(Panel* parent, nlohmann::json& json);
 	RectangleF ImageSourceRect;
-	std::shared_ptr<Image> Image;
+	std::shared_ptr<Image> ImagePtr;
 	virtual void Draw() override;
 };
 }  // namespace Supergoon
