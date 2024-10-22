@@ -68,7 +68,7 @@ void Sound::StopBgmFadeout() {
 	if (!_bgm || !_bgm->IsPlaying || _fadingOut) {
 		return;
 	}
-	_bgmTween = new Tween(1.0, 0, 1, Supergoon::Easings::Linear);
+	_bgmTween = new Tween(1.0, 0, 1, &_playingBgmVolume, Supergoon::Easings::Linear);
 	_fadingOut = true;
 }
 
@@ -82,7 +82,8 @@ void Sound::Update() {
 	if (!_bgmTween) return;
 	if (!_bgmTween->Complete()) {
 		_bgmTween->Update();
-		SetPlayingBgmVolume(_bgmTween->Value());
+		UpdatePlayingBgmVolume();
+		// SetPlayingBgmVolume(_playingBgmVolume);
 	} else {
 		StopBgm();
 		SDL_free(_bgmTween);
