@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include <variant>
 namespace Supergoon {
 enum class Easings {
@@ -45,6 +46,8 @@ class Tween {
 	inline void Restart() { _currentDuration = 0; }
 	inline bool Complete() { return _currentDuration >= _duration; }
 	inline float Percent() { return _currentDuration / _duration; }
+	std::function<void()> UpdateFunc = nullptr;
+	std::function<void()> EndFunc = nullptr;
 
    private:
 	void UpdateInternal();

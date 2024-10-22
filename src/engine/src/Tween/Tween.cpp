@@ -7,7 +7,7 @@
 using namespace Supergoon;
 Tween::Tween(float start, float end, float duration, float* value, Easings ease) : _begin(start), _end(end), _duration(duration), value(value), _easeType(ease) {
 }
-Tween::Tween(float start, float end, float duration, int* value, Easings ease) : _begin(start), _end(end), _duration(duration), _easeType(ease) {
+Tween::Tween(float start, float end, float duration, int* value, Easings ease) : _begin(start), _end(end), value(value), _duration(duration), _easeType(ease) {
 }
 
 void Tween::UpdateInternal() {
@@ -42,5 +42,11 @@ bool Tween::Update() {
 		return true;
 	_currentDuration += Game::DeltaTime();
 	UpdateInternal();
+	if (UpdateFunc) {
+		UpdateFunc();
+	}
+	if (_currentDuration >= _duration && EndFunc) {
+		EndFunc();
+	}
 	return _currentDuration >= _duration;
 }

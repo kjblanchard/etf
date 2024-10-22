@@ -27,6 +27,7 @@
 #include <Supergoon/Primitives/Vector2.hpp>
 #include <Supergoon/Sound.hpp>
 #include <Supergoon/Supergoon.hpp>
+#include <Supergoon/Tween/Sequence.hpp>
 #include <Supergoon/Tween/Tween.hpp>
 #include <Supergoon/UI/ImageObject.hpp>
 #include <Supergoon/UI/Panel.hpp>

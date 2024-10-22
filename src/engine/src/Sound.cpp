@@ -69,6 +69,9 @@ void Sound::StopBgmFadeout() {
 		return;
 	}
 	_bgmTween = new Tween(1.0, 0, 1, &_playingBgmVolume, Supergoon::Easings::Linear);
+	_bgmTween->UpdateFunc = [this]() {
+		UpdatePlayingBgmVolume();
+	};
 	_fadingOut = true;
 }
 
@@ -82,7 +85,7 @@ void Sound::Update() {
 	if (!_bgmTween) return;
 	if (!_bgmTween->Complete()) {
 		_bgmTween->Update();
-		UpdatePlayingBgmVolume();
+		// UpdatePlayingBgmVolume();
 		// SetPlayingBgmVolume(_playingBgmVolume);
 	} else {
 		StopBgm();
