@@ -31,11 +31,23 @@ void UIWidget::ShowUiDebugWindow() {
 			auto imageObject = std::dynamic_pointer_cast<ImageObject>(value);
 			std::string childX_label = "Child X##" + key;
 			std::string childY_label = "Child Y##" + key;
+			std::string childWLabel = "Child W##" + key;
+			std::string childHLabel = "Child H##" + key;
+			std::string transLabel = "Child Transparency##" + key;
 			if (ImGui::CollapsingHeader(key.c_str())) {
 				if (ImGui::DragFloat(childX_label.c_str(), &value->Offset.X, 1.0f)) {
 					value->Dirty = true;
 				}
-				if (ImGui::DragFloat(childY_label.c_str(), &value->Offset.Y, 1.0f)) {
+				if (ImGui::DragFloat(childY_label.c_str(), &imageObject->Offset.Y, 1.0f)) {
+					value->Dirty = true;
+				}
+				if (ImGui::DragFloat(childWLabel.c_str(), &imageObject->Bounds.W, 1.0f)) {
+					value->Dirty = true;
+				}
+				if (ImGui::DragFloat(childHLabel.c_str(), &imageObject->Bounds.H, 1.0f)) {
+					value->Dirty = true;
+				}
+				if (ImGui::DragInt(transLabel.c_str(), &imageObject->Transparency, 1, 0, 255, "%d", ImGuiSliderFlags_WrapAround)) {
 					value->Dirty = true;
 				}
 			}

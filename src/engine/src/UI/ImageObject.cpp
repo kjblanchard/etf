@@ -8,6 +8,14 @@
 using namespace Supergoon;
 using json = nlohmann::json;
 
+void ImageObject::OnDirty() {
+	auto parentBoundsX = Parent ? Parent->Bounds.X : 0;
+	auto parentBoundsY = Parent ? Parent->Bounds.Y : 0;
+	Bounds.X = Offset.X + parentBoundsX;
+	Bounds.Y = Offset.Y + parentBoundsY;
+	ImagePtr->SetAlpha(Transparency);
+}
+
 ImageObject::ImageObject(Panel* parent, json& imageJson) : UIObject(parent) {
 	WidgetType = (int)BuiltinWidgetTypes::Image;
 	Visible = imageJson["visible"].get<bool>();
