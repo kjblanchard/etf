@@ -39,6 +39,7 @@ if(imgui)
         src/Widgets/Sound.cpp
         src/Widgets/Content.cpp
         src/Widgets/Game.cpp
+        src/Widgets/UIWidget.cpp
     )
 else()
     message(STATUS "ImGui is not enabled.")

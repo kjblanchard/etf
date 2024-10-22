@@ -7,6 +7,7 @@ class Panel : public UIObject {
    public:
 	std::unordered_map<std::string, std::shared_ptr<UIObject>> Children;
 	void OnDirty() override;
+	void Update() override;
 	void Draw() override;
 };
 }  // namespace Supergoon

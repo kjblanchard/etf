@@ -25,7 +25,7 @@ class BlackjackGame : public Game {
 };
 
 void BlackjackGame::Start() {
-	ui = LoadUIFromFile("logos");
+	ui = UI::LoadUIFromFile("logos");
 	// level = new Level("debugTown");
 	// level->CreateBackgroundImage();
 	// LoadPlayers();

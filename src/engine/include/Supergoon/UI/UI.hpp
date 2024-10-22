@@ -1,6 +1,11 @@
 #pragma once
 #include <string>
 namespace Supergoon {
+
 class Panel;
-Panel* LoadUIFromFile(std::string filename);
+class UI {
+   public:
+	static Panel* LoadUIFromFile(std::string filename);
+	static Panel* UIInstance;
+};
 }  // namespace Supergoon

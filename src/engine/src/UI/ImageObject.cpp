@@ -9,6 +9,7 @@ using namespace Supergoon;
 using json = nlohmann::json;
 
 ImageObject::ImageObject(Panel* parent, json& imageJson) : UIObject(parent) {
+	WidgetType = (int)BuiltinWidgetTypes::Image;
 	Visible = imageJson["visible"].get<bool>();
 	auto name = imageJson["name"].get<std::string>();
 	auto sourceData = imageJson["source"];

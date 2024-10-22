@@ -9,8 +9,9 @@
 #include <fstream>
 using namespace Supergoon;
 using json = nlohmann::json;
+Panel* UI::UIInstance = nullptr;
 
-Panel* Supergoon::LoadUIFromFile(std::string filename) {
+Panel* UI::LoadUIFromFile(std::string filename) {
 	auto rootPanel = new Panel();
 	auto graphics = Graphics::Instance();
 	rootPanel->Bounds = RectangleF{0, 0, (float)graphics.LogicalWidth(), (float)graphics.LogicalHeight()};
@@ -24,5 +25,6 @@ Panel* Supergoon::LoadUIFromFile(std::string filename) {
 			rootPanel->Children[name] = child;
 		}
 	}
+	UIInstance = rootPanel;
 	return rootPanel;
 }
