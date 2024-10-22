@@ -13,21 +13,17 @@ struct UIObjectAnimatorBase {
 	UIObjectAnimatorBase(float start, float end, float duration, float* value, UIObject* obj);
 	//  For a single tween with int
 	UIObjectAnimatorBase(float start, float end, float duration, int* value, UIObject* obj);
+	// Create a Animator that handles custom sequences one by one.
+	UIObjectAnimatorBase(std::string name);
+	void AddUIObjectTween(Tween* tween, UIObject* obj);
 	void Play();
 	void Update();
 	void Stop();
 	std::string Name;
 	std::unique_ptr<Sequence> SequenceToPlay;
-	// std::unique_ptr<Tween> tween;
-	// std::variant<float*, int*> value;
-	UIObject* object;
 
    private:
 	bool _playing;
 };
 
-// template <typename T, typename = std::enable_if_t<std::is_base_of_v<UIObject, T>>>
-// class UIObjectAnimator : UIObjectAnimatorBase {
-// 	T* AnimatedUIObject;
-// };
 }  // namespace Supergoon
