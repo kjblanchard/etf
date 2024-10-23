@@ -9,6 +9,7 @@ class UIObject {
    public:
 	inline UIObject() = default;
 	inline UIObject(UIObject* parent, bool enabled = true, bool visible = true) : Enabled(enabled), Visible(visible), Parent(parent) {}
+	virtual ~UIObject() = default;
 	bool Enabled;
 	bool Visible;
 	bool Dirty = true;

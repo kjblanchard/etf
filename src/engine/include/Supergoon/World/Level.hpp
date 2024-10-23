@@ -39,7 +39,7 @@ class Level {
 	bool CheckIfTilesetIsCached(const std::string &name) const;
 	void LoadSolidObjects();
 	Image *GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset);
-	void StartBgm();
+	// void StartBgm();
 	GameObject *NewSolidObject(TiledMap::TiledObject &);
 	GameObject *NewSolidObject(Rectangle r);
 

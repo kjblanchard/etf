@@ -14,10 +14,8 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 };
 }
 using namespace Supergoon;
-Level *level;
-Panel *ui;
-Sequence *sequence;
-UIObjectAnimatorBase *animator;
+Scene *logoScene;
+Scene* gameScene;
 
 class BlackjackGame : public Game {
    public:
@@ -27,16 +25,19 @@ class BlackjackGame : public Game {
 };
 
 void BlackjackGame::Start() {
-	ui = UI::LoadUIFromFile("logos");
+	auto ui = UI::Initialize();
+	UI::LoadUIFromFile("logos", ui);
 	auto thing = (ImageObject *)ui->Children["logoImage"].get();
 	auto thing2 = (ImageObject *)ui->Children["logoImage2"].get();
-	animator = new UIObjectAnimatorBase("Logos");
+	auto animator = new UIObjectAnimatorBase("Logos");
 	auto fadeTween = new Tween(255, 0, 2.0, &thing->Transparency, Supergoon::Easings::Linear);
 	auto waitTween = new Tween(5.0);
 	auto fadeTween2 = new Tween(255, 0, 2.0, &thing2->Transparency, Supergoon::Easings::Linear);
 	animator->AddUIObjectTween(fadeTween, thing);
 	animator->AddUIObjectTween(waitTween, nullptr);
 	animator->AddUIObjectTween(fadeTween2, thing2);
+	logoScene = new Scene(nullptr, ui);
+	logoScene->Animators.push_back(std::shared_ptr<UIObjectAnimatorBase>(animator));
 
 	// level = new Level("debugTown");
 	// level->CreateBackgroundImage();
@@ -47,24 +48,15 @@ void BlackjackGame::Start() {
 }
 
 void BlackjackGame::Update() {
-	// PlayerInput();
-	// UpdateAnimationComponents();
-	// UpdateCamera();
-	animator->Update();
-	ui->UpdateInternal();
+	logoScene->Update();
+	// animator->Update();
+	// ui->UpdateInternal();
 }
 
 void BlackjackGame::Draw() {
-	ui->Draw();
-	// level->Draw();
-	// DrawAnimationComponents();
-	// DrawImages();
+	// ui->Draw();
+	logoScene->Draw();
 
-#ifdef imgui
-	Widgets::ShowWidgets();
-	// DrawDebugBoxes();
-	// ShowPlayerColliderWindow();
-#endif
 }
 
 REGISTER_GAME(BlackjackGame);
