@@ -32,8 +32,10 @@ void BlackjackGame::Start() {
 	auto thing2 = (ImageObject *)ui->Children["logoImage2"].get();
 	animator = new UIObjectAnimatorBase("Logos");
 	auto fadeTween = new Tween(255, 0, 2.0, &thing->Transparency, Supergoon::Easings::Linear);
+	auto waitTween = new Tween(5.0);
 	auto fadeTween2 = new Tween(255, 0, 2.0, &thing2->Transparency, Supergoon::Easings::Linear);
 	animator->AddUIObjectTween(fadeTween, thing);
+	animator->AddUIObjectTween(waitTween, nullptr);
 	animator->AddUIObjectTween(fadeTween2, thing2);
 
 	// level = new Level("debugTown");

@@ -41,7 +41,7 @@ class Tween {
 	// Start value, end value,
 	Tween(float start, float end, float duration, float* value, Easings ease);
 	Tween(float start, float end, float duration, int* value, Easings ease);
-	// float Value();
+	Tween(float waitTime);
 	bool Update();
 	inline void Restart() { _currentDuration = 0; }
 	inline bool Complete() { return _currentDuration >= _duration; }
@@ -51,8 +51,7 @@ class Tween {
 
    private:
 	void UpdateInternal();
-	std::variant<float*, int*> value;
-	// float* value;
+	std::variant<std::monostate, float*, int*> value;
 	float _begin = 0, _end = 0, _currentDuration = 0, _duration = 0;
 	Easings _easeType;
 };

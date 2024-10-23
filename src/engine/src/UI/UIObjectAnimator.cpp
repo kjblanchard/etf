@@ -13,7 +13,9 @@ UIObjectAnimatorBase::UIObjectAnimatorBase(float start, float end, float duratio
 UIObjectAnimatorBase::UIObjectAnimatorBase(std::string name) : Name(name), SequenceToPlay(std::make_unique<Sequence>()) {
 }
 void UIObjectAnimatorBase::AddUIObjectTween(Tween* tween, UIObject* obj) {
-	tween->UpdateFunc = [obj]() { obj->Dirty = true; };
+	if (obj) {
+		tween->UpdateFunc = [obj]() { obj->Dirty = true; };
+	}
 	SequenceToPlay->Tweens.push_back(std::shared_ptr<Tween>(tween));
 }
 

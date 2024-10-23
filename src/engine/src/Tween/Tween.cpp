@@ -9,6 +9,7 @@ Tween::Tween(float start, float end, float duration, float* value, Easings ease)
 }
 Tween::Tween(float start, float end, float duration, int* value, Easings ease) : _begin(start), _end(end), value(value), _duration(duration), _easeType(ease) {
 }
+Tween::Tween(float waitTime) : _duration(waitTime), value(std::monostate()) {}
 
 void Tween::UpdateInternal() {
 	float progress = 0;
@@ -41,6 +42,13 @@ bool Tween::Update() {
 	if (_currentDuration >= _duration)
 		return true;
 	_currentDuration += Game::DeltaTime();
+	// If this is a monostate, it is a blank tween
+	if (std::holds_alternative<std::monostate>(value)) {
+		if (_currentDuration >= _duration && EndFunc) {
+			EndFunc();
+		}
+		return _currentDuration >= _duration;
+	}
 	UpdateInternal();
 	if (UpdateFunc) {
 		UpdateFunc();
