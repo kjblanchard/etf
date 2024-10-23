@@ -10,8 +10,8 @@ class UIObject {
 	inline UIObject() = default;
 	inline UIObject(UIObject* parent, bool enabled = true, bool visible = true) : Enabled(enabled), Visible(visible), Parent(parent) {}
 	virtual ~UIObject() = default;
-	bool Enabled;
-	bool Visible;
+	bool Enabled = true;
+	bool Visible = true;
 	bool Dirty = true;
 	UIObject* Parent;
 	RectangleF Bounds;
@@ -22,16 +22,25 @@ class UIObject {
 		Bounds.Y = Offset.Y + Parent->Bounds.Y;
 	}
 	inline void UpdateInternal() {
+		if (!Enabled) {
+			return;
+		}
 		if (Dirty) {
 			OnDirty();
 			Dirty = false;
 		}
 		Update();
 	}
-	virtual void Draw() {}
+	inline void DrawInternal() {
+		if (!Visible) {
+			return;
+		}
+		Draw();
+	}
 
    protected:
 	virtual void Update() {}
+	virtual void Draw() {}
 };
 
 }  // namespace Supergoon

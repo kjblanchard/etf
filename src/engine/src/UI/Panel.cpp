@@ -16,6 +16,6 @@ void Panel::Update() {
 }
 void Panel::Draw() {
 	for (auto& [name, uiObject] : Children) {
-		uiObject->Draw();
+		uiObject->DrawInternal();
 	}
 }

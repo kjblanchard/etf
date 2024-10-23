@@ -8,6 +8,7 @@ using EventFunc = std::function<void(int, void*, void*)>;
 
 struct BuiltinEventTypes {
 	uint32_t ImGuiFocusedEvent;
+	uint32_t LevelChangeEvent;
 };
 class Events {
    public:

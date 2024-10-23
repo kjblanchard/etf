@@ -24,7 +24,6 @@ set(SRC_FILES
     src/Graphics/Graphics.cpp
     src/World/Level.cpp
     src/World/TiledMap.cpp
-    src/World/Scene.cpp
     src/World/World.cpp
     src/Physics/Physics.cpp
     src/ECS/GameObject.cpp

@@ -13,6 +13,7 @@ BuiltinEventTypes Events::BuiltinEvents;
 
 Events::Events() {
 	BuiltinEvents.ImGuiFocusedEvent = RegisterEvent();
+	BuiltinEvents.LevelChangeEvent = RegisterEvent();
 	RegisterEventHandler(BuiltinEvents.ImGuiFocusedEvent, [this](int code, void*, void*) {
 		this->_isGameFocused = code;
 	});

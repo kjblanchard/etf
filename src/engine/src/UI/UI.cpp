@@ -9,25 +9,41 @@
 #include <fstream>
 using namespace Supergoon;
 using json = nlohmann::json;
+Panel* UI::UIInstance = nullptr;
+std::vector<std::shared_ptr<UIObjectAnimatorBase>> UI::Animators;
 
 Panel* UI::Initialize() {
 	auto rootPanel = new Panel();
 	auto graphics = Graphics::Instance();
 	rootPanel->Bounds = RectangleF{0, 0, (float)graphics.LogicalWidth(), (float)graphics.LogicalHeight()};
+	UIInstance = rootPanel;
 	return rootPanel;
 }
-void UI::LoadUIFromFile(std::string filename, Panel* rootPanel) {
-	// auto rootPanel = new Panel();
-	// auto graphics = Graphics::Instance();
-	// rootPanel->Bounds = RectangleF{0, 0, (float)graphics.LogicalWidth(), (float)graphics.LogicalHeight()};
+
+void UI::Update() {
+	if (UIInstance) {
+		UIInstance->UpdateInternal();
+	}
+	for (auto&& animator : Animators) {
+		animator->Update();
+	}
+}
+
+void UI::Draw() {
+	if (UIInstance) {
+		UIInstance->Draw();
+	}
+}
+
+void UI::LoadUIFromFile(std::string filename, Panel* parentPanel) {
 	std::string jsonPath = std::string(SDL_GetBasePath()) + "assets/ui/" + filename + ".json";
 	std::ifstream fileStream(jsonPath);
 	auto j = json::parse(fileStream);
 	for (auto& jsonChild : j) {
 		if (jsonChild["type"] == "Image") {
 			auto name = jsonChild["name"].get<std::string>();
-			auto child = std::make_shared<ImageObject>(rootPanel, jsonChild);
-			rootPanel->Children[name] = child;
+			auto child = std::make_shared<ImageObject>(parentPanel, jsonChild);
+			parentPanel->Children[name] = child;
 		}
 	}
 }

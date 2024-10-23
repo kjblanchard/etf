@@ -5,11 +5,10 @@
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/Widgets/UIWidget.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
-#include <Supergoon/World/Scene.hpp>
 using namespace Supergoon;
 
 void UIWidget::ShowUiDebugWindow() {
-	auto rootPanel = Scene::Instance->SceneUI.get();
+	auto rootPanel = UI::UIInstance;
 	if (!rootPanel) {
 		return;
 	}

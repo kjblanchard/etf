@@ -40,11 +40,8 @@
 #include <Supergoon/Widgets/Sound.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
 #include <Supergoon/World/Level.hpp>
-#include <Supergoon/World/Scene.hpp>
 #include <Supergoon/World/TiledMap.hpp>
 #include <Supergoon/World/World.hpp>
 #ifdef imgui
 #include <SupergoonEngine/imgui/imgui.h>
 #endif
-// #include </include/SupergoonEngine/json.hpp"
-// #include </include/SupergoonEngine/json_fwd.hpp"
