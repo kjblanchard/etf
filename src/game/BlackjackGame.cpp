@@ -20,34 +20,42 @@ class BlackjackGame : public Game {
 	void Start() override;
 	void Update() override;
 	void Draw() override;
+	void Reset() override;
 };
 Level *level = nullptr;
 
-void BlackjackGame::Start() {
-	auto ui = UI::Initialize();
-	UI::LoadUIFromFile("logos", ui);
+static void playLogos() {
+	UI::LoadUIFromFile("logos");
+	auto ui = UI::UIInstance;
 	auto thing = (ImageObject *)ui->Children["logoImage"].get();
 	auto thing2 = (ImageObject *)ui->Children["logoImage2"].get();
-	thing2->Visible = true;
 	auto animator = new UIObjectAnimatorBase("Logos");
-	auto fadeTween = new Tween(255, 0, 2.0, &thing->Transparency, Supergoon::Easings::Linear);
-	auto waitTween = new Tween(5.0);
-	auto fadeTween2 = new Tween(255, 0, 2.0, &thing2->Transparency, Supergoon::Easings::Linear);
-	fadeTween2->EndFunc = []() {
+	auto fadeInTween = new Tween(0, 255, 3.0, &thing->Transparency, Supergoon::Easings::Linear);
+	auto fadeOutTween = new Tween(255, 0, 3.0, &thing->Transparency, Supergoon::Easings::Linear);
+	// auto waitTween = new Tween(1.0);
+	auto fadeInTween2 = new Tween(0, 255, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
+	auto fadeOutTween2 = new Tween(255, 0, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
+	fadeOutTween2->EndFunc = []() {
 		level = new Level("debugTown");
-		level->CreateBackgroundImage();
+		// level->CreateBackgroundImage();
 		LoadPlayers();
 		LoadAnimationComponents();
 		UI::UIInstance->Visible = false;
 		UI::UIInstance->Enabled = false;
 		ContentRegistry::LoadAllContent();
 	};
-	animator->AddUIObjectTween(fadeTween, thing);
-	animator->AddUIObjectTween(waitTween, nullptr);
-	animator->AddUIObjectTween(fadeTween2, thing2);
+	animator->AddUIObjectTween(fadeInTween, thing);
+	animator->AddUIObjectTween(fadeOutTween, thing);
+	// animator->AddUIObjectTween(waitTween, nullptr);
+	animator->AddUIObjectTween(fadeInTween2, thing2);
+	animator->AddUIObjectTween(fadeOutTween2, thing2);
 	UI::Animators.push_back(std::shared_ptr<UIObjectAnimatorBase>(animator));
 
 	ContentRegistry::LoadAllContent();
+}
+
+void BlackjackGame::Start() {
+	playLogos();
 }
 
 void BlackjackGame::Update() {
@@ -71,6 +79,13 @@ void BlackjackGame::Draw() {
 #ifdef imgui
 	Widgets::ShowWidgets();
 #endif
+}
+
+void BlackjackGame::Reset() {
+	if (level) {
+		delete level;
+		level = nullptr;
+	}
 }
 
 REGISTER_GAME(BlackjackGame);

@@ -2,6 +2,7 @@
 #include <SupergoonEngine/log.h>
 
 #include <Supergoon/Events.hpp>
+#include <Supergoon/Game.hpp>
 #include <algorithm>
 #ifdef imgui
 #include <SupergoonEngine/imgui/imgui_impl_sdl3.h>
@@ -14,8 +15,13 @@ BuiltinEventTypes Events::BuiltinEvents;
 Events::Events() {
 	BuiltinEvents.ImGuiFocusedEvent = RegisterEvent();
 	BuiltinEvents.LevelChangeEvent = RegisterEvent();
+	BuiltinEvents.ResetGameEvent = RegisterEvent();
 	RegisterEventHandler(BuiltinEvents.ImGuiFocusedEvent, [this](int code, void*, void*) {
 		this->_isGameFocused = code;
+	});
+
+	RegisterEventHandler(BuiltinEvents.ResetGameEvent, [](int, void*, void*) {
+		Game::Instance()->InternalReset();
 	});
 }
 

@@ -19,6 +19,7 @@ void ImageObject::OnDirty() {
 ImageObject::ImageObject(Panel* parent, json& imageJson) : UIObject(parent) {
 	WidgetType = (int)BuiltinWidgetTypes::Image;
 	Visible = imageJson["visible"].get<bool>();
+	Transparency = imageJson["alpha"].get<float>();
 	auto name = imageJson["name"].get<std::string>();
 	auto sourceData = imageJson["source"];
 	auto destinationData = imageJson["destination"];

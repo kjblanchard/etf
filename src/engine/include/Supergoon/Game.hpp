@@ -29,6 +29,7 @@ class Game {
 	void InternalUpdate();
 	// Game internal Draw, do not call
 	void InternalDraw();
+	void InternalReset();
 	int HandleEvent(SDL_Event* event);
 	//  Happens once at game start
 	virtual void Start() = 0;
@@ -36,6 +37,7 @@ class Game {
 	virtual void Update() = 0;
 	//  Happens after update
 	virtual void Draw() = 0;
+	virtual void Reset() = 0;
 	inline Sound& Sound() { return *_sound; }
 	static inline Game* Instance() { return _game; }
 	static double DeltaTime();

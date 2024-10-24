@@ -101,7 +101,7 @@ SDL_Texture* Graphics::CreateRenderTargetTexture(int width, int height, Color co
 	}
 	SDL_SetTextureScaleMode(image, SDL_SCALEMODE_NEAREST);
 	SDL_SetTextureBlendMode(image, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(_renderer, 255, color.G, color.B, color.A);
+	SDL_SetRenderDrawColor(_renderer, 100, color.G, color.B, color.A);
 	SDL_RenderClear(_renderer);
 	SDL_SetRenderTarget(_renderer, NULL);
 	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);

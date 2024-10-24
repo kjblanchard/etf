@@ -11,11 +11,13 @@
 #include <SupergoonEngine/imgui/imgui.h>
 #endif
 
+#include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Game.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/Log.hpp>
 #include <Supergoon/Sound.hpp>
+#include <Supergoon/UI/UI.hpp>
 #include <SupergoonEngine/nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
@@ -37,8 +39,8 @@ SDL_AppResult SDL_AppInit(void **, int, char *[]) {
 	geInitializeJoysticks();
 
 	sgRegisterGame();
-	_gameInternal->Initialize();
-	_gameInternal->Start();
+	// This should be entailed in reset
+	_gameInternal->InternalReset();
 	return SDL_APP_CONTINUE;
 }
 
@@ -82,6 +84,7 @@ void Game::Initialize() {
 	InitializeImGui();
 	_graphics->InitializeImGui();
 	Game::Instance()->Sound().InitializeSound();
+	_initialized = true;
 }
 
 int Game::HandleEvent(SDL_Event *event) {
@@ -109,6 +112,18 @@ void Game::InternalDraw() {
 	Draw();
 	_graphics->DrawImGui();
 	_graphics->DrawEnd();
+}
+
+void Game::InternalReset() {
+	_gameInternal->Reset();
+	UI::Reset();
+	GameObject::ClearGameObjects();
+	ContentRegistry::DestroyAllContent();
+	if (!_initialized) {
+		Initialize();
+	}
+	UI::Initialize();
+	_gameInternal->Start();
 }
 
 double Game::DeltaTime() {

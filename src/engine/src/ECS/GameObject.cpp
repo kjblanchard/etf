@@ -13,3 +13,6 @@ void GameObject::FreeGameObject() {
 GameObject::GameObject() {
 	_entity = _registry.create();
 }
+void GameObject::ClearGameObjects() {
+	_registry.clear();
+}

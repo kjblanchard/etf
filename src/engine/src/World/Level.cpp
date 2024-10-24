@@ -24,8 +24,8 @@ Level::Level(const char *filename)
 	: _background(nullptr) {
 	_name = filename;
 	_mapData = std::make_unique<TiledMap>(filename);
-	// _physicsWorld = std::make_unique<PhysicsWorld>();
 	LoadSurfaces();
+	CreateBackgroundImage();
 	LoadAllGameObjects();
 	LoadSolidObjects();
 	// Add gamestate object to level
@@ -55,6 +55,7 @@ Level::~Level() {
 	}
 
 	_gameObjects.clear();
+	_imagesCache.clear();
 	// TODO should we actually clear this?  Save for manual cleanup.
 	// geBgmDelete(_bgm);
 }

@@ -13,6 +13,9 @@ Panel* UI::UIInstance = nullptr;
 std::vector<std::shared_ptr<UIObjectAnimatorBase>> UI::Animators;
 
 Panel* UI::Initialize() {
+	if (UIInstance) {
+		return UIInstance;
+	}
 	auto rootPanel = new Panel();
 	auto graphics = Graphics::Instance();
 	rootPanel->Bounds = RectangleF{0, 0, (float)graphics.LogicalWidth(), (float)graphics.LogicalHeight()};
@@ -33,6 +36,13 @@ void UI::Draw() {
 	if (UIInstance) {
 		UIInstance->Draw();
 	}
+}
+void UI::Reset() {
+	if (UIInstance) {
+		delete UIInstance;
+	}
+	UIInstance = nullptr;
+	Animators.clear();
 }
 
 void UI::LoadUIFromFile(std::string filename, Panel* parentPanel) {

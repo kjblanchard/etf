@@ -25,6 +25,7 @@ class GameObject {
 	static void ForEach(Func func);
 	template <typename... Components>
 	static std::optional<GameObject> GetGameObjectWithComponents();
+	static void ClearGameObjects();
 
    private:
 	static entt::registry _registry;
