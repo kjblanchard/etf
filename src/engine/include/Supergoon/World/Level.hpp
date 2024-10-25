@@ -36,7 +36,7 @@ class Level {
 	 * @brief Loads all the surfaces from the tilesets in this level, so that we can blit them properly
 	 */
 	void LoadSurfaces();
-	bool CheckIfTilesetIsCached(const std::string &name) const;
+	// bool CheckIfTilesetIsCached(const std::string &name) const;
 	void LoadSolidObjects();
 	Image *GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset);
 	// void StartBgm();

@@ -31,4 +31,7 @@ void Supergoon::DrawAnimationComponents() {
 	});
 }
 void Supergoon::FreeAnimationComponents() {
+	GameObject::ForEach<AnimationComponent>([](GameObject, AnimationComponent& a) {
+		delete (a.Animation);
+	});
 }

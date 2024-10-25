@@ -18,7 +18,7 @@ namespace Supergoon {
 extern std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap;
 }
 using namespace Supergoon;
-static std::vector<std::pair<std::string, Image *>> _imagesCache;
+// static std::vector<std::pair<std::string, Image *>> _imagesCache;
 
 Level::Level(const char *filename)
 	: _background(nullptr) {
@@ -45,6 +45,7 @@ Level::Level(const char *filename)
 
 Level::~Level() {
 	// Bba::FreeAnimationComponents();
+
 	if (_background) {
 		// TODO should we actually clear this?  Save for manual cleanup.
 		// geImageFree(_background);
@@ -55,7 +56,7 @@ Level::~Level() {
 	}
 
 	_gameObjects.clear();
-	_imagesCache.clear();
+	// _imagesCache.clear();
 	// TODO should we actually clear this?  Save for manual cleanup.
 	// geBgmDelete(_bgm);
 }
@@ -66,44 +67,26 @@ void Level::LoadSurfaces() {
 			for (auto &tile : tileset.Tiles) {
 				char *fullPath = NULL;
 				SDL_asprintf(&fullPath, "%sassets/tiled/%s", SDL_GetBasePath(), tile.Image.c_str());
-				if (!CheckIfTilesetIsCached(fullPath)) {
-					auto i = ContentRegistry::CreateContent<Image>(fullPath);
-					_imagesCache.push_back({tile.Image, i.get()});
-				}
+				ContentRegistry::CreateContent<Image>(fullPath);
 			}
 		} else {
 			char *fullPath = NULL;
 			SDL_asprintf(&fullPath, "%sassets/tiled/%s", SDL_GetBasePath(), tileset.Image.c_str());
-			if (!CheckIfTilesetIsCached(fullPath)) {
-				auto i = ContentRegistry::CreateContent<Image>(fullPath);
-				_imagesCache.push_back({tileset.Image, i.get()});
-			}
+			auto i = ContentRegistry::CreateContent<Image>(fullPath);
 		}
 	}
-}
-
-bool Level::CheckIfTilesetIsCached(const std::string &name) const {
-	return std::any_of(_imagesCache.begin(), _imagesCache.end(),
-					   [&name](const auto &cachedTileset) {
-						   return cachedTileset.first == name;
-					   });
+	ContentRegistry::LoadAllContent();
 }
 
 Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	if (tileset->Type == TilesetType::Image) {
 		for (auto &tile : tileset->Tiles) {
 			if (tile.Id + tileset->FirstGid == gid) {
-				for (auto surface : _imagesCache) {
-					if (surface.first == tile.Image)
-						return surface.second;
-				}
+				return ContentRegistry::CreateContent<Image>(tile.Image).get();
 			}
 		}
 	} else {
-		for (auto surface : _imagesCache) {
-			if (surface.first == tileset->Image)
-				return surface.second;
-		}
+		return ContentRegistry::CreateContent<Image>(tileset->Image).get();
 	}
 	printf("Could not find loaded surface for gid %ud\n", gid);
 	return nullptr;

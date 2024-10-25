@@ -169,6 +169,10 @@ void Image::Load() {
 	SDL_GetTextureSize(_image, &_width, &_height);
 }
 void Image::Unload() {
+	if (_image) {
+		SDL_DestroyTexture(_image);
+		_image = nullptr;
+	}
 }
 const std::string Image::Filepath() {
 	return _filePath;

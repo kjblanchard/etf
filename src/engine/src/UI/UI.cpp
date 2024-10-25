@@ -40,8 +40,8 @@ void UI::Draw() {
 void UI::Reset() {
 	if (UIInstance) {
 		delete UIInstance;
+		UIInstance = nullptr;
 	}
-	UIInstance = nullptr;
 	Animators.clear();
 }
 

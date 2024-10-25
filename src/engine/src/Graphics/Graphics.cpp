@@ -110,13 +110,6 @@ SDL_Texture* Graphics::CreateRenderTargetTexture(int width, int height, Color co
 
 void Graphics::SetTextureAlpha(SDL_Texture* texture, int alpha) {
 	SDL_SetTextureAlphaMod(texture, alpha);
-	// SDL_SetRenderTarget(_renderer, texture);
-	// if (SDL_SetRenderDrawColor(_renderer, 0, 0, 0, alpha) != 0) {
-	// 	// Handle error
-	// 	sgLogError("Error setting render draw color: %s", SDL_GetError());
-	// }
-	// SDL_RenderClear(_renderer);
-	// SDL_SetRenderTarget(_renderer, NULL);
 }
 
 void Graphics::ClearRenderTargetTexture(SDL_Texture* texture, Color color) {
