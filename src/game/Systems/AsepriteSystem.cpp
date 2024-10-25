@@ -4,7 +4,9 @@
 using namespace Supergoon;
 
 void loadAnimationComponent(AnimationComponent& a) {
-	a.Animation = std::make_shared<AsepriteAnimation>(a.AnimationName);
+	if (!a.Animation) {
+		a.Animation = std::make_shared<AsepriteAnimation>(a.AnimationName);
+	}
 	a.AnimationImage = ContentRegistry::CreateContent<Image>(a.Animation->Filename());
 }
 

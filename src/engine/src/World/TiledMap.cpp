@@ -57,14 +57,9 @@ RectangleF TiledMap::GetGidSourceRect(int gid) {
 }
 
 TiledMap::TiledMap(std::string filename) {
-	// auto pathPrefix = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + filename + ".tmj";
-	char *fullPath = NULL;
-	SDL_asprintf(&fullPath, "%sassets/tiled/%s%s", SDL_GetBasePath(), filename.c_str(), ".tmj");
-	// geGetLoadFilename(buf, sizeof(buf), pathPrefix.c_str());
+	auto fullPath = std::string(SDL_GetBasePath()) + "assets/tiled/" + filename + ".tmj";
 	std::ifstream file(fullPath);
-	SDL_free(fullPath);
 	json data = json::parse(file);
-	// auto &tilesets = data["tilesets"];
 	Width = data["width"];
 	Height = data["height"];
 	TileWidth = data["tilewidth"];
@@ -78,11 +73,9 @@ TiledMap::TiledMap(std::string filename) {
 	for (auto &tiledmapTileset : TiledmapTilesets) {
 		auto tileset = Tileset();
 		tileset.FirstGid = tiledmapTileset.FirstGid;
-		// std::string tilesetPrefix = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + tiledmapTileset.Source;
-		SDL_asprintf(&fullPath, "%sassets/tiled/%s", SDL_GetBasePath(), tiledmapTileset.Source.c_str());
-		// geGetLoadFilename(fullPath, sizeof(buf), tilesetPrefix.c_str());
-		std::ifstream file(fullPath);
-		json tilesetData = json::parse(file);
+		auto tiledPath = std::string(SDL_GetBasePath()) + "assets/tiled/" + tiledmapTileset.Source.c_str();
+		std::ifstream file2(tiledPath);
+		json tilesetData = json::parse(file2);
 		// read the tileset file, and load info about it here.
 		tileset.Name = tilesetData["name"];
 		tileset.TileHeight = tilesetData["tileheight"];

@@ -173,6 +173,10 @@ void Image::Unload() {
 		SDL_DestroyTexture(_image);
 		_image = nullptr;
 	}
+	if (_surface) {
+		SDL_DestroySurface(_surface);
+		_surface = nullptr;
+	}
 }
 const std::string Image::Filepath() {
 	return _filePath;

@@ -21,9 +21,7 @@ AsepriteAnimation::AsepriteAnimation(std::string n) : _animNum(0), _frame(0), _n
 AsepriteAnimation::~AsepriteAnimation() {
 }
 std::string AsepriteAnimation::Filename() {
-	char* fullPath = NULL;
-	SDL_asprintf(&fullPath, "%sassets/img/%s", SDL_GetBasePath(), _aseDocument->meta.image.c_str());
-	return fullPath;
+	return std::string(SDL_GetBasePath()) + "assets/img/" + _aseDocument->meta.image;
 }
 
 void AsepriteAnimation::Load() {

@@ -14,7 +14,10 @@ void GlobalWidget::ShowGlobalDebugWindow() {
 		return;
 	}
 	if (ImGui::Button("Reset##globalreset")) {
-		Events::PushEvent(Events::BuiltinEvents.ResetGameEvent, 0);
+		for (size_t i = 0; i < 15; i++) {
+			Events::PushEvent(Events::BuiltinEvents.ResetGameEvent, 0);
+			/* code */
+		}
 	}
 	ImGui::End();
 }

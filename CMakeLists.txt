@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Should we include Imgui stuffs
 option(imgui "Include ImGui support" ON)
-option(SYSTEM_PACKAGES "Use system packages if available" OFF)
+option(SYSTEM_PACKAGES "Use system packages if available" ON)
 
 include(FetchContent)
 
