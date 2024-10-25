@@ -36,8 +36,8 @@ add_library(${LIBRARY_TARGET_NAME} STATIC
 )
 
 if(SYSTEM_PACKAGES)
-    # find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
-    # find_package(PNG REQUIRED)
+    find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
+    find_package(PNG REQUIRED)
     find_library(LIB_VORBIS
         REQUIRED
         PATH_SUFFIXES .a
@@ -85,6 +85,17 @@ if(NOT PNG_FOUND)
     )
     FetchContent_MakeAvailable(PNG)
 endif(NOT PNG_FOUND)
+
+if(NOT LIB_VORBIS)
+    set(INSTALL_CMAKE_PACKAGE_MODULE OFF CACHE BOOL "Dont do it" FORCE)
+    FetchContent_Declare(
+        LIB_VORBIS
+        GIT_REPOSITORY https://github.com/xiph/vorbis
+        GIT_TAG v1.3.7
+        EXCLUDE_FROM_ALL
+    )
+    FetchContent_MakeAvailable(LIB_VORBIS)
+endif(NOT LIB_VORBIS)
 
 target_compile_options(${LIBRARY_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_directories(${LIBRARY_TARGET_NAME}
