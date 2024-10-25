@@ -23,8 +23,7 @@ class AsepriteAnimation {
 	int _nextFrame;
 	float _frameTime;
 	bool _reverse = false;	// pingpong
-	std::unique_ptr<RectangleF> _rect;
+	RectangleF _rect;
 	std::shared_ptr<AsepriteDocument> _aseDocument;
-	// static std::unordered_map<std::string, std::shared_ptr<AsepriteDocument>> _asepriteDocuments;
 };
 }  // namespace Supergoon

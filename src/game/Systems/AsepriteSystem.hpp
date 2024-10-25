@@ -4,5 +4,4 @@ namespace Supergoon {
 void LoadAnimationComponents();
 void UpdateAnimationComponents();
 void DrawAnimationComponents();
-void FreeAnimationComponents();
-}
+}  // namespace Supergoon

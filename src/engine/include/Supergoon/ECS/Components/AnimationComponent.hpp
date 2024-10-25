@@ -5,13 +5,14 @@
 #include <Supergoon/Primitives/Point.hpp>
 #include <memory>
 #include <string>
+#include <utility>
 namespace Supergoon {
 struct AnimationComponent {
-	AsepriteAnimation* Animation;
 	std::string AnimationName;
 	float AnimationSpeed;
-	std::shared_ptr<Image> AnimationImage;
 	Point Offset;
 	bool Playing;
+	std::shared_ptr<AsepriteAnimation> Animation;
+	std::shared_ptr<Image> AnimationImage;
 };
 }  // namespace Supergoon

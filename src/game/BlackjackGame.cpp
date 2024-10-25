@@ -89,7 +89,6 @@ void BlackjackGame::Draw() {
 
 void BlackjackGame::Reset() {
 	if (level) {
-		FreeAnimationComponents();
 		delete level;
 		level = nullptr;
 	}

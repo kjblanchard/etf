@@ -2,8 +2,9 @@
 #include <Systems/AsepriteSystem.hpp>
 #include <memory>
 using namespace Supergoon;
+
 void loadAnimationComponent(AnimationComponent& a) {
-	a.Animation = new AsepriteAnimation(a.AnimationName);
+	a.Animation = std::make_shared<AsepriteAnimation>(a.AnimationName);
 	a.AnimationImage = ContentRegistry::CreateContent<Image>(a.Animation->Filename());
 }
 
@@ -28,10 +29,5 @@ void Supergoon::DrawAnimationComponents() {
 		auto srcRect = a.Animation->FrameCoords();
 		auto d = RectangleF{(float)(int)(l.Location.X + a.Offset.X) - (int)cameraComponent.Box.X, (float)(int)(l.Location.Y + a.Offset.Y) - (int)cameraComponent.Box.Y, (float)srcRect.W, (float)srcRect.H};
 		a.AnimationImage->Draw(srcRect, d);
-	});
-}
-void Supergoon::FreeAnimationComponents() {
-	GameObject::ForEach<AnimationComponent>([](GameObject, AnimationComponent& a) {
-		delete (a.Animation);
 	});
 }

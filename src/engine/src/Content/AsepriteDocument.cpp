@@ -58,5 +58,5 @@ void AsepriteDocument::Load() {
 }
 void AsepriteDocument::Unload() {
 }
-AsepriteDocument::AsepriteDocument(std::string p) : Content(std::string(SDL_GetBasePath()) + "assets/aseprite/" + p + ".json") {
+AsepriteDocument::AsepriteDocument(std::string p) : Content(p) {
 }

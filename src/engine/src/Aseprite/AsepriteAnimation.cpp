@@ -7,7 +7,6 @@
 
 using namespace Supergoon;
 
-// std::unordered_map<std::string, std::shared_ptr<AsepriteDocument>> AsepriteAnimation::_asepriteDocuments;
 // #ifdef GN_PLATFORM_MACOS
 // static const char *_animationPrefix = "../Resources/assets/img/";
 // #else
@@ -15,7 +14,6 @@ using namespace Supergoon;
 // #endif
 
 AsepriteAnimation::AsepriteAnimation(std::string n) : _animNum(0), _frame(0), _nextFrame(0), _frameTime(0), _aseDocument(nullptr) {
-	_rect = std::make_unique<RectangleF>();
 	_filePath = n;
 	Load();
 }
@@ -25,12 +23,11 @@ AsepriteAnimation::~AsepriteAnimation() {
 std::string AsepriteAnimation::Filename() {
 	char* fullPath = NULL;
 	SDL_asprintf(&fullPath, "%sassets/img/%s", SDL_GetBasePath(), _aseDocument->meta.image.c_str());
-	// geGetLoadFilename(buf, sizeof(buf), f.c_str());
 	return fullPath;
 }
 
 void AsepriteAnimation::Load() {
-	_aseDocument = ContentRegistry::CreateContent<AsepriteDocument>(_filePath);
+	_aseDocument = ContentRegistry::CreateContent<AsepriteDocument>(std::string(SDL_GetBasePath()) + "assets/aseprite/" + _filePath + ".json");
 	_aseDocument->Load();
 	UpdateRect();
 }
@@ -82,12 +79,12 @@ void AsepriteAnimation::PlayAnimation(std::string a) {
 	sgLogWarn("Could not find animation for %s", a.c_str());
 }
 void AsepriteAnimation::UpdateRect() {
-	_rect->X = _aseDocument->frames[_frame].frame.x;
-	_rect->Y = _aseDocument->frames[_frame].frame.y;
-	_rect->W = _aseDocument->frames[_frame].frame.w;
-	_rect->H = _aseDocument->frames[_frame].frame.h;
+	_rect.X = _aseDocument->frames[_frame].frame.x;
+	_rect.Y = _aseDocument->frames[_frame].frame.y;
+	_rect.W = _aseDocument->frames[_frame].frame.w;
+	_rect.H = _aseDocument->frames[_frame].frame.h;
 }
 
 RectangleF& AsepriteAnimation::FrameCoords() {
-	return *(_rect.get());
+	return _rect;
 }
