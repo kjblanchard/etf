@@ -184,7 +184,7 @@ void Image::SetAlpha(int alpha) {
 }
 
 Image::~Image() {
-	SDL_DestroyTexture(_image);
+	Unload();
 }
 
 void Image::DrawImageToImage(Image &src, RectangleF &srcRect, RectangleF &dstRect) {

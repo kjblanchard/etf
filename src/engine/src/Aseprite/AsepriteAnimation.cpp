@@ -2,11 +2,12 @@
 
 #include <Supergoon/Aseprite/AsepriteAnimation.hpp>
 #include <Supergoon/Content/AsepriteDocument.hpp>
+#include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Log.hpp>
 
 using namespace Supergoon;
 
-std::unordered_map<std::string, std::shared_ptr<AsepriteDocument>> AsepriteAnimation::_asepriteDocuments;
+// std::unordered_map<std::string, std::shared_ptr<AsepriteDocument>> AsepriteAnimation::_asepriteDocuments;
 // #ifdef GN_PLATFORM_MACOS
 // static const char *_animationPrefix = "../Resources/assets/img/";
 // #else
@@ -22,9 +23,6 @@ AsepriteAnimation::AsepriteAnimation(std::string n) : _animNum(0), _frame(0), _n
 AsepriteAnimation::~AsepriteAnimation() {
 }
 std::string AsepriteAnimation::Filename() {
-	// auto f = _animationPrefix+ _aseDocument->meta.image;
-	// char buf[1000];
-
 	char* fullPath = NULL;
 	SDL_asprintf(&fullPath, "%sassets/img/%s", SDL_GetBasePath(), _aseDocument->meta.image.c_str());
 	// geGetLoadFilename(buf, sizeof(buf), f.c_str());
@@ -32,12 +30,8 @@ std::string AsepriteAnimation::Filename() {
 }
 
 void AsepriteAnimation::Load() {
-	auto iter = _asepriteDocuments.find(_filePath);
-	if (iter != _asepriteDocuments.end()) {
-		_aseDocument = iter->second;
-	}
-	_asepriteDocuments[_filePath] = std::make_shared<AsepriteDocument>(_filePath);
-	_aseDocument = _asepriteDocuments[_filePath];
+	_aseDocument = ContentRegistry::CreateContent<AsepriteDocument>(_filePath);
+	_aseDocument->Load();
 	UpdateRect();
 }
 
