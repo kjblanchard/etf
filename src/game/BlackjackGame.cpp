@@ -14,6 +14,17 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 };
 }
 using namespace Supergoon;
+static bool skipLogos = true;
+Level *level = nullptr;
+static void loadLevel() {
+	level = new Level("debugTown");
+	// level->CreateBackgroundImage();
+	LoadPlayers();
+	LoadAnimationComponents();
+	UI::UIInstance->Visible = false;
+	UI::UIInstance->Enabled = false;
+	ContentRegistry::LoadAllContent();
+}
 
 class BlackjackGame : public Game {
    public:
@@ -22,7 +33,6 @@ class BlackjackGame : public Game {
 	void Draw() override;
 	void Reset() override;
 };
-Level *level = nullptr;
 
 static void playLogos() {
 	UI::LoadUIFromFile("logos");
@@ -35,15 +45,7 @@ static void playLogos() {
 	// auto waitTween = new Tween(1.0);
 	auto fadeInTween2 = new Tween(0, 255, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
 	auto fadeOutTween2 = new Tween(255, 0, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
-	fadeOutTween2->EndFunc = []() {
-		level = new Level("debugTown");
-		// level->CreateBackgroundImage();
-		LoadPlayers();
-		LoadAnimationComponents();
-		UI::UIInstance->Visible = false;
-		UI::UIInstance->Enabled = false;
-		ContentRegistry::LoadAllContent();
-	};
+	fadeOutTween2->EndFunc = loadLevel;
 	animator->AddUIObjectTween(fadeInTween, thing);
 	animator->AddUIObjectTween(fadeOutTween, thing);
 	// animator->AddUIObjectTween(waitTween, nullptr);
@@ -55,7 +57,11 @@ static void playLogos() {
 }
 
 void BlackjackGame::Start() {
-	playLogos();
+	if (!skipLogos) {
+		playLogos();
+	} else {
+		loadLevel();
+	}
 }
 
 void BlackjackGame::Update() {

@@ -44,8 +44,6 @@ Level::Level(const char *filename)
 }
 
 Level::~Level() {
-	// Bba::FreeAnimationComponents();
-
 	if (_background) {
 		// TODO should we actually clear this?  Save for manual cleanup.
 		// geImageFree(_background);
@@ -56,9 +54,9 @@ Level::~Level() {
 	}
 
 	_gameObjects.clear();
-	// _imagesCache.clear();
-	// TODO should we actually clear this?  Save for manual cleanup.
-	// geBgmDelete(_bgm);
+}
+static std::string getBasePathForTiled() {
+	return std::string(SDL_GetBasePath()) + "assets/tiled/";
 }
 
 void Level::LoadSurfaces() {
@@ -66,13 +64,15 @@ void Level::LoadSurfaces() {
 		if (tileset.Type == TilesetType::Image) {
 			for (auto &tile : tileset.Tiles) {
 				char *fullPath = NULL;
-				SDL_asprintf(&fullPath, "%sassets/tiled/%s", SDL_GetBasePath(), tile.Image.c_str());
+				SDL_asprintf(&fullPath, "%s%s", getBasePathForTiled().c_str(), tile.Image.c_str());
 				ContentRegistry::CreateContent<Image>(fullPath);
+				SDL_free(fullPath);
 			}
 		} else {
 			char *fullPath = NULL;
-			SDL_asprintf(&fullPath, "%sassets/tiled/%s", SDL_GetBasePath(), tileset.Image.c_str());
+			SDL_asprintf(&fullPath, "%s%s", getBasePathForTiled().c_str(), tileset.Image.c_str());
 			auto i = ContentRegistry::CreateContent<Image>(fullPath);
+			SDL_free(fullPath);
 		}
 	}
 	ContentRegistry::LoadAllContent();
@@ -82,13 +82,13 @@ Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	if (tileset->Type == TilesetType::Image) {
 		for (auto &tile : tileset->Tiles) {
 			if (tile.Id + tileset->FirstGid == gid) {
-				return ContentRegistry::CreateContent<Image>(tile.Image).get();
+				return ContentRegistry::CreateContent<Image>(getBasePathForTiled() + tile.Image).get();
 			}
 		}
 	} else {
-		return ContentRegistry::CreateContent<Image>(tileset->Image).get();
+		return ContentRegistry::CreateContent<Image>(getBasePathForTiled() + tileset->Image).get();
 	}
-	printf("Could not find loaded surface for gid %ud\n", gid);
+	sgLogError("Could not find loaded surface for gid %ud\n", gid);
 	return nullptr;
 }
 
