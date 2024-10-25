@@ -1,11 +1,7 @@
 # Subdirectories
 add_subdirectory(external)
 add_subdirectory(sound)
-
-# Variables
 set(LIBRARY_TARGET_NAME SupergoonEngine)
-
-#
 cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
 set(SRC_FILES
@@ -33,7 +29,6 @@ set(SRC_FILES
     src/UI/UIObjectAnimator.cpp
 )
 
-# Conditionally append the widget files if ImGui is enabled
 if(imgui)
     message(STATUS "ImGui is enabled, adding ImGui-related files.")
     list(APPEND SRC_FILES
@@ -44,8 +39,6 @@ if(imgui)
         src/Widgets/UIWidget.cpp
         src/Widgets/Global.cpp
     )
-else()
-    message(STATUS "ImGui is not enabled.")
 endif()
 
 add_library(${LIBRARY_TARGET_NAME}

@@ -4,6 +4,7 @@ EXECUTABLE_NAME = SupergoonBlackJack
 DEFAULT_GENERATOR ?= "Ninja"
 BACKUP_GENERATOR ?= "Unix Makefiles"
 DEFAULT_IMGUI ?= ON
+SYSTEM_PACKAGES ?= ON
 # default, should be used after a rebuild of some sort.
 all: build run
 
@@ -11,8 +12,10 @@ rebuild:
 	$(MAKE) CMAKE_GENERATOR=$(DEFAULT_GENERATOR) clean configure build install
 brebuild:
 	$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) clean configure build install
+rrebuild:
+	$(MAKE) CMAKE_GENERATOR=$(DEFAULT_GENERATOR) DEFAULT_IMGUI=OFF clean configure build install
 configure:
-	cmake -G "$(CMAKE_GENERATOR)" . -B $(BUILD_DIR) -Dimgui=$(DEFAULT_IMGUI)
+	cmake -G "$(CMAKE_GENERATOR)" . -B $(BUILD_DIR) -Dimgui=$(DEFAULT_IMGUI) -DSYSTEM_PACKAGES=$(SYSTEM_PACKAGES)
 build:
 	cmake --build $(BUILD_DIR)
 install:

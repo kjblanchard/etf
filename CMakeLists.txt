@@ -11,6 +11,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Should we include Imgui stuffs
 option(imgui "Include ImGui support" ON)
+option(SYSTEM_PACKAGES "Use system packages if available" ON)
+
+include(FetchContent)
 
 # Output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
