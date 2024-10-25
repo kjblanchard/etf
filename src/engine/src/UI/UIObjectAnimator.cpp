@@ -1,11 +1,11 @@
 #include <Supergoon/UI/UIObjectAnimator.hpp>
 using namespace Supergoon;
 
-UIObjectAnimatorBase::UIObjectAnimatorBase(float start, float end, float duration, float* value, UIObject* obj) {
+UIObjectAnimatorBase::UIObjectAnimatorBase(float start, float end, float duration, float* value) {
 	SequenceToPlay = std::make_unique<Sequence>();
 	SequenceToPlay->Tweens.push_back(std::make_shared<Tween>(start, end, duration, value, Supergoon::Easings::Linear));
 }
-UIObjectAnimatorBase::UIObjectAnimatorBase(float start, float end, float duration, int* value, UIObject* obj) {
+UIObjectAnimatorBase::UIObjectAnimatorBase(float start, float end, float duration, int* value) {
 	SequenceToPlay = std::make_unique<Sequence>();
 	SequenceToPlay->Tweens.push_back(std::make_shared<Tween>(start, end, duration, value, Supergoon::Easings::Linear));
 }

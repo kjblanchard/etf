@@ -15,7 +15,7 @@ void ContentWidget::ShowContentDebugWindow() {
 		ImGui::End();
 		return;
 	}
-	ImGui::Text("Number of loaded content is %d", ContentRegistry::_loadedContent.size());
+	ImGui::Text("Number of loaded content is %zu", ContentRegistry::_loadedContent.size());
 	if (ImGui::TreeNode("Contents")) {
 		for (const auto& [key, value] : ContentRegistry::_loadedContent) {
 			if (ImGui::TreeNode(key.c_str())) {
@@ -24,7 +24,7 @@ void ContentWidget::ShowContentDebugWindow() {
 				ImGui::Text("%lu", sizeof(*value.get()));
 				ImGui::Text("Type:");
 				ImGui::SameLine();
-				ImGui::Text(value->Type().c_str());
+				ImGui::Text("%s", value->Type().c_str());
 				ImGui::Text("Path:");
 				ImGui::SameLine();
 				ImGui::Text("%s", value->Filepath().c_str());

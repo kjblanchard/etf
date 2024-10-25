@@ -1,10 +1,9 @@
 #include <SDL3/SDL_filesystem.h>
+#include <SupergoonEngine/log.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
-#include <SupergoonEngine/log.h>
 
 #define MAX_LOG_SIZE 200
 
@@ -36,18 +35,17 @@ static int geGetFileFilepath(char *buffer, size_t bufferSize, const char *filena
 
 	if (base_path == NULL) {
 		// Use the current directory if SDL_GetBasePath() fails
-		if (snprintf(buffer, bufferSize, "./%s", filename) < bufferSize) {
+		if (snprintf(buffer, bufferSize, "./%s", filename) < (int)bufferSize) {
 			result = 0;	 // Success
 		}
 	} else {
 		// Construct the path using the base path provided by SDL
-		if (snprintf(buffer, bufferSize, "%s%s", base_path, filename) < bufferSize) {
+		if (snprintf(buffer, bufferSize, "%s%s", base_path, filename) < (int)bufferSize) {
 			_systemFilePath = strdup(base_path);
 			SDL_free((void *)base_path);  // Clean up the SDL memory
 			result = 0;					  // Success
 		}
 	}
-	sgLogWarn("Path is %s", buffer);
 	return result;
 }
 
@@ -142,4 +140,3 @@ void sgLogCritical(const char *fmt, ...) {
 void sgSetLogLevel(int newLevel) {
 	logLevel = (sgLogLevel)newLevel;
 }
-

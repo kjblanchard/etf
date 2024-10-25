@@ -45,7 +45,7 @@ class Graphics {
 	int _windowHeight;
 	int _logicalWidth;
 	int _logicalHeight;
-	int _refreshRate;
+	// int _refreshRate;
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
 	static Graphics* _instance;

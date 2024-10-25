@@ -5,6 +5,7 @@ set(FULL_COMPILE_OPTIONS
     -Wextra
     -Wpedantic
     -Wdeprecated
+    -Wno-deprecated-literal-operator
     CACHE
     STRING
     "Compile options for everything"

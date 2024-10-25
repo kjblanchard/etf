@@ -5,11 +5,11 @@
 #include <Supergoon/Tween/Tween.hpp>
 
 using namespace Supergoon;
-Tween::Tween(float start, float end, float duration, float* value, Easings ease) : _begin(start), _end(end), _duration(duration), value(value), _easeType(ease) {
+Tween::Tween(float start, float end, float duration, float* value, Easings ease) : value(value), _begin(start), _end(end), _duration(duration), _easeType(ease) {
 }
-Tween::Tween(float start, float end, float duration, int* value, Easings ease) : _begin(start), _end(end), value(value), _duration(duration), _easeType(ease) {
+Tween::Tween(float start, float end, float duration, int* value, Easings ease) : value(value), _begin(start), _end(end), _duration(duration), _easeType(ease) {
 }
-Tween::Tween(float waitTime) : _duration(waitTime), value(std::monostate()) {}
+Tween::Tween(float waitTime) : value(std::monostate()), _duration(waitTime) {}
 
 void Tween::UpdateInternal() {
 	float progress = 0;

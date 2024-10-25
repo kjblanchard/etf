@@ -10,9 +10,9 @@ namespace Supergoon {
 
 struct UIObjectAnimatorBase {
 	//  For a single Tween with float
-	UIObjectAnimatorBase(float start, float end, float duration, float* value, UIObject* obj);
+	UIObjectAnimatorBase(float start, float end, float duration, float* value);
 	//  For a single tween with int
-	UIObjectAnimatorBase(float start, float end, float duration, int* value, UIObject* obj);
+	UIObjectAnimatorBase(float start, float end, float duration, int* value);
 	// Create a Animator that handles custom sequences one by one.
 	UIObjectAnimatorBase(std::string name);
 	void AddUIObjectTween(Tween* tween, UIObject* obj);
