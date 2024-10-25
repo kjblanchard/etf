@@ -3,6 +3,7 @@ EXECUTABLE_NAME = SupergoonBlackJack
 .PHONY: all configure build clean debug release
 DEFAULT_GENERATOR ?= "Ninja"
 BACKUP_GENERATOR ?= "Unix Makefiles"
+DEFAULT_IMGUI ?= ON
 # default, should be used after a rebuild of some sort.
 all: build run
 
@@ -11,7 +12,7 @@ rebuild:
 brebuild:
 	$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) clean configure build install
 configure:
-	cmake -G "$(CMAKE_GENERATOR)" . -B $(BUILD_DIR)
+	cmake -G "$(CMAKE_GENERATOR)" . -B $(BUILD_DIR) -Dimgui=$(DEFAULT_IMGUI)
 build:
 	cmake --build $(BUILD_DIR)
 install:

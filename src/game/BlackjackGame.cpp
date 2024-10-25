@@ -78,12 +78,12 @@ void BlackjackGame::Draw() {
 		level->Draw();
 		DrawAnimationComponents();
 		DrawImages();
-		DrawDebugBoxes();
-		ShowPlayerColliderWindow();
 	}
 	UI::Draw();
 #ifdef imgui
+	DrawDebugBoxes();
 	Widgets::ShowWidgets();
+	ShowPlayerColliderWindow();
 #endif
 }
 

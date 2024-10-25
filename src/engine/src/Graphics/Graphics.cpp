@@ -83,7 +83,7 @@ void Graphics::SetWindowScaling(int worldx, int worldY) {
 	if (!mode) {
 		sgLogWarn("Could not get display info for some reason!");
 	}
-	_refreshRate = mode->refresh_rate ? mode->refresh_rate : 60;
+	// _refreshRate = mode->refresh_rate ? mode->refresh_rate : 60;
 	SDL_SetRenderLogicalPresentation(_renderer, worldx, worldY, SDL_LOGICAL_PRESENTATION_INTEGER_SCALE, SDL_SCALEMODE_NEAREST);
 #endif
 }
