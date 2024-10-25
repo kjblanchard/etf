@@ -38,22 +38,22 @@ add_library(${LIBRARY_TARGET_NAME} STATIC
 if(SYSTEM_PACKAGES)
     find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
     find_package(PNG REQUIRED)
-    # find_library(LIB_VORBIS
-    #     REQUIRED
-    #     PATH_SUFFIXES .a
-    #     NAMES libvorbis vorbis vorbis.a vorbis.dll libvorbis.a
-    #     HINTS /usr/local/lib /c/cmake/lib)
+    find_library(LIB_VORBIS
+        REQUIRED
+        PATH_SUFFIXES .a
+        NAMES libvorbis vorbis vorbis.a vorbis.dll libvorbis.a
+        HINTS /usr/local/lib /c/cmake/lib)
 
-    # find_library(LIB_VORBISFILE
-    # REQUIRED
-    # PATH_SUFFIXES .a
-    # NAMES libvorbisfile vorbisfile vorbisfile.a vorbisfile.dll
-    # HINTS /usr/local/lib)
-    # find_library(LIB_OGG
-    #     REQUIRED
-    #     PATH_SUFFIXES .a .dll
-    #     NAMES ogg Ogg
-    #     HINTS /usr/local/lib)
+    find_library(LIB_VORBISFILE
+        REQUIRED
+        PATH_SUFFIXES .a
+        NAMES libvorbisfile vorbisfile vorbisfile.a vorbisfile.dll
+        HINTS /usr/local/lib)
+    find_library(LIB_OGG
+        REQUIRED
+        PATH_SUFFIXES .a .dll
+        NAMES ogg Ogg
+        HINTS /usr/local/lib)
 endif(SYSTEM_PACKAGES)
 
 if(NOT SDL3_FOUND)
