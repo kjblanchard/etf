@@ -1,5 +1,5 @@
 #pragma once
-#include <entt/entity/registry.hpp>
+#include <SupergoonEngine/entt/entt.hpp>
 #include <optional>
 
 namespace Supergoon {

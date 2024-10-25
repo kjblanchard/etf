@@ -1,6 +1,6 @@
 #pragma once
 #include <Supergoon/Content/Image.hpp>
-#include <Supergoon/ECS/GameObject.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Physics/Physics.hpp>
 #include <Supergoon/Primitives/Point.hpp>
 #include <Supergoon/World/TiledMap.hpp>

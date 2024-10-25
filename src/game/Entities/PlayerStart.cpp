@@ -1,6 +1,6 @@
 #include <Components/PlayerSpawnComponent.hpp>
 #include <Entities/PlayerStart.hpp>
-#include <Supergoon/ECS/GameObject.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
 using namespace Supergoon;
 
 GameObject* Supergoon::NewPlayerSpawn(TiledMap::TiledObject& obj) {

@@ -56,7 +56,7 @@ SDL_AppResult SDL_AppIterate(void *) {
 	return SDL_APP_CONTINUE;
 }
 
-void SDL_AppQuit(void *) {
+void SDL_AppQuit(void *, SDL_AppResult) {
 }
 
 Game::Game() {

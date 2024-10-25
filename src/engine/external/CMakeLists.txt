@@ -36,21 +36,21 @@ add_library(${LIBRARY_TARGET_NAME} STATIC
 )
 
 if(SYSTEM_PACKAGES)
-    find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
+    find_package(SDL3 CONFIG COMPONENTS SDL3-shared)
     find_package(PNG REQUIRED)
     find_library(LIB_VORBIS
-        REQUIRED
+
         PATH_SUFFIXES .a
         NAMES libvorbis vorbis vorbis.a vorbis.dll libvorbis.a
         HINTS /usr/local/lib /c/cmake/lib)
 
     find_library(LIB_VORBISFILE
-        REQUIRED
+
         PATH_SUFFIXES .a
         NAMES libvorbisfile vorbisfile vorbisfile.a vorbisfile.dll
         HINTS /usr/local/lib)
     find_library(LIB_OGG
-        REQUIRED
+
         PATH_SUFFIXES .a .dll
         NAMES ogg Ogg
         HINTS /usr/local/lib)
@@ -71,6 +71,7 @@ if(NOT SDL3_FOUND)
 
     # Make sure to fetch the content
     FetchContent_MakeAvailable(SDL3)
+    # Make sure to fetch the content
 endif(NOT SDL3_FOUND)
 
 if(NOT PNG_FOUND)
@@ -128,6 +129,9 @@ target_link_libraries(${LIBRARY_TARGET_NAME}
 )
 target_include_directories(${LIBRARY_TARGET_NAME}
     PUBLIC
+    ${CMAKE_CURRENT_LIST_DIR}/include
+    ${CMAKE_BINARY_DIR}/_deps/sdl3-src/include
+    ${CMAKE_INSTALL_INCLUDEDIR}
     /usr/local/include
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include

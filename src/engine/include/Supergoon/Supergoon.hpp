@@ -11,7 +11,7 @@
 #include <Supergoon/ECS/Components/ImageComponent.hpp>
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Components/SolidComponent.hpp>
-#include <Supergoon/ECS/GameObject.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Game.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>

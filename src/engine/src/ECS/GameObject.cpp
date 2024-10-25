@@ -1,4 +1,4 @@
-#include <Supergoon/ECS/GameObject.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
 using namespace Supergoon;
 
 entt::registry GameObject::_registry;

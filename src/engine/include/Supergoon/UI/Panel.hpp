@@ -1,6 +1,7 @@
 #pragma once
 #include <Supergoon/UI/UIObject.hpp>
 #include <string>
+#include <memory>
 #include <unordered_map>
 namespace Supergoon {
 class Panel : public UIObject {
