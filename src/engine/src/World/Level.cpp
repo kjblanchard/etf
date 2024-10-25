@@ -18,7 +18,6 @@ namespace Supergoon {
 extern std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap;
 }
 using namespace Supergoon;
-// static std::vector<std::pair<std::string, Image *>> _imagesCache;
 
 Level::Level(const char *filename)
 	: _background(nullptr) {
@@ -45,7 +44,7 @@ Level::Level(const char *filename)
 
 Level::~Level() {
 	if (_background) {
-		// TODO should we actually clear this?  Save for manual cleanup.
+		// TODO should we actually clear this?  Save for manual cleanup when we want.
 		// geImageFree(_background);
 	}
 	for (auto &&go : _gameObjects) {

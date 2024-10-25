@@ -16,7 +16,7 @@ set(SRC_FILES
     src/Tween/Sequence.cpp
     src/Events.cpp
     src/Aseprite/AsepriteAnimation.cpp
-    src/Aseprite/AsepriteDocument.cpp
+    src/Content/AsepriteDocument.cpp
     src/Content/Sfx.cpp
     src/Content/Content.cpp
     src/Content/ContentRegistry.cpp

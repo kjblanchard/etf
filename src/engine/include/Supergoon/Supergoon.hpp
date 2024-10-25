@@ -1,6 +1,6 @@
 #pragma once
 #include <Supergoon/Aseprite/AsepriteAnimation.hpp>
-#include <Supergoon/Aseprite/AsepriteDocument.hpp>
+#include <Supergoon/Content/AsepriteDocument.hpp>
 #include <Supergoon/Content/Content.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>

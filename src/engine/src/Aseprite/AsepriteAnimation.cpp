@@ -1,7 +1,7 @@
 #include <SDL3/SDL.h>
 
 #include <Supergoon/Aseprite/AsepriteAnimation.hpp>
-#include <Supergoon/Aseprite/AsepriteDocument.hpp>
+#include <Supergoon/Content/AsepriteDocument.hpp>
 #include <Supergoon/Log.hpp>
 
 using namespace Supergoon;
