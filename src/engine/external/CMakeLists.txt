@@ -38,21 +38,22 @@ add_library(${LIBRARY_TARGET_NAME} STATIC
 if(SYSTEM_PACKAGES)
     find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
     find_package(PNG REQUIRED)
-    find_library(LIB_VORBIS
-        REQUIRED
-        PATH_SUFFIXES .a
-        NAMES libvorbis vorbis vorbis.a vorbis.dll libvorbis.a
-        HINTS /usr/local/lib /c/cmake/lib)
-    find_library(LIB_VORBISFILE
-        REQUIRED
-        PATH_SUFFIXES .a
-        NAMES libvorbisfile vorbisfile vorbisfile.a vorbisfile.dll
-        HINTS /usr/local/lib)
-    find_library(LIB_OGG
-        REQUIRED
-        PATH_SUFFIXES .a .dll
-        NAMES ogg Ogg
-        HINTS /usr/local/lib)
+    # find_library(LIB_VORBIS
+    #     REQUIRED
+    #     PATH_SUFFIXES .a
+    #     NAMES libvorbis vorbis vorbis.a vorbis.dll libvorbis.a
+    #     HINTS /usr/local/lib /c/cmake/lib)
+
+    # find_library(LIB_VORBISFILE
+    # REQUIRED
+    # PATH_SUFFIXES .a
+    # NAMES libvorbisfile vorbisfile vorbisfile.a vorbisfile.dll
+    # HINTS /usr/local/lib)
+    # find_library(LIB_OGG
+    #     REQUIRED
+    #     PATH_SUFFIXES .a .dll
+    #     NAMES ogg Ogg
+    #     HINTS /usr/local/lib)
 endif(SYSTEM_PACKAGES)
 
 if(NOT SDL3_FOUND)
@@ -96,6 +97,16 @@ if(NOT LIB_VORBIS)
     )
     FetchContent_MakeAvailable(LIB_VORBIS)
 endif(NOT LIB_VORBIS)
+
+if(NOT LIB_OGG)
+    FetchContent_Declare(
+        LIB_OGG
+        GIT_REPOSITORY https://github.com/xiph/ogg
+        GIT_TAG v1.3.5
+        EXCLUDE_FROM_ALL
+    )
+    FetchContent_MakeAvailable(LIB_OGG)
+endif(NOT LIB_OGG)
 
 target_compile_options(${LIBRARY_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_directories(${LIBRARY_TARGET_NAME}
