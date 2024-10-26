@@ -69,6 +69,9 @@ void BlackjackGame::Update() {
 		PlayerInput();
 		UpdateAnimationComponents();
 		UpdateCamera();
+		if (KeyJustPressed(Supergoon::KeyboardKeys::Key_P)) {
+			Events::PushEvent(Events::BuiltinEvents.ResetGameEvent, 0);
+		}
 	}
 	UI::Update();
 }

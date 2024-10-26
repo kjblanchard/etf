@@ -36,6 +36,8 @@ void Graphics::CreateWindow(int width, int height, std::string name) {
 	_windowWidth = width;
 	_windowHeight = height;
 	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
+	SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "opengl");
+
 	// auto flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 	auto flags = SDL_WINDOW_RESIZABLE;
 	if (!SDL_CreateWindowAndRenderer(name.c_str(), width, height, flags, &_window, &_renderer)) {
@@ -83,8 +85,10 @@ void Graphics::SetWindowScaling(int worldx, int worldY) {
 	if (!mode) {
 		sgLogWarn("Could not get display info for some reason!");
 	}
+	// SDL_SetRenderScale(_renderer, 2.0, 2.0);
 	// _refreshRate = mode->refresh_rate ? mode->refresh_rate : 60;
-	SDL_SetRenderLogicalPresentation(_renderer, worldx, worldY, SDL_LOGICAL_PRESENTATION_INTEGER_SCALE, SDL_SCALEMODE_NEAREST);
+	// SDL_SetRenderLogicalPresentation(_renderer, worldx, worldY, SDL_LOGICAL_PRESENTATION_INTEGER_SCALE, SDL_SCALEMODE_NEAREST);
+	SDL_SetRenderLogicalPresentation(_renderer, worldx, worldY, SDL_LOGICAL_PRESENTATION_INTEGER_SCALE);
 #endif
 }
 void Graphics::DrawEnd() {
@@ -129,6 +133,7 @@ void Graphics::DrawImageToImage(Image& src, Image& dst, RectangleF* srcR, Rectan
 SDL_Texture* Graphics::CreateTextureFromSurface(SDL_Surface* surface) {
 	SDL_Texture* t = SDL_CreateTextureFromSurface(_renderer, surface);
 	SDL_SetTextureBlendMode(t, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureScaleMode(t, SDL_SCALEMODE_NEAREST);
 	if (t == NULL) {
 		sgLogError("Could not create texture, Error: %s", SDL_GetError());
 		return NULL;
