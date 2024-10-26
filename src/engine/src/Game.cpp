@@ -118,7 +118,7 @@ void Game::InternalReset() {
 	_gameInternal->Reset();
 	UI::Reset();
 	GameObject::ClearGameObjects();
-	ContentRegistry::DestroyAllContent();
+	// ContentRegistry::DestroyAllContent();
 	if (!_initialized) {
 		Initialize();
 	}

@@ -144,6 +144,11 @@ void Level::RestartLevel() {
 void Level::CreateBackgroundImage() {
 	if (_background)
 		return;
+	if (ContentRegistry::ContentExists(_name)) {
+		// map is already loaded, so don't blit ot it.
+		_background = ContentRegistry::CreateContent<Image, int, int>(_name, _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight);
+		return;
+	}
 	_background = ContentRegistry::CreateContent<Image, int, int>(_name, _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight);
 	ContentRegistry::LoadAllContent();
 	for (auto &group : _mapData->Groups) {

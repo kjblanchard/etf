@@ -3,7 +3,7 @@ EXECUTABLE_NAME = SupergoonBlackJack
 .PHONY: all configure build clean debug release
 DEFAULT_GENERATOR ?= "Ninja"
 BACKUP_GENERATOR ?= "Unix Makefiles"
-DEFAULT_IMGUI ?= ON
+DEFAULT_IMGUI ?= OFF
 SYSTEM_PACKAGES ?= ON
 # default, should be used after a rebuild of some sort.
 all: build run

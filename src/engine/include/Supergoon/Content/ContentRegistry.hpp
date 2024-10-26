@@ -37,6 +37,13 @@ class ContentRegistry {
 		_loadedContent[key] = newContent;
 		return newContent;
 	}
+	static bool ContentExists(const std::string& key) {
+		auto it = _loadedContent.find(key);
+		if (it != _loadedContent.end()) {
+			return true;
+		}
+		return false;
+	}
 
    private:
 	static std::unordered_map<std::string, std::shared_ptr<Content>> _loadedContent;
