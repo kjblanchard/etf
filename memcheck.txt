@@ -1,0 +1,304 @@
+==323963== Memcheck, a memory error detector
+==323963== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==323963== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==323963== Command: ./build/bin/SupergoonBlackJack
+==323963== 
+==323963== Conditional jump or move depends on uninitialised value(s)
+==323963==    at 0x62A8565: pa_shm_cleanup (in /usr/lib/x86_64-linux-gnu/pulseaudio/libpulsecommon-13.99.so)
+==323963==    by 0x62A87A1: pa_shm_create_rw (in /usr/lib/x86_64-linux-gnu/pulseaudio/libpulsecommon-13.99.so)
+==323963==    by 0x62984B6: pa_mempool_new (in /usr/lib/x86_64-linux-gnu/pulseaudio/libpulsecommon-13.99.so)
+==323963==    by 0x621D9B1: pa_context_new_with_proplist (in /usr/lib/x86_64-linux-gnu/libpulse.so.0.21.2)
+==323963==    by 0x755BFC: ConnectToPulseServer (SDL_pulseaudio.c:362)
+==323963==    by 0x755746: PULSEAUDIO_Init (SDL_pulseaudio.c:1007)
+==323963==    by 0x670A86: SDL_InitAudio (SDL_audio.c:970)
+==323963==    by 0x666A45: SDL_InitSubSystem_REAL (SDL.c:358)
+==323963==    by 0x667322: SDL_Init_REAL (SDL.c:496)
+==323963==    by 0x4BD357: SDL_Init (SDL_dynapi_procs.h:638)
+==323963==    by 0x4569FC: SDL_AppInit (src/engine/src/Game.cpp:33)
+==323963==    by 0x69449F: SDL_InitMainCallbacks (SDL_main_callbacks.c:104)
+==323963==  Uninitialised value was created by a heap allocation
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x4CECF18: __alloc_dir (opendir.c:118)
+==323963==    by 0x4CECF18: opendir_tail (opendir.c:69)
+==323963==    by 0x4CECF18: opendir (opendir.c:92)
+==323963==    by 0x62A852F: pa_shm_cleanup (in /usr/lib/x86_64-linux-gnu/pulseaudio/libpulsecommon-13.99.so)
+==323963==    by 0x62A87A1: pa_shm_create_rw (in /usr/lib/x86_64-linux-gnu/pulseaudio/libpulsecommon-13.99.so)
+==323963==    by 0x62984B6: pa_mempool_new (in /usr/lib/x86_64-linux-gnu/pulseaudio/libpulsecommon-13.99.so)
+==323963==    by 0x621D9B1: pa_context_new_with_proplist (in /usr/lib/x86_64-linux-gnu/libpulse.so.0.21.2)
+==323963==    by 0x755BFC: ConnectToPulseServer (SDL_pulseaudio.c:362)
+==323963==    by 0x755746: PULSEAUDIO_Init (SDL_pulseaudio.c:1007)
+==323963==    by 0x670A86: SDL_InitAudio (SDL_audio.c:970)
+==323963==    by 0x666A45: SDL_InitSubSystem_REAL (SDL.c:358)
+==323963==    by 0x667322: SDL_Init_REAL (SDL.c:496)
+==323963==    by 0x4BD357: SDL_Init (SDL_dynapi_procs.h:638)
+==323963== 
+MESA-INTEL: warning: Performance support disabled, consider sysctl dev.i915.perf_stream_paranoid=0
+
+MESA-INTEL: warning: Performance support disabled, consider sysctl dev.i915.perf_stream_paranoid=0
+
+==323963== Thread 6 WSI swapchain q:
+==323963== Conditional jump or move depends on uninitialised value(s)
+==323963==    at 0x20094E53: ??? (in /usr/lib/x86_64-linux-gnu/libvulkan_intel.so)
+==323963==    by 0x200957C3: ??? (in /usr/lib/x86_64-linux-gnu/libvulkan_intel.so)
+==323963==    by 0x4BF4608: start_thread (pthread_create.c:477)
+==323963==    by 0x4D2E352: clone (clone.S:95)
+==323963==  Uninitialised value was created by a heap allocation
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x20095A27: ??? (in /usr/lib/x86_64-linux-gnu/libvulkan_intel.so)
+==323963==    by 0x200935C5: ??? (in /usr/lib/x86_64-linux-gnu/libvulkan_intel.so)
+==323963==    by 0x1835D2CF: ??? (in /usr/lib/x86_64-linux-gnu/libvulkan.so.1.2.131)
+==323963==    by 0x662CD8: VULKAN_INTERNAL_CreateSwapchain (SDL_gpu_vulkan.c:4614)
+==323963==    by 0x663CA7: VULKAN_INTERNAL_RecreateSwapchain (SDL_gpu_vulkan.c:9651)
+==323963==    by 0x655145: VULKAN_SetSwapchainParameters (SDL_gpu_vulkan.c:9882)
+==323963==    by 0x4F90D7: SDL_SetGPUSwapchainParameters_REAL (SDL_gpu.c:2640)
+==323963==    by 0x524B63: GPU_CreateRenderer (SDL_render_gpu.c:1263)
+==323963==    by 0x511D9B: SDL_CreateRendererWithProperties_REAL (SDL_render.c:1031)
+==323963==    by 0x511AA4: SDL_CreateRenderer_REAL (SDL_render.c:1162)
+==323963==    by 0x5119F1: SDL_CreateWindowAndRenderer_REAL (SDL_render.c:884)
+==323963== 
+==323963== Conditional jump or move depends on uninitialised value(s)
+==323963==    at 0x20094E5B: ??? (in /usr/lib/x86_64-linux-gnu/libvulkan_intel.so)
+==323963==    by 0x200957C3: ??? (in /usr/lib/x86_64-linux-gnu/libvulkan_intel.so)
+==323963==    by 0x4BF4608: start_thread (pthread_create.c:477)
+==323963==    by 0x4D2E352: clone (clone.S:95)
+==323963==  Uninitialised value was created by a heap allocation
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x20095A27: ??? (in /usr/lib/x86_64-linux-gnu/libvulkan_intel.so)
+==323963==    by 0x200935C5: ??? (in /usr/lib/x86_64-linux-gnu/libvulkan_intel.so)
+==323963==    by 0x1835D2CF: ??? (in /usr/lib/x86_64-linux-gnu/libvulkan.so.1.2.131)
+==323963==    by 0x662CD8: VULKAN_INTERNAL_CreateSwapchain (SDL_gpu_vulkan.c:4614)
+==323963==    by 0x663CA7: VULKAN_INTERNAL_RecreateSwapchain (SDL_gpu_vulkan.c:9651)
+==323963==    by 0x655145: VULKAN_SetSwapchainParameters (SDL_gpu_vulkan.c:9882)
+==323963==    by 0x4F90D7: SDL_SetGPUSwapchainParameters_REAL (SDL_gpu.c:2640)
+==323963==    by 0x524B63: GPU_CreateRenderer (SDL_render_gpu.c:1263)
+==323963==    by 0x511D9B: SDL_CreateRendererWithProperties_REAL (SDL_render.c:1031)
+==323963==    by 0x511AA4: SDL_CreateRenderer_REAL (SDL_render.c:1162)
+==323963==    by 0x5119F1: SDL_CreateWindowAndRenderer_REAL (SDL_render.c:884)
+==323963== 
+==323963== 
+==323963== HEAP SUMMARY:
+==323963==     in use at exit: 316,542 bytes in 3,057 blocks
+==323963==   total heap usage: 312,219 allocs, 300,946 frees, 345,659,721 bytes allocated
+==323963== 
+==323963== Thread 1:
+==323963== 4 bytes in 1 blocks are definitely lost in loss record 6 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x555DE4: real_malloc (SDL_malloc.c:6321)
+==323963==    by 0x55605C: SDL_malloc_REAL (SDL_malloc.c:6431)
+==323963==    by 0x508CDB: SDL_GetJoysticks_REAL (SDL_joystick.c:734)
+==323963==    by 0x4BB2A9: SDL_GetJoysticks (SDL_dynapi_procs.h:431)
+==323963==    by 0x4B6720: CountPluggedInControllers (src/engine/external/src/input/joystick.c:85)
+==323963==    by 0x4B6702: geInitializeJoysticks (src/engine/external/src/input/joystick.c:42)
+==323963==    by 0x456A40: SDL_AppInit (src/engine/src/Game.cpp:39)
+==323963==    by 0x69449F: SDL_InitMainCallbacks (SDL_main_callbacks.c:104)
+==323963==    by 0x6661EA: SDL_EnterAppMainCallbacks_REAL (SDL_sysmain_callbacks.c:42)
+==323963==    by 0x4B908F: SDL_EnterAppMainCallbacks (SDL_dynapi_procs.h:207)
+==323963==    by 0x4569D2: SDL_main (SDL_main_impl.h:59)
+==323963== 
+==323963== 8 bytes in 1 blocks are definitely lost in loss record 11 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x551BF99: ???
+==323963==    by 0x600E32: X11_InitKeyboard (SDL_x11keyboard.c:200)
+==323963==    by 0x607284: X11_VideoInit (SDL_x11video.c:427)
+==323963==    by 0x5782E8: SDL_VideoInit (SDL_video.c:663)
+==323963==    by 0x6669BC: SDL_InitSubSystem_REAL (SDL.c:333)
+==323963==    by 0x667322: SDL_Init_REAL (SDL.c:496)
+==323963==    by 0x4BD357: SDL_Init (SDL_dynapi_procs.h:638)
+==323963==    by 0x4569FC: SDL_AppInit (src/engine/src/Game.cpp:33)
+==323963==    by 0x69449F: SDL_InitMainCallbacks (SDL_main_callbacks.c:104)
+==323963==    by 0x6661EA: SDL_EnterAppMainCallbacks_REAL (SDL_sysmain_callbacks.c:42)
+==323963==    by 0x4B908F: SDL_EnterAppMainCallbacks (SDL_dynapi_procs.h:207)
+==323963== 
+==323963== 17 bytes in 1 blocks are definitely lost in loss record 20 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x5511896: ???
+==323963==    by 0x5511C6A: ???
+==323963==    by 0x600E01: X11_InitKeyboard (SDL_x11keyboard.c:198)
+==323963==    by 0x607284: X11_VideoInit (SDL_x11video.c:427)
+==323963==    by 0x5782E8: SDL_VideoInit (SDL_video.c:663)
+==323963==    by 0x6669BC: SDL_InitSubSystem_REAL (SDL.c:333)
+==323963==    by 0x667322: SDL_Init_REAL (SDL.c:496)
+==323963==    by 0x4BD357: SDL_Init (SDL_dynapi_procs.h:638)
+==323963==    by 0x4569FC: SDL_AppInit (src/engine/src/Game.cpp:33)
+==323963==    by 0x69449F: SDL_InitMainCallbacks (SDL_main_callbacks.c:104)
+==323963==    by 0x6661EA: SDL_EnterAppMainCallbacks_REAL (SDL_sysmain_callbacks.c:42)
+==323963== 
+==323963== 24 bytes in 1 blocks are definitely lost in loss record 27 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x5511AE7: ???
+==323963==    by 0x5511C0C: ???
+==323963==    by 0x5511C42: ???
+==323963==    by 0x600E63: X11_InitKeyboard (SDL_x11keyboard.c:205)
+==323963==    by 0x607284: X11_VideoInit (SDL_x11video.c:427)
+==323963==    by 0x5782E8: SDL_VideoInit (SDL_video.c:663)
+==323963==    by 0x6669BC: SDL_InitSubSystem_REAL (SDL.c:333)
+==323963==    by 0x667322: SDL_Init_REAL (SDL.c:496)
+==323963==    by 0x4BD357: SDL_Init (SDL_dynapi_procs.h:638)
+==323963==    by 0x4569FC: SDL_AppInit (src/engine/src/Game.cpp:33)
+==323963==    by 0x69449F: SDL_InitMainCallbacks (SDL_main_callbacks.c:104)
+==323963== 
+==323963== 32 bytes in 1 blocks are definitely lost in loss record 36 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x54FB78E: ???
+==323963==    by 0x54FC05A: ???
+==323963==    by 0x54FCD90: ???
+==323963==    by 0x604014: GetGlobalContentScale (SDL_x11modes.c:78)
+==323963==    by 0x603C7E: X11_FillXRandRDisplayInfo (SDL_x11modes.c:492)
+==323963==    by 0x603678: X11_AddXRandRDisplay (SDL_x11modes.c:503)
+==323963==    by 0x602313: X11_InitModes_XRandR (SDL_x11modes.c:700)
+==323963==    by 0x601FD2: X11_InitModes (SDL_x11modes.c:813)
+==323963==    by 0x607227: X11_VideoInit (SDL_x11video.c:407)
+==323963==    by 0x5782E8: SDL_VideoInit (SDL_video.c:663)
+==323963==    by 0x6669BC: SDL_InitSubSystem_REAL (SDL.c:333)
+==323963== 
+==323963== 40 bytes in 1 blocks are definitely lost in loss record 44 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x54E2601: ???
+==323963==    by 0x606168: X11_CreateDevice (SDL_x11video.c:93)
+==323963==    by 0x5781FC: SDL_VideoInit (SDL_video.c:636)
+==323963==    by 0x6669BC: SDL_InitSubSystem_REAL (SDL.c:333)
+==323963==    by 0x667322: SDL_Init_REAL (SDL.c:496)
+==323963==    by 0x4BD357: SDL_Init (SDL_dynapi_procs.h:638)
+==323963==    by 0x4569FC: SDL_AppInit (src/engine/src/Game.cpp:33)
+==323963==    by 0x69449F: SDL_InitMainCallbacks (SDL_main_callbacks.c:104)
+==323963==    by 0x6661EA: SDL_EnterAppMainCallbacks_REAL (SDL_sysmain_callbacks.c:42)
+==323963==    by 0x4B908F: SDL_EnterAppMainCallbacks (SDL_dynapi_procs.h:207)
+==323963==    by 0x4569D2: SDL_main (SDL_main_impl.h:59)
+==323963== 
+==323963== 40 bytes in 1 blocks are definitely lost in loss record 45 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x54E261E: ???
+==323963==    by 0x606168: X11_CreateDevice (SDL_x11video.c:93)
+==323963==    by 0x5781FC: SDL_VideoInit (SDL_video.c:636)
+==323963==    by 0x6669BC: SDL_InitSubSystem_REAL (SDL.c:333)
+==323963==    by 0x667322: SDL_Init_REAL (SDL.c:496)
+==323963==    by 0x4BD357: SDL_Init (SDL_dynapi_procs.h:638)
+==323963==    by 0x4569FC: SDL_AppInit (src/engine/src/Game.cpp:33)
+==323963==    by 0x69449F: SDL_InitMainCallbacks (SDL_main_callbacks.c:104)
+==323963==    by 0x6661EA: SDL_EnterAppMainCallbacks_REAL (SDL_sysmain_callbacks.c:42)
+==323963==    by 0x4B908F: SDL_EnterAppMainCallbacks (SDL_dynapi_procs.h:207)
+==323963==    by 0x4569D2: SDL_main (SDL_main_impl.h:59)
+==323963== 
+==323963== 40 bytes in 1 blocks are definitely lost in loss record 46 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x55064D9: ???
+==323963==    by 0x550A4FF: ???
+==323963==    by 0x5509A96: ???
+==323963==    by 0x550A29C: ???
+==323963==    by 0x55277B4: ???
+==323963==    by 0x5511AD5: ???
+==323963==    by 0x5511C0C: ???
+==323963==    by 0x5511C42: ???
+==323963==    by 0x600E63: X11_InitKeyboard (SDL_x11keyboard.c:205)
+==323963==    by 0x607284: X11_VideoInit (SDL_x11video.c:427)
+==323963==    by 0x5782E8: SDL_VideoInit (SDL_video.c:663)
+==323963== 
+==323963== 145 (88 direct, 57 indirect) bytes in 1 blocks are definitely lost in loss record 182 of 276
+==323963==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x555E3C: real_realloc (SDL_malloc.c:6323)
+==323963==    by 0x556164: SDL_realloc_REAL (SDL_malloc.c:6468)
+==323963==    by 0x55D984: SDL_SetTLS_REAL (SDL_thread.c:93)
+==323963==    by 0x55DFBF: SDL_GetErrBuf (SDL_thread.c:303)
+==323963==    by 0x668534: SDL_SetErrorV_REAL (SDL_error.c:43)
+==323963==    by 0x6684F4: SDL_SetError_REAL (SDL_error.c:33)
+==323963==    by 0x67276F: SDL_FindPhysicalAudioDeviceByCallback (SDL_audio.c:1423)
+==323963==    by 0x67004E: SDL_FindPhysicalAudioDeviceByHandle (SDL_audio.c:1434)
+==323963==    by 0x66FD19: SDL_AddAudioDevice (SDL_audio.c:656)
+==323963==    by 0x7581F1: AddPulseAudioDevice (SDL_pulseaudio.c:782)
+==323963== 
+==323963== 1,721 (16 direct, 1,705 indirect) bytes in 1 blocks are definitely lost in loss record 247 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x5504379: ???
+==323963==    by 0x5508682: ???
+==323963==    by 0x5509AA2: ???
+==323963==    by 0x550A29C: ???
+==323963==    by 0x552B7E4: ???
+==323963==    by 0x5511AD5: ???
+==323963==    by 0x5511C0C: ???
+==323963==    by 0x5511C42: ???
+==323963==    by 0x600E01: X11_InitKeyboard (SDL_x11keyboard.c:198)
+==323963==    by 0x607284: X11_VideoInit (SDL_x11video.c:427)
+==323963==    by 0x5782E8: SDL_VideoInit (SDL_video.c:663)
+==323963== 
+==323963== 2,048 bytes in 1 blocks are definitely lost in loss record 248 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x55065E6: ???
+==323963==    by 0x550A4FF: ???
+==323963==    by 0x5509A96: ???
+==323963==    by 0x550A29C: ???
+==323963==    by 0x552B7E4: ???
+==323963==    by 0x5511AD5: ???
+==323963==    by 0x5511CEE: ???
+==323963==    by 0x54F8844: ???
+==323963==    by 0x54FCD62: ???
+==323963==    by 0x604014: GetGlobalContentScale (SDL_x11modes.c:78)
+==323963==    by 0x603C7E: X11_FillXRandRDisplayInfo (SDL_x11modes.c:492)
+==323963== 
+==323963== 4,096 bytes in 1 blocks are definitely lost in loss record 261 of 276
+==323963==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x54EA1EC: ???
+==323963==    by 0x54FC4F3: ???
+==323963==    by 0x603FE9: GetGlobalContentScale (SDL_x11modes.c:74)
+==323963==    by 0x603C7E: X11_FillXRandRDisplayInfo (SDL_x11modes.c:492)
+==323963==    by 0x603678: X11_AddXRandRDisplay (SDL_x11modes.c:503)
+==323963==    by 0x602313: X11_InitModes_XRandR (SDL_x11modes.c:700)
+==323963==    by 0x601FD2: X11_InitModes (SDL_x11modes.c:813)
+==323963==    by 0x607227: X11_VideoInit (SDL_x11video.c:407)
+==323963==    by 0x5782E8: SDL_VideoInit (SDL_video.c:663)
+==323963==    by 0x6669BC: SDL_InitSubSystem_REAL (SDL.c:333)
+==323963==    by 0x667322: SDL_Init_REAL (SDL.c:496)
+==323963== 
+==323963== 7,616 (52 direct, 7,564 indirect) bytes in 1 blocks are definitely lost in loss record 266 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x5503F0F: ???
+==323963==    by 0x5504207: ???
+==323963==    by 0x550A3B6: ???
+==323963==    by 0x5509A96: ???
+==323963==    by 0x550A29C: ???
+==323963==    by 0x552B7E4: ???
+==323963==    by 0x5511AD5: ???
+==323963==    by 0x5511CEE: ???
+==323963==    by 0x54F8844: ???
+==323963==    by 0x54FCD62: ???
+==323963==    by 0x604014: GetGlobalContentScale (SDL_x11modes.c:78)
+==323963== 
+==323963== 7,851 (64 direct, 7,787 indirect) bytes in 1 blocks are definitely lost in loss record 267 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x5504A02: ???
+==323963==    by 0x55111E4: ???
+==323963==    by 0x5527936: ???
+==323963==    by 0x5511AD5: ???
+==323963==    by 0x5511C0C: ???
+==323963==    by 0x5511C42: ???
+==323963==    by 0x600E63: X11_InitKeyboard (SDL_x11keyboard.c:205)
+==323963==    by 0x607284: X11_VideoInit (SDL_x11video.c:427)
+==323963==    by 0x5782E8: SDL_VideoInit (SDL_video.c:663)
+==323963==    by 0x6669BC: SDL_InitSubSystem_REAL (SDL.c:333)
+==323963==    by 0x667322: SDL_Init_REAL (SDL.c:496)
+==323963== 
+==323963== 16,416 (64 direct, 16,352 indirect) bytes in 1 blocks are definitely lost in loss record 271 of 276
+==323963==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==323963==    by 0x54EA3AB: ???
+==323963==    by 0x54FC4F3: ???
+==323963==    by 0x603FE9: GetGlobalContentScale (SDL_x11modes.c:74)
+==323963==    by 0x603C7E: X11_FillXRandRDisplayInfo (SDL_x11modes.c:492)
+==323963==    by 0x603678: X11_AddXRandRDisplay (SDL_x11modes.c:503)
+==323963==    by 0x602313: X11_InitModes_XRandR (SDL_x11modes.c:700)
+==323963==    by 0x601FD2: X11_InitModes (SDL_x11modes.c:813)
+==323963==    by 0x607227: X11_VideoInit (SDL_x11video.c:407)
+==323963==    by 0x5782E8: SDL_VideoInit (SDL_video.c:663)
+==323963==    by 0x6669BC: SDL_InitSubSystem_REAL (SDL.c:333)
+==323963==    by 0x667322: SDL_Init_REAL (SDL.c:496)
+==323963== 
+==323963== LEAK SUMMARY:
+==323963==    definitely lost: 6,633 bytes in 15 blocks
+==323963==    indirectly lost: 33,465 bytes in 458 blocks
+==323963==      possibly lost: 0 bytes in 0 blocks
+==323963==    still reachable: 276,444 bytes in 2,584 blocks
+==323963==         suppressed: 0 bytes in 0 blocks
+==323963== Reachable blocks (those to which a pointer was found) are not shown.
+==323963== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==323963== 
+==323963== For lists of detected and suppressed errors, rerun with: -s
+==323963== ERROR SUMMARY: 21 errors from 18 contexts (suppressed: 2 from 2)
