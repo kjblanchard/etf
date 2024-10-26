@@ -107,20 +107,20 @@ void SoundWidgets::ShowSoundDebugWindow() {
 				auto song = bgmNames[item_current];
 				std::regex dotRegex("\\.ogg");
 				std::vector<std::string> result(std::sregex_token_iterator(song.begin(), song.end(), dotRegex, -1), std::sregex_token_iterator());
-				Game::Instance()->Sound().LoadBgm(result[0]);
-				Game::Instance()->Sound().PlayBgm();
+				Game::Instance()->GetSound().LoadBgm(result[0]);
+				Game::Instance()->GetSound().PlayBgm();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Pause")) {
-				Game::Instance()->Sound().PauseBgm();
+				Game::Instance()->GetSound().PauseBgm();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Stop")) {
-				Game::Instance()->Sound().StopBgm();
+				Game::Instance()->GetSound().StopBgm();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Stop Fadeout")) {
-				Game::Instance()->Sound().StopBgmFadeout();
+				Game::Instance()->GetSound().StopBgmFadeout();
 			}
 		}
 	}
@@ -144,7 +144,7 @@ void SoundWidgets::ShowSoundDebugWindow() {
 				std::vector<std::string> result(std::sregex_token_iterator(song.begin(), song.end(), dotRegex, -1), std::sregex_token_iterator());
 				auto sfx = ContentRegistry::CreateContent<Sfx>(result[0]);
 				ContentRegistry::LoadContent(*sfx);
-				Game::Instance()->Sound().PlaySfx(sfx.get());
+				Game::Instance()->GetSound().PlaySfx(sfx.get());
 			}
 		}
 	}

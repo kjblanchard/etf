@@ -38,7 +38,7 @@ class Game {
 	//  Happens after update
 	virtual void Draw() = 0;
 	virtual void Reset() = 0;
-	inline Sound& Sound() { return *_sound; }
+	inline Sound& GetSound() { return *_sound; }
 	static inline Game* Instance() { return _game; }
 	static double DeltaTime();
 	static double DeltaTimeMS();

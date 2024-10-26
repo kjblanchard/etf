@@ -83,7 +83,7 @@ void Game::Initialize() {
 	geClockStart(&_clock);
 	InitializeImGui();
 	_graphics->InitializeImGui();
-	Game::Instance()->Sound().InitializeSound();
+	Game::Instance()->GetSound().InitializeSound();
 	_initialized = true;
 }
 

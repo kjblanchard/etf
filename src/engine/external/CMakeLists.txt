@@ -125,7 +125,7 @@ target_link_libraries(${LIBRARY_TARGET_NAME}
     INTERFACE
     SDL3::SDL3-static
     ${PNG_LIB_NAME}
-    vorbis vorbisenc vorbisfile ogg
+    vorbisenc vorbisfile vorbis ogg
 )
 target_include_directories(${LIBRARY_TARGET_NAME}
     PUBLIC

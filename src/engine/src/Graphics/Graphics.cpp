@@ -36,7 +36,7 @@ void Graphics::CreateWindow(int width, int height, std::string name) {
 	_windowWidth = width;
 	_windowHeight = height;
 	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
-	SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "opengl");
+	// SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "opengl");
 
 	// auto flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 	auto flags = SDL_WINDOW_RESIZABLE;
