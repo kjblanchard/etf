@@ -72,7 +72,7 @@ void BlackjackGame::Update() {
 		UpdateCamera();
 		if (KeyJustPressed(Supergoon::KeyboardKeys::Key_P)) {
 			for (size_t i = 0; i < 30; i++) {
-				Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTown");
+				Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugSouth");
 			}
 		}
 	}

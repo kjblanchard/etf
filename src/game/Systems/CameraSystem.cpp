@@ -24,6 +24,10 @@ void UpdateCamera() {
 		getFollowTarget(cc);
 	}
 	auto pl = cc.FollowTarget;
+	if (!pl) {
+		gc.CurrentLevel->cameraX = 0;
+		gc.CurrentLevel->cameraY = 0;
+	}
 	cc.Box.X = pl->Location.X - (gc.WindowWidth / 2);
 	cc.Box.Y = pl->Location.Y - (gc.WindowHeight / 2);
 	if (cc.Box.X < 0) {

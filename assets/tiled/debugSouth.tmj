@@ -210,7 +210,7 @@
                  "visible":true,
                  "width":16,
                  "x":80,
-                 "y":16
+                 "y":80
                 }, 
                 {
                  "height":16,
@@ -256,6 +256,29 @@
                  "width":16,
                  "x":304,
                  "y":176
+                }, 
+                {
+                 "height":16,
+                 "id":17,
+                 "name":"Start0",
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "propertytype":"Direction",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"loadLocation",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"Start",
+                 "visible":true,
+                 "width":16,
+                 "x":352,
+                 "y":208
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -264,7 +287,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":17,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "properties":[
         {
