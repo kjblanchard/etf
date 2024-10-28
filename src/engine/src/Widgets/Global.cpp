@@ -5,6 +5,8 @@
 #include <Supergoon/Widgets/Widgets.hpp>
 using namespace Supergoon;
 
+bool GlobalWidget::ShowDebugBoxSolid = false;
+
 void GlobalWidget::ShowGlobalDebugWindow() {
 	auto window_flags = Widgets::GetDefaultWindowFlags();
 	bool p_open;
@@ -19,5 +21,6 @@ void GlobalWidget::ShowGlobalDebugWindow() {
 			/* code */
 		}
 	}
+	ImGui::Checkbox("Show Static Debug Colliders", &ShowDebugBoxSolid);
 	ImGui::End();
 }

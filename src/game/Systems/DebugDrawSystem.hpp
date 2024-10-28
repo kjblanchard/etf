@@ -1,4 +1,5 @@
 #pragma once
 namespace Supergoon {
-void DrawDebugBoxes();
-}
+void DrawDebugBoxesSolid();
+void DrawDebugBoxesPlayer();
+}  // namespace Supergoon

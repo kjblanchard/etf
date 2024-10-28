@@ -44,6 +44,11 @@ void Graphics::CreateWindow(int width, int height, std::string name) {
 	_windowWidth = width;
 	_windowHeight = height;
 	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
+#ifdef imgui
+	// Make the window start bigger if we are debugging.
+	width *= 2;
+	height *= 2;
+#endif
 	auto flags = SDL_WINDOW_RESIZABLE;
 	if (!SDL_CreateWindowAndRenderer(name.c_str(), width, height, flags, &_window, &_renderer)) {
 		sgLogCritical("Could not load window, error, %s", SDL_GetError());

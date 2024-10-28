@@ -28,7 +28,9 @@ static void drawStaticBodyDebugBoxes(GameObject, LocationComponent& location, So
 	graphics->DrawRect(dst, Color{255, 0, 0, 255});
 }
 
-void Supergoon::DrawDebugBoxes() {
-	GameObject::ForEach<LocationComponent, PlayerComponent>(drawPlayerBodyDebugBoxes);
+void Supergoon::DrawDebugBoxesSolid() {
 	GameObject::ForEach<LocationComponent, SolidComponent>(drawStaticBodyDebugBoxes);
+}
+void Supergoon::DrawDebugBoxesPlayer() {
+	GameObject::ForEach<LocationComponent, PlayerComponent>(drawPlayerBodyDebugBoxes);
 }

@@ -87,9 +87,15 @@ void BlackjackGame::Draw() {
 	}
 	UI::Draw();
 #ifdef imgui
-	DrawDebugBoxes();
+	if (GlobalWidget::ShowDebugBoxSolid) {
+		DrawDebugBoxesSolid();
+	}
+
 	Widgets::ShowWidgets(this);
-	ShowPlayerColliderWindow();
+	PlayerWidget::ShowPlayerColliderWindow();
+	if (PlayerWidget::ShowPlayerColliderDebugBox) {
+		DrawDebugBoxesPlayer();
+	}
 #endif
 }
 

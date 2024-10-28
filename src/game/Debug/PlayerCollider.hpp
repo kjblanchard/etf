@@ -1,4 +1,8 @@
 #pragma once
 namespace Supergoon {
-void ShowPlayerColliderWindow();
-}
+class PlayerWidget {
+   public:
+	static void ShowPlayerColliderWindow();
+	static bool ShowPlayerColliderDebugBox;
+};
+}  // namespace Supergoon
