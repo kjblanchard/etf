@@ -18,7 +18,7 @@ Panel* UI::Initialize() {
 	}
 	auto rootPanel = new Panel();
 	auto graphics = Graphics::Instance();
-	rootPanel->Bounds = RectangleF{0, 0, (float)graphics.LogicalWidth(), (float)graphics.LogicalHeight()};
+	rootPanel->Bounds = RectangleF{0, 0, (float)graphics->LogicalWidth(), (float)graphics->LogicalHeight()};
 	UIInstance = rootPanel;
 	return rootPanel;
 }

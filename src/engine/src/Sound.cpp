@@ -9,6 +9,7 @@
 #include <Supergoon/Tween/Tween.hpp>
 
 namespace Supergoon {
+Sound* Sound::_instance = nullptr;
 void Sound::InitializeSound() {
 	for (size_t i = 0; i < _totalSfxStreams; i++) {
 		auto stream = sgStreamNew();

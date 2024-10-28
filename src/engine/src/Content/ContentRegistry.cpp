@@ -1,4 +1,6 @@
 #include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/Log.hpp>
+#include <algorithm>
 using namespace Supergoon;
 std::unordered_map<std::string, std::shared_ptr<Content>> ContentRegistry::_loadedContent = {};
 
@@ -7,6 +9,13 @@ void ContentRegistry::LoadContent(Content& content) {
 }
 
 void ContentRegistry::ClearStaleContent() {
+	// If there is a lot of stale content, clear it all.
+	int count = std::count_if(_loadedContent.begin(), _loadedContent.end(),
+							  [](const auto& pair) { return pair.second.use_count() <= 1; });
+	if (count < 20) {
+		return;
+	}
+	sgLogWarn("Clearing stale content as stale content count is %d", count);
 	for (auto it = _loadedContent.begin(); it != _loadedContent.end();) {
 		if (it->second.use_count() == 1) {
 			it = _loadedContent.erase(it);	// erase returns next iterator

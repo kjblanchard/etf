@@ -10,6 +10,7 @@ namespace Supergoon {
 class Tween;
 class Sound {
    public:
+	inline Sound() { _instance = this; }
 	//  Initializes the Supergoon Sound
 	void InitializeSound();
 	/**
@@ -33,6 +34,7 @@ class Sound {
 	//  Sets the global volume multiplier for bgm, 0 - 1.0f
 	void SetGlobalBgmVolume(float volume);
 	void PlaySfx(Sfx* sfx, float volume = 1.0);
+	static inline Sound* Instance() { return _instance; }
 
    private:
 	//  Updates all internal bgms
@@ -49,6 +51,7 @@ class Sound {
 	bool _fadingOut = false;
 	sgBgm* _bgm;
 	Tween* _bgmTween;
+	static Sound* _instance;
 	friend class Game;
 };
 }  // namespace Supergoon

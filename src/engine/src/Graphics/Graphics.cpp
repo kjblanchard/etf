@@ -19,6 +19,14 @@ void Graphics::DrawRect(RectangleF& dstRect, Color color) {
 	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
 }
 
+Graphics::~Graphics() {
+	ImGui_ImplSDLRenderer3_Shutdown();
+	ImGui_ImplSDL3_Shutdown();
+	ImGui::DestroyContext();
+	SDL_DestroyRenderer(_renderer);
+	SDL_DestroyWindow(_window);
+}
+
 // void geUtilsDrawRectF(geRectangleF* dstRect, geColor* color) {
 // 	SDL_Renderer* r = geGlobalRenderer();
 // 	SDL_SetRenderDrawColor(r, color->R, color->G, color->B, color->A);
@@ -36,9 +44,6 @@ void Graphics::CreateWindow(int width, int height, std::string name) {
 	_windowWidth = width;
 	_windowHeight = height;
 	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
-	// SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "opengl");
-
-	// auto flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 	auto flags = SDL_WINDOW_RESIZABLE;
 	if (!SDL_CreateWindowAndRenderer(name.c_str(), width, height, flags, &_window, &_renderer)) {
 		sgLogCritical("Could not load window, error, %s", SDL_GetError());
@@ -104,6 +109,7 @@ SDL_Texture* Graphics::CreateRenderTargetTexture(int width, int height, Color co
 		sgLogError("Error setting blend mode: %s", SDL_GetError());
 	}
 	SDL_SetTextureScaleMode(image, SDL_SCALEMODE_NEAREST);
+	// SDL_SetTextureScaleMode(image, SDL_SCALEMODE_LINEAR);
 	SDL_SetTextureBlendMode(image, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(_renderer, 100, color.G, color.B, color.A);
 	SDL_RenderClear(_renderer);
@@ -134,6 +140,7 @@ SDL_Texture* Graphics::CreateTextureFromSurface(SDL_Surface* surface) {
 	SDL_Texture* t = SDL_CreateTextureFromSurface(_renderer, surface);
 	SDL_SetTextureBlendMode(t, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureScaleMode(t, SDL_SCALEMODE_NEAREST);
+	// SDL_SetTextureScaleMode(t, SDL_SCALEMODE_LINEAR);
 	if (t == NULL) {
 		sgLogError("Could not create texture, Error: %s", SDL_GetError());
 		return NULL;

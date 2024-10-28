@@ -12,7 +12,7 @@ static void drawPlayerBodyDebugBoxes(GameObject, LocationComponent& location, Pl
 	adjustedY += sb.Body.Y;
 	auto dst = RectangleF{adjustedX, adjustedY, (float)sb.Body.W, (float)sb.Body.H};
 	auto graphics = Graphics::Instance();
-	graphics.DrawRect(dst, Color{255, 0, 255, 255});
+	graphics->DrawRect(dst, Color{255, 0, 255, 255});
 }
 
 static void drawStaticBodyDebugBoxes(GameObject, LocationComponent& location, SolidComponent& sb) {
@@ -25,7 +25,7 @@ static void drawStaticBodyDebugBoxes(GameObject, LocationComponent& location, So
 	float adjustedY = bodyPos.Y - cc.Box.Y;
 	auto dst = RectangleF{adjustedX, adjustedY, (float)size.X, (float)size.Y};
 	auto graphics = Graphics::Instance();
-	graphics.DrawRect(dst, Color{255, 0, 0, 255});
+	graphics->DrawRect(dst, Color{255, 0, 0, 255});
 }
 
 void Supergoon::DrawDebugBoxes() {

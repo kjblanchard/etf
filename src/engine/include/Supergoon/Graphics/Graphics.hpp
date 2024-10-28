@@ -12,6 +12,7 @@ class Image;
 class Graphics {
    public:
 	inline Graphics() { _instance = this; }
+	~Graphics();
 	void CreateWindow(int width, int height, std::string name);
 	void InitializeImGui();
 	void DrawStart();
@@ -35,7 +36,7 @@ class Graphics {
 	inline void* ImGuiTexture() { return _imguiGameTexture; }
 #endif
 
-	inline static Graphics& Instance() { return *_instance; }
+	inline static Graphics* Instance() { return _instance; }
 
    private:
 #ifdef imgui

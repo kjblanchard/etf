@@ -3,6 +3,7 @@
 
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Game.hpp>
+#include <Supergoon/World/Level.hpp>
 #include <algorithm>
 #ifdef imgui
 #include <SupergoonEngine/imgui/imgui_impl_sdl3.h>
@@ -12,7 +13,7 @@ using namespace Supergoon;
 std::unordered_map<Uint32, std::vector<std::function<void(int, void*, void*)>>> Events::_eventHandlers;
 BuiltinEventTypes Events::BuiltinEvents;
 
-Events::Events() {
+Events::Events(Game* game) : _game(game) {
 	BuiltinEvents.ImGuiFocusedEvent = RegisterEvent();
 	BuiltinEvents.LevelChangeEvent = RegisterEvent();
 	BuiltinEvents.ResetGameEvent = RegisterEvent();
@@ -20,8 +21,12 @@ Events::Events() {
 		this->_isGameFocused = code;
 	});
 
-	RegisterEventHandler(BuiltinEvents.ResetGameEvent, [](int, void*, void*) {
-		Game::Instance()->InternalReset();
+	RegisterEventHandler(BuiltinEvents.ResetGameEvent, [game](int, void*, void*) {
+		game->InternalReset();
+	});
+	RegisterEventHandler(BuiltinEvents.LevelChangeEvent, [](int, void* levelName, void*) {
+		auto level = (const char*)levelName;
+		Level::LoadNewLevel(level);
 	});
 }
 

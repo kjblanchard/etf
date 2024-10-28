@@ -154,15 +154,15 @@ void Image::Load() {
 				_image = nullptr;
 				return;
 			}
-			_image = graphics.CreateTextureFromSurface(s);
+			_image = graphics->CreateTextureFromSurface(s);
 			break;
 		}
 		case ImageType::Surface: {
-			_image = graphics.CreateTextureFromSurface(_surface);
+			_image = graphics->CreateTextureFromSurface(_surface);
 			break;
 		}
 		case ImageType::RenderTarget: {
-			_image = graphics.CreateRenderTargetTexture(_width, _height);
+			_image = graphics->CreateRenderTargetTexture(_width, _height);
 			break;
 		}
 	}
@@ -184,7 +184,7 @@ const std::string Image::Filepath() {
 
 void Image::SetAlpha(int alpha) {
 	auto graphics = Graphics::Instance();
-	graphics.SetTextureAlpha(_image, alpha);
+	graphics->SetTextureAlpha(_image, alpha);
 }
 
 Image::~Image() {
@@ -193,10 +193,10 @@ Image::~Image() {
 
 void Image::DrawImageToImage(Image &src, RectangleF &srcRect, RectangleF &dstRect) {
 	auto graphics = Graphics::Instance();
-	graphics.DrawImageToImage(src, *this, &srcRect, &dstRect);
+	graphics->DrawImageToImage(src, *this, &srcRect, &dstRect);
 }
 
 void Image::Draw(RectangleF &src, RectangleF &dst) {
 	auto graphics = Graphics::Instance();
-	graphics.DrawImage(*this, &src, &dst);
+	graphics->DrawImage(*this, &src, &dst);
 }

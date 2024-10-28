@@ -20,12 +20,14 @@ class Level {
 	 */
 	Level(const char *filename);
 	~Level();
-	static void LoadNewLevel();
+	static void LoadNewLevel(std::string level);
 	const inline std::string &GetName() const { return _name; }
 	inline Point GetSize() { return Point{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
 	inline void AddGameObjectToLevel(GameObject *g) { _gameObjects.push_back(g); }
+	static std::function<void()> LoadFunc;
+	static void Reset();
+	static void Draw();
 	void LoadAllGameObjects();
-	void Draw();
 	void RestartLevel();
 	void CreateBackgroundImage();
 	int cameraX = 0;
@@ -48,5 +50,6 @@ class Level {
 	std::shared_ptr<Image> _background;
 	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;
+	static std::unique_ptr<Level> _currentLevel;
 };
 }  // namespace Supergoon

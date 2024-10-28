@@ -14,6 +14,7 @@ namespace Supergoon {
 std::vector<std::string> bgmNames;
 std::vector<std::string> sfxNames;
 static bool inited = false;
+static Sound* sound = nullptr;
 static void HelpMarker(const char* desc) {
 	ImGui::TextDisabled("(?)");
 	if (ImGui::BeginItemTooltip()) {
@@ -78,6 +79,7 @@ void SoundWidgets::ShowSoundDebugWindow() {
 	if (!inited) {
 		GetFiles();
 		inited = true;
+		sound = Sound::Instance();
 	}
 
 	if (!ImGui::Begin("Sound", &p_open, window_flags)) {
@@ -107,20 +109,20 @@ void SoundWidgets::ShowSoundDebugWindow() {
 				auto song = bgmNames[item_current];
 				std::regex dotRegex("\\.ogg");
 				std::vector<std::string> result(std::sregex_token_iterator(song.begin(), song.end(), dotRegex, -1), std::sregex_token_iterator());
-				Game::Instance()->GetSound().LoadBgm(result[0]);
-				Game::Instance()->GetSound().PlayBgm();
+				sound->LoadBgm(result[0]);
+				sound->PlayBgm();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Pause")) {
-				Game::Instance()->GetSound().PauseBgm();
+				sound->PauseBgm();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Stop")) {
-				Game::Instance()->GetSound().StopBgm();
+				sound->StopBgm();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Stop Fadeout")) {
-				Game::Instance()->GetSound().StopBgmFadeout();
+				sound->StopBgmFadeout();
 			}
 		}
 	}
@@ -144,7 +146,7 @@ void SoundWidgets::ShowSoundDebugWindow() {
 				std::vector<std::string> result(std::sregex_token_iterator(song.begin(), song.end(), dotRegex, -1), std::sregex_token_iterator());
 				auto sfx = ContentRegistry::CreateContent<Sfx>(result[0]);
 				ContentRegistry::LoadContent(*sfx);
-				Game::Instance()->GetSound().PlaySfx(sfx.get());
+				sound->PlaySfx(sfx.get());
 			}
 		}
 	}

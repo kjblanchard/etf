@@ -11,13 +11,16 @@
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
-int SCREEN_WIDTH = 512;
-int SCREEN_HEIGHT = 288;
+// int SCREEN_WIDTH = 512;
+// int SCREEN_HEIGHT = 288;
 
 namespace Supergoon {
 extern std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap;
 }
 using namespace Supergoon;
+
+std::unique_ptr<Level> Level::_currentLevel = nullptr;
+std::function<void()> Level::LoadFunc = nullptr;
 
 Level::Level(const char *filename)
 	: _background(nullptr) {
@@ -35,27 +38,27 @@ Level::Level(const char *filename)
 	camera.Bounds.Y = GetSize().Y;
 	gamestate.CurrentLevel = this;
 	gamestate.PlayerSpawnLocation = 0;
-	gamestate.WindowHeight = Graphics::Instance().LogicalHeight();
-	gamestate.WindowWidth = Graphics::Instance().LogicalWidth();
+	gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
+	gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
 	go->AddComponent<GameState>(gamestate);
 	go->AddComponent<CameraComponent>(camera);
 	AddGameObjectToLevel(go);
 }
 
 Level::~Level() {
-	if (_background) {
-		// TODO should we actually clear this?  Save for manual cleanup when we want.
-		// geImageFree(_background);
-	}
+	// TODO should we actually clear the background testure when level is destroyed here too?
 	for (auto &&go : _gameObjects) {
 		go->FreeGameObject();
 		delete (go);
 	}
-
 	_gameObjects.clear();
 }
 static std::string getBasePathForTiled() {
 	return std::string(SDL_GetBasePath()) + "assets/tiled/";
+}
+
+void Level::Reset() {
+	_currentLevel.reset();
 }
 
 void Level::LoadSurfaces() {
@@ -91,34 +94,11 @@ Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	return nullptr;
 }
 
-void Level::LoadNewLevel() {
-	// auto l = new Supergoon::Level(Bba::State::NextMapName.c_str());
-	// lastLevel = Bba::State::CurrentLevel;
-	// Bba::State::CurrentLevel = l;
-	// // Load things that potentially the last level would of loaded already
-	// l->LoadAllGameObjects();
-	// // Create new camera and set bounds
-	// auto c = NewCamera();
-	// auto &cc = c->GetComponent<CameraComponent>();
-	// auto worldSize = l->GetSize();
-	// cc.Bounds.x = worldSize.x;
-	// cc.Bounds.y = worldSize.y;
-	// l->AddGameObjectToLevel(c);
-	// l->RestartLevel();
-	// if (lastLevel) {
-	// 	delete (lastLevel);
-	// }
-	// // Load things
-	// Bba::LoadPlayers();
-	// Bba::LoadAnimationComponents();
-	// Bba::LoadTextInteractions();
-	// // Start
-	// l->StartBgm();
-	// Bba::StartPlayers();
-	// Bba::StartEnemies();
-	// Bba::UpdateCamera();
-	// // End and fade out
-	// State::FadePanel->FadeIn(LevelLoaded);
+void Level::LoadNewLevel(std::string level) {
+	_currentLevel = std::make_unique<Level>(level.c_str());
+	if (LoadFunc) {
+		LoadFunc();
+	}
 }
 
 void Level::LoadAllGameObjects() {
@@ -223,18 +203,23 @@ void Level::LoadSolidObjects() {
 }
 
 void Level::Draw() {
-	if (_background) {
+	if (!_currentLevel.get()) {
+		return;
+	}
+	if (_currentLevel->_background) {
+		auto screenWidth = Graphics::Instance()->LogicalWidth();
+		auto screenHeight = Graphics::Instance()->LogicalHeight();
 		auto s = RectangleF();
-		auto size = GetSize();
-		s.X = cameraX;
-		s.Y = cameraY;
-		s.W = size.X <= SCREEN_WIDTH ? size.X : SCREEN_WIDTH;
-		s.H = size.Y <= SCREEN_HEIGHT ? size.Y : SCREEN_HEIGHT;
+		auto size = _currentLevel->GetSize();
+		s.X = _currentLevel->cameraX;
+		s.Y = _currentLevel->cameraY;
+		s.W = size.X <= screenWidth ? size.X : screenWidth;
+		s.H = size.Y <= screenHeight ? size.Y : screenHeight;
 		auto d = RectangleF();
 		d.X = 0;
 		d.Y = 0;
-		d.W = SCREEN_WIDTH;
-		d.H = SCREEN_HEIGHT;
-		_background->Draw(s, d);
+		d.W = screenWidth;
+		d.H = screenHeight;
+		_currentLevel->_background->Draw(s, d);
 	}
 }

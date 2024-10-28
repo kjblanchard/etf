@@ -15,15 +15,14 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 }
 using namespace Supergoon;
 static bool skipLogos = true;
-Level *level = nullptr;
+static bool inGame = false;
 static void loadLevel() {
-	level = new Level("debugTown");
-	// level->CreateBackgroundImage();
 	LoadPlayers();
 	LoadAnimationComponents();
 	UI::UIInstance->Visible = false;
 	UI::UIInstance->Enabled = false;
 	ContentRegistry::LoadAllContent();
+	inGame = true;
 }
 
 class BlackjackGame : public Game {
@@ -60,19 +59,20 @@ void BlackjackGame::Start() {
 	if (!skipLogos) {
 		playLogos();
 	} else {
-		loadLevel();
+		Level::LoadFunc = loadLevel;
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTown");
+		// loadLevel();
 	}
 }
 
 void BlackjackGame::Update() {
-	if (level) {
+	if (inGame) {
 		PlayerInput();
 		UpdateAnimationComponents();
 		UpdateCamera();
 		if (KeyJustPressed(Supergoon::KeyboardKeys::Key_P)) {
 			for (size_t i = 0; i < 30; i++) {
-				/* code */
-				Events::PushEvent(Events::BuiltinEvents.ResetGameEvent, 0);
+				Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTown");
 			}
 		}
 	}
@@ -80,24 +80,22 @@ void BlackjackGame::Update() {
 }
 
 void BlackjackGame::Draw() {
-	if (level) {
-		level->Draw();
+	if (inGame) {
+		Level::Draw();
 		DrawAnimationComponents();
 		DrawImages();
 	}
 	UI::Draw();
 #ifdef imgui
 	DrawDebugBoxes();
-	Widgets::ShowWidgets();
+	Widgets::ShowWidgets(this);
 	ShowPlayerColliderWindow();
 #endif
 }
 
 void BlackjackGame::Reset() {
-	if (level) {
-		delete level;
-		level = nullptr;
-	}
+	inGame = false;
+	Level::Reset();
 }
 
 REGISTER_GAME(BlackjackGame);

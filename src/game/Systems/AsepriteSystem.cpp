@@ -16,7 +16,7 @@ void Supergoon::LoadAnimationComponents() {
 	});
 }
 void Supergoon::UpdateAnimationComponents() {
-	auto msTime = Game::Instance()->DeltaTimeMS();
+	auto msTime = Game::DeltaTimeMS();
 	GameObject::ForEach<AnimationComponent>([&msTime](GameObject, AnimationComponent& a) {
 		if (!a.Playing) {
 			return;

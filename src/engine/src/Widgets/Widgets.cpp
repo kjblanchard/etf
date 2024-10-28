@@ -7,7 +7,7 @@
 #include <Supergoon/Widgets/UIWidget.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
 namespace Supergoon {
-void Widgets::ShowWidgets() {
+void Widgets::ShowWidgets(Game* game) {
 	ContentWidget::ShowContentDebugWindow();
 	SoundWidgets::ShowSoundDebugWindow();
 	GameWidget::ShowGameDebugWindow();

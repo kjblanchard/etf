@@ -26,10 +26,10 @@
 
 using json = nlohmann::json;
 using namespace Supergoon;
-Game *Game::_game = nullptr;
-static Game *_gameInternal = nullptr;
+// Game *Game::_game = nullptr;
+// static Game *_gameInternal = nullptr;
 
-SDL_AppResult SDL_AppInit(void **, int, char *[]) {
+SDL_AppResult SDL_AppInit(void **appState, int, char *[]) {
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD)) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't initialize SDL!", SDL_GetError(), NULL);
 		return SDL_APP_FAILURE;
@@ -38,31 +38,37 @@ SDL_AppResult SDL_AppInit(void **, int, char *[]) {
 	geInitializeKeyboard();
 	geInitializeJoysticks();
 
-	sgRegisterGame();
-	// This should be entailed in reset
-	_gameInternal->InternalReset();
+	auto game = sgRegisterGame();
+	*appState = game;
+	game->InternalReset();
 	return SDL_APP_CONTINUE;
 }
 
-SDL_AppResult SDL_AppEvent(void *, SDL_Event *event) {
-	return (SDL_AppResult)_gameInternal->HandleEvent(event);
+SDL_AppResult SDL_AppEvent(void *appState, SDL_Event *event) {
+	return (SDL_AppResult)((Game *)appState)->HandleEvent(event);
 }
 
-SDL_AppResult SDL_AppIterate(void *) {
+SDL_AppResult SDL_AppIterate(void *appState) {
 	geUpdateKeyboard();
-	_gameInternal->InternalUpdate();
-	_gameInternal->InternalDraw();
+	auto game = (Game *)appState;
+	game->InternalUpdate();
+	game->InternalDraw();
 	geUpdateControllerLastFrame();
 	return SDL_APP_CONTINUE;
 }
 
-void SDL_AppQuit(void *, SDL_AppResult) {
+void SDL_AppQuit(void *appState, SDL_AppResult) {
+	auto game = (Game *)appState;
+	game->Reset();
 }
 
 Game::Game() {
-	SDL_assert(!Game::Instance());
-	_game = this;
-	_gameInternal = _game;
+	// SDL_assert(!Game::Instance());
+	// _game = this;
+	// _gameInternal = _game;
+}
+Game::~Game() {
+	sgCloseDebugLogFile();
 }
 void Game::Initialize() {
 	char *jsonPath = NULL;
@@ -75,15 +81,15 @@ void Game::Initialize() {
 	int worldWidth = j["world"]["x"];
 	int worldHeight = j["world"]["y"];
 	std::string windowTitle = j["window"]["title"];
-	_sound = new class Sound();
-	_graphics = new Graphics();
-	_events = new Events();
+	_sound = std::make_unique<Sound>();
+	_graphics = std::make_unique<Graphics>();
+	_events = std::make_unique<Events>(this);
 	_graphics->CreateWindow(windowWidth, windowHeight, windowTitle);
 	_graphics->SetWindowScaling(worldWidth, worldHeight);
 	geClockStart(&_clock);
 	InitializeImGui();
 	_graphics->InitializeImGui();
-	Game::Instance()->GetSound().InitializeSound();
+	_sound->InitializeSound();
 	_initialized = true;
 }
 
@@ -115,7 +121,7 @@ void Game::InternalDraw() {
 }
 
 void Game::InternalReset() {
-	_gameInternal->Reset();
+	Reset();
 	UI::Reset();
 	GameObject::ClearGameObjects();
 	// ContentRegistry::DestroyAllContent();
@@ -123,7 +129,7 @@ void Game::InternalReset() {
 		Initialize();
 	}
 	UI::Initialize();
-	_gameInternal->Start();
+	Start();
 }
 
 double Game::DeltaTime() {

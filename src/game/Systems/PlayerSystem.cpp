@@ -52,7 +52,7 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 		moved = true;
 		newDirection = Directions::West;
 	}
-	auto deltatime = (float)Game::Instance()->DeltaTime();
+	auto deltatime = (float)Game::DeltaTime();
 	vel *= Vector2{deltatime, deltatime};
 	// Handle Collisions
 	auto desiredPosition = loc.Location;
