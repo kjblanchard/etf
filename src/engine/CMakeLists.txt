@@ -38,6 +38,7 @@ if(imgui)
         src/Widgets/Game.cpp
         src/Widgets/UIWidget.cpp
         src/Widgets/Global.cpp
+        src/Widgets/LevelWidget.cpp
     )
 endif()
 

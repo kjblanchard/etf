@@ -3,6 +3,7 @@
 #include <Supergoon/Widgets/Content.hpp>
 #include <Supergoon/Widgets/Game.hpp>
 #include <Supergoon/Widgets/Global.hpp>
+#include <Supergoon/Widgets/LevelWidget.hpp>
 #include <Supergoon/Widgets/Sound.hpp>
 #include <Supergoon/Widgets/UIWidget.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
@@ -12,6 +13,7 @@ void Widgets::ShowWidgets(Game* game) {
 	SoundWidgets::ShowSoundDebugWindow();
 	GameWidget::ShowGameDebugWindow();
 	UIWidget::ShowUiDebugWindow();
+	LevelWidget::ShowLevelWidget();
 	GlobalWidget::ShowGlobalDebugWindow();
 }
 int Widgets::GetDefaultWindowFlags() {

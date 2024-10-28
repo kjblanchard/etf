@@ -51,5 +51,6 @@ class Level {
 	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;
 	static std::unique_ptr<Level> _currentLevel;
+	friend class LevelWidget;
 };
 }  // namespace Supergoon
