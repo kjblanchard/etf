@@ -1,10 +1,13 @@
 {
-    "activeFile": "debugTown.tmj",
+    "activeFile": "debugTownHome.tmj",
     "expandedProjectPaths": [
         "."
     ],
     "fileStates": {
         "debugSouth.tmj": {
+            "expandedObjectLayers": [
+                2
+            ],
             "scale": 0.9974999999999999,
             "selectedLayer": 4,
             "viewCenter": {
@@ -22,10 +25,10 @@
         },
         "debugTownHome.tmj": {
             "scale": 3.169140625,
-            "selectedLayer": 3,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 127.9526685566375,
-                "y": 80.14791076050783
+                "x": 128.42598299026253,
+                "y": 80.46345371625786
             }
         },
         "house.tsj": {
@@ -62,7 +65,7 @@
         "terrain.tsj",
         "inside.tsj",
         "house.tsj",
-        "debugTownHome.tmj",
-        "debugTown.tmj"
+        "debugTown.tmj",
+        "debugTownHome.tmj"
     ]
 }
