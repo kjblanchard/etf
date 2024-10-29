@@ -3,6 +3,7 @@
 
 #include <Supergoon/Content/Sfx.hpp>
 #include <queue>
+#include <memory>
 #include <string>
 typedef struct sgBgm sgBgm;
 typedef struct sgSfx sgSfx;

@@ -20,9 +20,11 @@ void Graphics::DrawRect(RectangleF& dstRect, Color color) {
 }
 
 Graphics::~Graphics() {
+#ifdef imgui
 	ImGui_ImplSDLRenderer3_Shutdown();
 	ImGui_ImplSDL3_Shutdown();
 	ImGui::DestroyContext();
+#endif
 	SDL_DestroyRenderer(_renderer);
 	SDL_DestroyWindow(_window);
 }
