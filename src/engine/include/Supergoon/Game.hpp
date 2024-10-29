@@ -2,6 +2,7 @@
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
 #include <SupergoonEngine/clock.h>
+#include <Supergoon/Sound.hpp>
 
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <memory>
