@@ -1,11 +1,12 @@
 # Variables
 set(LIBRARY_TARGET_NAME SupergoonEngineExternal)
+
 set(FULL_COMPILE_OPTIONS
-    -Wall
-    -Wextra
-    -Wpedantic
-    -Wdeprecated
-    -Wno-deprecated-literal-operator
+    # -Wall
+    # -Wextra
+    # -Wpedantic
+    # -Wdeprecated
+    # -Wno-deprecated-literal-operator
     CACHE STRING "Compile options for everything"
 )
 cmake_minimum_required(VERSION 3.16)
@@ -37,7 +38,7 @@ add_library(${LIBRARY_TARGET_NAME} STATIC
 
 if(SYSTEM_PACKAGES)
     find_package(SDL3 CONFIG COMPONENTS SDL3-shared)
-    find_package(PNG REQUIRED)
+    find_package(PNG )
     find_library(LIB_VORBIS
 
         PATH_SUFFIXES .a
@@ -80,6 +81,7 @@ if(NOT PNG_FOUND)
     set(PNG_TOOLS OFF CACHE BOOL "Build the libpng tests" FORCE)
     set(PNG_SHARED OFF CACHE BOOL "Build the libpng tests" FORCE)
     set(SKIP_INSTALL_ALL ON CACHE BOOL "Don't install this")
+    message(STATUS "PNG not found. Fetching PNG...")
     FetchContent_Declare(
         PNG
         GIT_REPOSITORY https://github.com/pnggroup/libpng.git
@@ -88,18 +90,9 @@ if(NOT PNG_FOUND)
     FetchContent_MakeAvailable(PNG)
 endif(NOT PNG_FOUND)
 
-if(NOT LIB_VORBIS)
-    set(INSTALL_CMAKE_PACKAGE_MODULE OFF CACHE BOOL "Dont do it" FORCE)
-    FetchContent_Declare(
-        LIB_VORBIS
-        GIT_REPOSITORY https://github.com/xiph/vorbis
-        GIT_TAG v1.3.7
-        EXCLUDE_FROM_ALL
-    )
-    FetchContent_MakeAvailable(LIB_VORBIS)
-endif(NOT LIB_VORBIS)
 
 if(NOT LIB_OGG)
+    message(STATUS "OGG not found. Fetching OGG...")
     FetchContent_Declare(
         LIB_OGG
         GIT_REPOSITORY https://github.com/xiph/ogg
@@ -107,7 +100,35 @@ if(NOT LIB_OGG)
         EXCLUDE_FROM_ALL
     )
     FetchContent_MakeAvailable(LIB_OGG)
+        get_target_property(OGG_INCLUDE_DIR ogg INTERFACE_INCLUDE_DIRECTORIES)
+        set(OGG_LIBRARY ogg)
+    # get_target_property(OGG_LIBRARY ogg IMPORTED_LOCATION)
+
+#     if(NOT OGG_LIBRARY)
+#     # Print all CMake variables
+# get_cmake_property(ALL_VARIABLES VARIABLES)
+# foreach(VAR ${ALL_VARIABLES})
+#     message(STATUS "${VAR} = ${${VAR}}")
+# endforeach()
+
+#         message(FATAL_ERROR "OGG_LIBRARY could not be found!")
+#     endif()
 endif(NOT LIB_OGG)
+
+if(NOT LIB_VORBIS)
+    message(STATUS "VORBIS not found. Fetching VORBIS...")
+    set(INSTALL_CMAKE_PACKAGE_MODULE OFF CACHE BOOL "Dont do it" FORCE)
+    FetchContent_Declare(
+        LIB_VORBIS
+        GIT_REPOSITORY https://github.com/xiph/vorbis
+        GIT_TAG v1.3.7
+        EXCLUDE_FROM_ALL
+    )
+    # set(PC_OGG_INCLUDEDIR ${CMAKE_BINARY_DIR}/_deps/lib_ogg-src/include CACHE STRING "YES" FORCE)
+    # set(OGG_INCLUDE_DIR ${LIB_OGG_SOURCE_DIR}/include CACHE STRING "Include directory for OGG")
+    # set(PC_OGG_LIBDIR ${CMAKE_BINARY_DIR}/_deps/lib_ogg-build CACHE STRING "YES" FORCE)
+    FetchContent_MakeAvailable(LIB_VORBIS)
+endif(NOT LIB_VORBIS)
 
 target_compile_options(${LIBRARY_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_directories(${LIBRARY_TARGET_NAME}

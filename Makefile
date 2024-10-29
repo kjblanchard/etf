@@ -3,6 +3,7 @@ EXECUTABLE_NAME = SupergoonBlackJack
 .PHONY: all configure build clean debug release
 DEFAULT_GENERATOR ?= "Ninja"
 BACKUP_GENERATOR ?= "Unix Makefiles"
+WINDOWS_GENERATOR ?= "Visual Studio 17 2022"
 DEFAULT_IMGUI ?= OFF
 SYSTEM_PACKAGES ?= ON
 # default, should be used after a rebuild of some sort.
@@ -12,6 +13,8 @@ rebuild:
 	$(MAKE) CMAKE_GENERATOR=$(DEFAULT_GENERATOR) clean configure build install
 brebuild:
 	$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) clean configure build install
+wrebuild:
+	$(MAKE) CMAKE_GENERATOR=$(WINDOWS_GENERATOR) clean configure build install
 rrebuild:
 	$(MAKE) CMAKE_GENERATOR=$(DEFAULT_GENERATOR) DEFAULT_IMGUI=OFF clean configure build install
 configure:
