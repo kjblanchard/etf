@@ -1,4 +1,5 @@
 #include <SDL3/SDL_audio.h>
+#include <SupergoonEngine/log.h>
 #include <SupergoonEngine/Stream.h>
 
 sgStream* sgStreamNew(void) {
@@ -6,7 +7,8 @@ sgStream* sgStreamNew(void) {
 	const SDL_AudioSpec spec = {SDL_AUDIO_S16LE, 2, 4800};
 	stream->stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec, NULL, NULL);
 	if (!stream->stream) {
-		printf("Failed making stream, %s", SDL_GetError());
+		
+		sgLogWarn("Failed making stream, %s", SDL_GetError());
 	}
 	return stream;
 }

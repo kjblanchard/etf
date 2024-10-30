@@ -9,7 +9,9 @@ set(FULL_COMPILE_OPTIONS
     # -Wno-deprecated-literal-operator
     CACHE STRING "Compile options for everything"
 )
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.24)
+set(ZLIB_USE_STATIC_LIBS "ON") #We should always link to static zlib
+find_package(ZLIB)
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
 set(SRC_FILES
     src/easing.c
@@ -102,10 +104,6 @@ if(NOT ZLIB_FOUND)
     # FetchContent_MakeAvailable(zlib)
 endif(NOT ZLIB_FOUND)
 
-# get_cmake_property(ALL_VARIABLES VARIABLES)
-# foreach(VAR ${ALL_VARIABLES})
-#     message(STATUS "${VAR} = ${${VAR}}")
-# endforeach()
 
 if(NOT PNG_FOUND)
     set(PNG_TESTS OFF CACHE BOOL "Build the libpng tests" FORCE)
@@ -159,31 +157,30 @@ if(NOT LIB_VORBIS)
     FetchContent_MakeAvailable(LIB_VORBIS)
 endif(NOT LIB_VORBIS)
 
+get_cmake_property(ALL_VARIABLES VARIABLES)
+foreach(VAR ${ALL_VARIABLES})
+    message(STATUS "${VAR} = ${${VAR}}")
+endforeach()
+
 target_compile_options(${LIBRARY_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_directories(${LIBRARY_TARGET_NAME}
     PUBLIC /usr/local/lib
 
 )
 
-if(WIN32 OR(MACOS AND GOON_FULL_MACOS_BUILD))
-    set(PNG_LIB_NAME png_static)
-else()
-    set(PNG_LIB_NAME png)
-endif(WIN32 OR(MACOS AND GOON_FULL_MACOS_BUILD))
-
 target_link_libraries(${LIBRARY_TARGET_NAME}
-    # INTERFACE
-    PUBLIC
+    INTERFACE
     SDL3::SDL3-static
-    # zlibstatic
-    zlib
-    ${PNG_LIB_NAME}
+    ${ZLIB_LIBRARIES}
+    png_static
     vorbisenc vorbisfile vorbis ogg
 )
 target_include_directories(${LIBRARY_TARGET_NAME}
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/include
     ${CMAKE_BINARY_DIR}/_deps/sdl3-src/include
+    ${png_SOURCE_DIR}
+    ${png_BINARY_DIR}
     ${zlib_SOURCE_DIR}
     ${zlib_BINARY_DIR}
     ${CMAKE_INSTALL_INCLUDEDIR}

@@ -50,8 +50,8 @@ class Sound {
 	std::queue<sgStream*> _usableSfxStreams;
 	float _bgmOriginalVolume = 0;
 	bool _fadingOut = false;
-	sgBgm* _bgm;
-	Tween* _bgmTween;
+	sgBgm* _bgm = nullptr;
+	Tween* _bgmTween = nullptr;
 	static Sound* _instance;
 	friend class Game;
 };
