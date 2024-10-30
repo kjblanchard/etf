@@ -14,7 +14,6 @@ rebuild:
 brebuild:
 	$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) clean configure build install
 wrebuild:
-	powershell -Command "Remove-Item -Recurse -Force 'build' -ErrorAction SilentlyContinue
 	$(MAKE) CMAKE_GENERATOR=$(WINDOWS_GENERATOR) configure build install
 rrebuild:
 	$(MAKE) CMAKE_GENERATOR=$(DEFAULT_GENERATOR) DEFAULT_IMGUI=OFF clean configure build install

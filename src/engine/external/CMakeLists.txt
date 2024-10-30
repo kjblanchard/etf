@@ -78,8 +78,14 @@ if(NOT SDL3_FOUND)
     # Make sure to fetch the content
 endif(NOT SDL3_FOUND)
 
+set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "" FORCE)
+set(CMAKE_DEBUG_TARGET_PROPERTIES "DEBUG_OUTPUT" "" CACHE STRING "" FORCE)
+
 if(NOT ZLIB_FOUND)
     message(STATUS "ZLIB not found. Fetching zlib...")
+    set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "Do not build zlib examples" FORCE)
+    set(RENAME_ZCONF OFF CACHE BOOL "Do not build zlib examples" FORCE)
+    # set(ZLIB_USE_STATIC_LIBS "ON")
     FetchContent_Declare(
         zlib
         GIT_REPOSITORY https://github.com/madler/zlib
@@ -88,18 +94,18 @@ if(NOT ZLIB_FOUND)
     )
     include_directories(${zlib_SOURCE_DIR})
     include_directories(${zlib_BINARY_DIR})
-    # FetchContent_GetProperties(zlib)
-    # if(NOT zlib_POPULATED)
-    #     FetchContent_Populate(zlib)
-    #     add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
-    # endif()
-    FetchContent_MakeAvailable(zlib)
-endif(NOT PNG_FOUND)
+    FetchContent_GetProperties(zlib)
+    if(NOT zlib_POPULATED)
+        FetchContent_Populate(zlib)
+        add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
+    endif()
+    # FetchContent_MakeAvailable(zlib)
+endif(NOT ZLIB_FOUND)
 
-get_cmake_property(ALL_VARIABLES VARIABLES)
-foreach(VAR ${ALL_VARIABLES})
-    message(STATUS "${VAR} = ${${VAR}}")
-endforeach()
+# get_cmake_property(ALL_VARIABLES VARIABLES)
+# foreach(VAR ${ALL_VARIABLES})
+#     message(STATUS "${VAR} = ${${VAR}}")
+# endforeach()
 
 if(NOT PNG_FOUND)
     set(PNG_TESTS OFF CACHE BOOL "Build the libpng tests" FORCE)
@@ -166,8 +172,10 @@ else()
 endif(WIN32 OR(MACOS AND GOON_FULL_MACOS_BUILD))
 
 target_link_libraries(${LIBRARY_TARGET_NAME}
-    INTERFACE
+    # INTERFACE
+    PUBLIC
     SDL3::SDL3-static
+    zlibstatic
     ${PNG_LIB_NAME}
     vorbisenc vorbisfile vorbis ogg
 )
@@ -175,6 +183,8 @@ target_include_directories(${LIBRARY_TARGET_NAME}
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/include
     ${CMAKE_BINARY_DIR}/_deps/sdl3-src/include
+    ${zlib_SOURCE_DIR}
+    ${zlib_BINARY_DIR}
     ${CMAKE_INSTALL_INCLUDEDIR}
     /usr/local/include
     PRIVATE
