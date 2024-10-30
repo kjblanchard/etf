@@ -30,8 +30,8 @@ class Level {
 	void LoadAllGameObjects();
 	void RestartLevel();
 	void CreateBackgroundImage();
-	int cameraX = 0;
-	int cameraY = 0;
+	float cameraX = 0;
+	float cameraY = 0;
 
    private:
 	/**

@@ -211,8 +211,8 @@ void Level::Draw() {
 		auto screenHeight = Graphics::Instance()->LogicalHeight();
 		auto s = RectangleF();
 		auto size = _currentLevel->GetSize();
-		s.X = _currentLevel->cameraX;
-		s.Y = _currentLevel->cameraY;
+		s.X = std::round( _currentLevel->cameraX);
+		s.Y = std::round( _currentLevel->cameraY);
 		s.W = size.X <= screenWidth ? size.X : screenWidth;
 		s.H = size.Y <= screenHeight ? size.Y : screenHeight;
 		auto d = RectangleF();

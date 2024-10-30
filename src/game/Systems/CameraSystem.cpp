@@ -41,7 +41,9 @@ void UpdateCamera() {
 		cc.Box.Y = cc.Bounds.Y - gc.WindowHeight;
 	}
 
-	gc.CurrentLevel->cameraX = (int)cc.Box.X;
-	gc.CurrentLevel->cameraY = (int)cc.Box.Y;
+	// gc.CurrentLevel->cameraX = (int)cc.Box.X;
+	// gc.CurrentLevel->cameraY = (int)cc.Box.Y;
+	gc.CurrentLevel->cameraX = cc.Box.X;
+	gc.CurrentLevel->cameraY = cc.Box.Y;
 }
 }  // namespace Supergoon

@@ -57,7 +57,7 @@ static void loadDataToStream(sgBgm *bgm) {
 	if (!bgm->CanPlay) {
 		return;
 	}
-	int requestSize = VORBIS_REQUEST_SIZE;
+	uint64_t requestSize = VORBIS_REQUEST_SIZE;
 	long total_buffer_bytes_read = 0;
 	bool isLooped = false;
 	// Try and load a full buffer
@@ -65,7 +65,7 @@ static void loadDataToStream(sgBgm *bgm) {
 		// Request size should be either the full request size, or until we can fill our buffer.
 		requestSize = (total_buffer_bytes_read + requestSize <= BGM_BUFFER_SIZE)
 						  ? requestSize
-						  : BGM_BUFFER_SIZE - total_buffer_bytes_read;
+						  : (uint64_t)BGM_BUFFER_SIZE - total_buffer_bytes_read;
 		//   Update to not go past the loop end
 		requestSize = (total_buffer_bytes_read + requestSize + bgm->CurrentLoopBytesRead <= bgm->LoopEnd)
 						  ? requestSize
