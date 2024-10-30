@@ -2,7 +2,7 @@
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/Primitives/Rectangle.hpp>
 #include <Supergoon/UI/UIObject.hpp>
-#include <nlohmann/json_fwd.hpp>
+#include <SupergoonEngine/nlohmann/json_fwd.hpp>
 namespace Supergoon {
 class Panel;
 class ImageObject : public UIObject {
