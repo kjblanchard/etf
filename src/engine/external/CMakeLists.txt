@@ -1,18 +1,24 @@
 # Variables
 set(LIBRARY_TARGET_NAME SupergoonEngineExternal)
-set(COMPILE_OPTIONS )
+set(COMPILE_OPTIONS)
+
 if(UNIX OR APPLE)
-list ( APPEND COMPILE_OPTIONS
-    -Wall
-    -Wextra
-    -Wpedantic
-    -Wdeprecated
-    -Wno-deprecated-literal-operator
-)
+    list(APPEND COMPILE_OPTIONS
+        -Wall
+        -Wextra
+        -Wpedantic
+        -Wdeprecated
+        -Wno-deprecated-literal-operator
+    )
 endif(UNIX OR APPLE)
+
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
 cmake_minimum_required(VERSION 3.24)
-set(ZLIB_USE_STATIC_LIBS "ON") #We should always link to static zlib
+
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build libraries as static" FORCE)
+
+# use off for emscripten?
+# set(ZLIB_USE_STATIC_LIBS "ON") # We should always link to static zlib
 set(SRC_FILES
     src/easing.c
     src/log.c
@@ -34,6 +40,7 @@ if(imgui)
     )
 endif()
 
+
 add_library(${LIBRARY_TARGET_NAME} STATIC
     ${SRC_FILES}
 )
@@ -41,9 +48,9 @@ set(SKIP_INSTALL_ALL ON CACHE BOOL "We don't want any of these external packages
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING " Don't use the d for debug packages" FORCE)
 set(CMAKE_DEBUG_TARGET_PROPERTIES "DEBUG_OUTPUT" "" CACHE STRING "Don't use the d for debug packages" FORCE)
 
-if(SYSTEM_PACKAGES) #If we are using system packages, then we should try to find them.
+if(SYSTEM_PACKAGES) # If we are using system packages, then we should try to find them.
     find_package(SDL3 CONFIG COMPONENTS SDL3-shared)
-    find_package(PNG )
+    find_package(PNG)
     find_library(LIB_VORBIS
         PATH_SUFFIXES .a .dll
         NAMES libvorbis vorbis vorbis.a vorbis.dll libvorbis.a
@@ -57,10 +64,9 @@ if(SYSTEM_PACKAGES) #If we are using system packages, then we should try to find
 
         PATH_SUFFIXES .a .dll
         NAMES ogg Ogg
-            HINTS /usr/local/lib)
-        find_package(ZLIB)
+        HINTS /usr/local/lib)
+    find_package(ZLIB)
 endif(SYSTEM_PACKAGES)
-
 
 if(NOT SDL3_FOUND)
     message(STATUS "SDL3 not found. Fetching SDL3...")
@@ -77,7 +83,6 @@ if(NOT SDL3_FOUND)
     FetchContent_MakeAvailable(SDL3)
 endif(NOT SDL3_FOUND)
 
-
 if(NOT ZLIB_FOUND)
     message(STATUS "ZLIB not found. Fetching zlib...")
     set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "Do not build zlib examples" FORCE)
@@ -88,23 +93,33 @@ if(NOT ZLIB_FOUND)
         GIT_TAG v1.3.1
         EXCLUDE_FROM_ALL
     )
+
     FetchContent_GetProperties(zlib)
+
     if(NOT zlib_POPULATED)
         FetchContent_Populate(zlib)
         add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
     endif()
+
     # Add both the subdirectories to the include directories, this is needed for windows builds specifically for PNG
+    # If emscripten, need to add include dir?
+    if(EMSCRIPTEN)
+        set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
+        set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/libz.a)
+    endif(EMSCRIPTEN)
+
     include_directories(${zlib_SOURCE_DIR})
     include_directories(${zlib_BINARY_DIR})
 endif(NOT ZLIB_FOUND)
 
-
 if(NOT PNG_FOUND)
     set(PNG_TESTS OFF CACHE BOOL "Build the libpng tests" FORCE)
-    set(PNG_BUILD_ZLIB OFF  CACHE BOOL "Always build ZLIB if needed" FORCE)
+    set(PNG_BUILD_ZLIB OFF CACHE BOOL "Always build ZLIB if needed" FORCE)
     set(PNG_TOOLS OFF CACHE BOOL "Build the libpng tests" FORCE)
-    # set(ZLIB_LIBRARY zlib)
-    set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/Release/zlibstatic.lib)
+
+    # set(ZLIB_LIBRARY zlibstatic)
+
+    # set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/Release/zlibstatic.lib CACHE STRING "Library to find" FORCE)
     set(ZLIB_ROOT ${zlib_SOURCE_DIR} CACHE STRING "PATH TO SUBDIR ZLIB" FORCE)
     set(PNG_SHARED OFF CACHE BOOL "Build the libpng tests" FORCE)
     message(STATUS "PNG not found. Fetching PNG...")
@@ -117,7 +132,6 @@ if(NOT PNG_FOUND)
     FetchContent_MakeAvailable(PNG)
 endif(NOT PNG_FOUND)
 
-
 if(NOT LIB_OGG)
     message(STATUS "OGG not found. Fetching OGG...")
     FetchContent_Declare(
@@ -127,8 +141,8 @@ if(NOT LIB_OGG)
         EXCLUDE_FROM_ALL
     )
     FetchContent_MakeAvailable(LIB_OGG)
-        get_target_property(OGG_INCLUDE_DIR ogg INTERFACE_INCLUDE_DIRECTORIES)
-        set(OGG_LIBRARY ogg)
+    get_target_property(OGG_INCLUDE_DIR ogg INTERFACE_INCLUDE_DIRECTORIES)
+    set(OGG_LIBRARY ogg)
 endif(NOT LIB_OGG)
 
 if(NOT LIB_VORBIS)
@@ -143,17 +157,19 @@ if(NOT LIB_VORBIS)
     FetchContent_MakeAvailable(LIB_VORBIS)
 endif(NOT LIB_VORBIS)
 
-# get_cmake_property(ALL_VARIABLES VARIABLES)
-# foreach(VAR ${ALL_VARIABLES})
-#     message(STATUS "${VAR} = ${${VAR}}")
-# endforeach()
+get_cmake_property(ALL_VARIABLES VARIABLES)
+
+foreach(VAR ${ALL_VARIABLES})
+    message(STATUS "${VAR} = ${${VAR}}")
+endforeach()
 
 target_compile_options(${LIBRARY_TARGET_NAME} PUBLIC ${COMPILE_OPTIONS})
-target_link_directories(${LIBRARY_TARGET_NAME} PUBLIC /usr/local/lib) #should always include from usr/local/lib
+target_link_directories(${LIBRARY_TARGET_NAME} PUBLIC /usr/local/lib) # should always include from usr/local/lib
 
 target_link_libraries(${LIBRARY_TARGET_NAME}
     INTERFACE
     SDL3::SDL3-static
+
     # zlib
     # ${ZLIB_LIBRARIES}
     png_static
@@ -162,6 +178,7 @@ target_link_libraries(${LIBRARY_TARGET_NAME}
 target_include_directories(${LIBRARY_TARGET_NAME}
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/include
+
     # If we had to build from subdirectories, include their things needed.
     # ${CMAKE_INSTALL_INCLUDEDIR}
     /usr/local/include

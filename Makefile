@@ -15,6 +15,8 @@ brebuild:
 	$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) clean configure build install
 wrebuild:
 	$(MAKE) CMAKE_GENERATOR=$(WINDOWS_GENERATOR) configure build install
+erebuild:
+	emcmake cmake -G $(BACKUP_GENERATOR) . -B $(BUILD_DIR) -Dimgui=$(DEFAULT_IMGUI) -DSYSTEM_PACKAGES=OFF
 rrebuild:
 	$(MAKE) CMAKE_GENERATOR=$(DEFAULT_GENERATOR) DEFAULT_IMGUI=OFF clean configure build install
 configure:

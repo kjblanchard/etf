@@ -1,6 +1,14 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.24)
+if(EMSCRIPTEN)
+    message(STATUS "Configuring Emscripten")
+    set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
+endif(EMSCRIPTEN)
 project(SupergoonEngine)
 
+if(EMSCRIPTEN)
+    message(STATUS "Configuring Emscripten")
+    set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
+endif(EMSCRIPTEN)
 # Engine is C
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
