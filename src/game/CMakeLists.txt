@@ -1,6 +1,8 @@
 # Variables
 set(EXECUTABLE_TARGET_NAME SupergoonBlackJack)
 
+set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
+
 #
 cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${EXECUTABLE_TARGET_NAME} library initialization")
@@ -23,6 +25,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Systems/DebugDrawSystem.cpp
     ${DEBUG_FILES}
 )
+set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
 target_compile_options(${EXECUTABLE_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_libraries(${EXECUTABLE_TARGET_NAME}
     PRIVATE

@@ -1,6 +1,7 @@
 # Variables
 set(LIBRARY_TARGET_NAME SupergoonEngineExternal)
 set(COMPILE_OPTIONS)
+set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
 
 if(UNIX OR APPLE)
     list(APPEND COMPILE_OPTIONS
@@ -14,6 +15,7 @@ endif(UNIX OR APPLE)
 
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
 cmake_minimum_required(VERSION 3.24)
+
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build libraries as static" FORCE)
 
@@ -40,10 +42,10 @@ if(imgui)
     )
 endif()
 
-
 add_library(${LIBRARY_TARGET_NAME} STATIC
     ${SRC_FILES}
 )
+message(STATUS "Configuring Emscripten in external 2")
 set(SKIP_INSTALL_ALL ON CACHE BOOL "We don't want any of these external packages to install anything")
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING " Don't use the d for debug packages" FORCE)
 set(CMAKE_DEBUG_TARGET_PROPERTIES "DEBUG_OUTPUT" "" CACHE STRING "Don't use the d for debug packages" FORCE)
