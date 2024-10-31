@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include <vorbis/vorbisfile.h>
 
+#ifdef _WIN32
+#define strncasecmp(x,y,z) _strnicmp(x,y,z)
+#endif
+
 #define BGM_NUM_BUFFERS 4		  // Amount of "Buffers" we should have buffered in the SDL stream
 #define BGM_BUFFER_SIZE 8192	  // 8kb
 #define VORBIS_REQUEST_SIZE 4096  // Size of vorbis requests, usually recommend to be 4096

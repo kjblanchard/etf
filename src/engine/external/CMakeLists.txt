@@ -88,13 +88,14 @@ if(NOT ZLIB_FOUND)
         GIT_TAG v1.3.1
         EXCLUDE_FROM_ALL
     )
-    # include_directories(${zlib_SOURCE_DIR})
-    # include_directories(${zlib_BINARY_DIR})
     FetchContent_GetProperties(zlib)
     if(NOT zlib_POPULATED)
         FetchContent_Populate(zlib)
         add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
     endif()
+    # Add both the subdirectories to the include directories, this is needed for windows builds specifically for PNG
+    include_directories(${zlib_SOURCE_DIR})
+    include_directories(${zlib_BINARY_DIR})
 endif(NOT ZLIB_FOUND)
 
 
@@ -102,7 +103,8 @@ if(NOT PNG_FOUND)
     set(PNG_TESTS OFF CACHE BOOL "Build the libpng tests" FORCE)
     set(PNG_BUILD_ZLIB OFF  CACHE BOOL "Always build ZLIB if needed" FORCE)
     set(PNG_TOOLS OFF CACHE BOOL "Build the libpng tests" FORCE)
-    set(ZLIB_LIBRARY zlib)
+    # set(ZLIB_LIBRARY zlib)
+    set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/Release/zlibstatic.lib)
     set(ZLIB_ROOT ${zlib_SOURCE_DIR} CACHE STRING "PATH TO SUBDIR ZLIB" FORCE)
     set(PNG_SHARED OFF CACHE BOOL "Build the libpng tests" FORCE)
     message(STATUS "PNG not found. Fetching PNG...")
@@ -152,7 +154,8 @@ target_link_directories(${LIBRARY_TARGET_NAME} PUBLIC /usr/local/lib) #should al
 target_link_libraries(${LIBRARY_TARGET_NAME}
     INTERFACE
     SDL3::SDL3-static
-    ${ZLIB_LIBRARIES}
+    # zlib
+    # ${ZLIB_LIBRARIES}
     png_static
     vorbisenc vorbisfile vorbis ogg
 )
