@@ -55,25 +55,31 @@ set(CMAKE_DEBUG_TARGET_PROPERTIES "DEBUG_OUTPUT" "" CACHE STRING "Don't use the 
 if(SYSTEM_PACKAGES) # If we are using system packages, then we should try to find them.
     find_package(SDL3 CONFIG COMPONENTS SDL3-shared)
     find_package(PNG)
+    if(PNG_FOUND)
+        list(APPEND EXTERNAL_LIBS ${LIB_PNG_LIBRARY})
+    endif(LIB_VORBIS_FOUND)
     find_library(LIB_VORBIS
         PATH_SUFFIXES .a .dll
         NAMES libvorbis vorbis vorbis.a vorbis.dll libvorbis.a
         HINTS /usr/local/lib /c/cmake/lib)
+    if(LIB_VORBIS_FOUND)
+        list(APPEND EXTERNAL_LIBS ${LIB_VORBIS})
+    endif(LIB_VORBIS_FOUND)
     find_library(LIB_VORBISFILE
         PATH_SUFFIXES .a .dll
         NAMES libvorbisfile vorbisfile vorbisfile.a vorbisfile.dll
         HINTS /usr/local/lib)
+    if(LIB_VORBISFILE_FOUND)
+        list(APPEND EXTERNAL_LIBS ${LIB_VORBISFILE})
+    endif(LIB_VORBIS_FOUND)
     find_library(LIB_OGG
         PATH_SUFFIXES .a .dll
         NAMES ogg Ogg
         HINTS /usr/local/lib)
+    if(LIB_OGG_FOUND)
+        list(APPEND EXTERNAL_LIBS ${LIB_OGG})
+    endif(LIB_VORBIS_FOUND)
     find_package(ZLIB)
-    list(APPEND EXTERNAL_LIBS
-        ${PNG_LIBRARY}
-        ${LIB_VORBIS}
-        ${LIB_VORBISFILE}
-        ${LIB_OGG}
-    )
 endif(SYSTEM_PACKAGES)
 
 if(NOT SDL3_FOUND)
