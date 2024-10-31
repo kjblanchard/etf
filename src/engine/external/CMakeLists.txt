@@ -175,7 +175,8 @@ target_link_libraries(${LIBRARY_TARGET_NAME}
     # INTERFACE
     PUBLIC
     SDL3::SDL3-static
-    zlibstatic
+    # zlibstatic
+    zlib
     ${PNG_LIB_NAME}
     vorbisenc vorbisfile vorbis ogg
 )
