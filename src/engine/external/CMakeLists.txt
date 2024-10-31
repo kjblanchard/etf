@@ -2,6 +2,9 @@
 set(LIBRARY_TARGET_NAME SupergoonEngineExternal)
 set(COMPILE_OPTIONS)
 set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
+set(EXTERNAL_LIBS
+    SDL3::SDL3-static
+)
 
 if(UNIX OR APPLE)
     list(APPEND COMPILE_OPTIONS
@@ -15,7 +18,6 @@ endif(UNIX OR APPLE)
 
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
 cmake_minimum_required(VERSION 3.24)
-
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build libraries as static" FORCE)
 
@@ -57,17 +59,21 @@ if(SYSTEM_PACKAGES) # If we are using system packages, then we should try to fin
         PATH_SUFFIXES .a .dll
         NAMES libvorbis vorbis vorbis.a vorbis.dll libvorbis.a
         HINTS /usr/local/lib /c/cmake/lib)
-
     find_library(LIB_VORBISFILE
         PATH_SUFFIXES .a .dll
         NAMES libvorbisfile vorbisfile vorbisfile.a vorbisfile.dll
         HINTS /usr/local/lib)
     find_library(LIB_OGG
-
         PATH_SUFFIXES .a .dll
         NAMES ogg Ogg
         HINTS /usr/local/lib)
     find_package(ZLIB)
+    list(APPEND EXTERNAL_LIBS
+        ${PNG_LIBRARY}
+        ${LIB_VORBIS}
+        ${LIB_VORBISFILE}
+        ${LIB_OGG}
+    )
 endif(SYSTEM_PACKAGES)
 
 if(NOT SDL3_FOUND)
@@ -95,7 +101,6 @@ if(NOT ZLIB_FOUND)
         GIT_TAG v1.3.1
         EXCLUDE_FROM_ALL
     )
-
     FetchContent_GetProperties(zlib)
 
     if(NOT zlib_POPULATED)
@@ -124,6 +129,16 @@ if(NOT PNG_FOUND)
     # set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/Release/zlibstatic.lib CACHE STRING "Library to find" FORCE)
     set(ZLIB_ROOT ${zlib_SOURCE_DIR} CACHE STRING "PATH TO SUBDIR ZLIB" FORCE)
     set(PNG_SHARED OFF CACHE BOOL "Build the libpng tests" FORCE)
+
+    if(APPLE)
+        set(libpng_arm_sources
+            arm/arm_init.c
+            arm/filter_neon_intrinsics.c
+            arm/palette_neon_intrinsics.c
+            arm/filter_neon.S
+            CACHE STRING "Enable arm sources for apple universal builds, regardless due to errors" FORCE)
+    endif(APPLE)
+
     message(STATUS "PNG not found. Fetching PNG...")
     FetchContent_Declare(
         PNG
@@ -132,6 +147,7 @@ if(NOT PNG_FOUND)
         EXCLUDE_FROM_ALL
     )
     FetchContent_MakeAvailable(PNG)
+    list(APPEND EXTERNAL_LIBS png_static)
 endif(NOT PNG_FOUND)
 
 if(NOT LIB_OGG)
@@ -145,6 +161,7 @@ if(NOT LIB_OGG)
     FetchContent_MakeAvailable(LIB_OGG)
     get_target_property(OGG_INCLUDE_DIR ogg INTERFACE_INCLUDE_DIRECTORIES)
     set(OGG_LIBRARY ogg)
+    list(APPEND EXTERNAL_LIBS ogg)
 endif(NOT LIB_OGG)
 
 if(NOT LIB_VORBIS)
@@ -157,25 +174,20 @@ if(NOT LIB_VORBIS)
         EXCLUDE_FROM_ALL
     )
     FetchContent_MakeAvailable(LIB_VORBIS)
+    list(APPEND EXTERNAL_LIBS vorbisenc vorbisfile vorbis)
 endif(NOT LIB_VORBIS)
 
-get_cmake_property(ALL_VARIABLES VARIABLES)
-
-foreach(VAR ${ALL_VARIABLES})
-    message(STATUS "${VAR} = ${${VAR}}")
-endforeach()
 
 target_compile_options(${LIBRARY_TARGET_NAME} PUBLIC ${COMPILE_OPTIONS})
 target_link_directories(${LIBRARY_TARGET_NAME} PUBLIC /usr/local/lib) # should always include from usr/local/lib
 
 target_link_libraries(${LIBRARY_TARGET_NAME}
     INTERFACE
-    SDL3::SDL3-static
+    ${EXTERNAL_LIBS}
 
-    # zlib
-    # ${ZLIB_LIBRARIES}
-    png_static
-    vorbisenc vorbisfile vorbis ogg
+    # SDL3::SDL3-static
+    # png_static
+    # vorbisenc vorbisfile vorbis ogg
 )
 target_include_directories(${LIBRARY_TARGET_NAME}
     PUBLIC
