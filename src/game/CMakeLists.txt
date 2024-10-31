@@ -1,9 +1,5 @@
 # Variables
 set(EXECUTABLE_TARGET_NAME SupergoonBlackJack)
-
-set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
-
-#
 cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${EXECUTABLE_TARGET_NAME} library initialization")
 

@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
 project(SupergoonEngine)
-set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
 
 # Engine is C
 set(CMAKE_C_STANDARD 11)
@@ -27,9 +25,7 @@ if(imgui)
     add_definitions(-Dimgui)
 endif(imgui)
 
-set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
 add_subdirectory(src/engine)
-set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
 add_subdirectory(src/game)
 
 set(FOLDERS_TO_COPY assets)
