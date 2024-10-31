@@ -60,4 +60,3 @@ endif(MSVC)
 install(DIRECTORY ${FOLDERS_TO_COPY}
     DESTINATION ${INSTALL_DIR}
     COMPONENT assets)
-

@@ -19,7 +19,7 @@ configure:
 build:
 	@cmake --build $(BUILD_DIR) --config $(BUILD_TYPE)
 install:
-	@cmake --install $(BUILD_DIR)
+	@cmake --install $(BUILD_DIR) --config $(BUILD_TYPE)
 valgrind:
 	@valgrind --track-origins=yes --leak-check=yes --leak-resolution=low --show-leak-kinds=definite ./build/bin/$(EXECUTABLE_NAME) 2>&1 | tee memcheck.txt
 run:

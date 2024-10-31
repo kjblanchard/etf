@@ -1,25 +1,22 @@
 # Variables
 cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${EXECUTABLE_TARGET_NAME} library initialization")
+set(DEBUG_FILES)
 
 if(imgui)
-    set(DEBUG_FILES
+    list(APPEND DEBUG_FILES
         Debug/PlayerCollider.cpp
     )
-else()
-    set(DEBUG_FILES)
 endif(imgui)
 
 if(EMSCRIPTEN)
     set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s 'DEFAULT_LIBRARY_FUNCS_TO_INCLUDE=[\"$autoResumeAudioContext\",\"$dynCall\"]'")
-endif(EMSCRIPTEN)
-
-if(APPLE)
+elseif(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "Minimum OS X deployment version")
     set(IS_BUNDLE "MACOSX_BUNDLE" CACHE STRING "Is this a bundle")
     set(ICON_PATH ${CMAKE_SOURCE_DIR}/cmake/AppIcon.icns CACHE STRING "Icon path")
-endif(APPLE)
+endif(EMSCRIPTEN)
 
 add_executable(${EXECUTABLE_TARGET_NAME}
     ${IS_BUNDLE} ${IS_WIN32}
@@ -36,6 +33,10 @@ add_executable(${EXECUTABLE_TARGET_NAME}
 
 if(APPLE)
     set_target_properties(${EXECUTABLE_TARGET_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/cmake/Info.plist)
+    set_source_files_properties(${ICON_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_source_files_properties(${CMAKE_SOURCE_DIR}/cmake/Info.plist PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+    )
 elseif(EMSCRIPTEN)
     set_target_properties(${EXECUTABLE_TARGET_NAME} PROPERTIES LINK_FLAGS ${LINK_FLAGS} " -O0 -g -s --preload-file ${CMAKE_SOURCE_DIR}/assets@/assets")
 endif(APPLE)
@@ -51,10 +52,3 @@ target_include_directories(${EXECUTABLE_TARGET_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
-
-if(APPLE)
-    set_source_files_properties(${ICON_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    set_source_files_properties(${CMAKE_SOURCE_DIR}/cmake/Info.plist PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-    )
-endif(APPLE)

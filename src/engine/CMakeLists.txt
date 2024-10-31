@@ -2,7 +2,7 @@
 add_subdirectory(external)
 add_subdirectory(sound)
 set(LIBRARY_TARGET_NAME SupergoonEngine)
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.24)
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
 set(SRC_FILES
     src/Game.cpp
