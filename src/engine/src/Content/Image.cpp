@@ -7,7 +7,7 @@
 #include <Supergoon/Graphics/Graphics.hpp>
 using namespace Supergoon;
 
-SDL_Surface *loadPNG(const char *filename) {
+SDL_Surface *loadPNG(const char *filename, void** dataToFree) {
 	// Read data
 	int width, height, bytesPerPixel;
 	void *data = stbi_load(filename, &width, &height, &bytesPerPixel, 0);
@@ -37,7 +37,8 @@ SDL_Surface *loadPNG(const char *filename) {
 		// NOTE: Should free stbi_load 'data' variable here
 		return NULL;
 	}
-	stbi_image_free(data);
+	*dataToFree = data;
+	// stbi_image_free(data);
 	return surface;
 }
 
@@ -56,13 +57,15 @@ void Image::Load() {
 	auto graphics = Graphics::Instance();
 	switch (_imageType) {
 		case ImageType::Default: {
-			SDL_Surface *s = loadPNG(_filePath.c_str());
+			void* pngData = nullptr;
+			SDL_Surface *s = loadPNG(_filePath.c_str(), &pngData);
 			if (!s) {
 				sgLogError("Could not load PNG properly, content not fully loaded");
 				_image = nullptr;
 				return;
 			}
 			_image = graphics->CreateTextureFromSurface(s);
+			SDL_free(pngData);
 			break;
 		}
 		case ImageType::Surface: {
