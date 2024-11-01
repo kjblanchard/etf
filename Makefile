@@ -18,7 +18,7 @@ clean:
 configure:
 	@$(CONFIGURE_COMMAND) -G "$(CMAKE_GENERATOR)" . -B $(BUILD_DIR) -Dimgui=$(DEFAULT_IMGUI) -DSYSTEM_PACKAGES=$(SYSTEM_PACKAGES) -DCMAKE_BUILD_TYPE=$(BUILD_TYPE)
 build:
-	@cmake --build $(BUILD_DIR) --config $(BUILD_TYPE)
+	@$(BUILD_COMMAND)
 install:
 	@cmake --install $(BUILD_DIR) --config $(BUILD_TYPE)
 valgrind:
