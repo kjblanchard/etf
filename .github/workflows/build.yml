@@ -1,0 +1,126 @@
+name: Build All Platforms
+run-name: "Build All Platforms: ${{ github.actor }}"
+on:
+  push:
+    tags:
+      - "v*"
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  Build-Desktop:
+    strategy:
+      matrix:
+        include:
+          - os: windows
+            make_cmd: wrebuild
+            suffix: zip
+            zlib: wzlib
+            name: win
+          - os: macos
+            make_cmd: xrebuild
+            suffix: tgz
+            zlib: zlib
+            name: mac
+          - os: ubuntu
+            make_cmd: rebuild
+            suffix: tgz
+            zlib: zlib
+            name: linux
+    runs-on: ${{ matrix.os }}-latest
+    environment: prod
+    steps:
+      - run: pip install --upgrade cppclean
+        name: Install cppclean
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Configure CMake
+        run: make BUILD_TYPE=Release ${{ matrix.make_cmd}}
+  Build-Emscripten:
+    runs-on: ubuntu-latest
+    environment: prod
+    container:
+      # image: emscripten/emsdk:3.1.46
+      image: emscripten/emsdk:3.1.70
+      env:
+        THING_ADD: <div><br>Use WASD to move<br>Space to interact<br>Or, use a controller!<br>Built with github actions!</div>
+      credentials:
+        username: ${{ vars.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          path: repo
+          submodules: recursive
+      - name: Install CMake
+        run: |
+          apt update -y && apt upgrade -y
+          apt install cmake pkg-config  -y
+      - name: Actual build
+        run: cd repo && make init && make CMAKE_BUILD_TYPE=Release erebuild
+      - name: Update html build
+        run: cd repo/build/bin && awk '/<textarea id="output" rows="8"><\/textarea>/ {print; print ENVIRON["THING_ADD"]; next} 1' BbAdventures.html > temp.html && mv temp.html BbAdventures.html
+      - uses: actions/upload-artifact@v4
+        name: Upload to S3
+        with:
+          name: s3Artifact
+          path: repo/build/bin
+  Push-Files-To-S3:
+    uses: supergoongaming/sharedWorkflows/.github/workflows/push_to_s3.yml@master
+    needs: Build-Emscripten
+    secrets:
+      IAM_SECRET: ${{ secrets.IAM_SECRET }}
+    with:
+      IAM_USER: ${{ vars.IAM_USER }}
+      bucket_region: "us-east-1"
+      bucket_name: "etf-external-site"
+  # Create-Release:
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - os: win
+  #           artifact_name: BbAdventures.zip
+  #           asset_name: supergoon_win.zip
+  #         - os: mac
+  #           artifact_name: BbAdventures.tgz
+  #           asset_name: supergoon_mac.tgz
+  #         - os: linux
+  #           artifact_name: BbAdventures.tgz
+  #           asset_name: supergoon_ubuntu.tgz
+  #   if: startsWith(github.event.ref, 'refs/tags/v')
+  #   runs-on: ubuntu-latest
+  #   environment: prod
+  #   needs:
+  #     - Build-Desktop
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #     - name: Fetch tags
+  #       run: git fetch --tags --force
+  #     - name: Download Build Artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: ${{ matrix.os }}-artifacts
+  #     - name: Get current tag annotation
+  #       id: tag-data
+  #       run: |
+  #         {
+  #           echo 'annotation<<EOF'
+  #           git for-each-ref "${GITHUB_REF}" --format '%(contents)'
+  #           echo 'EOF'
+  #         } >>"${GITHUB_OUTPUT}"
+  #       # id: tag-data
+  #       # uses: ericcornelissen/git-tag-annotation-action@v2
+
+      # - name: Upload binaries to release
+      #   env:
+      #     ANNOTATION: ${{ steps.tag-data.outputs.git-tag-annotation }}
+      #   uses: svenstaro/upload-release-action@v2
+      #   with:
+      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+      #     file: ${{ matrix.artifact_name }}
+      #     asset_name: ${{ matrix.asset_name }}
+      #     tag: ${{ github.ref }}
+      #     overwrite: true
+      #     body: ${{ steps.tag-data.outputs.git-tag-annotation }}
