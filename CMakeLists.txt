@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.22)
 
 if(CMAKE_GENERATOR STREQUAL "Xcode")
     message(STATUS "Setting Build to Universal Binary")
