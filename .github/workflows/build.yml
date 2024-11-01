@@ -58,7 +58,7 @@ jobs:
           apt update -y && apt upgrade -y
           apt install cmake pkg-config  -y
       - name: Actual build
-        run: cd repo && sudo make CMAKE_BUILD_TYPE=Release DEFAULT_IMGUI=OFF erebuild
+        run: cd repo && make CMAKE_BUILD_TYPE=Release DEFAULT_IMGUI=OFF erebuild
       - name: Update html build
         run: cd repo/build/bin && awk '/<textarea id="output" rows="8"><\/textarea>/ {print; print ENVIRON["THING_ADD"]; next} 1' BbAdventures.html > temp.html && mv temp.html BbAdventures.html
       - uses: actions/upload-artifact@v4
@@ -113,14 +113,14 @@ jobs:
   #       # id: tag-data
   #       # uses: ericcornelissen/git-tag-annotation-action@v2
 
-      # - name: Upload binaries to release
-      #   env:
-      #     ANNOTATION: ${{ steps.tag-data.outputs.git-tag-annotation }}
-      #   uses: svenstaro/upload-release-action@v2
-      #   with:
-      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
-      #     file: ${{ matrix.artifact_name }}
-      #     asset_name: ${{ matrix.asset_name }}
-      #     tag: ${{ github.ref }}
-      #     overwrite: true
-      #     body: ${{ steps.tag-data.outputs.git-tag-annotation }}
+  # - name: Upload binaries to release
+  #   env:
+  #     ANNOTATION: ${{ steps.tag-data.outputs.git-tag-annotation }}
+  #   uses: svenstaro/upload-release-action@v2
+  #   with:
+  #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #     file: ${{ matrix.artifact_name }}
+  #     asset_name: ${{ matrix.asset_name }}
+  #     tag: ${{ github.ref }}
+  #     overwrite: true
+  #     body: ${{ steps.tag-data.outputs.git-tag-annotation }}

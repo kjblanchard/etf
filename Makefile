@@ -10,6 +10,7 @@ EMSCRIPTEN_CONFIGURE_COMMAND = "emcmake cmake"
 BUILD_TYPE ?= Debug
 DEFAULT_IMGUI ?= ON
 SYSTEM_PACKAGES ?= ON
+BUILD_COMMAND ?= cmake --build $(BUILD_DIR) --config $(BUILD_TYPE)
 # default, should be used after a rebuild of some sort.
 all: build run
 clean:
@@ -38,7 +39,7 @@ brebuild:
 wrebuild:
 	@$(MAKE) CMAKE_GENERATOR=$(WINDOWS_GENERATOR) SYSTEM_PACKAGES=OFF configure build install
 erebuild:
-	@$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) CONFIGURE_COMMAND=$(EMSCRIPTEN_CONFIGURE_COMMAND) SYSTEM_PACKAGES=OFF clean configure build
+	@$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) CONFIGURE_COMMAND=$(EMSCRIPTEN_CONFIGURE_COMMAND) BUILD_COMMAND='sudo $(BUILD_COMMAND)' SYSTEM_PACKAGES=OFF clean configure build
 # Custom run commands
 erun:
 	emrun ./build/bin/$(EXECUTABLE_NAME).html
