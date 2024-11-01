@@ -23,7 +23,7 @@ jobs:
             zlib: zlib
             name: mac
           - os: ubuntu
-            make_cmd: rebuild
+            make_cmd: brebuild
             suffix: tgz
             zlib: zlib
             name: linux
@@ -58,7 +58,7 @@ jobs:
           apt update -y && apt upgrade -y
           apt install cmake pkg-config  -y
       - name: Actual build
-        run: cd repo && make init && make CMAKE_BUILD_TYPE=Release erebuild
+        run: cd repo && make CMAKE_BUILD_TYPE=Release erebuild
       - name: Update html build
         run: cd repo/build/bin && awk '/<textarea id="output" rows="8"><\/textarea>/ {print; print ENVIRON["THING_ADD"]; next} 1' BbAdventures.html > temp.html && mv temp.html BbAdventures.html
       - uses: actions/upload-artifact@v4
