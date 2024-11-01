@@ -54,32 +54,32 @@ set(CMAKE_DEBUG_TARGET_PROPERTIES "DEBUG_OUTPUT" "" CACHE STRING "Don't use the 
 
 if(SYSTEM_PACKAGES) # If we are using system packages, then we should try to find them.
     find_package(SDL3 CONFIG COMPONENTS SDL3-shared)
-    find_package(PNG)
-    if(PNG_FOUND)
-        list(APPEND EXTERNAL_LIBS ${LIB_PNG_LIBRARY})
-    endif(LIB_VORBIS_FOUND)
     find_library(LIB_VORBIS
         PATH_SUFFIXES .a .dll
         NAMES libvorbis vorbis vorbis.a vorbis.dll libvorbis.a
         HINTS /usr/local/lib /c/cmake/lib)
-    if(LIB_VORBIS_FOUND)
+
+    if(LIB_VORBIS)
         list(APPEND EXTERNAL_LIBS ${LIB_VORBIS})
-    endif(LIB_VORBIS_FOUND)
+    endif(LIB_VORBIS)
+
     find_library(LIB_VORBISFILE
         PATH_SUFFIXES .a .dll
         NAMES libvorbisfile vorbisfile vorbisfile.a vorbisfile.dll
         HINTS /usr/local/lib)
-    if(LIB_VORBISFILE_FOUND)
+
+    if(LIB_VORBISFILE)
         list(APPEND EXTERNAL_LIBS ${LIB_VORBISFILE})
-    endif(LIB_VORBIS_FOUND)
+    endif(LIB_VORBISFILE)
+
     find_library(LIB_OGG
         PATH_SUFFIXES .a .dll
         NAMES ogg Ogg
         HINTS /usr/local/lib)
-    if(LIB_OGG_FOUND)
+
+    if(LIB_OGG)
         list(APPEND EXTERNAL_LIBS ${LIB_OGG})
-    endif(LIB_VORBIS_FOUND)
-    find_package(ZLIB)
+    endif(LIB_OGG)
 endif(SYSTEM_PACKAGES)
 
 if(NOT SDL3_FOUND)
@@ -96,65 +96,6 @@ if(NOT SDL3_FOUND)
     )
     FetchContent_MakeAvailable(SDL3)
 endif(NOT SDL3_FOUND)
-
-if(NOT ZLIB_FOUND)
-    message(STATUS "ZLIB not found. Fetching zlib...")
-    set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "Do not build zlib examples" FORCE)
-    set(RENAME_ZCONF OFF CACHE BOOL "Do not build zlib examples" FORCE)
-    FetchContent_Declare(
-        zlib
-        GIT_REPOSITORY https://github.com/madler/zlib
-        GIT_TAG v1.3.1
-        EXCLUDE_FROM_ALL
-    )
-    FetchContent_GetProperties(zlib)
-
-    if(NOT zlib_POPULATED)
-        FetchContent_Populate(zlib)
-        add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
-    endif()
-
-    # Add both the subdirectories to the include directories, this is needed for windows builds specifically for PNG
-    # If emscripten, need to add include dir?
-    if(EMSCRIPTEN)
-        set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
-        set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/libz.a)
-    endif(EMSCRIPTEN)
-
-    include_directories(${zlib_SOURCE_DIR})
-    include_directories(${zlib_BINARY_DIR})
-endif(NOT ZLIB_FOUND)
-
-if(NOT PNG_FOUND)
-    set(PNG_TESTS OFF CACHE BOOL "Build the libpng tests" FORCE)
-    set(PNG_BUILD_ZLIB OFF CACHE BOOL "Always build ZLIB if needed" FORCE)
-    set(PNG_TOOLS OFF CACHE BOOL "Build the libpng tests" FORCE)
-
-    # set(ZLIB_LIBRARY zlibstatic)
-
-    # set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/Release/zlibstatic.lib CACHE STRING "Library to find" FORCE)
-    set(ZLIB_ROOT ${zlib_SOURCE_DIR} CACHE STRING "PATH TO SUBDIR ZLIB" FORCE)
-    set(PNG_SHARED OFF CACHE BOOL "Build the libpng tests" FORCE)
-
-    if(APPLE)
-        set(libpng_arm_sources
-            arm/arm_init.c
-            arm/filter_neon_intrinsics.c
-            arm/palette_neon_intrinsics.c
-            arm/filter_neon.S
-            CACHE STRING "Enable arm sources for apple universal builds, regardless due to errors" FORCE)
-    endif(APPLE)
-
-    message(STATUS "PNG not found. Fetching PNG...")
-    FetchContent_Declare(
-        PNG
-        GIT_REPOSITORY https://github.com/pnggroup/libpng.git
-        GIT_TAG v1.6.44
-        EXCLUDE_FROM_ALL
-    )
-    FetchContent_MakeAvailable(PNG)
-    list(APPEND EXTERNAL_LIBS png_static)
-endif(NOT PNG_FOUND)
 
 if(NOT LIB_OGG)
     message(STATUS "OGG not found. Fetching OGG...")
@@ -183,17 +124,12 @@ if(NOT LIB_VORBIS)
     list(APPEND EXTERNAL_LIBS vorbisenc vorbisfile vorbis)
 endif(NOT LIB_VORBIS)
 
-
 target_compile_options(${LIBRARY_TARGET_NAME} PUBLIC ${COMPILE_OPTIONS})
 target_link_directories(${LIBRARY_TARGET_NAME} PUBLIC /usr/local/lib) # should always include from usr/local/lib
 
 target_link_libraries(${LIBRARY_TARGET_NAME}
     INTERFACE
     ${EXTERNAL_LIBS}
-
-    # SDL3::SDL3-static
-    # png_static
-    # vorbisenc vorbisfile vorbis ogg
 )
 target_include_directories(${LIBRARY_TARGET_NAME}
     PUBLIC
@@ -204,8 +140,6 @@ target_include_directories(${LIBRARY_TARGET_NAME}
     /usr/local/include
     PRIVATE
     ${sdl3_SOURCE_DIR}/include
-    ${png_SOURCE_DIR}
-    ${png_BINARY_DIR}
     ${zlib_SOURCE_DIR}
     ${zlib_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/include
