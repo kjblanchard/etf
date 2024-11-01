@@ -60,7 +60,7 @@ jobs:
       - name: Actual build
         run: cd repo && make CMAKE_BUILD_TYPE=Release DEFAULT_IMGUI=OFF erebuild
       - name: Update html build
-        run: cd repo/build/bin && awk '/<textarea id="output" rows="8"><\/textarea>/ {print; print ENVIRON["THING_ADD"]; next} 1' BbAdventures.html > temp.html && mv temp.html BbAdventures.html
+        run: cd repo/build/bin && awk '/<textarea id="output" rows="8"><\/textarea>/ {print; print ENVIRON["THING_ADD"]; next} 1' EscapeTheFate.html > temp.html && mv temp.html EscapeTheFate.html
       - uses: actions/upload-artifact@v4
         name: Upload to S3
         with:
