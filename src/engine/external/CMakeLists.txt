@@ -21,8 +21,6 @@ cmake_minimum_required(VERSION 3.24)
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build libraries as static" FORCE)
 
-# use off for emscripten?
-# set(ZLIB_USE_STATIC_LIBS "ON") # We should always link to static zlib
 set(SRC_FILES
     src/easing.c
     src/log.c
@@ -140,7 +138,5 @@ target_include_directories(${LIBRARY_TARGET_NAME}
     /usr/local/include
     PRIVATE
     ${sdl3_SOURCE_DIR}/include
-    ${zlib_SOURCE_DIR}
-    ${zlib_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )

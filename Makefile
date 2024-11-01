@@ -36,7 +36,7 @@ xrebuild:
 brebuild:
 	@$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) clean configure build install
 wrebuild:
-	@$(MAKE) CMAKE_GENERATOR=$(WINDOWS_GENERATOR) configure build install
+	@$(MAKE) CMAKE_GENERATOR=$(WINDOWS_GENERATOR) SYSTEM_PACKAGES=OFF configure build install
 erebuild:
 	@$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) CONFIGURE_COMMAND=$(EMSCRIPTEN_CONFIGURE_COMMAND) SYSTEM_PACKAGES=OFF clean configure build
 # Custom run commands
