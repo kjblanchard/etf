@@ -114,6 +114,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.os }}-artifacts
+
       - name: Get current tag annotation
         id: tag-data
         run: |
@@ -132,4 +133,4 @@ jobs:
           asset_name: ${{ matrix.asset_name }}
           tag: ${{ github.ref }}
           overwrite: true
-          body: ${{ steps.tag-data.outputs.git-tag-annotation }}
+          body: ${{ steps.tag-data.outputs.annotation }}

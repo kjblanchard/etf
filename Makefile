@@ -35,9 +35,9 @@ package:
 
 # Generate dsym for bloaty
 
-# Custom build commands that set variables accordingly based on platform.. rebuild is macos, brebuild is backup, wrebuild is windows, erebuild is emscripten
+# Custom build commands that set variables accordingly based on platform.. rebuild is macos, brebuild is backup, wrebuild is windows, erebuild is emscripten, irebuild is ios simulator
 rebuild:
-	@$(MAKE) CMAKE_GENERATOR=$(DEFAULT_GENERATOR) clean configure build install package
+	@$(MAKE) CMAKE_GENERATOR=$(DEFAULT_GENERATOR) clean configure build install
 xrebuild:
 	@$(MAKE) CMAKE_GENERATOR=$(APPLE_GENERATOR) SYSTEM_PACKAGES=OFF clean configure build install package
 brebuild:
@@ -47,9 +47,7 @@ wrebuild:
 erebuild:
 	@$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) CONFIGURE_COMMAND=$(EMSCRIPTEN_CONFIGURE_COMMAND) BUILD_COMMAND='sudo $(BUILD_COMMAND)' SYSTEM_PACKAGES=OFF clean configure build
 irebuild:
-	$(MAKE) CMAKE_GENERATOR=$(APPLE_GENERATOR) DEFAULT_IMGUI=OFF ADDITIONAL_OPTIONS="-DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0" clean configure build install
-arebuild:
-	$(MAKE) CMAKE_GENERATOR=$(APPLE_GENERATOR) DEFAULT_IMGUI=OFF ADDITIONAL_OPTIONS="-DCMAKE_SYSTEM_NAME=Android -DANDROID_PLATFORM=android-23 -DANDROID_ABI=armeabi-v7a -DCMAKE_SYSTEM_VERSION=23 -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0" clean configure build install
+	$(MAKE) CMAKE_GENERATOR=$(APPLE_GENERATOR) DEFAULT_IMGUI=OFF ADDITIONAL_OPTIONS="-DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0" clean configure build install package
 # Custom run commands
 erun:
 	emrun ./build/bin/$(EXECUTABLE_NAME).html
