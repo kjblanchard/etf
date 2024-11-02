@@ -60,7 +60,6 @@ void BlackjackGame::Start() {
 	if (!skipLogos) {
 		playLogos();
 	} else {
-		Level::LoadFunc = loadLevel;
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTown");
 	}
 }
