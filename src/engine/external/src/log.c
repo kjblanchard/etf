@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MAX_LOG_SIZE 200
+#define MAX_LOG_SIZE 400
 
 /**
  * @brief The file that will be written to when logs are put.

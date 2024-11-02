@@ -73,6 +73,7 @@ Game::~Game() {
 void Game::Initialize() {
 	char *jsonPath = NULL;
 	SDL_asprintf(&jsonPath, "%sassets/config.json", SDL_GetBasePath());
+	sgLogWarn("Going to read from file %s", jsonPath);
 	std::ifstream fileStream(jsonPath);
 	SDL_free(jsonPath);
 	auto j = json::parse(fileStream);

@@ -22,6 +22,11 @@ jobs:
             suffix: tgz
             zlib: zlib
             name: mac
+          - os: macos
+            make_cmd: irebuild
+            suffix: tgz
+            zlib: zlib
+            name: ios-simulator
           - os: ubuntu
             make_cmd: brebuild
             suffix: tgz
@@ -89,6 +94,9 @@ jobs:
           - os: mac
             artifact_name: EscapeTheFate.tgz
             asset_name: supergoon_mac.tgz
+          - os: ios-simulator
+            artifact_name: EscapeTheFate.tgz
+            asset_name: supergoon_ios_sim.tgz
           - os: linux
             artifact_name: EscapeTheFate.tgz
             asset_name: supergoon_ubuntu.tgz
