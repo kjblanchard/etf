@@ -4,7 +4,7 @@
 #include <unordered_map>
 typedef union SDL_Event SDL_Event;
 namespace Supergoon {
-	class Game;
+class Game;
 using EventFunc = std::function<void(int, void*, void*)>;
 
 struct BuiltinEventTypes {
@@ -26,7 +26,6 @@ class Events {
 	static void HandleCustomEventHandlers(SDL_Event* event);
 	static std::unordered_map<uint32_t, std::vector<EventFunc>> _eventHandlers;
 	bool _isGameFocused = true;
-	Game* _game;
 };
 
 }  // namespace Supergoon

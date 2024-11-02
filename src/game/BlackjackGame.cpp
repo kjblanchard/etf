@@ -14,7 +14,7 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 };
 }
 using namespace Supergoon;
-static bool skipLogos = true;
+static bool skipLogos = false;
 static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();
@@ -41,13 +41,13 @@ static void playLogos() {
 	auto animator = new UIObjectAnimatorBase("Logos");
 	auto fadeInTween = new Tween(0, 255, 3.0, &thing->Transparency, Supergoon::Easings::Linear);
 	auto fadeOutTween = new Tween(255, 0, 3.0, &thing->Transparency, Supergoon::Easings::Linear);
-	// auto waitTween = new Tween(1.0);
 	auto fadeInTween2 = new Tween(0, 255, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
 	auto fadeOutTween2 = new Tween(255, 0, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
-	fadeOutTween2->EndFunc = loadLevel;
+	fadeOutTween2->EndFunc = []() {
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTown");
+	};
 	animator->AddUIObjectTween(fadeInTween, thing);
 	animator->AddUIObjectTween(fadeOutTween, thing);
-	// animator->AddUIObjectTween(waitTween, nullptr);
 	animator->AddUIObjectTween(fadeInTween2, thing2);
 	animator->AddUIObjectTween(fadeOutTween2, thing2);
 	UI::Animators.push_back(std::shared_ptr<UIObjectAnimatorBase>(animator));
@@ -56,12 +56,12 @@ static void playLogos() {
 }
 
 void BlackjackGame::Start() {
+	Level::LoadFunc = loadLevel;
 	if (!skipLogos) {
 		playLogos();
 	} else {
 		Level::LoadFunc = loadLevel;
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTown");
-		// loadLevel();
 	}
 }
 

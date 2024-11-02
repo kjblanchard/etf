@@ -13,7 +13,7 @@ using namespace Supergoon;
 std::unordered_map<Uint32, std::vector<std::function<void(int, void*, void*)>>> Events::_eventHandlers;
 BuiltinEventTypes Events::BuiltinEvents;
 
-Events::Events(Game* game) : _game(game) {
+Events::Events(Game* game) {
 	BuiltinEvents.ImGuiFocusedEvent = RegisterEvent();
 	BuiltinEvents.LevelChangeEvent = RegisterEvent();
 	BuiltinEvents.ResetGameEvent = RegisterEvent();
