@@ -15,6 +15,10 @@ void PlayerWidget::ShowPlayerColliderWindow() {
 	}
 	ImGui::Checkbox("Show Player Debug Colliders", &ShowPlayerColliderDebugBox);
 	auto playerGo = GameObject::GetGameObjectWithComponents<PlayerComponent>();
+	if (!playerGo.has_value()) {
+		ImGui::End();
+		return;
+	}
 	auto& playerComponent = playerGo->GetComponent<PlayerComponent>();
 	auto& locationComponent = playerGo->GetComponent<LocationComponent>();
 	if (ImGui::CollapsingHeader("Player")) {

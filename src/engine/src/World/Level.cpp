@@ -9,6 +9,7 @@
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Components/SolidComponent.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
+#include <Supergoon/Sound.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
 // int SCREEN_WIDTH = 512;
@@ -21,6 +22,20 @@ using namespace Supergoon;
 
 std::unique_ptr<Level> Level::_currentLevel = nullptr;
 std::function<void()> Level::LoadFunc = nullptr;
+
+std::string Level::GetBgm() {
+	auto iterator = std::find_if(_mapData->Properties.begin(), _mapData->Properties.end(), [](TiledMap::TiledProperty &prop) {
+		if (prop.Name == "bgm") {
+			return true;
+		}
+		return false;
+	});
+	if (iterator == _mapData->Properties.end()) {
+		return "";
+	}
+	return std::get<std::string>(iterator->Value);
+	// return _mapData->Properties
+}
 
 Level::Level(const char *filename)
 	: _background(nullptr) {
@@ -99,6 +114,10 @@ void Level::LoadNewLevel(std::string level) {
 	if (LoadFunc) {
 		LoadFunc();
 	}
+	auto bgm = _currentLevel->GetBgm();
+	auto sound = Sound::Instance();
+	sound->LoadBgm(bgm);
+	sound->PlayBgm();
 }
 
 void Level::LoadAllGameObjects() {
@@ -211,8 +230,8 @@ void Level::Draw() {
 		auto screenHeight = Graphics::Instance()->LogicalHeight();
 		auto s = RectangleF();
 		auto size = _currentLevel->GetSize();
-		s.X = std::round( _currentLevel->cameraX);
-		s.Y = std::round( _currentLevel->cameraY);
+		s.X = std::round(_currentLevel->cameraX);
+		s.Y = std::round(_currentLevel->cameraY);
 		s.W = size.X <= screenWidth ? size.X : screenWidth;
 		s.H = size.Y <= screenHeight ? size.Y : screenHeight;
 		auto d = RectangleF();

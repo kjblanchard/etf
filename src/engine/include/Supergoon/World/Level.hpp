@@ -21,6 +21,7 @@ class Level {
 	Level(const char *filename);
 	~Level();
 	static void LoadNewLevel(std::string level);
+	std::string GetBgm();
 	const inline std::string &GetName() const { return _name; }
 	inline Point GetSize() { return Point{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
 	inline void AddGameObjectToLevel(GameObject *g) { _gameObjects.push_back(g); }

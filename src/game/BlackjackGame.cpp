@@ -17,7 +17,7 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 };
 }
 using namespace Supergoon;
-static bool skipLogos = true;
+static bool skipLogos = false;
 static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();

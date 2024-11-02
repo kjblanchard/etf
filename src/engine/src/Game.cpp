@@ -105,6 +105,9 @@ void Game::InitializeImGui() {
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;	   // IF using Docking Branch
+	static auto thing = std::string(SDL_GetPrefPath("Supergoon Games", "EscapeTheFate")) + "debug.ini";
+	io.IniFilename = thing.c_str();
+
 #endif
 }
 
@@ -122,10 +125,13 @@ void Game::InternalDraw() {
 }
 
 void Game::InternalReset() {
+	if (_sound) {
+		_sound->StopBgm();
+	}
 	Reset();
 	UI::Reset();
 	GameObject::ClearGameObjects();
-	// ContentRegistry::DestroyAllContent();
+	ContentRegistry::DestroyAllContent();
 	if (!_initialized) {
 		Initialize();
 	}
