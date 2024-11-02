@@ -5,12 +5,19 @@
 #include <SupergoonEngine/log.h>
 
 #include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/Events.hpp>
 #include <Supergoon/Sound.hpp>
 #include <Supergoon/Tween/Tween.hpp>
 
 namespace Supergoon {
 Sound* Sound::_instance = nullptr;
 void Sound::InitializeSound() {
+	Events::RegisterEventHandler(Events::BuiltinEvents.PlayBgmEvent, [this](int code, void* name, void*) {
+		auto nameStr = std::string((const char*)name);
+		LoadBgm(nameStr);
+		PlayBgm();
+		SDL_free(name);
+	});
 	for (size_t i = 0; i < _totalSfxStreams; i++) {
 		auto stream = sgStreamNew();
 		_sfxStreams.push_back(std::unique_ptr<sgStream>(stream));

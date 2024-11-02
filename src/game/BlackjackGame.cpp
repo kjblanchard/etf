@@ -3,12 +3,15 @@
 #include <Debug/PlayerCollider.hpp>
 #include <Entities/PlayerStart.hpp>
 #include <Supergoon/Supergoon.hpp>
+#include <SupergoonEngine/nlohmann/json.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/DebugDrawSystem.hpp>
 #include <Systems/ImageSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
 #include FT_FREETYPE_H
+using json = nlohmann::json;
+extern json configData;
 namespace Supergoon {
 std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap = {
 	{"Start", [](TiledMap::TiledObject &object) {
@@ -17,7 +20,7 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 };
 }
 using namespace Supergoon;
-static bool skipLogos = false;
+static bool skipLogos = true;
 static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();
@@ -60,6 +63,7 @@ static void playLogos() {
 
 void BlackjackGame::Start() {
 	Level::LoadFunc = loadLevel;
+	skipLogos = configData["logos"];
 	FT_Library library;
 	auto error = FT_Init_FreeType(&library);
 	if (!skipLogos) {
@@ -74,11 +78,6 @@ void BlackjackGame::Update() {
 		PlayerInput();
 		UpdateAnimationComponents();
 		UpdateCamera();
-		if (KeyJustPressed(Supergoon::KeyboardKeys::Key_P)) {
-			for (size_t i = 0; i < 30; i++) {
-				Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugSouth");
-			}
-		}
 	}
 	UI::Update();
 }

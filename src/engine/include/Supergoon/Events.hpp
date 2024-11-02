@@ -11,6 +11,7 @@ struct BuiltinEventTypes {
 	uint32_t ImGuiFocusedEvent;
 	uint32_t LevelChangeEvent;
 	uint32_t ResetGameEvent;
+	uint32_t PlayBgmEvent;
 };
 class Events {
    public:

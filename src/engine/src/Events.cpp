@@ -17,6 +17,7 @@ Events::Events(Game* game) {
 	BuiltinEvents.ImGuiFocusedEvent = RegisterEvent();
 	BuiltinEvents.LevelChangeEvent = RegisterEvent();
 	BuiltinEvents.ResetGameEvent = RegisterEvent();
+	BuiltinEvents.PlayBgmEvent = RegisterEvent();
 	RegisterEventHandler(BuiltinEvents.ImGuiFocusedEvent, [this](int code, void*, void*) {
 		this->_isGameFocused = code;
 	});

@@ -2,10 +2,10 @@
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
 #include <SupergoonEngine/clock.h>
-#include <Supergoon/Sound.hpp>
-#include <Supergoon/Events.hpp>
 
+#include <Supergoon/Events.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
+#include <Supergoon/Sound.hpp>
 #include <memory>
 
 namespace Supergoon {

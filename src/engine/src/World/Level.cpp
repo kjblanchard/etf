@@ -8,8 +8,8 @@
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Components/SolidComponent.hpp>
+#include <Supergoon/Events.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
-#include <Supergoon/Sound.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
 // int SCREEN_WIDTH = 512;
@@ -115,9 +115,11 @@ void Level::LoadNewLevel(std::string level) {
 		LoadFunc();
 	}
 	auto bgm = _currentLevel->GetBgm();
-	auto sound = Sound::Instance();
-	sound->LoadBgm(bgm);
-	sound->PlayBgm();
+	Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup(bgm.c_str()));
+	// auto sound = Sound::Instance();
+
+	// sound->LoadBgm(bgm);
+	// sound->PlayBgm();
 }
 
 void Level::LoadAllGameObjects() {

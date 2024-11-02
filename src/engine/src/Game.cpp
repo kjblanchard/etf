@@ -26,8 +26,7 @@
 
 using json = nlohmann::json;
 using namespace Supergoon;
-// Game *Game::_game = nullptr;
-// static Game *_gameInternal = nullptr;
+json configData;
 
 SDL_AppResult SDL_AppInit(void **appState, int, char *[]) {
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD)) {
@@ -76,15 +75,15 @@ void Game::Initialize() {
 	sgLogWarn("Going to read from file %s", jsonPath);
 	std::ifstream fileStream(jsonPath);
 	SDL_free(jsonPath);
-	auto j = json::parse(fileStream);
-	int windowWidth = j["window"]["x"];
-	int windowHeight = j["window"]["y"];
-	int worldWidth = j["world"]["x"];
-	int worldHeight = j["world"]["y"];
-	std::string windowTitle = j["window"]["title"];
+	configData = json::parse(fileStream);
+	int windowWidth = configData["window"]["x"];
+	int windowHeight = configData["window"]["y"];
+	int worldWidth = configData["world"]["x"];
+	int worldHeight = configData["world"]["y"];
+	std::string windowTitle = configData["window"]["title"];
+	_events = std::make_unique<Events>(this);
 	_sound = std::make_unique<Sound>();
 	_graphics = std::make_unique<Graphics>();
-	_events = std::make_unique<Events>(this);
 	_graphics->CreateWindow(windowWidth, windowHeight, windowTitle);
 	_graphics->SetWindowScaling(worldWidth, worldHeight);
 	geClockStart(&_clock);
