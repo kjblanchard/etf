@@ -1,3 +1,5 @@
+#include <ft2build.h>
+
 #include <Debug/PlayerCollider.hpp>
 #include <Entities/PlayerStart.hpp>
 #include <Supergoon/Supergoon.hpp>
@@ -6,6 +8,7 @@
 #include <Systems/DebugDrawSystem.hpp>
 #include <Systems/ImageSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
+#include FT_FREETYPE_H
 namespace Supergoon {
 std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap = {
 	{"Start", [](TiledMap::TiledObject &object) {
@@ -14,7 +17,7 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 };
 }
 using namespace Supergoon;
-static bool skipLogos = false;
+static bool skipLogos = true;
 static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();
@@ -57,6 +60,8 @@ static void playLogos() {
 
 void BlackjackGame::Start() {
 	Level::LoadFunc = loadLevel;
+	FT_Library library;
+	auto error = FT_Init_FreeType(&library);
 	if (!skipLogos) {
 		playLogos();
 	} else {

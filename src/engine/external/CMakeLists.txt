@@ -78,6 +78,12 @@ if(SYSTEM_PACKAGES) # If we are using system packages, then we should try to fin
     if(LIB_OGG)
         list(APPEND EXTERNAL_LIBS ${LIB_OGG})
     endif(LIB_OGG)
+
+    find_package(freetype REQUIRED)
+
+    if(freetype_found)
+        list(APPEND EXTERNAL_LIBS freetype)
+    endif(freetype_found)
 endif(SYSTEM_PACKAGES)
 
 if(NOT SDL3_FOUND)
@@ -94,6 +100,24 @@ if(NOT SDL3_FOUND)
     )
     FetchContent_MakeAvailable(SDL3)
 endif(NOT SDL3_FOUND)
+
+if(NOT freetype_FOUND)
+    message(STATUS "freetype not found. Fetching freetype...")
+    set(FT_DISABLE_BROTLI ON CACHE BOOL "Do not install when installing" FORCE)
+    set(FT_DISABLE_HARFBUZZ ON CACHE BOOL "Do not install when installing" FORCE)
+    set(FT_DISABLE_ZLIB ON CACHE BOOL "Do not use" FORCE)
+    set(FT_DISABLE_BZIP2 ON CACHE BOOL "Do not use" FORCE)
+    set(FT_DISABLE_PNG ON CACHE BOOL "Do not use" FORCE)
+    set(FT_DISABLE_PNG ON CACHE BOOL "Do not use" FORCE)
+    FetchContent_Declare(
+        LIB_FREETYPE
+        GIT_REPOSITORY https://github.com/freetype/freetype
+        GIT_TAG VER-2-13-3
+        EXCLUDE_FROM_ALL
+    )
+    FetchContent_MakeAvailable(LIB_FREETYPE)
+    list(APPEND EXTERNAL_LIBS freetype)
+endif(NOT freetype_FOUND)
 
 if(NOT LIB_OGG)
     message(STATUS "OGG not found. Fetching OGG...")
