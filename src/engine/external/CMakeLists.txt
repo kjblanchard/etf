@@ -17,7 +17,7 @@ if(UNIX OR APPLE)
 endif(UNIX OR APPLE)
 
 message(STATUS "Starting ${LIBRARY_TARGET_NAME} library initialization")
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.22)
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build libraries as static" FORCE)
 

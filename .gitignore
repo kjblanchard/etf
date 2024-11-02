@@ -4,3 +4,4 @@ build/
 imgui.ini
 .terraform/
 terraform.tfvars
+memcheck.txt

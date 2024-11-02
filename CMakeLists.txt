@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.22)
 
 if(CMAKE_GENERATOR STREQUAL "Xcode")
     message(STATUS "Setting Build to Universal Binary")
@@ -16,10 +16,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Should we include Imgui stuffs
-option(imgui "Include ImGui support" ON)
+option(imgui "Include ImGui support" OFF)
 option(SYSTEM_PACKAGES "Use system packages if available" ON)
 option(BUILD_TESTING "Should we build test projects" OFF)
-option(DEBUG_CMAKE_VARIABLES "Print out all debug variables near end of configure" ON)
+option(DEBUG_CMAKE_VARIABLES "Print out all debug variables near end of configure" OFF)
 
 include(FetchContent)
 
