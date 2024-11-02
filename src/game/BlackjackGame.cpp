@@ -20,7 +20,6 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 };
 }
 using namespace Supergoon;
-static bool skipLogos = true;
 static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();
@@ -63,7 +62,7 @@ static void playLogos() {
 
 void BlackjackGame::Start() {
 	Level::LoadFunc = loadLevel;
-	skipLogos = configData["logos"];
+	auto skipLogos = configData["logos"];
 	FT_Library library;
 	auto error = FT_Init_FreeType(&library);
 	if (!skipLogos) {
