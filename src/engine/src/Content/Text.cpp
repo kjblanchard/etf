@@ -182,6 +182,8 @@ void Text::DrawLettersToTextImage(int startLoc) {
 			CreateSurfaceForLetter(letterContentName, _font->FontFace(), 255, 255, 255);
 		}
 		auto letterImage = ContentRegistry::GetContent<Image>(letterContentName);
+		letterImage->LoadContent();
+		_image->LoadContent();
 		auto r = RectangleF();
 		r.X = _letterPoints[i].X;
 		r.Y = _letterPoints[i].Y;
@@ -197,24 +199,37 @@ void Text::CreateSurfaceForLetter(std::string name, FT_Face fontFace, int r, int
 		return;
 
 	// auto surface = SDL_CreateSurfaceFrom(width, height, format, pixels, pitch);
+	// auto pitch = 8 * fontFace->glyph->bitmap.pitch / fontFace->glyph->bitmap.width;
+	auto pitch = fontFace->glyph->bitmap.pitch;
 	auto surface = SDL_CreateSurfaceFrom(fontFace->glyph->bitmap.width,
 										 fontFace->glyph->bitmap.rows,
 										 SDL_PIXELFORMAT_INDEX8,
 										 fontFace->glyph->bitmap.buffer,
-										 8 * fontFace->glyph->bitmap.pitch / fontFace->glyph->bitmap.width);
-	SDL_Palette palette;
-	palette.colors = (SDL_Color*)alloca(256 * sizeof(SDL_Color));
+										 pitch);
+	if (!surface) {
+		sgLogWarn("Bad surface: %s", SDL_GetError());
+	}
+	auto palette = SDL_CreateSurfacePalette(surface);
+	// SDL_Palette palette;
+	palette->colors = (SDL_Color*)alloca(256 * sizeof(SDL_Color));
 	int numColors = 256;
 	for (int i = 0; i < numColors; ++i) {
-		palette.colors[i].r = r;
-		palette.colors[i].g = g;
-		palette.colors[i].b = b;
-		palette.colors[i].a = (Uint8)(i);
+		palette->colors[i].r = r;
+		palette->colors[i].g = g;
+		palette->colors[i].b = b;
+		palette->colors[i].a = (Uint8)(i);
 	}
-	palette.ncolors = numColors;
+	palette->ncolors = numColors;
 
-	SDL_SetPaletteColors(&palette, palette.colors, 0, palette.ncolors);
-	SDL_SetSurfacePalette(surface, &palette);
-	SDL_SetSurfaceColorKey(surface, true, 0);
-	ContentRegistry::CreateContent<Image, SDL_Surface*>(name, std::move(surface));
+	auto result = SDL_SetPaletteColors(palette, palette->colors, 0, palette->ncolors);
+	// auto result = SDL_SetSurfacePalette(surface, &palette);
+	if (!result) {
+		sgLogWarn("Could not set, error %s", SDL_GetError());
+	}
+	result = SDL_SetSurfaceColorKey(surface, true, 0);
+	if (!result) {
+		sgLogWarn("Could not set, error %s;", SDL_GetError());
+	}
+	auto content = ContentRegistry::CreateContent<Image, SDL_Surface*>(name, std::move(surface));
+	content->LoadContent();
 }

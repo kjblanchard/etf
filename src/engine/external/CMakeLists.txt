@@ -79,11 +79,12 @@ if(SYSTEM_PACKAGES) # If we are using system packages, then we should try to fin
         list(APPEND EXTERNAL_LIBS ${LIB_OGG})
     endif(LIB_OGG)
 
-    find_package(freetype REQUIRED)
+    find_package(Freetype)
 
-    if(freetype_found)
-        list(APPEND EXTERNAL_LIBS freetype)
-    endif(freetype_found)
+    if(FREETYPE_FOUND)
+        list(APPEND EXTERNAL_LIBS ${FREETYPE_LIBRARY})
+        target_include_directories(${LIBRARY_TARGET_NAME} INTERFACE /usr/local/include/freetype2)
+    endif(FREETYPE_FOUND)
 endif(SYSTEM_PACKAGES)
 
 if(NOT SDL3_FOUND)
@@ -101,7 +102,7 @@ if(NOT SDL3_FOUND)
     FetchContent_MakeAvailable(SDL3)
 endif(NOT SDL3_FOUND)
 
-if(NOT freetype_FOUND)
+if(NOT FREETYPE_FOUND)
     message(STATUS "freetype not found. Fetching freetype...")
     set(FT_DISABLE_BROTLI ON CACHE BOOL "Do not install when installing" FORCE)
     set(FT_DISABLE_HARFBUZZ ON CACHE BOOL "Do not install when installing" FORCE)
@@ -145,6 +146,14 @@ if(NOT LIB_VORBIS)
     FetchContent_MakeAvailable(LIB_VORBIS)
     list(APPEND EXTERNAL_LIBS vorbisenc vorbisfile vorbis)
 endif(NOT LIB_VORBIS)
+
+if(DEBUG_CMAKE_VARIABLES)
+    get_cmake_property(ALL_VARIABLES VARIABLES)
+
+    foreach(VAR ${ALL_VARIABLES})
+        message(STATUS "${VAR} = ${${VAR}}")
+    endforeach()
+endif(DEBUG_CMAKE_VARIABLES)
 
 target_compile_options(${LIBRARY_TARGET_NAME} PUBLIC ${COMPILE_OPTIONS})
 target_link_directories(${LIBRARY_TARGET_NAME} PUBLIC /usr/local/lib) # should always include from usr/local/lib

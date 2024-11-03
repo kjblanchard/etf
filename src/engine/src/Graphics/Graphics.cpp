@@ -155,6 +155,7 @@ SDL_Texture* Graphics::CreateTextureFromSurface(SDL_Surface* surface) {
 		sgLogError("Could not create texture, Error: %s", SDL_GetError());
 		return NULL;
 	}
-	SDL_DestroySurface(surface);
+	// TODO why
+	// SDL_DestroySurface(surface);
 	return t;
 }
