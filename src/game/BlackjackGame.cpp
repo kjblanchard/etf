@@ -1,4 +1,3 @@
-#include <ft2build.h>
 
 #include <Debug/PlayerCollider.hpp>
 #include <Entities/PlayerStart.hpp>
@@ -9,7 +8,6 @@
 #include <Systems/DebugDrawSystem.hpp>
 #include <Systems/ImageSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
-#include FT_FREETYPE_H
 using json = nlohmann::json;
 extern json configData;
 namespace Supergoon {
@@ -20,6 +18,7 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 };
 }
 using namespace Supergoon;
+static std::shared_ptr<Text> testText = nullptr;
 static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();
@@ -63,8 +62,6 @@ static void playLogos() {
 void BlackjackGame::Start() {
 	Level::LoadFunc = loadLevel;
 	auto skipLogos = configData["logos"];
-	FT_Library library;
-	auto error = FT_Init_FreeType(&library);
 	if (!skipLogos) {
 		playLogos();
 	} else {
@@ -82,10 +79,15 @@ void BlackjackGame::Update() {
 }
 
 void BlackjackGame::Draw() {
+	if (!testText) {
+		testText = ContentRegistry::CreateContent<Text, std::string, int>("Hello world!", "commodore", 30);
+		testText->LoadContent();
+	}
 	if (inGame) {
 		Level::Draw();
 		DrawAnimationComponents();
 		DrawImages();
+		testText->Draw();
 	}
 	UI::Draw();
 #ifdef imgui

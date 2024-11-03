@@ -44,6 +44,17 @@ class ContentRegistry {
 		}
 		return false;
 	}
+	template <typename T>
+	static std::shared_ptr<T> GetContent(const std::string& key) {
+		auto it = _loadedContent.find(key);
+		if (it != _loadedContent.end()) {
+			std::shared_ptr<T> specificContent = std::dynamic_pointer_cast<T>(it->second);
+			if (specificContent) {
+				return specificContent;
+			}
+		}
+		return nullptr;
+	}
 
    private:
 	static std::unordered_map<std::string, std::shared_ptr<Content>> _loadedContent;

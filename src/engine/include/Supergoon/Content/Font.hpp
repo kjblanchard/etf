@@ -11,7 +11,8 @@ class Font : public Content {
 	virtual void Load() override;
 	virtual void Unload() override;
 	virtual const std::string Filepath() override;
-	inline virtual std::string Type() override { return "Image"; }
+	inline virtual std::string Type() override { return "Font"; }
+	inline FT_Face FontFace() { return _face; }
 
    private:
 	//    TODO this is never really freed anywhere.

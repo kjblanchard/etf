@@ -3,8 +3,12 @@
 #include <Supergoon/Content/Font.hpp>
 #include <Supergoon/Log.hpp>
 using namespace Supergoon;
+FT_Library Font::_loadedLibrary = nullptr;
 
 Font::Font(std::string name, int size) : Content(name), _size(size) {}
+Font::~Font() {
+	Unload();
+}
 
 void Font::Load() {
 	if (!_loadedLibrary) {
@@ -17,6 +21,7 @@ void Font::Load() {
 		_size = 32;
 	}
 	int result = FT_New_Face(_loadedLibrary, Filepath().c_str(), 0, &_face);
+
 	if (result) {
 		sgLogError("Could not open font %s with error %d\n", _filePath.c_str(), result);
 		return;
@@ -29,5 +34,5 @@ void Font::Unload() {
 }
 
 const std::string Font::Filepath() {
-	return std::string(SDL_GetBasePath()) + "assets/font/" + _filePath;
+	return std::string(SDL_GetBasePath()) + "assets/fonts/" + _filePath + ".ttf";
 }

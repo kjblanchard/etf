@@ -3,8 +3,10 @@
 #include <Supergoon/Content/AsepriteDocument.hpp>
 #include <Supergoon/Content/Content.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/Content/Font.hpp>
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/Content/Sfx.hpp>
+#include <Supergoon/Content/Text.hpp>
 #include <Supergoon/ECS/Components/AnimationComponent.hpp>
 #include <Supergoon/ECS/Components/CameraComponent.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>

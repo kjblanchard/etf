@@ -116,7 +116,6 @@ SDL_Texture* Graphics::CreateRenderTargetTexture(int width, int height, Color co
 		sgLogError("Error setting blend mode: %s", SDL_GetError());
 	}
 	SDL_SetTextureScaleMode(image, SDL_SCALEMODE_NEAREST);
-	// SDL_SetTextureScaleMode(image, SDL_SCALEMODE_LINEAR);
 	SDL_SetTextureBlendMode(image, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(_renderer, 100, color.G, color.B, color.A);
 	SDL_RenderClear(_renderer);
@@ -139,7 +138,11 @@ void Graphics::ClearRenderTargetTexture(SDL_Texture* texture, Color color) {
 
 void Graphics::DrawImageToImage(Image& src, Image& dst, RectangleF* srcR, RectangleF* dstR) {
 	SDL_SetRenderTarget(_renderer, dst._image);
-	SDL_RenderTexture(_renderer, src._image, (SDL_FRect*)srcR, (SDL_FRect*)dstR);
+	if (srcR->Zero()) {
+		SDL_RenderTexture(_renderer, src._image, nullptr, (SDL_FRect*)dstR);
+	} else {
+		SDL_RenderTexture(_renderer, src._image, (SDL_FRect*)srcR, (SDL_FRect*)dstR);
+	}
 	SDL_SetRenderTarget(_renderer, NULL);
 }
 
