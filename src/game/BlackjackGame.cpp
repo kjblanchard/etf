@@ -61,7 +61,7 @@ static void playLogos() {
 
 void BlackjackGame::Start() {
 	Level::LoadFunc = loadLevel;
-	auto skipLogos = configData["logos"];
+	auto skipLogos = configData["skipLogos"];
 	if (!skipLogos) {
 		playLogos();
 	} else {
@@ -80,7 +80,7 @@ void BlackjackGame::Update() {
 
 void BlackjackGame::Draw() {
 	if (!testText) {
-		testText = ContentRegistry::CreateContent<Text, std::string, int>("Hello world!", "commodore", 30);
+		testText = ContentRegistry::CreateContent<Text, std::string, int>("Hello big boi\nin theworld man..you really\n.... suck!!!", "commodore", 16);
 		testText->LoadContent();
 	}
 	if (inGame) {

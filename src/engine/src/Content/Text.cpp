@@ -8,6 +8,7 @@ Text::Text(std::string text, std::string fontName, int size) : Content(text), _s
 	_font = ContentRegistry::CreateContent<Font, int>(fontName, std::move(size));
 	_font->LoadContent();
 	_lettersToDraw = text.length();
+	_letterPoints.resize(_text.length() + 10);
 	MeasureText();
 	auto imageName = std::string(text.substr(0, 30)) + std::to_string(_size);
 	_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_boundingBox.W), std::move(_boundingBox.H));
@@ -30,8 +31,8 @@ void Text::Draw() {
 	d.X = _boundingBox.X;
 	d.Y = _boundingBox.Y;
 	// Try setting to image size.
-	d.W = _textBounds.X;
-	d.H = _textBounds.Y;
+	d.W = _boundingBox.W;
+	d.H = _boundingBox.H;
 	auto src = RectangleF();
 	_image->Draw(src, d);
 	// geImageDraw(t->Texture, NULL, &t->BoundingBox);
@@ -72,6 +73,8 @@ void Text::MeasureText() {
 		}
 		int letterSize = GetLetterWidth(fontFace, letter);
 		if (letter == ' ') {
+			// auto p = Point();
+			// _letterPoints.push_back(p);
 			AddWordToLetterPoints(fontFace, i, currentWordLetters, penX, penY);
 			penX += currentWordLength + letterSize;
 			currentWordLength = 0;
@@ -107,7 +110,10 @@ int Text::GetLetterWidth(FT_Face fontFace, char letter) {
 		sgLogError("Could not measure character properly.  Char %s, error %d", letter, result);
 		return 0;
 	}
-	return fontFace->glyph->advance.x >> 6;
+	if (letter == ' ') {
+		return fontFace->glyph->metrics.horiAdvance >> 6;
+	}
+	return fontFace->glyph->metrics.width >> 6;
 }
 
 bool Text::CheckShouldWrap(int x, int wordLength, int glyphWidth, int maxX) {
@@ -127,8 +133,8 @@ void Text::AddWordToLetterPoints(FT_Face fontFace, int wordEndPos, int wordLengt
 		p.X = x;
 		p.X -= GetKerning(fontFace, wordI);
 		p.Y = y - GetLetterYBearing(fontFace, letter);
-		_letterPoints.push_back(p);
-		// t->LetterPoints[wordI] = p;
+		// _letterPoints.push_back(p);
+		_letterPoints[wordI] = p;
 		int width = GetLetterWidth(fontFace, letter);
 		x += width;
 	}
@@ -211,7 +217,7 @@ void Text::CreateSurfaceForLetter(std::string name, FT_Face fontFace, int r, int
 	}
 	auto palette = SDL_CreateSurfacePalette(surface);
 	// SDL_Palette palette;
-	palette->colors = (SDL_Color*)alloca(256 * sizeof(SDL_Color));
+	// palette->colors = (SDL_Color*)alloca(256 * sizeof(SDL_Color));
 	int numColors = 256;
 	for (int i = 0; i < numColors; ++i) {
 		palette->colors[i].r = r;

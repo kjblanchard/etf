@@ -107,7 +107,12 @@ void Graphics::DrawEnd() {
 	SDL_RenderPresent(_renderer);
 }
 void Graphics::DrawImage(Image& image, RectangleF* srcR, RectangleF* dstR) {
-	SDL_RenderTexture(_renderer, image._image, (SDL_FRect*)srcR, (SDL_FRect*)dstR);
+	if (srcR->Zero()) {
+		SDL_RenderTexture(_renderer, image._image, nullptr, (SDL_FRect*)dstR);
+
+	} else {
+		SDL_RenderTexture(_renderer, image._image, (SDL_FRect*)srcR, (SDL_FRect*)dstR);
+	}
 }
 SDL_Texture* Graphics::CreateRenderTargetTexture(int width, int height, Color color) {
 	auto image = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
@@ -156,6 +161,6 @@ SDL_Texture* Graphics::CreateTextureFromSurface(SDL_Surface* surface) {
 		return NULL;
 	}
 	// TODO why
-	// SDL_DestroySurface(surface);
+	SDL_DestroySurface(surface);
 	return t;
 }
