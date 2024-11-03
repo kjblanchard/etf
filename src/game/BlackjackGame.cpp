@@ -80,7 +80,7 @@ void BlackjackGame::Update() {
 
 void BlackjackGame::Draw() {
 	if (!testText) {
-		testText = ContentRegistry::CreateContent<Text, std::string, int>("Hello big boi\nin theworld man..you really\n.... suck!!!", "commodore", 16);
+		testText = ContentRegistry::CreateContent<Text, std::string, int>("Hello big boi in theworld man..you really.... suck!!!", "commodore", 16);
 		testText->LoadContent();
 	}
 	if (inGame) {

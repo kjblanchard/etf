@@ -111,7 +111,7 @@ int Text::GetLetterWidth(FT_Face fontFace, char letter) {
 		return 0;
 	}
 	if (letter == ' ') {
-		return fontFace->glyph->metrics.horiAdvance >> 6;
+		return (fontFace->glyph->metrics.horiAdvance >> 6) / 2;
 	}
 	return fontFace->glyph->metrics.width >> 6;
 }
