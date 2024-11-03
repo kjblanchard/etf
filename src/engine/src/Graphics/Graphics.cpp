@@ -122,11 +122,14 @@ SDL_Texture* Graphics::CreateRenderTargetTexture(int width, int height, Color co
 	}
 	SDL_SetTextureScaleMode(image, SDL_SCALEMODE_NEAREST);
 	SDL_SetTextureBlendMode(image, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(_renderer, 100, color.G, color.B, color.A);
+	SDL_SetRenderDrawColor(_renderer, color.R, color.G, color.B, color.A);
 	SDL_RenderClear(_renderer);
 	SDL_SetRenderTarget(_renderer, NULL);
 	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
 	return image;
+}
+void Graphics::SetTextureColor(SDL_Texture* texture, Color color) {
+	SDL_SetTextureColorMod(texture, color.R, color.G, color.B);
 }
 
 void Graphics::SetTextureAlpha(SDL_Texture* texture, int alpha) {

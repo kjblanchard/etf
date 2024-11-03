@@ -171,5 +171,6 @@ target_include_directories(${LIBRARY_TARGET_NAME}
     /usr/local/include
     PRIVATE
     ${sdl3_SOURCE_DIR}/include
+    ${freetype_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )

@@ -8,6 +8,6 @@
         "x": 512,
         "y": 288
     },
-    "skipLogos": false
+    "skipLogos": true
 }
 

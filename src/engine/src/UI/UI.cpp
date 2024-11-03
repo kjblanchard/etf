@@ -20,6 +20,26 @@ Panel* UI::Initialize() {
 	auto graphics = Graphics::Instance();
 	rootPanel->Bounds = RectangleF{0, 0, (float)graphics->LogicalWidth(), (float)graphics->LogicalHeight()};
 	UIInstance = rootPanel;
+	auto name = "fadePanel";
+	auto fadePanel = std::make_shared<ImageObject>(rootPanel);
+	fadePanel->Transparency = 0;
+	auto path = std::string(SDL_GetBasePath()) + "assets/img/null.png";
+	fadePanel->ImagePtr = ContentRegistry::CreateContent<Image>(path);
+	fadePanel->ImagePtr->SetImageColor({0, 0, 0, 255});
+	fadePanel->Visible = true;
+	fadePanel->Bounds = RectangleF{0, 0, (float)graphics->LogicalWidth(), (float)graphics->LogicalHeight()};
+	fadePanel->Offset.X = 0;
+	fadePanel->Offset.Y = 0;
+	// auto fadeInAnimator = std::make_shared<UIObjectAnimatorBase>("fadein");
+	auto fadeOutAnimator = std::make_shared<UIObjectAnimatorBase>("fadeout");
+	// auto fadeInTween = new Tween(0, 255, 3.0, &fadePanel->Transparency, Supergoon::Easings::Linear);
+	auto fadeOutTween = new Tween(255, 0, 1.0, &fadePanel->Transparency, Supergoon::Easings::Linear);
+	// fadeInAnimator->AddUIObjectTween(fadeInTween, child.get());
+	fadeOutAnimator->AddUIObjectTween(fadeOutTween, fadePanel.get());
+	// Animators.push_back(fadeInAnimator);
+	Animators.push_back(fadeOutAnimator);
+	rootPanel->Children[name] = fadePanel;
+	fadeOutAnimator->Play();
 	return rootPanel;
 }
 

@@ -12,6 +12,7 @@ Text::Text(std::string text, std::string fontName, int size) : Content(text), _s
 	MeasureText();
 	auto imageName = std::string(text.substr(0, 30)) + std::to_string(_size);
 	_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_boundingBox.W), std::move(_boundingBox.H));
+	_image->SetImageColor({0, 0, 0, 255});
 	// TODO this shouldn't be 20.
 	_boundingBox.X = 20;
 	_boundingBox.Y = 20;
@@ -237,5 +238,6 @@ void Text::CreateSurfaceForLetter(std::string name, FT_Face fontFace, int r, int
 		sgLogWarn("Could not set, error %s;", SDL_GetError());
 	}
 	auto content = ContentRegistry::CreateContent<Image, SDL_Surface*>(name, std::move(surface));
+	// content->SetImageColor({255, 255, 255, 255});
 	content->LoadContent();
 }

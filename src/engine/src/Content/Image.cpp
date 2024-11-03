@@ -58,6 +58,7 @@ void Image::Load() {
 	switch (_imageType) {
 		case ImageType::Default: {
 			void *pngData = nullptr;
+			sgLogError("%s", _filePath.c_str());
 			SDL_Surface *s = loadPNG(_filePath.c_str(), &pngData);
 			if (!s) {
 				sgLogError("Could not load PNG properly, content not fully loaded");
@@ -73,9 +74,12 @@ void Image::Load() {
 			break;
 		}
 		case ImageType::RenderTarget: {
-			_image = graphics->CreateRenderTargetTexture(_width, _height);
+			_image = graphics->CreateRenderTargetTexture(_width, _height, _imageColor);
 			break;
 		}
+	}
+	if (_imageType != ImageType::RenderTarget) {
+		graphics->SetTextureColor(_image, _imageColor);
 	}
 	SDL_GetTextureSize(_image, &_width, &_height);
 }
@@ -110,4 +114,12 @@ void Image::DrawImageToImage(Image &src, RectangleF &srcRect, RectangleF &dstRec
 void Image::Draw(RectangleF &src, RectangleF &dst) {
 	auto graphics = Graphics::Instance();
 	graphics->DrawImage(*this, &src, &dst);
+}
+
+void Image::SetImageColor(Color colorToUse) {
+	_imageColor = colorToUse;
+	if (_isLoaded) {
+		auto graphics = Graphics::Instance();
+		graphics->SetTextureColor(_image, _imageColor);
+	}
 }

@@ -29,8 +29,8 @@ void UIWidget::ShowUiDebugWindow() {
 	for (auto &[key, value] : rootPanel->Children) {
 		if (value->WidgetType == (int)BuiltinWidgetTypes::Image) {
 			auto imageObject = std::dynamic_pointer_cast<ImageObject>(value);
-			std::string childX_label = "Child X##" + key;
-			std::string childY_label = "Child Y##" + key;
+			std::string childX_label = "Offset X##" + key;
+			std::string childY_label = "Offset Y##" + key;
 			std::string childWLabel = "Child W##" + key;
 			std::string childHLabel = "Child H##" + key;
 			std::string transLabel = "Child Transparency##" + key;

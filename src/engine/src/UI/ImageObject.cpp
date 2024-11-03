@@ -15,6 +15,9 @@ void ImageObject::OnDirty() {
 	Bounds.Y = Offset.Y + parentBoundsY;
 	ImagePtr->SetAlpha(Transparency);
 }
+ImageObject::ImageObject(Panel* parent) : UIObject(parent) {
+	WidgetType = (int)BuiltinWidgetTypes::Image;
+}
 
 ImageObject::ImageObject(Panel* parent, json& imageJson) : UIObject(parent) {
 	WidgetType = (int)BuiltinWidgetTypes::Image;

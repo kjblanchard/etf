@@ -41,7 +41,7 @@ rebuild:
 xrebuild:
 	@$(MAKE) CMAKE_GENERATOR=$(APPLE_GENERATOR) SYSTEM_PACKAGES=OFF clean configure build install package
 brebuild:
-	@$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) clean configure build install package
+	@$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) SYSTEM_PACKAGES=OFF clean configure build install package
 wrebuild:
 	$(MAKE) CMAKE_GENERATOR=$(WINDOWS_GENERATOR) PACKAGE_COMMAND=$(WINDOWS_PACKAGE_COMMAND) SYSTEM_PACKAGES=OFF configure build install package
 erebuild:

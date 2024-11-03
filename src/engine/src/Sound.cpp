@@ -15,7 +15,7 @@ void Sound::InitializeSound() {
 	Events::RegisterEventHandler(Events::BuiltinEvents.PlayBgmEvent, [this](int code, void* name, void*) {
 		auto nameStr = std::string((const char*)name);
 		LoadBgm(nameStr);
-		PlayBgm();
+		// PlayBgm();
 		SDL_free(name);
 	});
 	for (size_t i = 0; i < _totalSfxStreams; i++) {

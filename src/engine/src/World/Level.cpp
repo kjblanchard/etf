@@ -12,8 +12,6 @@
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
-// int SCREEN_WIDTH = 512;
-// int SCREEN_HEIGHT = 288;
 
 namespace Supergoon {
 extern std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap;
@@ -34,7 +32,6 @@ std::string Level::GetBgm() {
 		return "";
 	}
 	return std::get<std::string>(iterator->Value);
-	// return _mapData->Properties
 }
 
 Level::Level(const char *filename)
@@ -116,10 +113,6 @@ void Level::LoadNewLevel(std::string level) {
 	}
 	auto bgm = _currentLevel->GetBgm();
 	Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup(bgm.c_str()));
-	// auto sound = Sound::Instance();
-
-	// sound->LoadBgm(bgm);
-	// sound->PlayBgm();
 }
 
 void Level::LoadAllGameObjects() {
