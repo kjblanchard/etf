@@ -31,14 +31,11 @@ void Text::Draw() {
 	RectangleF d;
 	d.X = _boundingBox.X;
 	d.Y = _boundingBox.Y;
-	// Try setting to image size.
 	d.W = _boundingBox.W;
 	d.H = _boundingBox.H;
 	auto src = RectangleF();
+	// sgLogWarn("Drawing text to x:%f y:%f w:%f h:%f", d.X, d.Y, d.W, d.H);
 	_image->Draw(src, d);
-	// geImageDraw(t->Texture, NULL, &t->BoundingBox);
-	// geImageDraw(t->Texture, NULL, &d);
-	// graphics->DrawImage(*this, &src, &dst);
 }
 
 void Text::MeasureText() {
@@ -96,6 +93,7 @@ void Text::MeasureText() {
 		AddWordToLetterPoints(fontFace, _text.length(), currentWordLetters, penX, penY);
 		penX += currentWordLength;
 	}
+	sgLogWarn("Choosing between %d and %d", textSize.X, penX);
 	textSize.X = std::max(textSize.X, penX);
 	textSize.Y = penY - descenderInPixels;
 	if (textSize.Y > maxHeight) {

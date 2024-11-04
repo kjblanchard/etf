@@ -52,6 +52,7 @@ Level::Level(const char *filename)
 	gamestate.PlayerSpawnLocation = 0;
 	gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
 	gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
+	gamestate.Loading = true;
 	go->AddComponent<GameState>(gamestate);
 	go->AddComponent<CameraComponent>(camera);
 	AddGameObjectToLevel(go);

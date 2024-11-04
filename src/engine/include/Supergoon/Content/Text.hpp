@@ -30,11 +30,11 @@ class Text : public Content {
 	bool _wordWrap = false;
 	int _lettersToDraw;
 	int _currentLettersDrawn;
-	int _paddingL, _paddingR, _paddingT, _paddingB;
+	int _paddingL = 0, _paddingR = 0, _paddingT = 0, _paddingB = 0;
 	std::shared_ptr<Font> _font;
 	std::shared_ptr<Image> _image;
-	Point _textBounds;
-	Rectangle _boundingBox;
+	Point _textBounds = {0, 0};
+	Rectangle _boundingBox = {0, 0, 0, 0};
 	std::vector<Point> _letterPoints;
 };
 }  // namespace Supergoon
