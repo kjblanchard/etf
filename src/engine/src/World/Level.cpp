@@ -21,6 +21,7 @@ using namespace Supergoon;
 
 std::unique_ptr<Level> Level::_currentLevel = nullptr;
 std::function<void()> Level::LoadFunc = nullptr;
+bool Level::LoadLocation = 0;
 
 std::string Level::GetBgm() {
 	auto iterator = std::find_if(_mapData->Properties.begin(), _mapData->Properties.end(), [](TiledMap::TiledProperty &prop) {
@@ -50,7 +51,7 @@ Level::Level(const char *filename)
 	camera.Bounds.X = GetSize().X;
 	camera.Bounds.Y = GetSize().Y;
 	gamestate.CurrentLevel = this;
-	gamestate.PlayerSpawnLocation = 0;
+	gamestate.PlayerSpawnLocation = LoadLocation;
 	gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
 	gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
 	gamestate.Loading = false;

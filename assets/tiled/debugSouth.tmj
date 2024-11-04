@@ -86,7 +86,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":64,
+                 "width":56.5,
                  "x":0,
                  "y":0
                 }, 
@@ -97,8 +97,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":112,
-                 "x":128,
+                 "width":116,
+                 "x":117,
                  "y":0
                 }, 
                 {
@@ -108,8 +108,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":368,
-                 "x":112,
+                 "width":363,
+                 "x":117,
                  "y":256
                 }, 
                 {
@@ -213,7 +213,7 @@
                  "y":80
                 }, 
                 {
-                 "height":16,
+                 "height":9,
                  "id":4,
                  "name":"Exit0",
                  "properties":[
@@ -231,31 +231,8 @@
                  "type":"Exit",
                  "visible":true,
                  "width":48,
-                 "x":64,
-                 "y":0
-                }, 
-                {
-                 "height":16,
-                 "id":16,
-                 "name":"Bird",
-                 "properties":[
-                        {
-                         "name":"direction",
-                         "propertytype":"Direction",
-                         "type":"int",
-                         "value":2
-                        }, 
-                        {
-                         "name":"loadLocation",
-                         "type":"int",
-                         "value":1
-                        }],
-                 "rotation":0,
-                 "type":"Bird",
-                 "visible":true,
-                 "width":16,
-                 "x":304,
-                 "y":176
+                 "x":64.5,
+                 "y":1
                 }, 
                 {
                  "height":16,

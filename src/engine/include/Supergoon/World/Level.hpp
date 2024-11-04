@@ -29,6 +29,8 @@ class Level {
 	static std::function<void()> LoadFunc;
 	static void Reset();
 	static void Draw();
+	// Should we store this in a "gamestate" object somewhere?
+	static bool LoadLocation;
 	void LoadAllGameObjects();
 	void RestartLevel();
 	void CreateBackgroundImage();
@@ -53,7 +55,6 @@ class Level {
 	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;
 	static std::unique_ptr<Level> _currentLevel;
-	static bool _eventsInitialized;
 	friend class LevelWidget;
 };
 }  // namespace Supergoon

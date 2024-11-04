@@ -8,19 +8,22 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.9974999999999999,
+            "scale": 4,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 84.21052631578948,
-                "y": 33.08270676691728
+                "x": 139.625,
+                "y": 39
             }
         },
         "debugTown.tmj": {
-            "scale": 1.3343749999999999,
-            "selectedLayer": 4,
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 3,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 303.5128805620609,
-                "y": 143.88758782201407
+                "x": 212.8333333333333,
+                "y": 147.66666666666663
             }
         },
         "debugTownHome.tmj": {
