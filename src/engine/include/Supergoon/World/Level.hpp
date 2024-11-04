@@ -30,7 +30,7 @@ class Level {
 	static void Reset();
 	static void Draw();
 	// Should we store this in a "gamestate" object somewhere?
-	static bool LoadLocation;
+	static int LoadLocation;
 	void LoadAllGameObjects();
 	void RestartLevel();
 	void CreateBackgroundImage();

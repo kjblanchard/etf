@@ -6,32 +6,40 @@
     "fileStates": {
         "debugSouth.tmj": {
             "expandedObjectLayers": [
-                2
+                2,
+                5
             ],
-            "scale": 4,
+            "scale": 2,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 139.625,
-                "y": 39
+                "x": 154.75,
+                "y": 131
             }
         },
         "debugTown.tmj": {
             "expandedObjectLayers": [
                 5
             ],
-            "scale": 3,
-            "selectedLayer": 5,
+            "scale": 4,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 212.8333333333333,
-                "y": 147.66666666666663
+                "x": 414.625,
+                "y": 207.25
             }
         },
         "debugTownHome.tmj": {
+            "expandedGroupLayers": [
+                4
+            ],
+            "expandedObjectLayers": [
+                6,
+                5
+            ],
             "scale": 3.169140625,
-            "selectedLayer": 5,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 460.21940096142,
-                "y": 230.03081474177245
+                "x": 78.09688154813261,
+                "y": 145.46530260076423
             }
         },
         "house.tsj": {

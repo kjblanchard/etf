@@ -25,6 +25,7 @@ void UpdateCamera() {
 	}
 	auto pl = cc.FollowTarget;
 	if (!pl) {
+		sgLogError(" no follow boi");
 		gc.CurrentLevel->cameraX = 0;
 		gc.CurrentLevel->cameraY = 0;
 	}

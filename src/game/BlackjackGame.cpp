@@ -69,7 +69,7 @@ void BlackjackGame::Start() {
 	if (!skipLogos) {
 		playLogos();
 	} else {
-		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTown");
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTownHome");
 	}
 }
 

@@ -15,7 +15,7 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	playerAnimation.AnimationSpeed = 1.0;
 	playerComponent.PlayerNum = 0;
 	playerComponent.Direction = Directions::South;
-	playerComponent.Body = RectangleF{4, 7, 16, 27};
+	playerComponent.Body = RectangleF{4, 9, 16, 22};
 	playerLocation.Location.X = playerSpawn.Location.X;
 	playerLocation.Location.Y = playerSpawn.Location.Y;
 	go->AddComponent<AnimationComponent>(playerAnimation);
@@ -114,8 +114,10 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 		if (playerBodyRect.IsOverlap(&pe.BoundingBox)) {
 			// Play transition sound
 			stateComponent.PlayerSpawnLocation = pe.SpawnLocationId;
+			sgLogWarn("Calling new level fade");
 			Level::LoadNewLevelFade(pe.NextMap);
 			Level::LoadLocation = pe.SpawnLocationId;
+			sgLogWarn("Level load location is %d", Level::LoadLocation);
 			stateComponent.Loading = true;
 			exited = true;
 		}

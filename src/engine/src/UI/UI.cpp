@@ -34,8 +34,8 @@ Panel* UI::Initialize() {
 	fadePanel->Offset.Y = 0;
 	auto fadeInAnimator = std::make_shared<UIObjectAnimatorBase>("fadein");
 	auto fadeOutAnimator = std::make_shared<UIObjectAnimatorBase>("fadeout");
-	auto fadeOutTween = new Tween(0, 255, 0.5, &fadePanel->Transparency, Supergoon::Easings::Linear);
-	auto fadeInTween = new Tween(255, 0, 0.5, &fadePanel->Transparency, Supergoon::Easings::Linear);
+	auto fadeOutTween = new Tween(0, 255, 0.3, &fadePanel->Transparency, Supergoon::Easings::Linear);
+	auto fadeInTween = new Tween(255, 0, 0.3, &fadePanel->Transparency, Supergoon::Easings::Linear);
 	fadeInAnimator->AddUIObjectTween(fadeInTween, fadePanel.get());
 	fadeOutAnimator->AddUIObjectTween(fadeOutTween, fadePanel.get());
 	Animators.push_back(fadeInAnimator);

@@ -21,7 +21,7 @@ using namespace Supergoon;
 
 std::unique_ptr<Level> Level::_currentLevel = nullptr;
 std::function<void()> Level::LoadFunc = nullptr;
-bool Level::LoadLocation = 0;
+int Level::LoadLocation = 0;
 
 std::string Level::GetBgm() {
 	auto iterator = std::find_if(_mapData->Properties.begin(), _mapData->Properties.end(), [](TiledMap::TiledProperty &prop) {
@@ -50,7 +50,10 @@ Level::Level(const char *filename)
 	auto camera = CameraComponent();
 	camera.Bounds.X = GetSize().X;
 	camera.Bounds.Y = GetSize().Y;
+	camera.Box.X = 0;
+	camera.Box.Y = 0;
 	gamestate.CurrentLevel = this;
+	sgLogWarn("Level load location when making level is %d", Level::LoadLocation);
 	gamestate.PlayerSpawnLocation = LoadLocation;
 	gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
 	gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
@@ -159,6 +162,7 @@ void Level::CreateBackgroundImage() {
 		return;
 	}
 	_background = ContentRegistry::CreateContent<Image, int, int>(_name, _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight);
+	_background->SetImageColor(Color(0, 0, 0, 255));
 	ContentRegistry::LoadAllContent();
 	for (auto &group : _mapData->Groups) {
 		if (group.Name != "background") {
@@ -247,8 +251,8 @@ void Level::Draw() {
 		auto d = RectangleF();
 		d.X = 0;
 		d.Y = 0;
-		d.W = screenWidth;
-		d.H = screenHeight;
+		d.W = s.W;
+		d.H = s.H;
 		_currentLevel->_background->Draw(s, d);
 	}
 }
