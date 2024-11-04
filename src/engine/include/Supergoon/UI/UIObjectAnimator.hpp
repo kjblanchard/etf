@@ -19,11 +19,12 @@ struct UIObjectAnimatorBase {
 	void Play();
 	void Update();
 	void Stop();
+	inline bool IsPlaying() { return _playing; }
 	std::string Name;
 	std::unique_ptr<Sequence> SequenceToPlay;
 
    private:
-	bool _playing;
+	bool _playing = false;
 };
 
 }  // namespace Supergoon

@@ -10,6 +10,8 @@
 using namespace Supergoon;
 using json = nlohmann::json;
 Panel* UI::UIInstance = nullptr;
+UIObjectAnimatorBase* UI::_fadeInAnimator = nullptr;
+UIObjectAnimatorBase* UI::_fadeOutAnimator = nullptr;
 std::vector<std::shared_ptr<UIObjectAnimatorBase>> UI::Animators;
 
 Panel* UI::Initialize() {
@@ -30,16 +32,17 @@ Panel* UI::Initialize() {
 	fadePanel->Bounds = RectangleF{0, 0, (float)graphics->LogicalWidth(), (float)graphics->LogicalHeight()};
 	fadePanel->Offset.X = 0;
 	fadePanel->Offset.Y = 0;
-	// auto fadeInAnimator = std::make_shared<UIObjectAnimatorBase>("fadein");
+	auto fadeInAnimator = std::make_shared<UIObjectAnimatorBase>("fadein");
 	auto fadeOutAnimator = std::make_shared<UIObjectAnimatorBase>("fadeout");
-	// auto fadeInTween = new Tween(0, 255, 3.0, &fadePanel->Transparency, Supergoon::Easings::Linear);
-	auto fadeOutTween = new Tween(255, 0, 1.0, &fadePanel->Transparency, Supergoon::Easings::Linear);
-	// fadeInAnimator->AddUIObjectTween(fadeInTween, child.get());
+	auto fadeOutTween = new Tween(0, 255, 3.0, &fadePanel->Transparency, Supergoon::Easings::Linear);
+	auto fadeInTween = new Tween(255, 0, 1.0, &fadePanel->Transparency, Supergoon::Easings::Linear);
+	fadeInAnimator->AddUIObjectTween(fadeInTween, fadePanel.get());
 	fadeOutAnimator->AddUIObjectTween(fadeOutTween, fadePanel.get());
-	// Animators.push_back(fadeInAnimator);
+	Animators.push_back(fadeInAnimator);
 	Animators.push_back(fadeOutAnimator);
+	_fadeOutAnimator = fadeOutAnimator.get();
+	_fadeInAnimator = fadeInAnimator.get();
 	rootPanel->Children[name] = fadePanel;
-	fadeOutAnimator->Play();
 	return rootPanel;
 }
 

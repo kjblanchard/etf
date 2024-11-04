@@ -28,6 +28,22 @@ void UIWidget::ShowUiDebugWindow() {
 
 	if (ImGui::CollapsingHeader("UI Animators")) {
 		for (auto &&animator : UI::Animators) {
+			if (ImGui::TreeNode(animator->Name.c_str())) {
+				auto name = std::string("Play ##") + animator->Name;
+				auto valueText = animator->IsPlaying() ? "True" : "False";
+				// auto playingText = std::string("Is Playing ") + valueText + "## " + animator->Name;
+				auto playingText = std::string("Is Playing ") + valueText;
+				ImGui::Text(playingText.c_str());
+				if (ImGui::Button(name.c_str())) {
+					animator->Play();
+				}
+				ImGui::SameLine();
+				auto stop = std::string("Stop ##") + animator->Name;
+				if (ImGui::Button(stop.c_str())) {
+					animator->Stop();
+				}
+				ImGui::TreePop();
+			}
 		}
 	}
 	if (ImGui::CollapsingHeader("UI Elements")) {

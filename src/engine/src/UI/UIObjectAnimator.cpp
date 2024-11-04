@@ -21,9 +21,15 @@ void UIObjectAnimatorBase::AddUIObjectTween(Tween* tween, UIObject* obj) {
 
 void UIObjectAnimatorBase::Play() {
 	SequenceToPlay->Restart();
+	_playing = true;
 }
 void UIObjectAnimatorBase::Update() {
-	SequenceToPlay->Update();
+	if (_playing) {
+		SequenceToPlay->Update();
+		if (SequenceToPlay->IsComplete()) {
+			_playing = false;
+		}
+	}
 }
 void UIObjectAnimatorBase::Stop() {
 	_playing = false;

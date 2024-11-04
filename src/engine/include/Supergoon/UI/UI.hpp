@@ -17,5 +17,11 @@ class UI {
 	static void Reset();
 	static std::vector<std::shared_ptr<UIObjectAnimatorBase>> Animators;
 	static Panel* UIInstance;
+	inline static void FadeIn() { _fadeInAnimator->Play(); }
+	inline static void FadeOut() { _fadeOutAnimator->Play(); }
+
+   private:
+	static UIObjectAnimatorBase* _fadeInAnimator;
+	static UIObjectAnimatorBase* _fadeOutAnimator;
 };
 }  // namespace Supergoon
