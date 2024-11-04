@@ -3,6 +3,7 @@
 
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Game.hpp>
+#include <Supergoon/UI/UI.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
 #ifdef imgui
@@ -18,6 +19,11 @@ Events::Events(Game* game) {
 	BuiltinEvents.LevelChangeEvent = RegisterEvent();
 	BuiltinEvents.ResetGameEvent = RegisterEvent();
 	BuiltinEvents.PlayBgmEvent = RegisterEvent();
+	BuiltinEvents.UiFadeInStart = RegisterEvent();
+	BuiltinEvents.UiFadeInEnd = RegisterEvent();
+	BuiltinEvents.UiFadeOutStart = RegisterEvent();
+	BuiltinEvents.UiFadeOutEnd = RegisterEvent();
+
 	RegisterEventHandler(BuiltinEvents.ImGuiFocusedEvent, [this](int code, void*, void*) {
 		this->_isGameFocused = code;
 	});
@@ -25,6 +31,7 @@ Events::Events(Game* game) {
 	RegisterEventHandler(BuiltinEvents.ResetGameEvent, [game](int, void*, void*) {
 		game->InternalReset();
 	});
+
 	RegisterEventHandler(BuiltinEvents.LevelChangeEvent, [](int, void* levelName, void*) {
 		auto level = (const char*)levelName;
 		Level::LoadNewLevel(level);

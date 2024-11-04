@@ -10,6 +10,7 @@
 #include <Supergoon/ECS/Components/SolidComponent.hpp>
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
+#include <Supergoon/UI/UI.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
 
@@ -52,7 +53,7 @@ Level::Level(const char *filename)
 	gamestate.PlayerSpawnLocation = 0;
 	gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
 	gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
-	gamestate.Loading = true;
+	gamestate.Loading = false;
 	go->AddComponent<GameState>(gamestate);
 	go->AddComponent<CameraComponent>(camera);
 	AddGameObjectToLevel(go);
@@ -107,7 +108,18 @@ Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	return nullptr;
 }
 
+void Level::LoadNewLevelFade(std::string level) {
+	UI::SetFadeOutEndFunc([level]() {
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)level.c_str());
+		UI::FadeIn();
+	});
+	UI::FadeOut();
+	// Update gamestate object
+}
+
 void Level::LoadNewLevel(std::string level) {
+	// If we should fade, wait until we fade out to load the level properly
+
 	_currentLevel = std::make_unique<Level>(level.c_str());
 	if (LoadFunc) {
 		LoadFunc();
@@ -128,6 +140,7 @@ void Level::LoadAllGameObjects() {
 		}
 		_gameObjects.push_back(go);
 	}
+	UI::SetFadeOutEndFunc(nullptr);
 }
 
 void Level::RestartLevel() {

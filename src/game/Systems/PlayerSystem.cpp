@@ -1,4 +1,5 @@
 #include <Components/PlayerComponent.hpp>
+#include <Components/PlayerExitComponent.hpp>
 #include <Components/PlayerSpawnComponent.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Systems/PlayerSystem.hpp>
@@ -24,6 +25,15 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 }
 
 static void playerInput(GameObject go, PlayerComponent& player) {
+	auto state = GameObject::GetGameObjectWithComponents<GameState>();
+	auto& stateComponent = state->GetComponent<GameState>();
+	if (!state.has_value()) {
+		sgLogError("No gamestate component somehow");
+		return;
+	}
+	if (stateComponent.Loading) {
+		return;
+	}
 	auto vel = Vector2();
 	auto& anim = go.GetComponent<AnimationComponent>();
 	auto& loc = go.GetComponent<LocationComponent>();
@@ -92,6 +102,26 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 		auto letter = GetLetterForDirection(newDirection);
 		anim.Animation->PlayAnimation("walk" + std::string(letter));
 		player.Direction = newDirection;
+	}
+
+	// Did we exit?
+	auto playerBodyRect = RectangleF{loc.Location.X + player.Body.X, loc.Location.Y + player.Body.Y, player.Body.W, player.Body.H};
+	auto exited = false;
+	GameObject::ForEach<PlayerExitComponent>([&](GameObject, PlayerExitComponent pe) {
+		if (exited) {
+			return;
+		}
+		if (playerBodyRect.IsOverlap(&pe.BoundingBox)) {
+			// Play transition sound
+			// auto& stateComponent = state->GetComponent<GameState>();
+			stateComponent.PlayerSpawnLocation = pe.SpawnLocationId;
+			Level::LoadNewLevelFade(pe.NextMap);
+			stateComponent.Loading = true;
+			exited = true;
+		}
+	});
+	if (exited) {
+		return;
 	}
 }
 

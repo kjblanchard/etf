@@ -1,4 +1,5 @@
 #include <Components/PlayerComponent.hpp>
+#include <Components/PlayerExitComponent.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Systems/DebugDrawSystem.hpp>
 using namespace Supergoon;
@@ -27,10 +28,23 @@ static void drawStaticBodyDebugBoxes(GameObject, LocationComponent& location, So
 	auto graphics = Graphics::Instance();
 	graphics->DrawRect(dst, Color{255, 0, 0, 255});
 }
+static void drawPlayerExitDebugBoxes(GameObject, PlayerExitComponent& pe) {
+	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+	auto& cc = c->GetComponent<CameraComponent>();
 
+	float adjustedX = pe.BoundingBox.X - cc.Box.X;
+	float adjustedY = pe.BoundingBox.Y - cc.Box.Y;
+	auto dst = RectangleF{adjustedX, adjustedY, (float)pe.BoundingBox.W, (float)pe.BoundingBox.H};
+	auto graphics = Graphics::Instance();
+	graphics->DrawRect(dst, Color{0, 255, 0, 255});
+}
+
+void Supergoon::DrawDebugBoxesPlayer() {
+	GameObject::ForEach<LocationComponent, PlayerComponent>(drawPlayerBodyDebugBoxes);
+}
 void Supergoon::DrawDebugBoxesSolid() {
 	GameObject::ForEach<LocationComponent, SolidComponent>(drawStaticBodyDebugBoxes);
 }
-void Supergoon::DrawDebugBoxesPlayer() {
-	GameObject::ForEach<LocationComponent, PlayerComponent>(drawPlayerBodyDebugBoxes);
+void Supergoon::DrawDebugBoxesPlayerExit() {
+	GameObject::ForEach<PlayerExitComponent>(drawPlayerExitDebugBoxes);
 }

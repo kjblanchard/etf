@@ -34,8 +34,8 @@ Panel* UI::Initialize() {
 	fadePanel->Offset.Y = 0;
 	auto fadeInAnimator = std::make_shared<UIObjectAnimatorBase>("fadein");
 	auto fadeOutAnimator = std::make_shared<UIObjectAnimatorBase>("fadeout");
-	auto fadeOutTween = new Tween(0, 255, 3.0, &fadePanel->Transparency, Supergoon::Easings::Linear);
-	auto fadeInTween = new Tween(255, 0, 1.0, &fadePanel->Transparency, Supergoon::Easings::Linear);
+	auto fadeOutTween = new Tween(0, 255, 0.5, &fadePanel->Transparency, Supergoon::Easings::Linear);
+	auto fadeInTween = new Tween(255, 0, 0.5, &fadePanel->Transparency, Supergoon::Easings::Linear);
 	fadeInAnimator->AddUIObjectTween(fadeInTween, fadePanel.get());
 	fadeOutAnimator->AddUIObjectTween(fadeOutTween, fadePanel.get());
 	Animators.push_back(fadeInAnimator);
@@ -78,5 +78,17 @@ void UI::LoadUIFromFile(std::string filename, Panel* parentPanel) {
 			auto child = std::make_shared<ImageObject>(parentPanel, jsonChild);
 			parentPanel->Children[name] = child;
 		}
+	}
+}
+void UI::SetFadeOutEndFunc(std::function<void()> func) {
+	auto lastTween = _fadeOutAnimator->SequenceToPlay->Tweens.back();
+	if (lastTween) {
+		lastTween->EndFunc = func;
+	}
+}
+void UI::SetFadeInStartFunc(std::function<void()> func) {
+	auto lastTween = _fadeInAnimator->SequenceToPlay->Tweens.back();
+	if (lastTween) {
+		lastTween->StartFunc = func;
 	}
 }

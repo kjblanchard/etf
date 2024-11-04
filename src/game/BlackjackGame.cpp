@@ -1,5 +1,6 @@
 
 #include <Debug/PlayerCollider.hpp>
+#include <Entities/PlayerExit.hpp>
 #include <Entities/PlayerStart.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <SupergoonEngine/nlohmann/json.hpp>
@@ -14,6 +15,9 @@ namespace Supergoon {
 std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap = {
 	{"Start", [](TiledMap::TiledObject &object) {
 		 return NewPlayerSpawn(object);
+	 }},
+	{"Exit", [](TiledMap::TiledObject &object) {
+		 return NewPlayerExit(object);
 	 }},
 };
 }
@@ -99,6 +103,9 @@ void BlackjackGame::Draw() {
 	PlayerWidget::ShowPlayerColliderWindow();
 	if (PlayerWidget::ShowPlayerColliderDebugBox) {
 		DrawDebugBoxesPlayer();
+	}
+	if (PlayerWidget::ShowPlayerExitDebugBox) {
+		DrawDebugBoxesPlayerExit();
 	}
 #endif
 }

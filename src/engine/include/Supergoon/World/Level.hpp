@@ -20,6 +20,7 @@ class Level {
 	 */
 	Level(const char *filename);
 	~Level();
+	static void LoadNewLevelFade(std::string level);
 	static void LoadNewLevel(std::string level);
 	std::string GetBgm();
 	const inline std::string &GetName() const { return _name; }
@@ -52,6 +53,7 @@ class Level {
 	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;
 	static std::unique_ptr<Level> _currentLevel;
+	static bool _eventsInitialized;
 	friend class LevelWidget;
 };
 }  // namespace Supergoon

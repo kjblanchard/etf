@@ -16,6 +16,10 @@ struct UIObjectAnimatorBase {
 	// Create a Animator that handles custom sequences one by one.
 	UIObjectAnimatorBase(std::string name);
 	void AddUIObjectTween(Tween* tween, UIObject* obj);
+	inline void Restart() {
+		SequenceToPlay->Restart();
+		Play();
+	}
 	// Start Playing this animator
 	inline void Play() { _playing = true; };
 	// Pause the animator
