@@ -33,7 +33,11 @@ void UIWidget::ShowUiDebugWindow() {
 				auto valueText = animator->IsPlaying() ? "True" : "False";
 				// auto playingText = std::string("Is Playing ") + valueText + "## " + animator->Name;
 				auto playingText = std::string("Is Playing ") + valueText;
-				ImGui::Text(playingText.c_str());
+				ImGui::Text("%s", playingText.c_str());
+				ImGui::SameLine();
+				auto percentText = std::string("Percent: ") + std::to_string(animator->SequenceToPlay->Percent());
+				ImGui::Text("%s", percentText.c_str());
+
 				if (ImGui::Button(name.c_str())) {
 					animator->Play();
 				}
@@ -41,6 +45,11 @@ void UIWidget::ShowUiDebugWindow() {
 				auto stop = std::string("Stop ##") + animator->Name;
 				if (ImGui::Button(stop.c_str())) {
 					animator->Stop();
+				}
+				ImGui::SameLine();
+				auto pause = std::string("Pause ##") + animator->Name;
+				if (ImGui::Button(pause.c_str())) {
+					animator->Pause();
 				}
 				ImGui::TreePop();
 			}

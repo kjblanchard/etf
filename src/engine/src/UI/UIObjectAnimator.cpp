@@ -19,10 +19,6 @@ void UIObjectAnimatorBase::AddUIObjectTween(Tween* tween, UIObject* obj) {
 	SequenceToPlay->Tweens.push_back(std::shared_ptr<Tween>(tween));
 }
 
-void UIObjectAnimatorBase::Play() {
-	SequenceToPlay->Restart();
-	_playing = true;
-}
 void UIObjectAnimatorBase::Update() {
 	if (_playing) {
 		SequenceToPlay->Update();
@@ -31,6 +27,8 @@ void UIObjectAnimatorBase::Update() {
 		}
 	}
 }
+
 void UIObjectAnimatorBase::Stop() {
 	_playing = false;
+	SequenceToPlay->Restart();
 }
