@@ -5,7 +5,7 @@
 #include <Systems/PlayerSystem.hpp>
 using namespace Supergoon;
 
-static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState& gameState) {
+static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn) {
 	auto go = new GameObject();
 	auto playerLocation = LocationComponent();
 	auto playerComponent = PlayerComponent();
@@ -140,7 +140,7 @@ static void loadPlayerEach(GameObject go, PlayerSpawnComponent& ps) {
 		return;
 	}
 
-	loadPlayer(go, ps, stateComponent);
+	loadPlayer(go, ps);
 }
 
 void Supergoon::StartPlayers() {
