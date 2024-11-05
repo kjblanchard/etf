@@ -26,8 +26,8 @@ void UpdateCamera() {
 	auto pl = cc.FollowTarget;
 	if (!pl) {
 		sgLogError(" no follow boi");
-		gc.CurrentLevel->cameraX = 0;
-		gc.CurrentLevel->cameraY = 0;
+		Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
+		return;
 	}
 	cc.Box.X = pl->Location.X - (gc.WindowWidth / 2);
 	cc.Box.Y = pl->Location.Y - (gc.WindowHeight / 2);
@@ -44,7 +44,8 @@ void UpdateCamera() {
 
 	// gc.CurrentLevel->cameraX = (int)cc.Box.X;
 	// gc.CurrentLevel->cameraY = (int)cc.Box.Y;
-	gc.CurrentLevel->cameraX = cc.Box.X;
-	gc.CurrentLevel->cameraY = cc.Box.Y;
+	Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
+	// gc.CurrentLevel->cameraX = cc.Box.X;
+	// gc.CurrentLevel->cameraY = cc.Box.Y;
 }
 }  // namespace Supergoon

@@ -6,6 +6,6 @@ struct GameState {
 	int WindowHeight;
 	int WindowWidth;
 	bool Loading;
-	Level* CurrentLevel;
+	// Level* CurrentLevel;
 };
 }  // namespace Supergoon

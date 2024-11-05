@@ -23,6 +23,8 @@ Events::Events(Game* game) {
 	BuiltinEvents.UiFadeInEnd = RegisterEvent();
 	BuiltinEvents.UiFadeOutStart = RegisterEvent();
 	BuiltinEvents.UiFadeOutEnd = RegisterEvent();
+	BuiltinEvents.GameObjectAdd = RegisterEvent();
+	BuiltinEvents.CameraUpdate = RegisterEvent();
 
 	RegisterEventHandler(BuiltinEvents.ImGuiFocusedEvent, [this](int code, void*, void*) {
 		this->_isGameFocused = code;
@@ -40,6 +42,17 @@ Events::Events(Game* game) {
 			Level::LoadNewLevel(level);
 		}
 		SDL_free(levelName);
+	});
+	RegisterEventHandler(BuiltinEvents.GameObjectAdd, [](int, void* gameObject, void*) {
+		assert((GameObject*)gameObject);
+		Level::_currentLevel->AddGameObjectToLevel((GameObject*)gameObject);
+	});
+	RegisterEventHandler(BuiltinEvents.CameraUpdate, [](int, void* newLoc, void*) {
+		assert((RectangleF*)newLoc);
+		auto rect = (RectangleF*)newLoc;
+		Level::_currentLevel->cameraX = rect->X;
+		Level::_currentLevel->cameraY = rect->Y;
+		// Level::_currentLevel->AddGameObjectToLevel((GameObject*)gameObject);
 	});
 }
 

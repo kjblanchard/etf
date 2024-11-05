@@ -21,7 +21,7 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	go->AddComponent<AnimationComponent>(playerAnimation);
 	go->AddComponent<LocationComponent>(playerLocation);
 	go->AddComponent<PlayerComponent>(playerComponent);
-	gameState.CurrentLevel->AddGameObjectToLevel(go);
+	Events::PushEvent(Events::BuiltinEvents.GameObjectAdd, true, (void*)go);
 }
 static void startPlayer(GameObject, PlayerComponent& playerComponent, AnimationComponent& animComponent) {
 	auto letter = GetLetterForDirection(playerComponent.Direction);

@@ -49,7 +49,7 @@ Level::Level(const char *filename)
 		auto gsGo = new GameObject();
 		auto gamestate = GameState();
 		auto keepalive = KeepAliveComponent();
-		gamestate.CurrentLevel = this;
+		// gamestate.CurrentLevel = this;
 		gamestate.PlayerSpawnLocation = 0;
 		gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
 		gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
@@ -58,7 +58,7 @@ Level::Level(const char *filename)
 		gsGo->AddComponent<KeepAliveComponent>(keepalive);
 		AddGameObjectToLevel(gsGo);
 	} else {
-		gamestate->CurrentLevel = this;
+		// gamestate->CurrentLevel = this;
 	}
 	auto camGo = new GameObject();
 	auto camera = CameraComponent();

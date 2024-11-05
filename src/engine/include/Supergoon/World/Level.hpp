@@ -23,17 +23,15 @@ class Level {
 	std::string GetBgm();
 	const inline std::string &GetName() const { return _name; }
 	inline Point GetSize() { return Point{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
-	inline void AddGameObjectToLevel(GameObject *g) { _gameObjects.push_back(g); }
 	static std::function<void()> LoadFunc;
 	static void Reset();
 	static void Draw();
 	void LoadAllGameObjects();
 	void RestartLevel();
 	void CreateBackgroundImage();
-	float cameraX = 0;
-	float cameraY = 0;
 
    private:
+	inline void AddGameObjectToLevel(GameObject *g) { _gameObjects.push_back(g); }
 	// Loads a new level with a fade, for screen transitions.
 	static void LoadNewLevelFade(std::string level);
 	static void LoadNewLevel(std::string level);
@@ -56,5 +54,8 @@ class Level {
 	static std::unique_ptr<Level> _currentLevel;
 	friend class LevelWidget;
 	friend class Events;
+	// TODO Why are camerax and y here?
+	float cameraX = 0;
+	float cameraY = 0;
 };
 }  // namespace Supergoon
