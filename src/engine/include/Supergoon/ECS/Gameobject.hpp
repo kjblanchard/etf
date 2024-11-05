@@ -26,6 +26,7 @@ class GameObject {
 	template <typename... Components>
 	static std::optional<GameObject> GetGameObjectWithComponents();
 	static void ClearGameObjects();
+	static int NumberGameObjects();
 
    private:
 	static entt::registry _registry;

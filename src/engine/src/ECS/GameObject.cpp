@@ -16,3 +16,12 @@ GameObject::GameObject() {
 void GameObject::ClearGameObjects() {
 	_registry.clear();
 }
+
+int GameObject::NumberGameObjects() {
+	auto count = 0;
+	auto view = _registry.view<entt::entity>();
+	for (auto &&i : view) {
+		count++;
+	}
+	return count;
+}
