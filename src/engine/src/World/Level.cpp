@@ -197,7 +197,7 @@ void Level::CreateBackgroundImage() {
 		return;
 	}
 	_background = ContentRegistry::CreateContent<Image, int, int>(_name, _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight);
-	_background->SetImageColor(Color(0, 0, 0, 255));
+	_background->SetImageColor(Color{0, 0, 0, 255});
 	ContentRegistry::LoadAllContent();
 	for (auto &group : _mapData->Groups) {
 		if (group.Name != "background") {
