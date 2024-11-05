@@ -5,7 +5,7 @@
 #include <Supergoon/Content/Sfx.hpp>
 #include <Supergoon/Game.hpp>
 #include <Supergoon/Sound.hpp>
-#include <Supergoon/Widgets/Sound.hpp>
+#include <Supergoon/Widgets/SoundWidget.hpp>
 #include <regex>
 #include <string>
 
@@ -48,7 +48,7 @@ static void GetFiles() {
 	SDL_free(sfxFiles);
 }
 
-void SoundWidgets::ShowSoundDebugWindow() {
+void SoundWidget::ShowSoundDebugWindow() {
 	static bool p_open = true;
 	static bool no_titlebar = false;
 	static bool no_scrollbar = false;

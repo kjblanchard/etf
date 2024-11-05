@@ -79,6 +79,11 @@ static void playLogos() {
 
 void BlackjackGame::Start() {
 	Level::LoadFunc = loadLevel;
+	auto muted = configData["mute"];
+	if (muted) {
+		Sound::Instance()->SetGlobalBgmVolume(0);
+		Sound::Instance()->SetGlobalSfxVolume(0);
+	}
 	auto skipLogos = configData["skipLogos"];
 	if (!skipLogos) {
 		playLogos();

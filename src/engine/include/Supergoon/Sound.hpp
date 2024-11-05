@@ -2,8 +2,8 @@
 #include <SupergoonEngine/Stream.h>
 
 #include <Supergoon/Content/Sfx.hpp>
-#include <queue>
 #include <memory>
+#include <queue>
 #include <string>
 typedef struct sgBgm sgBgm;
 typedef struct sgSfx sgSfx;
@@ -34,6 +34,7 @@ class Sound {
 	void SetPlayingBgmVolume(float volume);
 	//  Sets the global volume multiplier for bgm, 0 - 1.0f
 	void SetGlobalBgmVolume(float volume);
+	inline void SetGlobalSfxVolume(float volume) { _globalSfxVolume = volume; };
 	void PlaySfx(Sfx* sfx, float volume = 1.0);
 	static inline Sound* Instance() { return _instance; }
 
@@ -44,6 +45,7 @@ class Sound {
 	void UpdatePlayingBgmVolume();
 	const size_t _totalSfxStreams = 4;
 	float _globalBgmVolume = 1.0f;
+	float _globalSfxVolume = 1.0f;
 	float _playingBgmVolume = 0;
 	std::vector<std::unique_ptr<sgStream>> _sfxStreams;
 	std::vector<sgStream*> _playingStreams;

@@ -35,7 +35,7 @@ if(imgui)
     message(STATUS "ImGui is enabled, adding ImGui-related files.")
     list(APPEND SRC_FILES
         src/Widgets/Widgets.cpp
-        src/Widgets/Sound.cpp
+        src/Widgets/SoundWidget.cpp
         src/Widgets/Content.cpp
         src/Widgets/Game.cpp
         src/Widgets/UIWidget.cpp

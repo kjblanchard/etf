@@ -143,7 +143,7 @@ void Sound::PlaySfx(Sfx* sfx, float volume) {
 		return;
 	}
 	auto stream = _usableSfxStreams.front();
-	sfx->SgSfx()->Volume = volume;
+	sfx->SgSfx()->Volume = volume * _globalSfxVolume;
 	sgSfxPlay(sfx->SgSfx(), stream);
 	_playingStreams.push_back(stream);
 	_usableSfxStreams.pop();
