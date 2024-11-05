@@ -56,5 +56,6 @@ class Sound {
 	Tween* _bgmTween = nullptr;
 	static Sound* _instance;
 	friend class Game;
+	friend class SoundWidget;
 };
 }  // namespace Supergoon
