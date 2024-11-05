@@ -54,8 +54,9 @@ class Level {
 	static std::unique_ptr<Level> _currentLevel;
 	friend class LevelWidget;
 	friend class Events;
-	// TODO Why are camerax and y here?
-	float cameraX = 0;
-	float cameraY = 0;
+	// float cameraX = 0;
+	// float cameraY = 0;
+	int cameraX = 0;
+	int cameraY = 0;
 };
 }  // namespace Supergoon

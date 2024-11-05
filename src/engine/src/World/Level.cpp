@@ -53,6 +53,7 @@ Level::Level(const char *filename)
 		gamestate.PlayerSpawnLocation = 0;
 		gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
 		gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
+		gamestate.CameraFollowTarget = true;
 		gamestate.Loading = false;
 		gsGo->AddComponent<GameState>(gamestate);
 		gsGo->AddComponent<KeepAliveComponent>(keepalive);

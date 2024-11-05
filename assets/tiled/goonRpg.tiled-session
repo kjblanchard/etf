@@ -21,6 +21,7 @@
         },
         "debugTown.tmj": {
             "expandedObjectLayers": [
+                3,
                 5
             ],
             "scale": 4,
@@ -39,10 +40,10 @@
                 5
             ],
             "scale": 3.169140625,
-            "selectedLayer": 4,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 78.09688154813261,
-                "y": 145.46530260076423
+                "x": 55.06224577838037,
+                "y": 145.1497596450142
             }
         },
         "house.tsj": {

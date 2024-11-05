@@ -114,6 +114,11 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 		}
 		if (playerBodyRect.IsOverlap(&pe.BoundingBox)) {
 			stateComponent.PlayerSpawnLocation = pe.SpawnLocationId;
+			// TODO should we make this an event?
+			auto sound = Sound::Instance();
+			auto sfx = ContentRegistry::CreateContent<Sfx>("transition2");
+			ContentRegistry::LoadContent(*sfx);
+			sound->PlaySfx(sfx.get(), 0.3f);
 			Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, true, (void*)strdup((pe.NextMap.c_str())));
 			stateComponent.Loading = true;
 			exited = true;

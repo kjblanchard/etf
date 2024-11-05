@@ -15,7 +15,7 @@ void Sound::InitializeSound() {
 	Events::RegisterEventHandler(Events::BuiltinEvents.PlayBgmEvent, [this](int code, void* name, void*) {
 		auto nameStr = std::string((const char*)name);
 		LoadBgm(nameStr);
-		// PlayBgm();
+		PlayBgm();
 		SDL_free(name);
 	});
 	for (size_t i = 0; i < _totalSfxStreams; i++) {
@@ -138,12 +138,13 @@ void Sound::CheckForStaleSfxStreams() {
 	}
 }
 
-void Sound::PlaySfx(Sfx* sfx, float) {
+void Sound::PlaySfx(Sfx* sfx, float volume) {
 	if (_usableSfxStreams.empty()) {
 		sgLogWarn("No SFX buffers available to play sound %s\n", sfx->Filepath().c_str());
 		return;
 	}
 	auto stream = _usableSfxStreams.front();
+	sfx->SgSfx()->Volume = volume;
 	sgSfxPlay(sfx->SgSfx(), stream);
 	_playingStreams.push_back(stream);
 	_usableSfxStreams.pop();

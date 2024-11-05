@@ -20,6 +20,9 @@ void UpdateCamera() {
 	}
 	auto& cc = c->GetComponent<CameraComponent>();
 	auto& gc = g->GetComponent<GameState>();
+	if (!gc.CameraFollowTarget) {
+		return;
+	}
 	if (!cc.FollowTarget) {
 		getFollowTarget(cc);
 	}
@@ -29,8 +32,8 @@ void UpdateCamera() {
 		Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
 		return;
 	}
-	cc.Box.X = pl->Location.X - (gc.WindowWidth / 2);
-	cc.Box.Y = pl->Location.Y - (gc.WindowHeight / 2);
+	cc.Box.X = (int)(pl->Location.X - (gc.WindowWidth / 2.0f));
+	cc.Box.Y = (int)(pl->Location.Y - (gc.WindowHeight / 2.0f));
 	if (cc.Box.X < 0) {
 		cc.Box.X = 0;
 	} else if (cc.Box.X > cc.Bounds.X - gc.WindowWidth) {
