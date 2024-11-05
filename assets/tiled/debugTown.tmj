@@ -122,8 +122,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":112,
-                 "x":400,
+                 "width":110.5,
+                 "x":401.5,
                  "y":0
                 }, 
                 {
@@ -133,8 +133,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":7,
-                 "x":420,
+                 "width":5.63636363636363,
+                 "x":421.363636363636,
                  "y":112
                 }, 
                 {
@@ -144,18 +144,18 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":16,
-                 "x":480,
+                 "width":6.63636363636363,
+                 "x":485,
                  "y":112
                 }, 
                 {
-                 "height":32,
+                 "height":26,
                  "id":17,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":16,
+                 "width":14.75,
                  "x":496,
                  "y":112
                 }, 
@@ -171,15 +171,15 @@
                  "y":73
                 }, 
                 {
-                 "height":50.0909090909091,
+                 "height":46.3409090909091,
                  "id":20,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":33.2121212121212,
-                 "x":197,
-                 "y":89
+                 "width":29.9621212121212,
+                 "x":199.25,
+                 "y":92.25
                 }, 
                 {
                  "height":48,
@@ -199,8 +199,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32,
-                 "x":36,
+                 "width":28.5,
+                 "x":39.5,
                  "y":10
                 }, 
                 {
@@ -226,26 +226,26 @@
                  "y":224
                 }, 
                 {
-                 "height":32,
+                 "height":20.75,
                  "id":25,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32,
-                 "x":208,
-                 "y":0
+                 "width":22,
+                 "x":214,
+                 "y":6.5
                 }, 
                 {
-                 "height":32,
+                 "height":19.25,
                  "id":26,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":48,
-                 "x":336,
-                 "y":256
+                 "width":40.5,
+                 "x":341.25,
+                 "y":261.5
                 }, 
                 {
                  "height":112,
@@ -268,6 +268,17 @@
                  "width":16,
                  "x":400,
                  "y":112
+                }, 
+                {
+                 "height":61.325,
+                 "id":44,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":175.25,
+                 "x":424.25,
+                 "y":224.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -281,7 +292,7 @@
          "name":"entities",
          "objects":[
                 {
-                 "height":16,
+                 "height":9,
                  "id":6,
                  "name":"Exit0",
                  "properties":[
@@ -298,9 +309,9 @@
                  "rotation":0,
                  "type":"Exit",
                  "visible":true,
-                 "width":48,
-                 "x":48,
-                 "y":272
+                 "width":41.4545454545454,
+                 "x":50.7272727272727,
+                 "y":279
                 }, 
                 {
                  "height":16,
@@ -345,18 +356,18 @@
                  "type":"Start",
                  "visible":true,
                  "width":16,
-                 "x":66.5,
-                 "y":235
+                 "x":64.1666666666667,
+                 "y":242.333333333333
                 }, 
                 {
-                 "height":16,
+                 "height":9,
                  "id":13,
                  "name":"House Exit",
                  "properties":[
                         {
                          "name":"loadLocation",
                          "type":"int",
-                         "value":0
+                         "value":1
                         }, 
                         {
                          "name":"loadMap",
@@ -390,8 +401,8 @@
                  "type":"Start",
                  "visible":true,
                  "width":16,
-                 "x":448,
-                 "y":132.5
+                 "x":448.333333333333,
+                 "y":125.666666666667
                 }, 
                 {
                  "height":16,
@@ -485,7 +496,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":44,
+ "nextobjectid":45,
  "orientation":"orthogonal",
  "properties":[
         {

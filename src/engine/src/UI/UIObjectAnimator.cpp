@@ -1,3 +1,4 @@
+#include <Supergoon/UI/UIObject.hpp>
 #include <Supergoon/UI/UIObjectAnimator.hpp>
 using namespace Supergoon;
 
@@ -19,12 +20,16 @@ void UIObjectAnimatorBase::AddUIObjectTween(Tween* tween, UIObject* obj) {
 	SequenceToPlay->Tweens.push_back(std::shared_ptr<Tween>(tween));
 }
 
-void UIObjectAnimatorBase::Play() {
-	SequenceToPlay->Restart();
-}
 void UIObjectAnimatorBase::Update() {
-	SequenceToPlay->Update();
+	if (_playing) {
+		SequenceToPlay->Update();
+		if (SequenceToPlay->IsComplete()) {
+			_playing = false;
+		}
+	}
 }
+
 void UIObjectAnimatorBase::Stop() {
 	_playing = false;
+	SequenceToPlay->Restart();
 }

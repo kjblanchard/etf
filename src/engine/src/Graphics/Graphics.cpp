@@ -107,7 +107,12 @@ void Graphics::DrawEnd() {
 	SDL_RenderPresent(_renderer);
 }
 void Graphics::DrawImage(Image& image, RectangleF* srcR, RectangleF* dstR) {
-	SDL_RenderTexture(_renderer, image._image, (SDL_FRect*)srcR, (SDL_FRect*)dstR);
+	if (srcR->Zero()) {
+		SDL_RenderTexture(_renderer, image._image, nullptr, (SDL_FRect*)dstR);
+
+	} else {
+		SDL_RenderTexture(_renderer, image._image, (SDL_FRect*)srcR, (SDL_FRect*)dstR);
+	}
 }
 SDL_Texture* Graphics::CreateRenderTargetTexture(int width, int height, Color color) {
 	auto image = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
@@ -116,13 +121,15 @@ SDL_Texture* Graphics::CreateRenderTargetTexture(int width, int height, Color co
 		sgLogError("Error setting blend mode: %s", SDL_GetError());
 	}
 	SDL_SetTextureScaleMode(image, SDL_SCALEMODE_NEAREST);
-	// SDL_SetTextureScaleMode(image, SDL_SCALEMODE_LINEAR);
 	SDL_SetTextureBlendMode(image, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(_renderer, 100, color.G, color.B, color.A);
+	SDL_SetRenderDrawColor(_renderer, color.R, color.G, color.B, color.A);
 	SDL_RenderClear(_renderer);
 	SDL_SetRenderTarget(_renderer, NULL);
 	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
 	return image;
+}
+void Graphics::SetTextureColor(SDL_Texture* texture, Color color) {
+	SDL_SetTextureColorMod(texture, color.R, color.G, color.B);
 }
 
 void Graphics::SetTextureAlpha(SDL_Texture* texture, int alpha) {
@@ -139,7 +146,11 @@ void Graphics::ClearRenderTargetTexture(SDL_Texture* texture, Color color) {
 
 void Graphics::DrawImageToImage(Image& src, Image& dst, RectangleF* srcR, RectangleF* dstR) {
 	SDL_SetRenderTarget(_renderer, dst._image);
-	SDL_RenderTexture(_renderer, src._image, (SDL_FRect*)srcR, (SDL_FRect*)dstR);
+	if (srcR->Zero()) {
+		SDL_RenderTexture(_renderer, src._image, nullptr, (SDL_FRect*)dstR);
+	} else {
+		SDL_RenderTexture(_renderer, src._image, (SDL_FRect*)srcR, (SDL_FRect*)dstR);
+	}
 	SDL_SetRenderTarget(_renderer, NULL);
 }
 
@@ -152,6 +163,7 @@ SDL_Texture* Graphics::CreateTextureFromSurface(SDL_Surface* surface) {
 		sgLogError("Could not create texture, Error: %s", SDL_GetError());
 		return NULL;
 	}
+	// TODO why
 	SDL_DestroySurface(surface);
 	return t;
 }

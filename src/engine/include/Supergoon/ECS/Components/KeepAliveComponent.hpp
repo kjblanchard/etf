@@ -1,6 +1,6 @@
 #pragma once
 namespace Supergoon {
-void LoadPlayers();
-void StartPlayers();
-void PlayerInput();
+struct KeepAliveComponent {
+	bool Alive;
+};
 }  // namespace Supergoon

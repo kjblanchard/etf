@@ -5,12 +5,19 @@
 #include <SupergoonEngine/log.h>
 
 #include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/Events.hpp>
 #include <Supergoon/Sound.hpp>
 #include <Supergoon/Tween/Tween.hpp>
 
 namespace Supergoon {
 Sound* Sound::_instance = nullptr;
 void Sound::InitializeSound() {
+	Events::RegisterEventHandler(Events::BuiltinEvents.PlayBgmEvent, [this](int code, void* name, void*) {
+		auto nameStr = std::string((const char*)name);
+		LoadBgm(nameStr);
+		PlayBgm();
+		SDL_free(name);
+	});
 	for (size_t i = 0; i < _totalSfxStreams; i++) {
 		auto stream = sgStreamNew();
 		_sfxStreams.push_back(std::unique_ptr<sgStream>(stream));
@@ -100,7 +107,6 @@ void Sound::UpdatePlayingBgmVolume() {
 	if (!_bgm) {
 		return;
 	}
-	sgLogWarn("Changing to volume %f", _globalBgmVolume * _playingBgmVolume);
 	sgBgmUpdateVolume(_bgm, _globalBgmVolume * _playingBgmVolume);
 }
 
@@ -131,12 +137,13 @@ void Sound::CheckForStaleSfxStreams() {
 	}
 }
 
-void Sound::PlaySfx(Sfx* sfx, float) {
+void Sound::PlaySfx(Sfx* sfx, float volume) {
 	if (_usableSfxStreams.empty()) {
 		sgLogWarn("No SFX buffers available to play sound %s\n", sfx->Filepath().c_str());
 		return;
 	}
 	auto stream = _usableSfxStreams.front();
+	sfx->SgSfx()->Volume = volume;
 	sgSfxPlay(sfx->SgSfx(), stream);
 	_playingStreams.push_back(stream);
 	_usableSfxStreams.pop();

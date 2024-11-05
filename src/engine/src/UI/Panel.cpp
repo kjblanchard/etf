@@ -11,6 +11,9 @@ void Panel::OnDirty() {
 }
 void Panel::Update() {
 	for (auto& [name, uiObject] : Children) {
+		if (!uiObject) {
+			continue;
+		}
 		uiObject->UpdateInternal();
 	}
 }

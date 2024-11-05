@@ -19,17 +19,21 @@ void UpdateCamera() {
 		return;
 	}
 	auto& cc = c->GetComponent<CameraComponent>();
-	auto& gc = c->GetComponent<GameState>();
+	auto& gc = g->GetComponent<GameState>();
+	if (!gc.CameraFollowTarget) {
+		return;
+	}
 	if (!cc.FollowTarget) {
 		getFollowTarget(cc);
 	}
 	auto pl = cc.FollowTarget;
 	if (!pl) {
-		gc.CurrentLevel->cameraX = 0;
-		gc.CurrentLevel->cameraY = 0;
+		sgLogError(" no follow boi");
+		Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
+		return;
 	}
-	cc.Box.X = pl->Location.X - (gc.WindowWidth / 2);
-	cc.Box.Y = pl->Location.Y - (gc.WindowHeight / 2);
+	cc.Box.X = (int)(pl->Location.X - (gc.WindowWidth / 2.0f));
+	cc.Box.Y = (int)(pl->Location.Y - (gc.WindowHeight / 2.0f));
 	if (cc.Box.X < 0) {
 		cc.Box.X = 0;
 	} else if (cc.Box.X > cc.Bounds.X - gc.WindowWidth) {
@@ -43,7 +47,8 @@ void UpdateCamera() {
 
 	// gc.CurrentLevel->cameraX = (int)cc.Box.X;
 	// gc.CurrentLevel->cameraY = (int)cc.Box.Y;
-	gc.CurrentLevel->cameraX = cc.Box.X;
-	gc.CurrentLevel->cameraY = cc.Box.Y;
+	Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
+	// gc.CurrentLevel->cameraX = cc.Box.X;
+	// gc.CurrentLevel->cameraY = cc.Box.Y;
 }
 }  // namespace Supergoon

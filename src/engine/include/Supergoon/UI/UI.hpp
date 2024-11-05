@@ -15,7 +15,22 @@ class UI {
 	static void Draw();
 	static void Update();
 	static void Reset();
-	static std::vector<std::shared_ptr<UIObjectAnimatorBase>> Animators;
+	static void RegisterUIEvents();
 	static Panel* UIInstance;
+
+	// Set when the UI
+
+	// Functions to handle the global Fade Panel.
+   public:
+	inline static void FadeIn() { _fadeInAnimator->Restart(); }
+	inline static void FadeOut() { _fadeOutAnimator->Restart(); }
+	inline static bool FadingOut() { return _fadeOutAnimator->IsPlaying(); }
+	inline static bool FadingIn() { return _fadeInAnimator->IsPlaying(); }
+	static void SetFadeOutEndFunc(std::function<void()> func);
+	static void SetFadeInStartFunc(std::function<void()> func);
+
+   private:
+	static UIObjectAnimatorBase* _fadeInAnimator;
+	static UIObjectAnimatorBase* _fadeOutAnimator;
 };
 }  // namespace Supergoon

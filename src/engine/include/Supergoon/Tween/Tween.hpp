@@ -42,10 +42,14 @@ class Tween {
 	Tween(float start, float end, float duration, float* value, Easings ease);
 	Tween(float start, float end, float duration, int* value, Easings ease);
 	Tween(float waitTime);
+	// Returns if this tween is complete or not, and also updates properly.
 	bool Update();
+	inline float CurrentLength() { return _currentDuration; }
+	inline float TotalLength() { return _duration; }
 	inline void Restart() { _currentDuration = 0; }
 	inline bool Complete() { return _currentDuration >= _duration; }
 	inline float Percent() { return _currentDuration / _duration; }
+	std::function<void()> StartFunc = nullptr;
 	std::function<void()> UpdateFunc = nullptr;
 	std::function<void()> EndFunc = nullptr;
 

@@ -22,6 +22,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     ${IS_BUNDLE} ${IS_WIN32}
     BlackjackGame.cpp
     Entities/PlayerStart.cpp
+    Entities/PlayerExit.cpp
     Systems/PlayerSystem.cpp
     Systems/ImageSystem.cpp
     Systems/AsepriteSystem.cpp

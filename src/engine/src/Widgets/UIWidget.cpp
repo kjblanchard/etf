@@ -26,33 +26,68 @@ void UIWidget::ShowUiDebugWindow() {
 		rootPanel->Dirty = true;
 	}
 
-	for (auto &[key, value] : rootPanel->Children) {
-		if (value->WidgetType == (int)BuiltinWidgetTypes::Image) {
-			auto imageObject = std::dynamic_pointer_cast<ImageObject>(value);
-			std::string childX_label = "Child X##" + key;
-			std::string childY_label = "Child Y##" + key;
-			std::string childWLabel = "Child W##" + key;
-			std::string childHLabel = "Child H##" + key;
-			std::string transLabel = "Child Transparency##" + key;
-			if (ImGui::CollapsingHeader(key.c_str())) {
-				if (ImGui::DragFloat(childX_label.c_str(), &value->Offset.X, 1.0f)) {
-					value->Dirty = true;
-				}
-				if (ImGui::DragFloat(childY_label.c_str(), &imageObject->Offset.Y, 1.0f)) {
-					value->Dirty = true;
-				}
-				if (ImGui::DragFloat(childWLabel.c_str(), &imageObject->Bounds.W, 1.0f)) {
-					value->Dirty = true;
-				}
-				if (ImGui::DragFloat(childHLabel.c_str(), &imageObject->Bounds.H, 1.0f)) {
-					value->Dirty = true;
-				}
-				if (ImGui::DragInt(transLabel.c_str(), &imageObject->Transparency, 1, 0, 255, "%d", ImGuiSliderFlags_WrapAround)) {
-					value->Dirty = true;
+	if (ImGui::CollapsingHeader("UI Animators")) {
+		// We will need to loop over all panels animators
+		for (auto &&[key, value] : UI::UIInstance->Children) {
+			for (auto &&animator : value->Animators) {
+				if (ImGui::TreeNode(animator->Name.c_str())) {
+					auto name = std::string("Play ##") + animator->Name;
+					auto valueText = animator->IsPlaying() ? "True" : "False";
+					// auto playingText = std::string("Is Playing ") + valueText + "## " + animator->Name;
+					auto playingText = std::string("Is Playing ") + valueText;
+					ImGui::Text("%s", playingText.c_str());
+					ImGui::SameLine();
+					auto percentText = std::string("Percent: ") + std::to_string(animator->SequenceToPlay->Percent());
+					ImGui::Text("%s", percentText.c_str());
+
+					if (ImGui::Button(name.c_str())) {
+						animator->Play();
+					}
+					ImGui::SameLine();
+					auto stop = std::string("Stop ##") + animator->Name;
+					if (ImGui::Button(stop.c_str())) {
+						animator->Stop();
+					}
+					ImGui::SameLine();
+					auto pause = std::string("Pause ##") + animator->Name;
+					if (ImGui::Button(pause.c_str())) {
+						animator->Pause();
+					}
+					ImGui::TreePop();
 				}
 			}
 		}
-		// ImGui::End();
+	}
+	if (ImGui::CollapsingHeader("UI Elements")) {
+		for (auto &[key, value] : rootPanel->Children) {
+			if (value->WidgetType == (int)BuiltinWidgetTypes::Image) {
+				auto imageObject = std::dynamic_pointer_cast<ImageObject>(value);
+				std::string childX_label = "Offset X##" + key;
+				std::string childY_label = "Offset Y##" + key;
+				std::string childWLabel = "Child W##" + key;
+				std::string childHLabel = "Child H##" + key;
+				std::string transLabel = "Child Transparency##" + key;
+				if (ImGui::TreeNode(key.c_str())) {
+					if (ImGui::DragFloat(childX_label.c_str(), &value->Offset.X, 1.0f)) {
+						value->Dirty = true;
+					}
+					if (ImGui::DragFloat(childY_label.c_str(), &imageObject->Offset.Y, 1.0f)) {
+						value->Dirty = true;
+					}
+					if (ImGui::DragFloat(childWLabel.c_str(), &imageObject->Bounds.W, 1.0f)) {
+						value->Dirty = true;
+					}
+					if (ImGui::DragFloat(childHLabel.c_str(), &imageObject->Bounds.H, 1.0f)) {
+						value->Dirty = true;
+					}
+					if (ImGui::DragInt(transLabel.c_str(), &imageObject->Transparency, 1, 0, 255, "%d", ImGuiSliderFlags_WrapAround)) {
+						value->Dirty = true;
+					}
+					ImGui::TreePop();
+				}
+			}
+			// ImGui::End();
+		}
 	}
 	ImGui::End();
 }

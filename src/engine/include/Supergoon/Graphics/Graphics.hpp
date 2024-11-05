@@ -24,6 +24,7 @@ class Graphics {
 	SDL_Texture* CreateTextureFromSurface(SDL_Surface* surface);
 	SDL_Texture* CreateRenderTargetTexture(int width, int height, Color color = Color{0, 0, 0, 255});
 	void ClearRenderTargetTexture(SDL_Texture* texture, Color color = Color{0, 0, 0, 255});
+	void SetTextureColor(SDL_Texture* texture, Color color);
 	void SetTextureAlpha(SDL_Texture* texture, int alpha);
 	void DrawRect(RectangleF& dstRect, Color color);
 	inline int WindowHeight() { return _windowHeight; }

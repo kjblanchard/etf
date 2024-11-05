@@ -8,6 +8,7 @@ class Content : public Loader, public Unloader {
 	Content(std::string contentPath);
 	virtual ~Content() = default;
 	inline virtual const std::string Filepath() { return _filePath; }
+	// This function is for loading the content, and should be called when you want to load the content.
 	void LoadContent();
 	void UnloadContent();
 	inline virtual std::string Type() { return "Content"; }

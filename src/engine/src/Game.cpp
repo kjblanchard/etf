@@ -26,8 +26,7 @@
 
 using json = nlohmann::json;
 using namespace Supergoon;
-// Game *Game::_game = nullptr;
-// static Game *_gameInternal = nullptr;
+json configData;
 
 SDL_AppResult SDL_AppInit(void **appState, int, char *[]) {
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD)) {
@@ -73,17 +72,18 @@ Game::~Game() {
 void Game::Initialize() {
 	char *jsonPath = NULL;
 	SDL_asprintf(&jsonPath, "%sassets/config.json", SDL_GetBasePath());
+	sgLogWarn("Going to read from file %s", jsonPath);
 	std::ifstream fileStream(jsonPath);
 	SDL_free(jsonPath);
-	auto j = json::parse(fileStream);
-	int windowWidth = j["window"]["x"];
-	int windowHeight = j["window"]["y"];
-	int worldWidth = j["world"]["x"];
-	int worldHeight = j["world"]["y"];
-	std::string windowTitle = j["window"]["title"];
+	configData = json::parse(fileStream);
+	int windowWidth = configData["window"]["x"];
+	int windowHeight = configData["window"]["y"];
+	int worldWidth = configData["world"]["x"];
+	int worldHeight = configData["world"]["y"];
+	std::string windowTitle = configData["window"]["title"];
+	_events = std::make_unique<Events>(this);
 	_sound = std::make_unique<Sound>();
 	_graphics = std::make_unique<Graphics>();
-	_events = std::make_unique<Events>(this);
 	_graphics->CreateWindow(windowWidth, windowHeight, windowTitle);
 	_graphics->SetWindowScaling(worldWidth, worldHeight);
 	geClockStart(&_clock);
@@ -104,6 +104,9 @@ void Game::InitializeImGui() {
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;	   // IF using Docking Branch
+	static auto thing = std::string(SDL_GetPrefPath("Supergoon Games", "EscapeTheFate")) + "debug.ini";
+	io.IniFilename = thing.c_str();
+
 #endif
 }
 
@@ -121,10 +124,13 @@ void Game::InternalDraw() {
 }
 
 void Game::InternalReset() {
+	if (_sound) {
+		_sound->StopBgm();
+	}
 	Reset();
 	UI::Reset();
 	GameObject::ClearGameObjects();
-	// ContentRegistry::DestroyAllContent();
+	ContentRegistry::DestroyAllContent();
 	if (!_initialized) {
 		Initialize();
 	}

@@ -4,6 +4,7 @@
 
 using namespace Supergoon;
 bool PlayerWidget::ShowPlayerColliderDebugBox = false;
+bool PlayerWidget::ShowPlayerExitDebugBox = false;
 void PlayerWidget::ShowPlayerColliderWindow() {
 	ImGuiWindowFlags window_flags = Widgets::GetDefaultWindowFlags();
 	bool p_open;
@@ -14,7 +15,12 @@ void PlayerWidget::ShowPlayerColliderWindow() {
 		return;
 	}
 	ImGui::Checkbox("Show Player Debug Colliders", &ShowPlayerColliderDebugBox);
+	ImGui::Checkbox("Show Player Exit Colliders", &ShowPlayerExitDebugBox);
 	auto playerGo = GameObject::GetGameObjectWithComponents<PlayerComponent>();
+	if (!playerGo.has_value()) {
+		ImGui::End();
+		return;
+	}
 	auto& playerComponent = playerGo->GetComponent<PlayerComponent>();
 	auto& locationComponent = playerGo->GetComponent<LocationComponent>();
 	if (ImGui::CollapsingHeader("Player")) {

@@ -1,4 +1,5 @@
 #include <Components/PlayerComponent.hpp>
+#include <Components/PlayerExitComponent.hpp>
 #include <Components/PlayerSpawnComponent.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Systems/PlayerSystem.hpp>
@@ -13,17 +14,27 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	playerAnimation.Offset = Point{0, 0};
 	playerAnimation.AnimationSpeed = 1.0;
 	playerComponent.PlayerNum = 0;
-	playerComponent.Direction = Directions::South;
-	playerComponent.Body = RectangleF{4, 7, 16, 27};
+	playerComponent.Direction = (Directions)playerSpawn.SpawnDirection;
+	playerComponent.Body = RectangleF{4, 9, 16, 22};
 	playerLocation.Location.X = playerSpawn.Location.X;
 	playerLocation.Location.Y = playerSpawn.Location.Y;
 	go->AddComponent<AnimationComponent>(playerAnimation);
 	go->AddComponent<LocationComponent>(playerLocation);
 	go->AddComponent<PlayerComponent>(playerComponent);
-	gameState.CurrentLevel->AddGameObjectToLevel(go);
+	Events::PushEvent(Events::BuiltinEvents.GameObjectAdd, true, (void*)go);
+}
+static void startPlayer(GameObject, PlayerComponent& playerComponent, AnimationComponent& animComponent) {
+	auto letter = GetLetterForDirection(playerComponent.Direction);
+	animComponent.Animation->PlayAnimation("walk" + std::string(letter));
 }
 
 static void playerInput(GameObject go, PlayerComponent& player) {
+	auto state = GameObject::GetGameObjectWithComponents<GameState>();
+	auto& stateComponent = state->GetComponent<GameState>();
+	assert(state.has_value());
+	if (stateComponent.Loading) {
+		return;
+	}
 	auto vel = Vector2();
 	auto& anim = go.GetComponent<AnimationComponent>();
 	auto& loc = go.GetComponent<LocationComponent>();
@@ -93,6 +104,29 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 		anim.Animation->PlayAnimation("walk" + std::string(letter));
 		player.Direction = newDirection;
 	}
+
+	// Did we exit?
+	auto playerBodyRect = RectangleF{loc.Location.X + player.Body.X, loc.Location.Y + player.Body.Y, player.Body.W, player.Body.H};
+	auto exited = false;
+	GameObject::ForEach<PlayerExitComponent>([&](GameObject, PlayerExitComponent pe) {
+		if (exited) {
+			return;
+		}
+		if (playerBodyRect.IsOverlap(&pe.BoundingBox)) {
+			stateComponent.PlayerSpawnLocation = pe.SpawnLocationId;
+			// TODO should we make this an event?
+			auto sound = Sound::Instance();
+			auto sfx = ContentRegistry::CreateContent<Sfx>("transition2");
+			ContentRegistry::LoadContent(*sfx);
+			sound->PlaySfx(sfx.get(), 0.3f);
+			Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, true, (void*)strdup((pe.NextMap.c_str())));
+			stateComponent.Loading = true;
+			exited = true;
+		}
+	});
+	if (exited) {
+		return;
+	}
 }
 
 static void loadPlayerEach(GameObject go, PlayerSpawnComponent& ps) {
@@ -107,6 +141,10 @@ static void loadPlayerEach(GameObject go, PlayerSpawnComponent& ps) {
 	}
 
 	loadPlayer(go, ps, stateComponent);
+}
+
+void Supergoon::StartPlayers() {
+	GameObject::ForEach<PlayerComponent, AnimationComponent>(startPlayer);
 }
 
 void Supergoon::LoadPlayers() {

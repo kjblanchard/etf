@@ -1,26 +1,35 @@
+
 #include <Debug/PlayerCollider.hpp>
+#include <Entities/PlayerExit.hpp>
 #include <Entities/PlayerStart.hpp>
 #include <Supergoon/Supergoon.hpp>
+#include <SupergoonEngine/nlohmann/json.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/DebugDrawSystem.hpp>
 #include <Systems/ImageSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
+using json = nlohmann::json;
+extern json configData;
 namespace Supergoon {
 std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap = {
 	{"Start", [](TiledMap::TiledObject &object) {
 		 return NewPlayerSpawn(object);
 	 }},
+	{"Exit", [](TiledMap::TiledObject &object) {
+		 return NewPlayerExit(object);
+	 }},
 };
 }
 using namespace Supergoon;
-static bool skipLogos = false;
+static std::shared_ptr<Text> testText = nullptr;
 static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();
 	LoadAnimationComponents();
-	UI::UIInstance->Visible = false;
-	UI::UIInstance->Enabled = false;
+	StartPlayers();
+	// UI::UIInstance->Visible = false;
+	// UI::UIInstance->Enabled = false;
 	ContentRegistry::LoadAllContent();
 	inGame = true;
 }
@@ -38,29 +47,43 @@ static void playLogos() {
 	auto ui = UI::UIInstance;
 	auto thing = (ImageObject *)ui->Children["logoImage"].get();
 	auto thing2 = (ImageObject *)ui->Children["logoImage2"].get();
-	auto animator = new UIObjectAnimatorBase("Logos");
+	auto animator = new UIObjectAnimatorBase("logo");
+	auto animator2 = new UIObjectAnimatorBase("logo2");
 	auto fadeInTween = new Tween(0, 255, 3.0, &thing->Transparency, Supergoon::Easings::Linear);
 	auto fadeOutTween = new Tween(255, 0, 3.0, &thing->Transparency, Supergoon::Easings::Linear);
 	auto fadeInTween2 = new Tween(0, 255, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
 	auto fadeOutTween2 = new Tween(255, 0, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
+	fadeOutTween->EndFunc = [animator2]() {
+		animator2->Play();
+	};
 	fadeOutTween2->EndFunc = []() {
-		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTown");
+		// auto ui = UI::UIInstance;
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTown"));
+		Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"logoImage");
+		Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"logoImage2");
+
+		// ui->Children.erase("logoImage");
+		// ui->Children.erase("logoImage2");
 	};
 	animator->AddUIObjectTween(fadeInTween, thing);
 	animator->AddUIObjectTween(fadeOutTween, thing);
-	animator->AddUIObjectTween(fadeInTween2, thing2);
-	animator->AddUIObjectTween(fadeOutTween2, thing2);
-	UI::Animators.push_back(std::shared_ptr<UIObjectAnimatorBase>(animator));
+	animator2->AddUIObjectTween(fadeInTween2, thing2);
+	animator2->AddUIObjectTween(fadeOutTween2, thing2);
+	thing->Animators.push_back(std::shared_ptr<UIObjectAnimatorBase>(animator));
+	thing2->Animators.push_back(std::shared_ptr<UIObjectAnimatorBase>(animator2));
+	animator->Play();
+	// UI::Animators.push_back(std::shared_ptr<UIObjectAnimatorBase>(animator));
 
 	ContentRegistry::LoadAllContent();
 }
 
 void BlackjackGame::Start() {
 	Level::LoadFunc = loadLevel;
+	auto skipLogos = configData["skipLogos"];
 	if (!skipLogos) {
 		playLogos();
 	} else {
-		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTown");
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTownHome"));
 	}
 }
 
@@ -69,20 +92,20 @@ void BlackjackGame::Update() {
 		PlayerInput();
 		UpdateAnimationComponents();
 		UpdateCamera();
-		if (KeyJustPressed(Supergoon::KeyboardKeys::Key_P)) {
-			for (size_t i = 0; i < 30; i++) {
-				Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugSouth");
-			}
-		}
 	}
 	UI::Update();
 }
 
 void BlackjackGame::Draw() {
+	if (!testText) {
+		testText = ContentRegistry::CreateContent<Text, std::string, int>("What in the world", "commodore", 16);
+		testText->LoadContent();
+	}
 	if (inGame) {
 		Level::Draw();
 		DrawAnimationComponents();
 		DrawImages();
+		testText->Draw();
 	}
 	UI::Draw();
 #ifdef imgui
@@ -94,6 +117,9 @@ void BlackjackGame::Draw() {
 	PlayerWidget::ShowPlayerColliderWindow();
 	if (PlayerWidget::ShowPlayerColliderDebugBox) {
 		DrawDebugBoxesPlayer();
+	}
+	if (PlayerWidget::ShowPlayerExitDebugBox) {
+		DrawDebugBoxesPlayerExit();
 	}
 #endif
 }

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MAX_LOG_SIZE 200
+#define MAX_LOG_SIZE 400
 
 /**
  * @brief The file that will be written to when logs are put.
@@ -30,7 +30,7 @@ static int geGetFileFilepath(char *buffer, size_t bufferSize, const char *filena
 		snprintf(buffer, bufferSize, "%s%s", _systemFilePath, filename);
 		return 0;
 	}
-	const char *base_path = SDL_GetPrefPath("Supergoon Games", "BbAdventures");
+	const char *base_path = SDL_GetPrefPath("Supergoon Games", "EscapeTheFate");
 	int result = -1;  // Return -1 on error
 
 	if (base_path == NULL) {

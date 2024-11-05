@@ -5,6 +5,8 @@ struct GameState {
 	int PlayerSpawnLocation;
 	int WindowHeight;
 	int WindowWidth;
-	Level* CurrentLevel;
+	bool Loading;
+	bool CameraFollowTarget;
+	// Level* CurrentLevel;
 };
 }  // namespace Supergoon

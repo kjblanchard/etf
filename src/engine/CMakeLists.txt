@@ -13,6 +13,8 @@ set(SRC_FILES
     src/Events.cpp
     src/Aseprite/AsepriteAnimation.cpp
     src/Content/AsepriteDocument.cpp
+    src/Content/Font.cpp
+    src/Content/Text.cpp
     src/Content/Sfx.cpp
     src/Content/Content.cpp
     src/Content/ContentRegistry.cpp

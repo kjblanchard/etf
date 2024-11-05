@@ -15,13 +15,13 @@ void ContentWidget::ShowContentDebugWindow() {
 		ImGui::End();
 		return;
 	}
+	if (ImGui::Button("Clear StaleContent")) {
+		ContentRegistry::ClearStaleContent(true);
+	}
 	ImGui::Text("Number of loaded content is %zu", ContentRegistry::_loadedContent.size());
 	if (ImGui::TreeNode("Contents")) {
 		for (const auto& [key, value] : ContentRegistry::_loadedContent) {
 			if (ImGui::TreeNode(key.c_str())) {
-				ImGui::Text("Size:");
-				ImGui::SameLine();
-				ImGui::Text("%lu", sizeof(*value.get()));
 				ImGui::Text("Type:");
 				ImGui::SameLine();
 				ImGui::Text("%s", value->Type().c_str());

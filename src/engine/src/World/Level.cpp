@@ -6,13 +6,14 @@
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/ECS/Components/CameraComponent.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/KeepAliveComponent.hpp>
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Components/SolidComponent.hpp>
+#include <Supergoon/Events.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
+#include <Supergoon/UI/UI.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <algorithm>
-// int SCREEN_WIDTH = 512;
-// int SCREEN_HEIGHT = 288;
 
 namespace Supergoon {
 extern std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap;
@@ -21,6 +22,41 @@ using namespace Supergoon;
 
 std::unique_ptr<Level> Level::_currentLevel = nullptr;
 std::function<void()> Level::LoadFunc = nullptr;
+void Level::AddLevelEventHandlers() {
+	Events::RegisterEventHandler(Events::BuiltinEvents.CameraUpdate, [](int, void *newLoc, void *) {
+		assert((RectangleF *)newLoc);
+		auto rect = (RectangleF *)newLoc;
+		Level::_currentLevel->cameraX = rect->X;
+		Level::_currentLevel->cameraY = rect->Y;
+	});
+	Events::RegisterEventHandler(Events::BuiltinEvents.LevelChangeEvent, [](int shouldFade, void *levelName, void *) {
+		auto level = (const char *)levelName;
+		assert(level);
+		if (shouldFade) {
+			LoadNewLevelFade(level);
+		} else {
+			LoadNewLevel(level);
+		}
+		SDL_free(levelName);
+	});
+	Events::RegisterEventHandler(Events::BuiltinEvents.GameObjectAdd, [](int, void *gameObject, void *) {
+		assert((GameObject *)gameObject);
+		_currentLevel->AddGameObjectToLevel((GameObject *)gameObject);
+	});
+}
+
+std::string Level::GetBgm() {
+	auto iterator = std::find_if(_mapData->Properties.begin(), _mapData->Properties.end(), [](TiledMap::TiledProperty &prop) {
+		if (prop.Name == "bgm") {
+			return true;
+		}
+		return false;
+	});
+	if (iterator == _mapData->Properties.end()) {
+		return "";
+	}
+	return std::get<std::string>(iterator->Value);
+}
 
 Level::Level(const char *filename)
 	: _background(nullptr) {
@@ -30,29 +66,46 @@ Level::Level(const char *filename)
 	CreateBackgroundImage();
 	LoadAllGameObjects();
 	LoadSolidObjects();
-	// Add gamestate object to level
-	auto go = new GameObject();
-	auto gamestate = GameState();
+	auto gamestate = GameObject::FindComponent<GameState>();
+	if (!gamestate) {
+		auto gsGo = new GameObject();
+		auto gamestate = GameState();
+		auto keepalive = KeepAliveComponent();
+		// gamestate.CurrentLevel = this;
+		gamestate.PlayerSpawnLocation = 0;
+		gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
+		gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
+		gamestate.CameraFollowTarget = true;
+		gamestate.Loading = false;
+		gsGo->AddComponent<GameState>(gamestate);
+		gsGo->AddComponent<KeepAliveComponent>(keepalive);
+		AddGameObjectToLevel(gsGo);
+	} else {
+		// gamestate->CurrentLevel = this;
+	}
+	auto camGo = new GameObject();
 	auto camera = CameraComponent();
 	camera.Bounds.X = GetSize().X;
 	camera.Bounds.Y = GetSize().Y;
-	gamestate.CurrentLevel = this;
-	gamestate.PlayerSpawnLocation = 0;
-	gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
-	gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
-	go->AddComponent<GameState>(gamestate);
-	go->AddComponent<CameraComponent>(camera);
-	AddGameObjectToLevel(go);
+	camera.Box.X = 0;
+	camera.Box.Y = 0;
+	camGo->AddComponent<CameraComponent>(camera);
+	AddGameObjectToLevel(camGo);
 }
 
 Level::~Level() {
 	// TODO should we actually clear the background testure when level is destroyed here too?
+	// TODO when should we clear keepalive components?
 	for (auto &&go : _gameObjects) {
+		if (go->HasComponent<KeepAliveComponent>()) {
+			continue;
+		}
 		go->FreeGameObject();
 		delete (go);
 	}
 	_gameObjects.clear();
 }
+
 static std::string getBasePathForTiled() {
 	return std::string(SDL_GetBasePath()) + "assets/tiled/";
 }
@@ -94,11 +147,24 @@ Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	return nullptr;
 }
 
+void Level::LoadNewLevelFade(std::string level) {
+	UI::SetFadeOutEndFunc([level]() {
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, false, (void *)strdup(level.c_str()));
+		UI::FadeIn();
+	});
+	UI::FadeOut();
+}
+
 void Level::LoadNewLevel(std::string level) {
 	_currentLevel = std::make_unique<Level>(level.c_str());
 	if (LoadFunc) {
 		LoadFunc();
 	}
+	auto bgm = _currentLevel->GetBgm();
+	auto goboi = GameObject::GetGameObjectWithComponents<GameState>();
+	auto &comp = goboi->GetComponent<GameState>();
+	comp.Loading = false;
+	Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup(bgm.c_str()));
 }
 
 void Level::LoadAllGameObjects() {
@@ -113,6 +179,7 @@ void Level::LoadAllGameObjects() {
 		}
 		_gameObjects.push_back(go);
 	}
+	UI::SetFadeOutEndFunc(nullptr);
 }
 
 void Level::RestartLevel() {
@@ -130,6 +197,7 @@ void Level::CreateBackgroundImage() {
 		return;
 	}
 	_background = ContentRegistry::CreateContent<Image, int, int>(_name, _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight);
+	_background->SetImageColor(Color{0, 0, 0, 255});
 	ContentRegistry::LoadAllContent();
 	for (auto &group : _mapData->Groups) {
 		if (group.Name != "background") {
@@ -211,15 +279,15 @@ void Level::Draw() {
 		auto screenHeight = Graphics::Instance()->LogicalHeight();
 		auto s = RectangleF();
 		auto size = _currentLevel->GetSize();
-		s.X = std::round( _currentLevel->cameraX);
-		s.Y = std::round( _currentLevel->cameraY);
+		s.X = std::round(_currentLevel->cameraX);
+		s.Y = std::round(_currentLevel->cameraY);
 		s.W = size.X <= screenWidth ? size.X : screenWidth;
 		s.H = size.Y <= screenHeight ? size.Y : screenHeight;
 		auto d = RectangleF();
 		d.X = 0;
 		d.Y = 0;
-		d.W = screenWidth;
-		d.H = screenHeight;
+		d.W = s.W;
+		d.H = s.H;
 		_currentLevel->_background->Draw(s, d);
 	}
 }

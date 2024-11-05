@@ -1,9 +1,11 @@
 #include <SDL3/SDL.h>
 #include <SupergoonEngine/imgui/imgui.h>
 
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Widgets/LevelWidget.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
+#include <Supergoon/World/Level.hpp>
 #include <regex>
 #include <string>
 #include <vector>
@@ -37,14 +39,28 @@ void LevelWidget::ShowLevelWidget() {
 		ImGui::End();
 		return;
 	}
-	static int item_current = 1;
+	if (Level::_currentLevel) {
+		auto gamestate = GameObject::FindComponent<GameState>();
+		if (gamestate) {
+			ImGui::Checkbox("Camera Following Target", &gamestate->CameraFollowTarget);
+		}
+		if (ImGui::DragInt("CameraX", &Level::_currentLevel->cameraX)) {
+		}
+		if (ImGui::DragInt("CameraY", &Level::_currentLevel->cameraY)) {
+		}
+	}
+
+	static int item_current = 0;
 	ImGui::ListBox("LevelLoader", &item_current, levelNamesC.data(), levelNamesC.size(), 4);
 	if (ImGui::Button("LoadLevel")) {
 		auto levelFull = std::string(levelNamesC[item_current]);
 		std::regex dotRegex("\\.tmj");
 		std::vector<std::string> result(std::sregex_token_iterator(levelFull.begin(), levelFull.end(), dotRegex, -1), std::sregex_token_iterator());
 		levelNameStrip = result[0];
-		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void*)levelNameStrip.c_str());
+		// TODO is this a leak since I strdup?
+		auto gamestate = GameObject::FindComponent<GameState>();
+		gamestate->PlayerSpawnLocation = 0;
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void*)strdup(levelNameStrip.c_str()));
 	}
 	ImGui::End();
 }
