@@ -107,7 +107,6 @@ void Sound::UpdatePlayingBgmVolume() {
 	if (!_bgm) {
 		return;
 	}
-	sgLogWarn("Changing to volume %f", _globalBgmVolume * _playingBgmVolume);
 	sgBgmUpdateVolume(_bgm, _globalBgmVolume * _playingBgmVolume);
 }
 

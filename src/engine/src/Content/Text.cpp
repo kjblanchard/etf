@@ -93,7 +93,6 @@ void Text::MeasureText() {
 		AddWordToLetterPoints(fontFace, _text.length(), currentWordLetters, penX, penY);
 		penX += currentWordLength;
 	}
-	sgLogWarn("Choosing between %d and %d", textSize.X, penX);
 	textSize.X = std::max(textSize.X, penX);
 	textSize.Y = penY - descenderInPixels;
 	if (textSize.Y > maxHeight) {
