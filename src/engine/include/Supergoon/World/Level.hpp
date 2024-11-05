@@ -29,8 +29,6 @@ class Level {
 	static std::function<void()> LoadFunc;
 	static void Reset();
 	static void Draw();
-	// Should we store this in a "gamestate" object somewhere?
-	static int LoadLocation;
 	void LoadAllGameObjects();
 	void RestartLevel();
 	void CreateBackgroundImage();

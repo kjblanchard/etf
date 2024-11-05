@@ -114,10 +114,7 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 		if (playerBodyRect.IsOverlap(&pe.BoundingBox)) {
 			// Play transition sound
 			stateComponent.PlayerSpawnLocation = pe.SpawnLocationId;
-			sgLogWarn("Calling new level fade");
 			Level::LoadNewLevelFade(pe.NextMap);
-			Level::LoadLocation = pe.SpawnLocationId;
-			sgLogWarn("Level load location is %d", Level::LoadLocation);
 			stateComponent.Loading = true;
 			exited = true;
 		}

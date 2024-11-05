@@ -22,8 +22,6 @@ using namespace Supergoon;
 
 std::unique_ptr<Level> Level::_currentLevel = nullptr;
 std::function<void()> Level::LoadFunc = nullptr;
-int Level::LoadLocation = 0;
-// GameObject *Level::_gameStateGameObject = nullptr;
 
 std::string Level::GetBgm() {
 	auto iterator = std::find_if(_mapData->Properties.begin(), _mapData->Properties.end(), [](TiledMap::TiledProperty &prop) {
@@ -54,8 +52,7 @@ Level::Level(const char *filename)
 		auto gamestate = GameState();
 		auto keepalive = KeepAliveComponent();
 		gamestate.CurrentLevel = this;
-		sgLogWarn("Level load location when making level is %d", Level::LoadLocation);
-		gamestate.PlayerSpawnLocation = LoadLocation;
+		gamestate.PlayerSpawnLocation = 0;
 		gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
 		gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
 		gamestate.Loading = false;
