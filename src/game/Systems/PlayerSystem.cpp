@@ -14,7 +14,7 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	playerAnimation.Offset = Point{0, 0};
 	playerAnimation.AnimationSpeed = 1.0;
 	playerComponent.PlayerNum = 0;
-	playerComponent.Direction = Directions::South;
+	playerComponent.Direction = (Directions)playerSpawn.SpawnDirection;
 	playerComponent.Body = RectangleF{4, 9, 16, 22};
 	playerLocation.Location.X = playerSpawn.Location.X;
 	playerLocation.Location.Y = playerSpawn.Location.Y;
@@ -23,14 +23,15 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	go->AddComponent<PlayerComponent>(playerComponent);
 	gameState.CurrentLevel->AddGameObjectToLevel(go);
 }
+static void startPlayer(GameObject, PlayerComponent& playerComponent, AnimationComponent& animComponent) {
+	auto letter = GetLetterForDirection(playerComponent.Direction);
+	animComponent.Animation->PlayAnimation("walk" + std::string(letter));
+}
 
 static void playerInput(GameObject go, PlayerComponent& player) {
 	auto state = GameObject::GetGameObjectWithComponents<GameState>();
 	auto& stateComponent = state->GetComponent<GameState>();
-	if (!state.has_value()) {
-		sgLogError("No gamestate component somehow");
-		return;
-	}
+	assert(state.has_value());
 	if (stateComponent.Loading) {
 		return;
 	}
@@ -136,6 +137,10 @@ static void loadPlayerEach(GameObject go, PlayerSpawnComponent& ps) {
 	}
 
 	loadPlayer(go, ps, stateComponent);
+}
+
+void Supergoon::StartPlayers() {
+	GameObject::ForEach<PlayerComponent, AnimationComponent>(startPlayer);
 }
 
 void Supergoon::LoadPlayers() {

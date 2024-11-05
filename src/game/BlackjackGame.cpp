@@ -27,6 +27,7 @@ static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();
 	LoadAnimationComponents();
+	StartPlayers();
 	// UI::UIInstance->Visible = false;
 	// UI::UIInstance->Enabled = false;
 	ContentRegistry::LoadAllContent();

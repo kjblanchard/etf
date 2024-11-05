@@ -5,6 +5,9 @@
     ],
     "fileStates": {
         "debugSouth.tmj": {
+            "expandedGroupLayers": [
+                3
+            ],
             "expandedObjectLayers": [
                 2,
                 5
@@ -12,7 +15,7 @@
             "scale": 2,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 154.75,
+                "x": 118.25,
                 "y": 131
             }
         },

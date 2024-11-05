@@ -4,6 +4,6 @@ namespace Supergoon {
 struct PlayerSpawnComponent {
 	Vector2 Location;
 	int SpawnLocationId;
-	// Directions SpawnDirection;
+	int SpawnDirection;
 };
-}  // namespace Bba
+}  // namespace Supergoon

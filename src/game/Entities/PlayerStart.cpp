@@ -12,9 +12,9 @@ GameObject* Supergoon::NewPlayerSpawn(TiledMap::TiledObject& obj) {
 		if (prop.Name == "loadLocation") {
 			p.SpawnLocationId = std::get<int>(prop.Value);
 		}
-		// if (prop.Name == "direction") {
-		// 	p.SpawnDirection = (Directions)std::get<int>(prop.Value);
-		// }
+		if (prop.Name == "direction") {
+			p.SpawnDirection = std::get<int>(prop.Value);
+		}
 	}
 	go->AddComponent<PlayerSpawnComponent>(p);
 	return go;
