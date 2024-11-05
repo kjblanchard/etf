@@ -4,8 +4,6 @@
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Widgets/ContentWidget.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
-#include <algorithm>
-#include <unordered_set>
 #include <vector>
 namespace Supergoon {
 
