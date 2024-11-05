@@ -14,10 +14,6 @@
 make rebuild
 ```
 
-## Features
-- Sound implementation with SDL3
-- - BGM with Introloop, to loop at specific intervals using ogg vorbis comments and load via buffers
-
 ## Libraries | Components
 - SDL3
 - nlohmann JSON
@@ -25,6 +21,7 @@ make rebuild
 - vorbis
 - imgui
 - stb_image
+- png (deprecated)
 - entt
 
 ## Contributing
