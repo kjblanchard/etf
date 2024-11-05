@@ -19,7 +19,7 @@ void UpdateCamera() {
 		return;
 	}
 	auto& cc = c->GetComponent<CameraComponent>();
-	auto& gc = c->GetComponent<GameState>();
+	auto& gc = g->GetComponent<GameState>();
 	if (!cc.FollowTarget) {
 		getFollowTarget(cc);
 	}

@@ -22,6 +22,7 @@ void GlobalWidget::ShowGlobalDebugWindow() {
 			/* code */
 		}
 	}
+	// TODO this is very ineffieicnt, yes.
 	ImGui::Text("Total number of gameobjects %d", GameObject::NumberGameObjects());
 	ImGui::Checkbox("Show Static Debug Colliders", &ShowDebugBoxSolid);
 	ImGui::End();

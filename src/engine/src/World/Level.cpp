@@ -6,6 +6,7 @@
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/ECS/Components/CameraComponent.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/KeepAliveComponent.hpp>
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Components/SolidComponent.hpp>
 #include <Supergoon/Events.hpp>
@@ -22,6 +23,7 @@ using namespace Supergoon;
 std::unique_ptr<Level> Level::_currentLevel = nullptr;
 std::function<void()> Level::LoadFunc = nullptr;
 int Level::LoadLocation = 0;
+// GameObject *Level::_gameStateGameObject = nullptr;
 
 std::string Level::GetBgm() {
 	auto iterator = std::find_if(_mapData->Properties.begin(), _mapData->Properties.end(), [](TiledMap::TiledProperty &prop) {
@@ -45,27 +47,42 @@ Level::Level(const char *filename)
 	LoadAllGameObjects();
 	LoadSolidObjects();
 	// Add gamestate object to level
-	auto go = new GameObject();
-	auto gamestate = GameState();
+	// if (!_gameStateGameObject) {
+	auto _gameStateGameObject = GameObject::GetGameObjectWithComponents<GameState>();
+	if (!_gameStateGameObject.has_value()) {
+		auto gsGo = new GameObject();
+		auto gamestate = GameState();
+		auto keepalive = KeepAliveComponent();
+		gamestate.CurrentLevel = this;
+		sgLogWarn("Level load location when making level is %d", Level::LoadLocation);
+		gamestate.PlayerSpawnLocation = LoadLocation;
+		gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
+		gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
+		gamestate.Loading = false;
+		gsGo->AddComponent<GameState>(gamestate);
+		gsGo->AddComponent<KeepAliveComponent>(keepalive);
+		AddGameObjectToLevel(gsGo);
+		// _gameStateGameObject = go;
+	} else {
+		auto &comp = _gameStateGameObject->GetComponent<GameState>();
+		comp.CurrentLevel = this;
+	}
+	auto camGo = new GameObject();
 	auto camera = CameraComponent();
 	camera.Bounds.X = GetSize().X;
 	camera.Bounds.Y = GetSize().Y;
 	camera.Box.X = 0;
 	camera.Box.Y = 0;
-	gamestate.CurrentLevel = this;
-	sgLogWarn("Level load location when making level is %d", Level::LoadLocation);
-	gamestate.PlayerSpawnLocation = LoadLocation;
-	gamestate.WindowHeight = Graphics::Instance()->LogicalHeight();
-	gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
-	gamestate.Loading = false;
-	go->AddComponent<GameState>(gamestate);
-	go->AddComponent<CameraComponent>(camera);
-	AddGameObjectToLevel(go);
+	camGo->AddComponent<CameraComponent>(camera);
+	AddGameObjectToLevel(camGo);
 }
 
 Level::~Level() {
 	// TODO should we actually clear the background testure when level is destroyed here too?
 	for (auto &&go : _gameObjects) {
+		if (go->HasComponent<KeepAliveComponent>()) {
+			continue;
+		}
 		go->FreeGameObject();
 		delete (go);
 	}
@@ -115,6 +132,7 @@ Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 void Level::LoadNewLevelFade(std::string level) {
 	UI::SetFadeOutEndFunc([level]() {
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)level.c_str());
+		// auto comp = _gameStateGameObject->GetComponent<GameState>();
 		UI::FadeIn();
 	});
 	UI::FadeOut();
@@ -129,6 +147,9 @@ void Level::LoadNewLevel(std::string level) {
 		LoadFunc();
 	}
 	auto bgm = _currentLevel->GetBgm();
+	auto goboi = GameObject::GetGameObjectWithComponents<GameState>();
+	auto &comp = goboi->GetComponent<GameState>();
+	comp.Loading = false;
 	Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup(bgm.c_str()));
 }
 

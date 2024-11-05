@@ -54,6 +54,7 @@ class Level {
 	std::shared_ptr<Image> _background;
 	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;
+	// static GameObject *_gameStateGameObject;
 	static std::unique_ptr<Level> _currentLevel;
 	friend class LevelWidget;
 };
