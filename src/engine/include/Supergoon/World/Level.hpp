@@ -20,8 +20,6 @@ class Level {
 	 */
 	Level(const char *filename);
 	~Level();
-	static void LoadNewLevelFade(std::string level);
-	static void LoadNewLevel(std::string level);
 	std::string GetBgm();
 	const inline std::string &GetName() const { return _name; }
 	inline Point GetSize() { return Point{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
@@ -36,6 +34,9 @@ class Level {
 	float cameraY = 0;
 
    private:
+	// Loads a new level with a fade, for screen transitions.
+	static void LoadNewLevelFade(std::string level);
+	static void LoadNewLevel(std::string level);
 	/**
 	 * @brief Loads all the surfaces from the tilesets in this level, so that we can blit them properly
 	 */
@@ -52,8 +53,8 @@ class Level {
 	std::shared_ptr<Image> _background;
 	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;
-	// static GameObject *_gameStateGameObject;
 	static std::unique_ptr<Level> _currentLevel;
 	friend class LevelWidget;
+	friend class Events;
 };
 }  // namespace Supergoon

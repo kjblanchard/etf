@@ -21,6 +21,9 @@ class GameObject {
 	template <typename T>
 	// Removes a component from a gameobject
 	void RemoveComponent();
+	template <typename T>
+	// Find a component on a gameobject from all entities.  A mix of GetGameObject and Get component to save lines, not super efficient.
+	static T* FindComponent();
 	template <typename... Components, typename Func>
 	static void ForEach(Func func);
 	template <typename... Components>
@@ -35,6 +38,14 @@ class GameObject {
 	template <typename... Components>
 	static auto GetGameObjectsWithComponents();
 };
+template <typename T>
+T* GameObject::FindComponent() {
+	auto view = _registry.view<T>();
+	if (view.empty()) {
+		return nullptr;
+	}
+	return &GameObject{*view.begin()}.GetComponent<T>();
+}
 
 template <typename T, typename... Args>
 void GameObject::AddComponent(Args&&... args) {

@@ -53,7 +53,7 @@ static void playLogos() {
 	auto fadeInTween2 = new Tween(0, 255, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
 	auto fadeOutTween2 = new Tween(255, 0, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
 	fadeOutTween2->EndFunc = []() {
-		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTown");
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTown"));
 	};
 	animator->AddUIObjectTween(fadeInTween, thing);
 	animator->AddUIObjectTween(fadeOutTween, thing);
@@ -70,7 +70,7 @@ void BlackjackGame::Start() {
 	if (!skipLogos) {
 		playLogos();
 	} else {
-		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)"debugTownHome");
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTownHome"));
 	}
 }
 

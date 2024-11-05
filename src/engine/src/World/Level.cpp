@@ -44,10 +44,8 @@ Level::Level(const char *filename)
 	CreateBackgroundImage();
 	LoadAllGameObjects();
 	LoadSolidObjects();
-	// Add gamestate object to level
-	// if (!_gameStateGameObject) {
-	auto _gameStateGameObject = GameObject::GetGameObjectWithComponents<GameState>();
-	if (!_gameStateGameObject.has_value()) {
+	auto gamestate = GameObject::FindComponent<GameState>();
+	if (!gamestate) {
 		auto gsGo = new GameObject();
 		auto gamestate = GameState();
 		auto keepalive = KeepAliveComponent();
@@ -59,10 +57,8 @@ Level::Level(const char *filename)
 		gsGo->AddComponent<GameState>(gamestate);
 		gsGo->AddComponent<KeepAliveComponent>(keepalive);
 		AddGameObjectToLevel(gsGo);
-		// _gameStateGameObject = go;
 	} else {
-		auto &comp = _gameStateGameObject->GetComponent<GameState>();
-		comp.CurrentLevel = this;
+		gamestate->CurrentLevel = this;
 	}
 	auto camGo = new GameObject();
 	auto camera = CameraComponent();
@@ -76,6 +72,7 @@ Level::Level(const char *filename)
 
 Level::~Level() {
 	// TODO should we actually clear the background testure when level is destroyed here too?
+	// TODO when should we clear keepalive components?
 	for (auto &&go : _gameObjects) {
 		if (go->HasComponent<KeepAliveComponent>()) {
 			continue;
@@ -85,6 +82,7 @@ Level::~Level() {
 	}
 	_gameObjects.clear();
 }
+
 static std::string getBasePathForTiled() {
 	return std::string(SDL_GetBasePath()) + "assets/tiled/";
 }
@@ -128,17 +126,13 @@ Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 
 void Level::LoadNewLevelFade(std::string level) {
 	UI::SetFadeOutEndFunc([level]() {
-		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)level.c_str());
-		// auto comp = _gameStateGameObject->GetComponent<GameState>();
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, false, (void *)strdup(level.c_str()));
 		UI::FadeIn();
 	});
 	UI::FadeOut();
-	// Update gamestate object
 }
 
 void Level::LoadNewLevel(std::string level) {
-	// If we should fade, wait until we fade out to load the level properly
-
 	_currentLevel = std::make_unique<Level>(level.c_str());
 	if (LoadFunc) {
 		LoadFunc();

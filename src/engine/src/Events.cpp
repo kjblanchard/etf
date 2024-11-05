@@ -32,9 +32,14 @@ Events::Events(Game* game) {
 		game->InternalReset();
 	});
 
-	RegisterEventHandler(BuiltinEvents.LevelChangeEvent, [](int, void* levelName, void*) {
+	RegisterEventHandler(BuiltinEvents.LevelChangeEvent, [](int shouldFade, void* levelName, void*) {
 		auto level = (const char*)levelName;
-		Level::LoadNewLevel(level);
+		if (shouldFade) {
+			Level::LoadNewLevelFade(level);
+		} else {
+			Level::LoadNewLevel(level);
+		}
+		SDL_free(levelName);
 	});
 }
 

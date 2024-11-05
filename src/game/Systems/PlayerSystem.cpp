@@ -113,9 +113,8 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 			return;
 		}
 		if (playerBodyRect.IsOverlap(&pe.BoundingBox)) {
-			// Play transition sound
 			stateComponent.PlayerSpawnLocation = pe.SpawnLocationId;
-			Level::LoadNewLevelFade(pe.NextMap);
+			Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, true, (void*)strdup((pe.NextMap.c_str())));
 			stateComponent.Loading = true;
 			exited = true;
 		}
