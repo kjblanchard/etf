@@ -3,7 +3,7 @@ namespace Supergoon {
 
 class Loader {
    public:
-	~Loader() = default;
+	virtual ~Loader() = default;
 	virtual void Load() = 0;
 };
 }  // namespace Supergoon

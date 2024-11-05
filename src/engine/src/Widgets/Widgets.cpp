@@ -1,6 +1,6 @@
 #include <SupergoonEngine/imgui/imgui.h>
 
-#include <Supergoon/Widgets/Content.hpp>
+#include <Supergoon/Widgets/ContentWidget.hpp>
 #include <Supergoon/Widgets/Game.hpp>
 #include <Supergoon/Widgets/Global.hpp>
 #include <Supergoon/Widgets/LevelWidget.hpp>

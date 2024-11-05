@@ -36,7 +36,7 @@ if(imgui)
     list(APPEND SRC_FILES
         src/Widgets/Widgets.cpp
         src/Widgets/SoundWidget.cpp
-        src/Widgets/Content.cpp
+        src/Widgets/ContentWidget.cpp
         src/Widgets/Game.cpp
         src/Widgets/UIWidget.cpp
         src/Widgets/Global.cpp
