@@ -13,6 +13,7 @@ if(UNIX OR APPLE)
         -Wpedantic
         -Wdeprecated
         -Wno-deprecated-literal-operator
+        -Wno-macro-redefined
     )
 endif(UNIX OR APPLE)
 
@@ -118,7 +119,7 @@ if(NOT FREETYPE_FOUND)
     )
     FetchContent_MakeAvailable(LIB_FREETYPE)
     list(APPEND EXTERNAL_LIBS freetype)
-endif(NOT freetype_FOUND)
+endif(NOT FREETYPE_FOUND)
 
 if(NOT LIB_OGG)
     message(STATUS "OGG not found. Fetching OGG...")
