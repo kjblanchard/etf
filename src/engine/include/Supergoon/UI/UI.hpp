@@ -15,7 +15,6 @@ class UI {
 	static void Draw();
 	static void Update();
 	static void Reset();
-	static std::vector<std::shared_ptr<UIObjectAnimatorBase>> Animators;
 	static Panel* UIInstance;
 
 	// Set when the UI

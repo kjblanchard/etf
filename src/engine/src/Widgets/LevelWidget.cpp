@@ -58,6 +58,8 @@ void LevelWidget::ShowLevelWidget() {
 		std::vector<std::string> result(std::sregex_token_iterator(levelFull.begin(), levelFull.end(), dotRegex, -1), std::sregex_token_iterator());
 		levelNameStrip = result[0];
 		// TODO is this a leak since I strdup?
+		auto gamestate = GameObject::FindComponent<GameState>();
+		gamestate->PlayerSpawnLocation = 0;
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void*)strdup(levelNameStrip.c_str()));
 	}
 	ImGui::End();

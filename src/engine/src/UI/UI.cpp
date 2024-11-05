@@ -12,7 +12,7 @@ using json = nlohmann::json;
 Panel* UI::UIInstance = nullptr;
 UIObjectAnimatorBase* UI::_fadeInAnimator = nullptr;
 UIObjectAnimatorBase* UI::_fadeOutAnimator = nullptr;
-std::vector<std::shared_ptr<UIObjectAnimatorBase>> UI::Animators;
+// std::vector<std::shared_ptr<UIObjectAnimatorBase>> UI::Animators;
 
 Panel* UI::Initialize() {
 	if (UIInstance) {
@@ -38,8 +38,8 @@ Panel* UI::Initialize() {
 	auto fadeInTween = new Tween(255, 0, 0.3, &fadePanel->Transparency, Supergoon::Easings::Linear);
 	fadeInAnimator->AddUIObjectTween(fadeInTween, fadePanel.get());
 	fadeOutAnimator->AddUIObjectTween(fadeOutTween, fadePanel.get());
-	Animators.push_back(fadeInAnimator);
-	Animators.push_back(fadeOutAnimator);
+	fadePanel->Animators.push_back(fadeInAnimator);
+	fadePanel->Animators.push_back(fadeOutAnimator);
 	_fadeOutAnimator = fadeOutAnimator.get();
 	_fadeInAnimator = fadeInAnimator.get();
 	rootPanel->Children[name] = fadePanel;
@@ -49,9 +49,6 @@ Panel* UI::Initialize() {
 void UI::Update() {
 	if (UIInstance) {
 		UIInstance->UpdateInternal();
-	}
-	for (auto&& animator : Animators) {
-		animator->Update();
 	}
 }
 
@@ -65,7 +62,6 @@ void UI::Reset() {
 		delete UIInstance;
 		UIInstance = nullptr;
 	}
-	Animators.clear();
 }
 
 void UI::LoadUIFromFile(std::string filename, Panel* parentPanel) {

@@ -47,19 +47,26 @@ static void playLogos() {
 	auto ui = UI::UIInstance;
 	auto thing = (ImageObject *)ui->Children["logoImage"].get();
 	auto thing2 = (ImageObject *)ui->Children["logoImage2"].get();
-	auto animator = new UIObjectAnimatorBase("Logos");
+	auto animator = new UIObjectAnimatorBase("logo");
+	auto animator2 = new UIObjectAnimatorBase("logo2");
 	auto fadeInTween = new Tween(0, 255, 3.0, &thing->Transparency, Supergoon::Easings::Linear);
 	auto fadeOutTween = new Tween(255, 0, 3.0, &thing->Transparency, Supergoon::Easings::Linear);
 	auto fadeInTween2 = new Tween(0, 255, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
 	auto fadeOutTween2 = new Tween(255, 0, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
+	fadeOutTween->EndFunc = [animator2]() {
+		animator2->Play();
+	};
 	fadeOutTween2->EndFunc = []() {
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTown"));
 	};
 	animator->AddUIObjectTween(fadeInTween, thing);
 	animator->AddUIObjectTween(fadeOutTween, thing);
-	animator->AddUIObjectTween(fadeInTween2, thing2);
-	animator->AddUIObjectTween(fadeOutTween2, thing2);
-	UI::Animators.push_back(std::shared_ptr<UIObjectAnimatorBase>(animator));
+	animator2->AddUIObjectTween(fadeInTween2, thing2);
+	animator2->AddUIObjectTween(fadeOutTween2, thing2);
+	thing->Animators.push_back(std::shared_ptr<UIObjectAnimatorBase>(animator));
+	thing2->Animators.push_back(std::shared_ptr<UIObjectAnimatorBase>(animator2));
+	animator->Play();
+	// UI::Animators.push_back(std::shared_ptr<UIObjectAnimatorBase>(animator));
 
 	ContentRegistry::LoadAllContent();
 }

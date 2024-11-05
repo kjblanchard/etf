@@ -1,3 +1,4 @@
+#include <Supergoon/UI/UIObject.hpp>
 #include <Supergoon/UI/UIObjectAnimator.hpp>
 using namespace Supergoon;
 

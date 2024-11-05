@@ -1,12 +1,13 @@
 #pragma once
 #include <Supergoon/Tween/Sequence.hpp>
 #include <Supergoon/Tween/Tween.hpp>
-#include <Supergoon/UI/UIObject.hpp>
 #include <memory>
 #include <string>
 #include <type_traits>
 #include <variant>
 namespace Supergoon {
+
+	class UIObject;
 
 struct UIObjectAnimatorBase {
 	//  For a single Tween with float
