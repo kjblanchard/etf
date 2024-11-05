@@ -15,6 +15,7 @@ class UI {
 	static void Draw();
 	static void Update();
 	static void Reset();
+	static void RegisterUIEvents();
 	static Panel* UIInstance;
 
 	// Set when the UI

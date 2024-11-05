@@ -24,6 +24,7 @@ class Level {
 	const inline std::string &GetName() const { return _name; }
 	inline Point GetSize() { return Point{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
 	static std::function<void()> LoadFunc;
+	static void AddLevelEventHandlers();
 	static void Reset();
 	static void Draw();
 	void LoadAllGameObjects();
@@ -53,9 +54,6 @@ class Level {
 	std::unique_ptr<TiledMap> _mapData;
 	static std::unique_ptr<Level> _currentLevel;
 	friend class LevelWidget;
-	friend class Events;
-	// float cameraX = 0;
-	// float cameraY = 0;
 	int cameraX = 0;
 	int cameraY = 0;
 };

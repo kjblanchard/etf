@@ -16,6 +16,7 @@ struct BuiltinEventTypes {
 	uint32_t UiFadeInEnd;
 	uint32_t UiFadeOutStart;
 	uint32_t UiFadeOutEnd;
+	uint32_t UiDestroyObject;
 	uint32_t GameObjectAdd;
 	// TODO not really sure if I like this, may make it jittery and behind on camera updates?
 	uint32_t CameraUpdate;

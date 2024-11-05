@@ -23,6 +23,7 @@ Events::Events(Game* game) {
 	BuiltinEvents.UiFadeInEnd = RegisterEvent();
 	BuiltinEvents.UiFadeOutStart = RegisterEvent();
 	BuiltinEvents.UiFadeOutEnd = RegisterEvent();
+	BuiltinEvents.UiDestroyObject = RegisterEvent();
 	BuiltinEvents.GameObjectAdd = RegisterEvent();
 	BuiltinEvents.CameraUpdate = RegisterEvent();
 
@@ -34,26 +35,8 @@ Events::Events(Game* game) {
 		game->InternalReset();
 	});
 
-	RegisterEventHandler(BuiltinEvents.LevelChangeEvent, [](int shouldFade, void* levelName, void*) {
-		auto level = (const char*)levelName;
-		if (shouldFade) {
-			Level::LoadNewLevelFade(level);
-		} else {
-			Level::LoadNewLevel(level);
-		}
-		SDL_free(levelName);
-	});
-	RegisterEventHandler(BuiltinEvents.GameObjectAdd, [](int, void* gameObject, void*) {
-		assert((GameObject*)gameObject);
-		Level::_currentLevel->AddGameObjectToLevel((GameObject*)gameObject);
-	});
-	RegisterEventHandler(BuiltinEvents.CameraUpdate, [](int, void* newLoc, void*) {
-		assert((RectangleF*)newLoc);
-		auto rect = (RectangleF*)newLoc;
-		Level::_currentLevel->cameraX = rect->X;
-		Level::_currentLevel->cameraY = rect->Y;
-		// Level::_currentLevel->AddGameObjectToLevel((GameObject*)gameObject);
-	});
+	UI::RegisterUIEvents();
+	Level::AddLevelEventHandlers();
 }
 
 bool Events::HandleEvent(SDL_Event* event) {

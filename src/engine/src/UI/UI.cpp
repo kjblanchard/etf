@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
 
 #include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/Events.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/UI/ImageObject.hpp>
 #include <Supergoon/UI/Panel.hpp>
@@ -13,6 +14,14 @@ Panel* UI::UIInstance = nullptr;
 UIObjectAnimatorBase* UI::_fadeInAnimator = nullptr;
 UIObjectAnimatorBase* UI::_fadeOutAnimator = nullptr;
 // std::vector<std::shared_ptr<UIObjectAnimatorBase>> UI::Animators;
+void UI::RegisterUIEvents() {
+	Events::RegisterEventHandler(Events::BuiltinEvents.UiDestroyObject, [](int, void* name, void*) {
+		auto ui = UI::UIInstance;
+		auto nameString = (const char*)name;
+		assert(nameString);
+		ui->Children.erase(nameString);
+	});
+}
 
 Panel* UI::Initialize() {
 	if (UIInstance) {

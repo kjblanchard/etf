@@ -57,7 +57,13 @@ static void playLogos() {
 		animator2->Play();
 	};
 	fadeOutTween2->EndFunc = []() {
+		// auto ui = UI::UIInstance;
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTown"));
+		Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"logoImage");
+		Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"logoImage2");
+
+		// ui->Children.erase("logoImage");
+		// ui->Children.erase("logoImage2");
 	};
 	animator->AddUIObjectTween(fadeInTween, thing);
 	animator->AddUIObjectTween(fadeOutTween, thing);

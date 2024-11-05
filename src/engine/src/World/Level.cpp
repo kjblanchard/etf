@@ -22,6 +22,28 @@ using namespace Supergoon;
 
 std::unique_ptr<Level> Level::_currentLevel = nullptr;
 std::function<void()> Level::LoadFunc = nullptr;
+void Level::AddLevelEventHandlers() {
+	Events::RegisterEventHandler(Events::BuiltinEvents.CameraUpdate, [](int, void *newLoc, void *) {
+		assert((RectangleF *)newLoc);
+		auto rect = (RectangleF *)newLoc;
+		Level::_currentLevel->cameraX = rect->X;
+		Level::_currentLevel->cameraY = rect->Y;
+	});
+	Events::RegisterEventHandler(Events::BuiltinEvents.LevelChangeEvent, [](int shouldFade, void *levelName, void *) {
+		auto level = (const char *)levelName;
+		assert(level);
+		if (shouldFade) {
+			LoadNewLevelFade(level);
+		} else {
+			LoadNewLevel(level);
+		}
+		SDL_free(levelName);
+	});
+	Events::RegisterEventHandler(Events::BuiltinEvents.GameObjectAdd, [](int, void *gameObject, void *) {
+		assert((GameObject *)gameObject);
+		_currentLevel->AddGameObjectToLevel((GameObject *)gameObject);
+	});
+}
 
 std::string Level::GetBgm() {
 	auto iterator = std::find_if(_mapData->Properties.begin(), _mapData->Properties.end(), [](TiledMap::TiledProperty &prop) {

@@ -8,11 +8,11 @@ void ContentRegistry::LoadContent(Content& content) {
 	content.LoadContent();
 }
 
-void ContentRegistry::ClearStaleContent() {
+void ContentRegistry::ClearStaleContent(bool force) {
 	// If there is a lot of stale content, clear it all.
 	int count = std::count_if(_loadedContent.begin(), _loadedContent.end(),
 							  [](const auto& pair) { return pair.second.use_count() <= 1; });
-	if (count < 20) {
+	if (!force && count < 20) {
 		return;
 	}
 	sgLogWarn("Clearing stale content as stale content count is %d", count);
