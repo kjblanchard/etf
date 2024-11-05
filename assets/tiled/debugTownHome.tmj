@@ -205,7 +205,7 @@
                  "y":64
                 }, 
                 {
-                 "height":16,
+                 "height":19.875,
                  "id":44,
                  "name":"",
                  "rotation":0,
@@ -213,10 +213,10 @@
                  "visible":true,
                  "width":109.16011339825,
                  "x":0,
-                 "y":160
+                 "y":154
                 }, 
                 {
-                 "height":16,
+                 "height":19.625,
                  "id":45,
                  "name":"",
                  "rotation":0,
@@ -224,7 +224,7 @@
                  "visible":true,
                  "width":109.79119930975,
                  "x":146.20880069025,
-                 "y":160
+                 "y":154
                 }],
          "opacity":1,
          "type":"objectgroup",
