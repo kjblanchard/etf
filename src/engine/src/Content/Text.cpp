@@ -166,7 +166,7 @@ int Text::GetLetterYBearing(FT_Face fontFace, char letter) {
 }
 
 void Text::DrawLettersToTextImage(int startLoc) {
-	_image->Clear();
+	// _image->Clear();
 	for (size_t i = startLoc; i < _lettersToDraw; i++) {
 		auto letter = _text[i];
 		if (letter == ' ' || letter == '\n') {
@@ -247,8 +247,10 @@ void Text::UpdateTextBounds(Point bounds) {
 	MeasureText();
 	// _image->UnloadContent();
 	auto imageName = std::string(_text.substr(0, 30)) + std::to_string(_fontSize) + std::to_string(_textSize.X) + std::to_string(_textSize.Y);
-	_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
-	_image->SetImageColor({0, 0, 0, 255});
-	_image->Load();
+	// If we need a new image to draw on from the size changing, then we should create new content, otherwise we should clear the current Image before redrawing.
+	if (imageName != _image->ContentKey()) {
+		_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
+	}
+	_image->Clear();
 	DrawLettersToTextImage();
 }
