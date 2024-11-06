@@ -40,6 +40,7 @@ class Text : public Content {
 	std::shared_ptr<Image> _image;
 	Point _textBounds = {0, 0};
 	Point _textSize = {0, 0};
+	Color _backgroundColor = {0, 0, 0, 0};
 	// Rectangle _boundingBox = {0, 0, 0, 0};
 	std::vector<Point> _letterPoints;
 	friend class UIWidget;
