@@ -9,6 +9,7 @@
 #include <Systems/DebugDrawSystem.hpp>
 #include <Systems/ImageSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
+
 using json = nlohmann::json;
 extern json configData;
 namespace Supergoon {
@@ -88,6 +89,12 @@ void BlackjackGame::Start() {
 		playLogos();
 	} else {
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTownHome"));
+		auto ui = UI::UIInstance;
+		auto textPanel = std::make_shared<Panel>(ui);
+		auto text = std::make_shared<UIText>(textPanel.get(), "Hello world!");
+		textPanel->Children["textman"] = text;
+		ui->Children["textTesting"] = textPanel;
+		auto hi = 0;
 	}
 }
 

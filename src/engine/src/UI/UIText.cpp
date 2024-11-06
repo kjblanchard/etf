@@ -5,6 +5,8 @@ using namespace Supergoon;
 UIText::UIText(Panel* parent, std::string text) : UIObject(parent) {
 	WidgetType = (int)BuiltinWidgetTypes::Text;
 	TextPtr = ContentRegistry::CreateContent<Text, std::string, int>(text, "commodore", 16);
+	Bounds.W = TextPtr->Size().X;
+	Bounds.H = TextPtr->Size().Y;
 }
 
 void UIText::Draw() {

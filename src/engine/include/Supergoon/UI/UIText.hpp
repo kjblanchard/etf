@@ -5,6 +5,7 @@
 #include <string>
 namespace Supergoon {
 class UIText : public UIObject {
+   public:
 	UIText(Panel* parent, std::string text);
 	virtual void Draw() override;
 	virtual void OnDirty() override;

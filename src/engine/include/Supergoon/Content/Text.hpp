@@ -12,6 +12,7 @@ class Text : public Content {
 	Text(std::string text, std::string fontName, int size);
 	~Text();
 	void Draw(RectangleF& dst);
+	inline Point Size() { return _textSize; }
 	virtual void Load() override;
 	virtual void Unload() override;
 	inline virtual std::string Type() override { return "Text"; }
