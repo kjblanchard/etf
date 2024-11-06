@@ -7,6 +7,7 @@ UIText::UIText(Panel* parent, std::string text) : UIObject(parent) {
 	TextPtr = ContentRegistry::CreateContent<Text, std::string, int>(text, "commodore", 16);
 	Bounds.W = TextPtr->Size().X;
 	Bounds.H = TextPtr->Size().Y;
+	TextBounds = TextPtr->TextBounds();
 }
 
 void UIText::Draw() {
@@ -20,4 +21,7 @@ void UIText::OnDirty() {
 	auto parentBoundsY = Parent ? Parent->Bounds.Y : 0;
 	Bounds.X = Offset.X + parentBoundsX;
 	Bounds.Y = Offset.Y + parentBoundsY;
+	TextPtr->UpdateTextBounds({(int)TextBounds.X, (int)TextBounds.Y});
+	Bounds.W = TextPtr->Size().X;
+	Bounds.H = TextPtr->Size().Y;
 }

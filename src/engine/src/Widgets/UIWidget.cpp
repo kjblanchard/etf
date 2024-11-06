@@ -7,7 +7,7 @@
 #include <Supergoon/Widgets/UIWidget.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
 using namespace Supergoon;
-static void DrawPanel(Panel *panel, std::string panelName) {
+void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 	if (ImGui::TreeNode((panelName + "- panel").c_str())) {
 		auto panelOffsetLabel = "Offset X ##" + panelName;
 		auto panelOffsetYLabel = "Offset Y ##" + panelName;
@@ -48,9 +48,14 @@ static void DrawPanel(Panel *panel, std::string panelName) {
 				}
 			} else if (value->WidgetType == (int)BuiltinWidgetTypes::Text) {
 				assert((UIText *)value.get());
-				// auto textUIObject = (UIText *)value.get();
+				auto textUIObject = (UIText *)value.get();
 				std::string childX_label = "Offset X##" + key;
 				std::string childY_label = "Offset Y##" + key;
+				std::string childW_label = "Width##" + key;
+				std::string childH_label = "Height##" + key;
+				std::string childXBounds = "TextBoundsX##" + key;
+				std::string childYBounds = "TextBoundsY##" + key;
+				std::string childWordWrapLabel = "WordWrap##" + key;
 				if (ImGui::TreeNode((key + "- text").c_str())) {
 					if (ImGui::DragFloat(childX_label.c_str(), &value->Offset.X, 1.0f)) {
 						value->Dirty = true;
@@ -58,6 +63,19 @@ static void DrawPanel(Panel *panel, std::string panelName) {
 					if (ImGui::DragFloat(childY_label.c_str(), &value->Offset.Y, 1.0f)) {
 						value->Dirty = true;
 					}
+					if (ImGui::DragFloat(childW_label.c_str(), &value->Bounds.W, 1.0f)) {
+						value->Dirty = true;
+					}
+					if (ImGui::DragFloat(childH_label.c_str(), &value->Bounds.H, 1.0f)) {
+						value->Dirty = true;
+					}
+					if (ImGui::DragInt(childXBounds.c_str(), &textUIObject->TextBounds.X, 1)) {
+						value->Dirty = true;
+					}
+					if (ImGui::DragInt(childYBounds.c_str(), &textUIObject->TextBounds.Y, 1)) {
+						value->Dirty = true;
+					}
+					ImGui::Checkbox(childWordWrapLabel.c_str(), &textUIObject->_wordWrap);
 					ImGui::TreePop();
 				}
 			}

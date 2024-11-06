@@ -123,3 +123,10 @@ void Image::SetImageColor(Color colorToUse) {
 		graphics->SetTextureColor(_image, _imageColor);
 	}
 }
+
+void Image::Clear() {
+	if (_imageType != ImageType::RenderTarget) {
+		return;
+	}
+	Graphics::Instance()->ClearRenderTargetTexture(_image);
+}

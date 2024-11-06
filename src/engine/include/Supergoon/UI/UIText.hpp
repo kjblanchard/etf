@@ -11,5 +11,10 @@ class UIText : public UIObject {
 	virtual void OnDirty() override;
 	std::shared_ptr<Text> TextPtr;
 	int Transparency = 255;
+	Point TextBounds = {0, 0};
+
+   private:
+	bool _wordWrap;
+	friend class UIWidget;
 };
 }  // namespace Supergoon

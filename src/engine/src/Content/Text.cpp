@@ -8,9 +8,9 @@ Text::Text(std::string text, std::string fontName, int size) : Content(text), _f
 	_font = ContentRegistry::CreateContent<Font, int>(fontName, std::move(size));
 	_font->LoadContent();
 	_lettersToDraw = text.length();
-	_letterPoints.resize(_text.length() + 10);
+	// _letterPoints.resize(_text.length() + 10);
 	MeasureText();
-	auto imageName = std::string(text.substr(0, 30)) + std::to_string(_fontSize);
+	auto imageName = std::string(text.substr(0, 30)) + std::to_string(_fontSize) + std::to_string(_textSize.X) + std::to_string(_textSize.Y);
 	_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
 	_image->SetImageColor({0, 0, 0, 255});
 	DrawLettersToTextImage();
@@ -26,7 +26,9 @@ Text::~Text() {
 }
 void Text::Draw(RectangleF& dst) {
 	auto src = RectangleF();
-	_image->Draw(src, dst);
+	// auto realDst = RectangleF{dst.X, dst.Y, (float)_textBounds.X, (float)_textBounds.Y};
+	auto realDst = RectangleF{dst.X, dst.Y, (float)_textSize.X, (float)_textSize.Y};
+	_image->Draw(src, realDst);
 }
 
 void Text::MeasureText() {
@@ -40,6 +42,8 @@ void Text::MeasureText() {
 	int descenderInPixels = (fontFace->descender * _fontSize) / fontFace->units_per_EM;
 	int lineSpace = (fontFace->height * _fontSize) / fontFace->units_per_EM;
 	int startLoc = ascenderInPixels + _paddingT;
+	_letterPoints.clear();
+	_letterPoints.resize(_text.length() + 10);
 
 	// int penX = 0, penY = startLoc;
 	int penX = _paddingL;
@@ -70,7 +74,9 @@ void Text::MeasureText() {
 			currentWordLetters = 0;
 			continue;
 		}
+		// If we should wordwrap, move penx to beginning, and increment peny
 		if (CheckShouldWrap(penX, currentWordLength, letterSize, maxWidth)) {
+			// If current pen location is greater than the calculated text size, update
 			if (penX > textSize.X) {
 				textSize.X = penX;
 			}
@@ -106,7 +112,7 @@ int Text::GetLetterWidth(FT_Face fontFace, char letter) {
 }
 
 bool Text::CheckShouldWrap(int x, int wordLength, int glyphWidth, int maxX) {
-	return x + wordLength + glyphWidth > maxX;
+	return _wordWrap && x + wordLength + glyphWidth > maxX;
 }
 
 void Text::AddWordToLetterPoints(FT_Face fontFace, int wordEndPos, int wordLength, int penX, int penY) {
@@ -160,6 +166,7 @@ int Text::GetLetterYBearing(FT_Face fontFace, char letter) {
 }
 
 void Text::DrawLettersToTextImage(int startLoc) {
+	_image->Clear();
 	for (size_t i = startLoc; i < _lettersToDraw; i++) {
 		auto letter = _text[i];
 		if (letter == ' ' || letter == '\n') {
@@ -179,13 +186,13 @@ void Text::DrawLettersToTextImage(int startLoc) {
 		auto letterImage = ContentRegistry::GetContent<Image>(letterContentName);
 		letterImage->LoadContent();
 		_image->LoadContent();
-		auto r = RectangleF();
-		r.X = _letterPoints[i].X;
-		r.Y = _letterPoints[i].Y;
-		r.W = letterImage->Width();
-		r.H = letterImage->Height();
 		auto dstRect = RectangleF();
-		_image->DrawImageToImage(*letterImage, dstRect, r);
+		dstRect.X = _letterPoints[i].X;
+		dstRect.Y = _letterPoints[i].Y;
+		dstRect.W = letterImage->Width();
+		dstRect.H = letterImage->Height();
+		auto srcRect = RectangleF();
+		_image->DrawImageToImage(*letterImage, srcRect, dstRect);
 	}
 }
 
@@ -228,4 +235,18 @@ void Text::CreateSurfaceForLetter(std::string name, FT_Face fontFace, int r, int
 	auto content = ContentRegistry::CreateContent<Image, SDL_Surface*>(name, std::move(surface));
 	// content->SetImageColor({255, 255, 255, 255});
 	content->LoadContent();
+}
+
+void Text::UpdateTextBounds(Point bounds) {
+	// TODO we should make a comparison operator for points.
+	if (bounds.X == _textBounds.X && bounds.Y == _textBounds.Y) {
+		return;
+	}
+	_textBounds.X = bounds.X;
+	_textBounds.Y = bounds.Y;
+	MeasureText();
+	auto imageName = std::string(_text.substr(0, 30)) + std::to_string(_fontSize) + std::to_string(_textSize.X) + std::to_string(_textSize.Y);
+	_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
+	_image->SetImageColor({0, 0, 0, 255});
+	DrawLettersToTextImage();
 }

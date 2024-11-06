@@ -15,6 +15,8 @@ class Text : public Content {
 	inline Point Size() { return _textSize; }
 	virtual void Load() override;
 	virtual void Unload() override;
+	void UpdateTextBounds(Point bounds);
+	inline Point TextBounds() { return _textBounds; }
 	inline virtual std::string Type() override { return "Text"; }
 
    private:
@@ -28,7 +30,7 @@ class Text : public Content {
 	void DrawLettersToTextImage(int startLoc = 0);
 	std::string _text;
 	int _fontSize;
-	// bool _wordWrap = false;
+	bool _wordWrap = true;
 	int _lettersToDraw;
 	// int _currentLettersDrawn;
 	int _paddingL = 0, _paddingR = 0, _paddingT = 0;  //,_paddingB = 0;
