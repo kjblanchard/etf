@@ -124,9 +124,9 @@ void Image::SetImageColor(Color colorToUse) {
 	}
 }
 
-void Image::Clear() {
+void Image::Clear(Color color) {
 	if (_imageType != ImageType::RenderTarget) {
 		return;
 	}
-	Graphics::Instance()->ClearRenderTargetTexture(_image);
+	Graphics::Instance()->ClearRenderTargetTexture(_image, color);
 }

@@ -1,4 +1,6 @@
 
+#include <SDL3/SDL.h>
+
 #include <Debug/PlayerCollider.hpp>
 #include <Entities/PlayerExit.hpp>
 #include <Entities/PlayerStart.hpp>
@@ -94,7 +96,46 @@ void BlackjackGame::Start() {
 		auto text = std::make_shared<UIText>(textPanel.get(), "Hello world!");
 		textPanel->Children["textman"] = text;
 		ui->Children["textTesting"] = textPanel;
-		auto hi = 0;
+		// Test creating the uitextbox
+		// First, lets load in the picture for uiimage so that we can draw from it to the new one
+		auto path = std::string(SDL_GetBasePath()) + "assets/img/uibase.png";
+		auto uiImageFull = ContentRegistry::CreateContent<Image>(path);
+		uiImageFull->LoadContent();
+		// Create ui text image of the right size as a render target
+		float fullSizeX = 128;
+		float fullSizeY = 64;
+		auto textBoxImage = ContentRegistry::CreateContent<Image, int, int>("uitextbox", (int)fullSizeX, (int)fullSizeY);
+		textBoxImage->LoadContent();
+		// Set the background
+		textBoxImage->Clear({0,0,200,200});
+		float sizeX = 8;
+		float sizeY = 9;
+		textBoxImage->SetAlpha(200);
+		// Draw the corners
+		// tl
+		auto srcRect = RectangleF{0, 0, sizeX, sizeY};
+		auto dstRect = RectangleF{0, 0, sizeX, sizeY};
+		textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
+		// tr
+		srcRect = RectangleF{uiImageFull->Width() - sizeX, 0, sizeX, sizeY};
+		dstRect = RectangleF{fullSizeX - sizeX, 0, sizeX, sizeY};
+		textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
+		// bl
+		srcRect = RectangleF{0, uiImageFull->Height() - sizeY, sizeX, sizeY};
+		dstRect = RectangleF{0, fullSizeY - sizeY, sizeX, sizeY};
+		textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
+		// br
+		srcRect = RectangleF{uiImageFull->Width() - sizeX, uiImageFull->Height() - sizeY, sizeX, sizeY};
+		dstRect = RectangleF{fullSizeX - sizeX, fullSizeY - sizeY, sizeX, sizeY};
+		textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
+		// Add this image to the ui panel
+		auto textBoxUIImage = std::make_shared<ImageObject>(textPanel.get());
+		textBoxUIImage->ImagePtr = textBoxImage;
+		textBoxUIImage->Visible = true;
+		textBoxUIImage->Bounds = RectangleF{0, 0, (float)textBoxImage->Width(), (float)textBoxImage->Height()};
+		textBoxUIImage->Offset.X = 20;
+		textBoxUIImage->Offset.Y = 20;
+		textPanel->Children["uitextbox"] = textBoxUIImage;
 	}
 }
 
