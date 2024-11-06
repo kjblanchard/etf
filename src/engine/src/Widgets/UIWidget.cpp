@@ -3,6 +3,7 @@
 #include <Supergoon/UI/ImageObject.hpp>
 #include <Supergoon/UI/Panel.hpp>
 #include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/Widgets/UIWidget.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
 using namespace Supergoon;
@@ -41,6 +42,20 @@ static void DrawPanel(Panel *panel, std::string panelName) {
 						value->Dirty = true;
 					}
 					if (ImGui::DragInt(transLabel.c_str(), &imageObject->Transparency, 1, 0, 255, "%d", ImGuiSliderFlags_WrapAround)) {
+						value->Dirty = true;
+					}
+					ImGui::TreePop();
+				}
+			} else if (value->WidgetType == (int)BuiltinWidgetTypes::Text) {
+				assert((UIText *)value.get());
+				// auto textUIObject = (UIText *)value.get();
+				std::string childX_label = "Offset X##" + key;
+				std::string childY_label = "Offset Y##" + key;
+				if (ImGui::TreeNode((key + "- text").c_str())) {
+					if (ImGui::DragFloat(childX_label.c_str(), &value->Offset.X, 1.0f)) {
+						value->Dirty = true;
+					}
+					if (ImGui::DragFloat(childY_label.c_str(), &value->Offset.Y, 1.0f)) {
 						value->Dirty = true;
 					}
 					ImGui::TreePop();
