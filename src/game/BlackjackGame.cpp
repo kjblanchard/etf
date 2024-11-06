@@ -30,8 +30,17 @@ static void loadLevel() {
 	LoadPlayers();
 	LoadAnimationComponents();
 	StartPlayers();
-	// UI::UIInstance->Visible = false;
-	// UI::UIInstance->Enabled = false;
+	// Check if we should show the text at top
+	auto display = Level::GetCurrentLevelProperty<std::string>("display");
+	auto ui = UI::UIInstance->Children["textTesting"];
+	assert(ui);
+	if (display) {
+		ui->Visible = true;
+		// do something
+	} else {
+		ui->Visible = false;
+	}
+
 	ContentRegistry::LoadAllContent();
 	inGame = true;
 }
@@ -159,9 +168,10 @@ void BlackjackGame::Start() {
 		textBoxUIImage->ImagePtr = textBoxImage;
 		textBoxUIImage->Visible = true;
 		textBoxUIImage->Bounds = RectangleF{0, 0, (float)textBoxImage->Width(), (float)textBoxImage->Height()};
-		textBoxUIImage->Offset.X = 20;
-		textBoxUIImage->Offset.Y = 20;
+		textBoxUIImage->Offset.X = 0;
+		textBoxUIImage->Offset.Y = 0;
 		textPanel->Children["uitextbox"] = textBoxUIImage;
+		textPanel->Visible = false;
 	}
 }
 

@@ -9,26 +9,26 @@
                 3
             ],
             "expandedObjectLayers": [
-                2,
-                5
+                5,
+                2
             ],
             "scale": 2,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 114.75,
-                "y": 127.5
+                "x": 240,
+                "y": 157.25
             }
         },
         "debugTown.tmj": {
             "expandedObjectLayers": [
-                3,
-                5
+                5,
+                3
             ],
-            "scale": 4,
+            "scale": 2,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 304,
-                "y": 143.875
+                "x": 303.25,
+                "y": 169.5
             }
         },
         "debugTownHome.tmj": {
@@ -39,11 +39,11 @@
                 6,
                 5
             ],
-            "scale": 8,
+            "scale": 3,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 130.1875,
-                "y": 162.375
+                "x": 128.16666666666666,
+                "y": 114
             }
         },
         "house.tsj": {
