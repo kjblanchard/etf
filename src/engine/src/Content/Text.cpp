@@ -245,8 +245,10 @@ void Text::UpdateTextBounds(Point bounds) {
 	_textBounds.X = bounds.X;
 	_textBounds.Y = bounds.Y;
 	MeasureText();
+	// _image->UnloadContent();
 	auto imageName = std::string(_text.substr(0, 30)) + std::to_string(_fontSize) + std::to_string(_textSize.X) + std::to_string(_textSize.Y);
 	_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
 	_image->SetImageColor({0, 0, 0, 255});
+	_image->Load();
 	DrawLettersToTextImage();
 }
