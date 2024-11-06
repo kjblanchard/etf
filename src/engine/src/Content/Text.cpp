@@ -8,7 +8,6 @@ Text::Text(std::string text, std::string fontName, int size) : Content(text), _f
 	_font = ContentRegistry::CreateContent<Font, int>(fontName, std::move(size));
 	_font->LoadContent();
 	_lettersToDraw = text.length();
-	// _letterPoints.resize(_text.length() + 10);
 	MeasureText();
 	auto imageName = std::string(text.substr(0, 30)) + std::to_string(_fontSize) + std::to_string(_textSize.X) + std::to_string(_textSize.Y);
 	_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
@@ -26,7 +25,6 @@ Text::~Text() {
 }
 void Text::Draw(RectangleF& dst) {
 	auto src = RectangleF();
-	// auto realDst = RectangleF{dst.X, dst.Y, (float)_textBounds.X, (float)_textBounds.Y};
 	auto realDst = RectangleF{dst.X, dst.Y, (float)_textSize.X, (float)_textSize.Y};
 	_image->Draw(src, realDst);
 }
@@ -43,9 +41,8 @@ void Text::MeasureText() {
 	int lineSpace = (fontFace->height * _fontSize) / fontFace->units_per_EM;
 	int startLoc = ascenderInPixels + _paddingT;
 	_letterPoints.clear();
-	_letterPoints.resize(_text.length() + 10);
+	_letterPoints.resize(_text.length());
 
-	// int penX = 0, penY = startLoc;
 	int penX = _paddingL;
 	int penY = startLoc;
 	for (size_t i = 0; i < _text.length(); i++) {
@@ -74,7 +71,7 @@ void Text::MeasureText() {
 			currentWordLetters = 0;
 			continue;
 		}
-		// If we should wordwrap, move penx to beginning, and increment peny
+		// If we should wrap to the next line, move penx to beginning, and increment peny
 		if (CheckShouldWrap(penX, currentWordLength, letterSize, maxWidth)) {
 			// If current pen location is greater than the calculated text size, update
 			if (penX > textSize.X) {
@@ -85,6 +82,14 @@ void Text::MeasureText() {
 		}
 		currentWordLength += letterSize;
 		++currentWordLetters;
+		// If we shouldn't word wrap, treat every letter like it's own word.
+		if (!_wordWrap) {
+			AddWordToLetterPoints(fontFace, i + 1, currentWordLetters, penX, penY);
+			// penX += currentWordLength + letterSize;
+			penX += letterSize;
+			currentWordLength = 0;
+			currentWordLetters = 0;
+		}
 	}
 	if (currentWordLength) {
 		AddWordToLetterPoints(fontFace, _text.length(), currentWordLetters, penX, penY);
@@ -112,7 +117,7 @@ int Text::GetLetterWidth(FT_Face fontFace, char letter) {
 }
 
 bool Text::CheckShouldWrap(int x, int wordLength, int glyphWidth, int maxX) {
-	return _wordWrap && x + wordLength + glyphWidth > maxX;
+	return x + wordLength + glyphWidth > maxX;
 }
 
 void Text::AddWordToLetterPoints(FT_Face fontFace, int wordEndPos, int wordLength, int penX, int penY) {
@@ -233,7 +238,6 @@ void Text::CreateSurfaceForLetter(std::string name, FT_Face fontFace, int r, int
 		sgLogWarn("Could not set, error %s;", SDL_GetError());
 	}
 	auto content = ContentRegistry::CreateContent<Image, SDL_Surface*>(name, std::move(surface));
-	// content->SetImageColor({255, 255, 255, 255});
 	content->LoadContent();
 }
 

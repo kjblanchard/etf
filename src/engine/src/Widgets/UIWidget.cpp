@@ -75,7 +75,9 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 					if (ImGui::DragInt(childYBounds.c_str(), &textUIObject->TextBounds.Y, 1)) {
 						value->Dirty = true;
 					}
-					ImGui::Checkbox(childWordWrapLabel.c_str(), &textUIObject->_wordWrap);
+					if (ImGui::Checkbox(childWordWrapLabel.c_str(), &textUIObject->TextPtr->_wordWrap)) {
+						value->Dirty = true;
+					};
 					ImGui::TreePop();
 				}
 			}

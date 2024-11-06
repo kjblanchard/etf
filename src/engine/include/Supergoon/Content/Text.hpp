@@ -30,7 +30,7 @@ class Text : public Content {
 	void DrawLettersToTextImage(int startLoc = 0);
 	std::string _text;
 	int _fontSize;
-	bool _wordWrap = true;
+	bool _wordWrap = false;
 	int _lettersToDraw;
 	// int _currentLettersDrawn;
 	int _paddingL = 0, _paddingR = 0, _paddingT = 0;  //,_paddingB = 0;
@@ -40,5 +40,6 @@ class Text : public Content {
 	Point _textSize = {0, 0};
 	// Rectangle _boundingBox = {0, 0, 0, 0};
 	std::vector<Point> _letterPoints;
+	friend class UIWidget;
 };
 }  // namespace Supergoon
