@@ -85,7 +85,6 @@ void Text::MeasureText() {
 		// If we shouldn't word wrap, treat every letter like it's own word.
 		if (!_wordWrap) {
 			AddWordToLetterPoints(fontFace, i + 1, currentWordLetters, penX, penY);
-			// penX += currentWordLength + letterSize;
 			penX += letterSize;
 			currentWordLength = 0;
 			currentWordLetters = 0;
@@ -250,6 +249,39 @@ void Text::UpdateTextBounds(Point bounds) {
 	_textBounds.Y = bounds.Y;
 	MeasureText();
 	// _image->UnloadContent();
+	auto imageName = std::string(_text.substr(0, 30)) + std::to_string(_fontSize) + std::to_string(_textSize.X) + std::to_string(_textSize.Y);
+	// If we need a new image to draw on from the size changing, then we should create new content, otherwise we should clear the current Image before redrawing.
+	if (imageName != _image->ContentKey()) {
+		_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
+	}
+	_image->Clear();
+	DrawLettersToTextImage();
+}
+void Text::UpdateLetterCount(int letters) {
+	if (letters == _lettersToDraw) {
+		return;
+	}
+	if (letters < _lettersToDraw) {
+		// We need to redraw from the beginning as we already drew this on there.
+		_lettersToDraw = letters;
+		_image->Clear();
+		DrawLettersToTextImage();
+		return;
+	}
+	// Continue drawing on this.
+	auto startLoc = _lettersToDraw;
+	_lettersToDraw = letters;
+	DrawLettersToTextImage(startLoc);
+}
+
+void Text::UpdateWordWrap(bool wordWrap) {
+	if (wordWrap == _wordWrap) {
+		return;
+	}
+	_wordWrap = wordWrap;
+	// we probably should redraw the whole thing if wordwrap is toggled.
+	_image->Clear();
+	MeasureText();
 	auto imageName = std::string(_text.substr(0, 30)) + std::to_string(_fontSize) + std::to_string(_textSize.X) + std::to_string(_textSize.Y);
 	// If we need a new image to draw on from the size changing, then we should create new content, otherwise we should clear the current Image before redrawing.
 	if (imageName != _image->ContentKey()) {

@@ -56,6 +56,7 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 				std::string childXBounds = "TextBoundsX##" + key;
 				std::string childYBounds = "TextBoundsY##" + key;
 				std::string childWordWrapLabel = "WordWrap##" + key;
+				std::string childLettersToDraw = "Letters To Draw##" + key;
 				if (ImGui::TreeNode((key + "- text").c_str())) {
 					if (ImGui::DragFloat(childX_label.c_str(), &value->Offset.X, 1.0f)) {
 						value->Dirty = true;
@@ -75,9 +76,12 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 					if (ImGui::DragInt(childYBounds.c_str(), &textUIObject->TextBounds.Y, 1)) {
 						value->Dirty = true;
 					}
-					if (ImGui::Checkbox(childWordWrapLabel.c_str(), &textUIObject->TextPtr->_wordWrap)) {
+					if (ImGui::Checkbox(childWordWrapLabel.c_str(), &textUIObject->WordWrap)) {
 						value->Dirty = true;
 					};
+					if (ImGui::DragInt(childLettersToDraw.c_str(), &textUIObject->currentLetters, 1, 0, textUIObject->TextPtr->_text.length())) {
+						value->Dirty = true;
+					}
 					ImGui::TreePop();
 				}
 			}

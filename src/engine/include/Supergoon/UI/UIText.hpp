@@ -12,9 +12,10 @@ class UIText : public UIObject {
 	std::shared_ptr<Text> TextPtr;
 	int Transparency = 255;
 	Point TextBounds = {0, 0};
+	int currentLetters = 0;
+	bool WordWrap;
 
    private:
-	bool _wordWrap;
 	friend class UIWidget;
 };
 }  // namespace Supergoon

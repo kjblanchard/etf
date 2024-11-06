@@ -16,6 +16,8 @@ class Text : public Content {
 	virtual void Load() override;
 	virtual void Unload() override;
 	void UpdateTextBounds(Point bounds);
+	void UpdateLetterCount(int letters);
+	void UpdateWordWrap(bool wordWrap);
 	inline Point TextBounds() { return _textBounds; }
 	inline virtual std::string Type() override { return "Text"; }
 
@@ -41,5 +43,6 @@ class Text : public Content {
 	// Rectangle _boundingBox = {0, 0, 0, 0};
 	std::vector<Point> _letterPoints;
 	friend class UIWidget;
+	friend class UIText;
 };
 }  // namespace Supergoon

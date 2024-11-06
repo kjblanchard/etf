@@ -8,6 +8,8 @@ UIText::UIText(Panel* parent, std::string text) : UIObject(parent) {
 	Bounds.W = TextPtr->Size().X;
 	Bounds.H = TextPtr->Size().Y;
 	TextBounds = TextPtr->TextBounds();
+	currentLetters = TextPtr->_lettersToDraw;
+	WordWrap = TextPtr->_wordWrap;
 }
 
 void UIText::Draw() {
@@ -22,6 +24,8 @@ void UIText::OnDirty() {
 	Bounds.X = Offset.X + parentBoundsX;
 	Bounds.Y = Offset.Y + parentBoundsY;
 	TextPtr->UpdateTextBounds({(int)TextBounds.X, (int)TextBounds.Y});
+	TextPtr->UpdateLetterCount(currentLetters);
+	TextPtr->UpdateWordWrap(WordWrap);
 	Bounds.W = TextPtr->Size().X;
 	Bounds.H = TextPtr->Size().Y;
 }
