@@ -22,7 +22,6 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 };
 }
 using namespace Supergoon;
-static std::shared_ptr<Text> testText = nullptr;
 static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();
@@ -102,15 +101,10 @@ void BlackjackGame::Update() {
 }
 
 void BlackjackGame::Draw() {
-	if (!testText) {
-		testText = ContentRegistry::CreateContent<Text, std::string, int>("What in the world", "commodore", 16);
-		testText->LoadContent();
-	}
 	if (inGame) {
 		Level::Draw();
 		DrawAnimationComponents();
 		DrawImages();
-		testText->Draw();
 	}
 	UI::Draw();
 #ifdef imgui

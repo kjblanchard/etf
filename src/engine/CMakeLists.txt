@@ -28,6 +28,7 @@ set(SRC_FILES
     src/UI/Panel.cpp
     src/UI/UI.cpp
     src/UI/ImageObject.cpp
+    src/UI/UIText.cpp
     src/UI/UIObjectAnimator.cpp
 )
 

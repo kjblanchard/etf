@@ -4,18 +4,15 @@
 #include <Supergoon/Log.hpp>
 using namespace Supergoon;
 
-Text::Text(std::string text, std::string fontName, int size) : Content(text), _size(size), _text(text) {
+Text::Text(std::string text, std::string fontName, int size) : Content(text), _fontSize(size), _text(text) {
 	_font = ContentRegistry::CreateContent<Font, int>(fontName, std::move(size));
 	_font->LoadContent();
 	_lettersToDraw = text.length();
 	_letterPoints.resize(_text.length() + 10);
 	MeasureText();
-	auto imageName = std::string(text.substr(0, 30)) + std::to_string(_size);
-	_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_boundingBox.W), std::move(_boundingBox.H));
+	auto imageName = std::string(text.substr(0, 30)) + std::to_string(_fontSize);
+	_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
 	_image->SetImageColor({0, 0, 0, 255});
-	// TODO this shouldn't be 20.
-	_boundingBox.X = 20;
-	_boundingBox.Y = 20;
 	DrawLettersToTextImage();
 }
 
@@ -27,15 +24,9 @@ void Text::Unload() {
 
 Text::~Text() {
 }
-void Text::Draw() {
-	RectangleF d;
-	d.X = _boundingBox.X;
-	d.Y = _boundingBox.Y;
-	d.W = _boundingBox.W;
-	d.H = _boundingBox.H;
+void Text::Draw(RectangleF& dst) {
 	auto src = RectangleF();
-	// sgLogWarn("Drawing text to x:%f y:%f w:%f h:%f", d.X, d.Y, d.W, d.H);
-	_image->Draw(src, d);
+	_image->Draw(src, dst);
 }
 
 void Text::MeasureText() {
@@ -45,9 +36,9 @@ void Text::MeasureText() {
 	maxWidth -= _paddingR;
 	auto textSize = Point();
 	int currentWordLength = 0, currentWordLetters = 0;
-	int ascenderInPixels = (fontFace->ascender * _size) / fontFace->units_per_EM;
-	int descenderInPixels = (fontFace->descender * _size) / fontFace->units_per_EM;
-	int lineSpace = (fontFace->height * _size) / fontFace->units_per_EM;
+	int ascenderInPixels = (fontFace->ascender * _fontSize) / fontFace->units_per_EM;
+	int descenderInPixels = (fontFace->descender * _fontSize) / fontFace->units_per_EM;
+	int lineSpace = (fontFace->height * _fontSize) / fontFace->units_per_EM;
 	int startLoc = ascenderInPixels + _paddingT;
 
 	// int penX = 0, penY = startLoc;
@@ -98,8 +89,8 @@ void Text::MeasureText() {
 	if (textSize.Y > maxHeight) {
 		sgLogWarn("Your text overflowed through Y, please adjust your bounds else it will flow past");
 	}
-	_boundingBox.W = textSize.X;
-	_boundingBox.H = textSize.Y;
+	_textSize.X = textSize.X;
+	_textSize.Y = textSize.Y;
 }
 
 int Text::GetLetterWidth(FT_Face fontFace, char letter) {
@@ -174,7 +165,7 @@ void Text::DrawLettersToTextImage(int startLoc) {
 		if (letter == ' ' || letter == '\n') {
 			continue;
 		}
-		auto letterContentName = letter + std::to_string(_size);
+		auto letterContentName = letter + std::to_string(_fontSize);
 
 		if (!ContentRegistry::ContentExists(letterContentName)) {
 			int result = FT_Load_Char(_font->FontFace(), letter, FT_LOAD_RENDER);

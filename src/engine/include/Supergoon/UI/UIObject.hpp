@@ -5,6 +5,7 @@
 namespace Supergoon {
 enum class BuiltinWidgetTypes {
 	Image = 1,
+	Text,
 };
 class UIObject {
    public:
