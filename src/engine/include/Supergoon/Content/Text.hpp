@@ -15,9 +15,9 @@ class Text : public Content {
 	inline Point Size() { return _textSize; }
 	virtual void Load() override;
 	virtual void Unload() override;
-	void UpdateTextBounds(Point bounds);
-	void UpdateLetterCount(int letters);
-	void UpdateWordWrap(bool wordWrap);
+	void SetTextBounds(Point bounds);
+	void SetLetterCount(int letters);
+	void SetWordWrap(bool wordWrap);
 	inline Point TextBounds() { return _textBounds; }
 	inline virtual std::string Type() override { return "Text"; }
 

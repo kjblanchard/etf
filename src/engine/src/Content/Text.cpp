@@ -240,7 +240,7 @@ void Text::CreateSurfaceForLetter(std::string name, FT_Face fontFace, int r, int
 	content->LoadContent();
 }
 
-void Text::UpdateTextBounds(Point bounds) {
+void Text::SetTextBounds(Point bounds) {
 	// TODO we should make a comparison operator for points.
 	if (bounds.X == _textBounds.X && bounds.Y == _textBounds.Y) {
 		return;
@@ -257,7 +257,7 @@ void Text::UpdateTextBounds(Point bounds) {
 	_image->Clear();
 	DrawLettersToTextImage();
 }
-void Text::UpdateLetterCount(int letters) {
+void Text::SetLetterCount(int letters) {
 	if (letters == _lettersToDraw) {
 		return;
 	}
@@ -274,7 +274,7 @@ void Text::UpdateLetterCount(int letters) {
 	DrawLettersToTextImage(startLoc);
 }
 
-void Text::UpdateWordWrap(bool wordWrap) {
+void Text::SetWordWrap(bool wordWrap) {
 	if (wordWrap == _wordWrap) {
 		return;
 	}
