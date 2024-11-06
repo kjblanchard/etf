@@ -107,7 +107,7 @@ void BlackjackGame::Start() {
 		auto textBoxImage = ContentRegistry::CreateContent<Image, int, int>("uitextbox", (int)fullSizeX, (int)fullSizeY);
 		textBoxImage->LoadContent();
 		// Set the background
-		textBoxImage->Clear({0,0,200,200});
+		textBoxImage->Clear({0, 0, 200, 200});
 		float sizeX = 8;
 		float sizeY = 9;
 		textBoxImage->SetAlpha(200);
@@ -128,6 +128,32 @@ void BlackjackGame::Start() {
 		srcRect = RectangleF{uiImageFull->Width() - sizeX, uiImageFull->Height() - sizeY, sizeX, sizeY};
 		dstRect = RectangleF{fullSizeX - sizeX, fullSizeY - sizeY, sizeX, sizeY};
 		textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
+		// draw the bars
+		int length = fullSizeX - (sizeX);
+		int height = fullSizeY - (sizeY);
+		// top
+		srcRect = RectangleF{1 + sizeX, 0, 1, sizeY};
+		for (size_t i = sizeX; i < length; i++) {
+			dstRect = RectangleF{(float)i, 0, 1, sizeY};
+			textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
+		}
+		// bottom
+		for (size_t i = sizeX; i < length; i++) {
+			dstRect = RectangleF{(float)i, fullSizeY - sizeY + 4, 1, sizeY};
+			textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
+		}
+		// left
+		srcRect = RectangleF({0, sizeY + 1, sizeX, 1});
+		for (size_t i = sizeY; i < height; i++) {
+			dstRect = RectangleF{0, (float)i, sizeX, 1};
+			textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
+		}
+		// right
+		for (size_t i = sizeY; i < height; i++) {
+			dstRect = RectangleF{fullSizeX - sizeX + 3, (float)i, sizeX, 1};
+			textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
+		}
+
 		// Add this image to the ui panel
 		auto textBoxUIImage = std::make_shared<ImageObject>(textPanel.get());
 		textBoxUIImage->ImagePtr = textBoxImage;
