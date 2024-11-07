@@ -2,13 +2,13 @@
     "window": {
         "x": 1024,
         "y": 576,
-        "title": "Supergoon Blackjack!"
+        "title": "Escape the Fate"
     },
     "world": {
         "x": 512,
         "y": 288
     },
-    "skipLogos": true,
-    "mute": true
+    "skipLogos": false,
+    "mute": false
 }
 
