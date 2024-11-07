@@ -1,0 +1,44 @@
+==24872== HEAP SUMMARY:
+==24872==     in use at exit: 827,449 bytes in 4,067 blocks
+==24872==   total heap usage: 182,534 allocs, 171,014 frees, 308,161,384 bytes allocated
+==24872== 
+==24872== 4 bytes in 1 blocks are definitely lost in loss record 2 of 211
+==24872==    at 0x4E05833: operator new(unsigned long) (vg_replace_malloc.c:483)
+==24872==    by 0x1F501F: Supergoon::Level::Level(char const*) (Level.cpp:71)
+==24872==    by 0x1F96BF: std::__detail::_MakeUniq<Supergoon::Level>::__single_object std::make_unique<Supergoon::Level, char const*>(char const*&&) (unique_ptr.h:1070)
+==24872==    by 0x1F5C2C: Supergoon::Level::LoadNewLevel(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (Level.cpp:159)
+==24872==    by 0x1F4B35: Supergoon::Level::AddLevelEventHandlers()::{lambda(int, void*, void*)#2}::operator()(int, void*, void*) const (Level.cpp:38)
+==24872==    by 0x1F7D27: void std::__invoke_impl<void, Supergoon::Level::AddLevelEventHandlers()::{lambda(int, void*, void*)#2}&, int, void*, void*>(std::__invoke_other, Supergoon::Level::AddLevelEventHandlers()::{lambda(int, void*, void*)#2}&, int&&, void*&&, void*&&) (invoke.h:61)
+==24872==    by 0x1F75F2: std::enable_if<is_invocable_r_v<void, Supergoon::Level::AddLevelEventHandlers()::{lambda(int, void*, void*)#2}&, int, void*, void*>, void>::type std::__invoke_r<void, Supergoon::Level::AddLevelEventHandlers()::{lambda(int, void*, void*)#2}&, int, void*, void*>(Supergoon::Level::AddLevelEventHandlers()::{lambda(int, void*, void*)#2}&, int&&, void*&&, void*&&) (invoke.h:111)
+==24872==    by 0x1F7064: std::_Function_handler<void (int, void*, void*), Supergoon::Level::AddLevelEventHandlers()::{lambda(int, void*, void*)#2}>::_M_invoke(std::_Any_data const&, int&&, void*&&, void*&&) (std_function.h:290)
+==24872==    by 0x1CD874: std::function<void (int, void*, void*)>::operator()(int, void*, void*) const (std_function.h:591)
+==24872==    by 0x1CC40D: Supergoon::Events::HandleCustomEventHandlers(SDL_Event*) (Events.cpp:68)
+==24872==    by 0x1CC2EF: Supergoon::Events::HandleEvent(SDL_Event*) (Events.cpp:54)
+==24872==    by 0x1ADF75: Supergoon::Game::HandleEvent(SDL_Event*) (Game.cpp:97)
+==24872== 
+==24872== 49 (48 direct, 1 indirect) bytes in 1 blocks are definitely lost in loss record 63 of 211
+==24872==    at 0x4E05833: operator new(unsigned long) (vg_replace_malloc.c:483)
+==24872==    by 0x14563F: sgRegisterGame (BlackjackGame.cpp:225)
+==24872==    by 0x1AD8D9: SDL_AppInit (Game.cpp:40)
+==24872==    by 0x5532E4: SDL_InitMainCallbacks (SDL_main_callbacks.c:104)
+==24872==    by 0x528979: SDL_EnterAppMainCallbacks_REAL (SDL_sysmain_callbacks.c:42)
+==24872==    by 0x38BEE7: SDL_EnterAppMainCallbacks (SDL_dynapi_procs.h:207)
+==24872==    by 0x1AD843: SDL_main (SDL_main_impl.h:59)
+==24872==    by 0x3CC09C: SDL_RunApp_REAL (SDL_runapp.c:40)
+==24872==    by 0x3844DE: SDL_RunApp_DEFAULT (SDL_dynapi_procs.h:804)
+==24872==    by 0x3918A4: SDL_RunApp (SDL_dynapi_procs.h:804)
+==24872==    by 0x1AD872: main (SDL_main_impl.h:149)
+==24872== 
+==24872== 2,347 (2,243 direct, 104 indirect) bytes in 8 blocks are definitely lost in loss record 176 of 211
+==24872==    at 0x4E050C5: malloc (vg_replace_malloc.c:442)
+==24872==    by 0x40D2E1: real_malloc (SDL_malloc.c:6321)
+==24872==    by 0x40D568: SDL_malloc_REAL (SDL_malloc.c:6431)
+==24872==    by 0x50492E: SDL_SYS_GetPrefPath (SDL_sysfilesystem.c:301)
+==24872==    by 0x3AE76B: SDL_GetPrefPath_REAL (SDL_filesystem.c:498)
+==24872==    by 0x38E43F: SDL_GetPrefPath (SDL_dynapi_procs.h:476)
+==24872==    by 0x1AE03B: Supergoon::Game::InitializeImGui() (Game.cpp:107)
+==24872==    by 0x1ADE43: Supergoon::Game::Initialize() (Game.cpp:90)
+==24872==    by 0x1AE278: Supergoon::Game::InternalReset() (Game.cpp:135)
+==24872==    by 0x1AD8F4: SDL_AppInit (Game.cpp:42)
+==24872==    by 0x5532E4: SDL_InitMainCallbacks (SDL_main_callbacks.c:104)
+==24872==    by 0x528979: SDL_EnterAppMainCallbacks_REAL (SDL_sysmain_callbacks.c:42)
