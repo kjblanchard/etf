@@ -179,8 +179,9 @@ void BlackjackGame::Start() {
 	if (!skipLogos) {
 		playLogos();
 	} else {
+		// UI::LoadUIFromFile("logos");
 		setupUINameChangeBox();
-		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTownHome"));
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTown"));
 	}
 }
 
