@@ -36,6 +36,7 @@
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIObject.hpp>
 #include <Supergoon/UI/UIObjectAnimator.hpp>
+#include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/Video.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <Supergoon/World/TiledMap.hpp>

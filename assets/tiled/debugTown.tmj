@@ -503,6 +503,11 @@
          "name":"bgm",
          "type":"string",
          "value":"town2"
+        }, 
+        {
+         "name":"display",
+         "type":"string",
+         "value":"Debug Town"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.8.6",

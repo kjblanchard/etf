@@ -30,6 +30,8 @@ class Level {
 	void LoadAllGameObjects();
 	void RestartLevel();
 	void CreateBackgroundImage();
+	template <typename T>
+	static T *GetCurrentLevelProperty(std::string key);
 
    private:
 	inline void AddGameObjectToLevel(GameObject *g) { _gameObjects.push_back(g); }
@@ -57,4 +59,13 @@ class Level {
 	int cameraX = 0;
 	int cameraY = 0;
 };
+template <typename T>
+T *Level::GetCurrentLevelProperty(std::string key) {
+	for (auto &&prop : _currentLevel->_mapData->Properties) {
+		if (prop.Name == key) {
+			return &std::get<T>(prop.Value);
+		}
+	}
+	return nullptr;
+}
 }  // namespace Supergoon
