@@ -136,9 +136,16 @@ static void setupUINameChangeBox() {
 	textPanel->Children["uitextbox"] = textBoxUIImage;
 	// textPanel->Visible = true;
 	// Setup the animators
-	auto animator = new UIObjectAnimatorBase("levelDisplayAnimator");
-	auto fadeOutTween = new Tween(255, 0, 5.0, &textPanel->Transparency, Supergoon::Easings::Linear);
+	auto animator = std::make_shared<UIObjectAnimatorBase>("levelDisplayAnimator");
+	auto waitTween = new Tween(1.0f);
+	auto fadeOutTween = new Tween(255, 0, 0.5, textPanel->AlphaHandle(), Supergoon::Easings::Linear);
+	fadeOutTween->EndFunc = [textPanel]() {
+		textPanel->Visible = false;
+		textPanel->SetAlpha(255);
+	};
+	animator->AddUIObjectTween(waitTween, textPanel.get());
 	animator->AddUIObjectTween(fadeOutTween, textPanel.get());
+	textPanel->Animators.push_back(animator);
 }
 
 static void playLogos() {
