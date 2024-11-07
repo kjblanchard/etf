@@ -1,8 +1,8 @@
 #include <SDL3/SDL.h>
 
 #include <Supergoon/Content/ContentRegistry.hpp>
-#include <Supergoon/UI/ImageObject.hpp>
 #include <Supergoon/UI/Panel.hpp>
+#include <Supergoon/UI/UIImage.hpp>
 #include <SupergoonEngine/nlohmann/json.hpp>
 
 using namespace Supergoon;
@@ -13,7 +13,7 @@ void ImageObject::OnDirty() {
 	auto parentBoundsY = Parent ? Parent->Bounds.Y : 0;
 	Bounds.X = Offset.X + parentBoundsX;
 	Bounds.Y = Offset.Y + parentBoundsY;
-	ImagePtr->SetAlpha(Transparency);
+	ImagePtr->SetAlpha(EffectiveAlpha());
 }
 ImageObject::ImageObject(Panel* parent) : UIObject(parent) {
 	WidgetType = (int)BuiltinWidgetTypes::Image;
@@ -22,7 +22,7 @@ ImageObject::ImageObject(Panel* parent) : UIObject(parent) {
 ImageObject::ImageObject(Panel* parent, json& imageJson) : UIObject(parent) {
 	WidgetType = (int)BuiltinWidgetTypes::Image;
 	Visible = imageJson["visible"].get<bool>();
-	Transparency = imageJson["alpha"].get<float>();
+	_alpha = imageJson["alpha"].get<float>();
 	auto name = imageJson["name"].get<std::string>();
 	auto sourceData = imageJson["source"];
 	auto destinationData = imageJson["destination"];

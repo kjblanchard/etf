@@ -39,7 +39,11 @@ static void loadLevel() {
 		assert(textBox);
 		textPanel->Visible = true;
 		textBox->UpdateText(*display);
-		// do something
+		// TODO this should be different.
+		for (auto &&animator : textPanel->Animators) {
+			animator->Restart();
+			animator->Play();
+		}
 	} else {
 		textPanel->Visible = false;
 	}
@@ -130,7 +134,11 @@ static void setupUINameChangeBox() {
 	textBoxUIImage->Offset.X = 0;
 	textBoxUIImage->Offset.Y = 0;
 	textPanel->Children["uitextbox"] = textBoxUIImage;
-	textPanel->Visible = true;
+	// textPanel->Visible = true;
+	// Setup the animators
+	auto animator = new UIObjectAnimatorBase("levelDisplayAnimator");
+	auto fadeOutTween = new Tween(255, 0, 5.0, &textPanel->Transparency, Supergoon::Easings::Linear);
+	animator->AddUIObjectTween(fadeOutTween, textPanel.get());
 }
 
 static void playLogos() {
@@ -140,10 +148,10 @@ static void playLogos() {
 	auto thing2 = (ImageObject *)ui->Children["logoImage2"].get();
 	auto animator = new UIObjectAnimatorBase("logo");
 	auto animator2 = new UIObjectAnimatorBase("logo2");
-	auto fadeInTween = new Tween(0, 255, 3.0, &thing->Transparency, Supergoon::Easings::Linear);
-	auto fadeOutTween = new Tween(255, 0, 3.0, &thing->Transparency, Supergoon::Easings::Linear);
-	auto fadeInTween2 = new Tween(0, 255, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
-	auto fadeOutTween2 = new Tween(255, 0, 3.0, &thing2->Transparency, Supergoon::Easings::Linear);
+	auto fadeInTween = new Tween(0, 255, 3.0, thing->AlphaHandle(), Supergoon::Easings::Linear);
+	auto fadeOutTween = new Tween(255, 0, 3.0, thing->AlphaHandle(), Supergoon::Easings::Linear);
+	auto fadeInTween2 = new Tween(0, 255, 3.0, thing2->AlphaHandle(), Supergoon::Easings::Linear);
+	auto fadeOutTween2 = new Tween(255, 0, 3.0, thing2->AlphaHandle(), Supergoon::Easings::Linear);
 	fadeOutTween->EndFunc = [animator2]() {
 		animator2->Play();
 	};

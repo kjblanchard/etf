@@ -16,9 +16,18 @@ class UIObject {
 	bool Enabled = true;
 	bool Visible = true;
 	bool Dirty = true;
+	inline void SetAlpha(int alpha) {
+		alpha < 0 ? _alpha = 0 : alpha > 255 ? _alpha = 255
+											 : _alpha = alpha;
+		Dirty = true;
+	}
+	// TODO Used for tweening alpha.. probably isn't great
+	inline int* AlphaHandle() { return &_alpha; }
 	UIObject* Parent = nullptr;
-	RectangleF Bounds = {0,0,0,0};
-	Vector2 Offset = {0,0};
+	RectangleF Bounds = {0, 0, 0, 0};
+	Vector2 Offset = {0, 0};
+	// Get the effective alpha for this object, taking the parents into consideration.
+	inline int EffectiveAlpha() { return Parent ? (int)((Parent->EffectiveAlpha() / 255.0) * (_alpha / 255.0) * 255) : _alpha; }
 	int WidgetType = 0;
 	std::vector<std::shared_ptr<UIObjectAnimatorBase>> Animators;
 	inline virtual void OnDirty() {
@@ -46,6 +55,7 @@ class UIObject {
 	}
 
    protected:
+	int _alpha = 255;
 	virtual void Update() {}
 	virtual void Draw() {}
 };

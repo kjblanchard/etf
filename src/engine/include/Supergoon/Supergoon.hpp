@@ -31,7 +31,7 @@
 #include <Supergoon/Supergoon.hpp>
 #include <Supergoon/Tween/Sequence.hpp>
 #include <Supergoon/Tween/Tween.hpp>
-#include <Supergoon/UI/ImageObject.hpp>
+#include <Supergoon/UI/UIImage.hpp>
 #include <Supergoon/UI/Panel.hpp>
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIObject.hpp>

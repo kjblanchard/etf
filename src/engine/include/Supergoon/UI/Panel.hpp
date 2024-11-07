@@ -8,6 +8,7 @@ class Panel : public UIObject {
    public:
 	Panel();
 	Panel(Panel* parent);
+	int Transparency = 0;
 	std::unordered_map<std::string, std::shared_ptr<UIObject>> Children;
 
 	void OnDirty() override;
