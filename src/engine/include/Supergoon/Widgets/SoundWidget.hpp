@@ -2,7 +2,7 @@
 
 namespace Supergoon {
 class Game;
-class SoundWidgets {
+class SoundWidget {
    public:
 	static void ShowSoundDebugWindow();
 };

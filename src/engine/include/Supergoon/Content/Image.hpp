@@ -26,6 +26,7 @@ class Image : public Content {
 	inline virtual std::string Type() override { return "Image"; }
 	inline int Width() { return _width; }
 	inline int Height() { return _height; }
+	void Clear(Color color = {0, 0, 0, 255});
 	// Updates the color modifier on this texture.
 	void SetImageColor(Color colorToUse);
 	void DrawImageToImage(Image& src, RectangleF& srcRect, RectangleF& dstRect);

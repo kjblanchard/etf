@@ -5,7 +5,7 @@
 #include <Supergoon/Content/Sfx.hpp>
 #include <Supergoon/Game.hpp>
 #include <Supergoon/Sound.hpp>
-#include <Supergoon/Widgets/Sound.hpp>
+#include <Supergoon/Widgets/SoundWidget.hpp>
 #include <regex>
 #include <string>
 
@@ -14,6 +14,7 @@ namespace Supergoon {
 std::vector<std::string> bgmNames;
 std::vector<std::string> sfxNames;
 static bool inited = false;
+static float sfxPlayVolume = 1.0f;
 static Sound* sound = nullptr;
 static void HelpMarker(const char* desc) {
 	ImGui::TextDisabled("(?)");
@@ -48,7 +49,7 @@ static void GetFiles() {
 	SDL_free(sfxFiles);
 }
 
-void SoundWidgets::ShowSoundDebugWindow() {
+void SoundWidget::ShowSoundDebugWindow() {
 	static bool p_open = true;
 	static bool no_titlebar = false;
 	static bool no_scrollbar = false;
@@ -87,10 +88,18 @@ void SoundWidgets::ShowSoundDebugWindow() {
 		ImGui::End();
 		return;
 	}
-	if (ImGui::Button("Update Sound Files")) {
-		// Gather all files in assets/sound
-		GetFiles();
+	auto muted = (Sound::Instance()->_globalBgmVolume == 0 && Sound::Instance()->_globalSfxVolume == 0);
+	if (ImGui::Checkbox("Mute", &muted)) {
+		if (muted) {
+			Sound::Instance()->SetGlobalBgmVolume(0);
+			Sound::Instance()->SetGlobalSfxVolume(0);
+		}
 	}
+
+	if (ImGui::SliderFloat("Global Bgm Volume", &Sound::Instance()->_globalBgmVolume, 0.0f, 1.0f)) {
+		Sound::Instance()->UpdatePlayingBgmVolume();
+	}
+	ImGui::SliderFloat("Global Sfx Volume", &Sound::Instance()->_globalSfxVolume, 0.0f, 1.0f);
 	if (ImGui::CollapsingHeader("Bgm")) {
 		if (bgmNames.size() > 0) {
 			static int item_current = 1;
@@ -124,6 +133,11 @@ void SoundWidgets::ShowSoundDebugWindow() {
 			if (ImGui::Button("Stop Fadeout")) {
 				sound->StopBgmFadeout();
 			}
+			if (ImGui::SliderFloat("Bgm Playing Volume", &Sound::Instance()->_playingBgmVolume, 0, 1.0)) {
+				Sound::Instance()->UpdatePlayingBgmVolume();
+			}
+			ImGui::SameLine();
+			HelpMarker("Updates the playing BGM sound only, this is multiplied by the global to get the final sound volume");
 		}
 	}
 	if (ImGui::CollapsingHeader("Sfx")) {
@@ -139,16 +153,22 @@ void SoundWidgets::ShowSoundDebugWindow() {
 			}
 			ImGui::ListBox("SfxItemList", &item_current, cStrings.data(), cStrings.size(), 4);
 			ImGui::SameLine();
-			HelpMarker("Click on a song to play, and then click play to try it out.");
+			HelpMarker("Click on a sound to play, and then click play to try it out.");
 			if (ImGui::Button("PlaySfx")) {
 				auto song = sfxNames[item_current];
 				std::regex dotRegex("\\.ogg");
 				std::vector<std::string> result(std::sregex_token_iterator(song.begin(), song.end(), dotRegex, -1), std::sregex_token_iterator());
 				auto sfx = ContentRegistry::CreateContent<Sfx>(result[0]);
 				ContentRegistry::LoadContent(*sfx);
-				sound->PlaySfx(sfx.get());
+				sound->PlaySfx(sfx.get(), sfxPlayVolume);
 			}
+			ImGui::SameLine();
+			ImGui::SliderFloat("Volume", &sfxPlayVolume, 0, 1.0);
 		}
+	}
+	if (ImGui::Button("Update Sound Files")) {
+		// Gather all files in assets/sound
+		GetFiles();
 	}
 	ImGui::End();
 }

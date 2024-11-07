@@ -139,7 +139,9 @@ void Graphics::SetTextureAlpha(SDL_Texture* texture, int alpha) {
 void Graphics::ClearRenderTargetTexture(SDL_Texture* texture, Color color) {
 	SDL_SetRenderTarget(_renderer, texture);
 	SDL_SetRenderDrawColor(_renderer, color.R, color.G, color.B, color.A);
-	SDL_RenderClear(_renderer);
+	if (!SDL_RenderClear(_renderer)) {
+		sgLogWarn("Could not clear texture, %s", SDL_GetError());
+	}
 	SDL_SetRenderTarget(_renderer, NULL);
 	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
 }
@@ -147,7 +149,9 @@ void Graphics::ClearRenderTargetTexture(SDL_Texture* texture, Color color) {
 void Graphics::DrawImageToImage(Image& src, Image& dst, RectangleF* srcR, RectangleF* dstR) {
 	SDL_SetRenderTarget(_renderer, dst._image);
 	if (srcR->Zero()) {
-		SDL_RenderTexture(_renderer, src._image, nullptr, (SDL_FRect*)dstR);
+		if(!SDL_RenderTexture(_renderer, src._image, nullptr, (SDL_FRect*)dstR)) {
+			sgLogWarn("Could not draw image to image, %s", SDL_GetError());
+		}
 	} else {
 		SDL_RenderTexture(_renderer, src._image, (SDL_FRect*)srcR, (SDL_FRect*)dstR);
 	}

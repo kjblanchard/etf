@@ -1,5 +1,10 @@
 #include <Supergoon/UI/Panel.hpp>
 using namespace Supergoon;
+Panel::Panel() : UIObject() {
+}
+Panel::Panel(Panel* parent) : UIObject(parent) {
+	WidgetType = (int)BuiltinWidgetTypes::Panel;
+}
 void Panel::OnDirty() {
 	auto parentBoundsX = Parent ? Parent->Bounds.X : 0;
 	auto parentBoundsY = Parent ? Parent->Bounds.Y : 0;

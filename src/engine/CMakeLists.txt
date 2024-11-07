@@ -28,6 +28,7 @@ set(SRC_FILES
     src/UI/Panel.cpp
     src/UI/UI.cpp
     src/UI/ImageObject.cpp
+    src/UI/UIText.cpp
     src/UI/UIObjectAnimator.cpp
 )
 
@@ -35,8 +36,8 @@ if(imgui)
     message(STATUS "ImGui is enabled, adding ImGui-related files.")
     list(APPEND SRC_FILES
         src/Widgets/Widgets.cpp
-        src/Widgets/Sound.cpp
-        src/Widgets/Content.cpp
+        src/Widgets/SoundWidget.cpp
+        src/Widgets/ContentWidget.cpp
         src/Widgets/Game.cpp
         src/Widgets/UIWidget.cpp
         src/Widgets/Global.cpp

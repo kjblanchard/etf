@@ -36,6 +36,7 @@
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIObject.hpp>
 #include <Supergoon/UI/UIObjectAnimator.hpp>
+#include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/Video.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <Supergoon/World/TiledMap.hpp>
@@ -43,9 +44,9 @@
 #ifdef imgui
 #include <SupergoonEngine/imgui/imgui.h>
 
-#include <Supergoon/Widgets/Content.hpp>
+#include <Supergoon/Widgets/ContentWidget.hpp>
 #include <Supergoon/Widgets/Game.hpp>
 #include <Supergoon/Widgets/Global.hpp>
-#include <Supergoon/Widgets/Sound.hpp>
+#include <Supergoon/Widgets/SoundWidget.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
 #endif

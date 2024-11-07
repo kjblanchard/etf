@@ -2,7 +2,7 @@
 - Cross Platform 2d RPG demo, using custom Engine written in C and C++
 
 ## Details
-- BGMs created in Garageband
+- BGMs created by me in Garageband
 - Play the game here, or likely watch its "progress" [Play!](https://escapethefate.supergoon.com)
 - Project board [Board](https://github.com/users/kjblanchard/projects/11)
 - ![Build All Platforms]( https://github.com/kjblanchard/sgEngine/actions/workflows/build.yml/badge.svg)
@@ -14,10 +14,6 @@
 make rebuild
 ```
 
-## Features
-- Sound implementation with SDL3
-- - BGM with Introloop, to loop at specific intervals using ogg vorbis comments and load via buffers
-
 ## Libraries | Components
 - SDL3
 - nlohmann JSON
@@ -25,6 +21,7 @@ make rebuild
 - vorbis
 - imgui
 - stb_image
+- png (deprecated)
 - entt
 
 ## Contributing

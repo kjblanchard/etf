@@ -5,6 +5,8 @@
 namespace Supergoon {
 enum class BuiltinWidgetTypes {
 	Image = 1,
+	Text,
+	Panel,
 };
 class UIObject {
    public:
@@ -14,10 +16,10 @@ class UIObject {
 	bool Enabled = true;
 	bool Visible = true;
 	bool Dirty = true;
-	UIObject* Parent;
-	RectangleF Bounds;
-	Vector2 Offset;
-	int WidgetType;
+	UIObject* Parent = nullptr;
+	RectangleF Bounds = {0,0,0,0};
+	Vector2 Offset = {0,0};
+	int WidgetType = 0;
 	std::vector<std::shared_ptr<UIObjectAnimatorBase>> Animators;
 	inline virtual void OnDirty() {
 		Bounds.X = Offset.X + Parent->Bounds.X;

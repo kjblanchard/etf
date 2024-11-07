@@ -12,7 +12,7 @@
 namespace Supergoon {
 Sound* Sound::_instance = nullptr;
 void Sound::InitializeSound() {
-	Events::RegisterEventHandler(Events::BuiltinEvents.PlayBgmEvent, [this](int code, void* name, void*) {
+	Events::RegisterEventHandler(Events::BuiltinEvents.PlayBgmEvent, [this](int, void* name, void*) {
 		auto nameStr = std::string((const char*)name);
 		LoadBgm(nameStr);
 		PlayBgm();
@@ -143,7 +143,7 @@ void Sound::PlaySfx(Sfx* sfx, float volume) {
 		return;
 	}
 	auto stream = _usableSfxStreams.front();
-	sfx->SgSfx()->Volume = volume;
+	sfx->SgSfx()->Volume = volume * _globalSfxVolume;
 	sgSfxPlay(sfx->SgSfx(), stream);
 	_playingStreams.push_back(stream);
 	_usableSfxStreams.pop();

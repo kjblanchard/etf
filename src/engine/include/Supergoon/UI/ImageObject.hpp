@@ -11,9 +11,9 @@ class ImageObject : public UIObject {
 	ImageObject(Panel* parent);
 	// If you are loading from a ui json file.
 	ImageObject(Panel* parent, nlohmann::json& json);
-	RectangleF ImageSourceRect;
+	RectangleF ImageSourceRect = {0,0,0,0};
 	int Transparency = 255;
-	std::shared_ptr<Image> ImagePtr;
+	std::shared_ptr<Image> ImagePtr = nullptr;
 	virtual void Draw() override;
 	virtual void OnDirty() override;
 };
