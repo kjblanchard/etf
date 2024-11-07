@@ -68,6 +68,7 @@ Level::Level(const char *filename)
 	LoadSolidObjects();
 	auto gamestate = GameObject::FindComponent<GameState>();
 	if (!gamestate) {
+		// TODO when do we clean this up?  Currently comes up as a leak.
 		auto gsGo = new GameObject();
 		auto gamestate = GameState();
 		auto keepalive = KeepAliveComponent();
