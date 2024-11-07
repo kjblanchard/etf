@@ -276,3 +276,7 @@ void Text::SetWordWrap(bool wordWrap) {
 	}
 	DrawLettersToTextImage();
 }
+
+void Text::SetAlpha(int alpha) {
+	_image->SetAlpha(alpha);
+}

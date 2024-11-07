@@ -27,6 +27,7 @@ void UIText::OnDirty() {
 	auto parentBoundsY = Parent ? Parent->Bounds.Y : 0;
 	Bounds.X = Offset.X + parentBoundsX;
 	Bounds.Y = Offset.Y + parentBoundsY;
+	TextPtr->SetAlpha(EffectiveAlpha());
 	TextPtr->SetTextBounds({(int)TextBounds.X, (int)TextBounds.Y});
 	TextPtr->SetLetterCount(currentLetters);
 	TextPtr->SetWordWrap(WordWrap);

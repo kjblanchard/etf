@@ -18,7 +18,7 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 		if (ImGui::DragFloat(panelOffsetYLabel.c_str(), &panel->Offset.Y, 1.0f)) {
 			panel->Dirty = true;
 		}
-		if (ImGui::DragInt(panelTransparencyLabel.c_str(), panel->AlphaHandle(), 1, 0, 255, "%d", ImGuiSliderFlags_WrapAround)) {
+		if (ImGui::DragInt(panelTransparencyLabel.c_str(), panel->AlphaHandle(), 1, 0, 255, "%d")) {
 			panel->Dirty = true;
 		}
 		for (auto &[key, value] : panel->Children) {
