@@ -68,8 +68,10 @@ Game::Game() {
 }
 Game::~Game() {
 	sgCloseDebugLogFile();
+#ifdef imgui
 	ImGuiIO &io = ImGui::GetIO();
-	SDL_free((void*)io.IniFilename);
+	SDL_free((void *)io.IniFilename);
+#endif
 }
 void Game::Initialize() {
 	char *jsonPath = NULL;
