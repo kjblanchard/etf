@@ -34,14 +34,12 @@ class Text : public Content {
 	int _fontSize;
 	bool _wordWrap = false;
 	int _lettersToDraw;
-	// int _currentLettersDrawn;
 	int _paddingL = 0, _paddingR = 0, _paddingT = 0;  //,_paddingB = 0;
 	std::shared_ptr<Font> _font;
 	std::shared_ptr<Image> _image;
 	Point _textBounds = {0, 0};
 	Point _textSize = {0, 0};
 	Color _backgroundColor = {0, 0, 0, 0};
-	// Rectangle _boundingBox = {0, 0, 0, 0};
 	std::vector<Point> _letterPoints;
 	friend class UIWidget;
 	friend class UIText;

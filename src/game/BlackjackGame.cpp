@@ -32,13 +32,16 @@ static void loadLevel() {
 	StartPlayers();
 	// Check if we should show the text at top
 	auto display = Level::GetCurrentLevelProperty<std::string>("display");
-	auto ui = UI::UIInstance->Children["textTesting"];
-	assert(ui);
+	auto textPanel = std::dynamic_pointer_cast<Panel>(UI::UIInstance->Children["textTesting"]);
+	assert(textPanel);
 	if (display) {
-		ui->Visible = true;
+		auto textBox = (UIText *)textPanel->Children["textman"].get();
+		assert(textBox);
+		textPanel->Visible = true;
+		textBox->UpdateText(*display);
 		// do something
 	} else {
-		ui->Visible = false;
+		textPanel->Visible = false;
 	}
 
 	ContentRegistry::LoadAllContent();
@@ -102,7 +105,9 @@ void BlackjackGame::Start() {
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTownHome"));
 		auto ui = UI::UIInstance;
 		auto textPanel = std::make_shared<Panel>(ui);
+		textPanel->Offset = {15, 8};
 		auto text = std::make_shared<UIText>(textPanel.get(), "Hello world!");
+		text->Offset = {12, 21};
 		textPanel->Children["textman"] = text;
 		ui->Children["textTesting"] = textPanel;
 		// Test creating the uitextbox
@@ -116,7 +121,7 @@ void BlackjackGame::Start() {
 		auto textBoxImage = ContentRegistry::CreateContent<Image, int, int>("uitextbox", (int)fullSizeX, (int)fullSizeY);
 		textBoxImage->LoadContent();
 		// Set the background
-		textBoxImage->Clear({0, 0, 200, 200});
+		textBoxImage->Clear({80, 0, 80, 220});
 		float sizeX = 8;
 		float sizeY = 9;
 		textBoxImage->SetAlpha(200);
@@ -171,7 +176,7 @@ void BlackjackGame::Start() {
 		textBoxUIImage->Offset.X = 0;
 		textBoxUIImage->Offset.Y = 0;
 		textPanel->Children["uitextbox"] = textBoxUIImage;
-		textPanel->Visible = false;
+		textPanel->Visible = true;
 	}
 }
 
