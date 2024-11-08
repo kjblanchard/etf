@@ -1,8 +1,8 @@
 #include <SupergoonEngine/imgui/imgui.h>
 
-#include <Supergoon/UI/ImageObject.hpp>
 #include <Supergoon/UI/Panel.hpp>
 #include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/UIImage.hpp>
 #include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/Widgets/UIWidget.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
@@ -11,10 +11,18 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 	if (ImGui::TreeNode((panelName + "- panel").c_str())) {
 		auto panelOffsetLabel = "Offset X ##" + panelName;
 		auto panelOffsetYLabel = "Offset Y ##" + panelName;
+		auto panelTransparencyLabel = "Transparency ##" + panelName;
+		auto visibleLable = "Visible ##" + panelName;
+		if (ImGui::Checkbox(visibleLable.c_str(), &panel->_visible)) {
+			panel->Dirty = true;
+		}
 		if (ImGui::DragFloat(panelOffsetLabel.c_str(), &panel->Offset.X, 1.0f)) {
 			panel->Dirty = true;
 		}
 		if (ImGui::DragFloat(panelOffsetYLabel.c_str(), &panel->Offset.Y, 1.0f)) {
+			panel->Dirty = true;
+		}
+		if (ImGui::DragInt(panelTransparencyLabel.c_str(), panel->AlphaHandle(), 1, 0, 255, "%d")) {
 			panel->Dirty = true;
 		}
 		for (auto &[key, value] : panel->Children) {
@@ -41,7 +49,7 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 					if (ImGui::DragFloat(childHLabel.c_str(), &imageObject->Bounds.H, 1.0f)) {
 						value->Dirty = true;
 					}
-					if (ImGui::DragInt(transLabel.c_str(), &imageObject->Transparency, 1, 0, 255, "%d", ImGuiSliderFlags_WrapAround)) {
+					if (ImGui::DragInt(transLabel.c_str(), imageObject->AlphaHandle(), 1, 0, 255, "%d", ImGuiSliderFlags_WrapAround)) {
 						value->Dirty = true;
 					}
 					ImGui::TreePop();

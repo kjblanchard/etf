@@ -3,9 +3,9 @@
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
-#include <Supergoon/UI/ImageObject.hpp>
 #include <Supergoon/UI/Panel.hpp>
 #include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/UIImage.hpp>
 #include <SupergoonEngine/nlohmann/json.hpp>
 #include <fstream>
 using namespace Supergoon;
@@ -33,18 +33,18 @@ Panel* UI::Initialize() {
 	UIInstance = rootPanel;
 	auto name = "fadePanel";
 	auto fadePanel = std::make_shared<ImageObject>(rootPanel);
-	fadePanel->Transparency = 0;
+	fadePanel->SetAlpha(0);
 	auto path = std::string(SDL_GetBasePath()) + "assets/img/null.png";
 	fadePanel->ImagePtr = ContentRegistry::CreateContent<Image>(path);
 	fadePanel->ImagePtr->SetImageColor({0, 0, 0, 255});
-	fadePanel->Visible = true;
+	fadePanel->SetVisible(true);
 	fadePanel->Bounds = RectangleF{0, 0, (float)graphics->LogicalWidth(), (float)graphics->LogicalHeight()};
 	fadePanel->Offset.X = 0;
 	fadePanel->Offset.Y = 0;
 	auto fadeInAnimator = std::make_shared<UIObjectAnimatorBase>("fadein");
 	auto fadeOutAnimator = std::make_shared<UIObjectAnimatorBase>("fadeout");
-	auto fadeOutTween = new Tween(0, 255, 0.3, &fadePanel->Transparency, Supergoon::Easings::Linear);
-	auto fadeInTween = new Tween(255, 0, 0.3, &fadePanel->Transparency, Supergoon::Easings::Linear);
+	auto fadeOutTween = new Tween(0, 255, 0.3, fadePanel->AlphaHandle(), Supergoon::Easings::Linear);
+	auto fadeInTween = new Tween(255, 0, 0.3, fadePanel->AlphaHandle(), Supergoon::Easings::Linear);
 	fadeInAnimator->AddUIObjectTween(fadeInTween, fadePanel.get());
 	fadeOutAnimator->AddUIObjectTween(fadeOutTween, fadePanel.get());
 	fadePanel->Animators.push_back(fadeInAnimator);

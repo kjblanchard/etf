@@ -18,6 +18,7 @@ class Text : public Content {
 	void SetTextBounds(Point bounds);
 	void SetLetterCount(int letters);
 	void SetWordWrap(bool wordWrap);
+	void SetAlpha(int alpha);
 	inline Point TextBounds() { return _textBounds; }
 	inline virtual std::string Type() override { return "Text"; }
 
@@ -36,6 +37,7 @@ class Text : public Content {
 	int _lettersToDraw;
 	int _paddingL = 0, _paddingR = 0, _paddingT = 0;  //,_paddingB = 0;
 	std::shared_ptr<Font> _font;
+	int _alpha = 255;
 	std::shared_ptr<Image> _image;
 	Point _textBounds = {0, 0};
 	Point _textSize = {0, 0};

@@ -149,7 +149,7 @@ void Graphics::ClearRenderTargetTexture(SDL_Texture* texture, Color color) {
 void Graphics::DrawImageToImage(Image& src, Image& dst, RectangleF* srcR, RectangleF* dstR) {
 	SDL_SetRenderTarget(_renderer, dst._image);
 	if (srcR->Zero()) {
-		if(!SDL_RenderTexture(_renderer, src._image, nullptr, (SDL_FRect*)dstR)) {
+		if (!SDL_RenderTexture(_renderer, src._image, nullptr, (SDL_FRect*)dstR)) {
 			sgLogWarn("Could not draw image to image, %s", SDL_GetError());
 		}
 	} else {

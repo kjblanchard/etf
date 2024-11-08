@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 namespace Supergoon {
+class UIWidget;
 class Panel : public UIObject {
    public:
 	Panel();
@@ -13,5 +14,6 @@ class Panel : public UIObject {
 	void OnDirty() override;
 	void Update() override;
 	void Draw() override;
+	friend UIWidget;
 };
 }  // namespace Supergoon

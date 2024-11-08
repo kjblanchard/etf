@@ -12,7 +12,6 @@ class UIText : public UIObject {
 	virtual void OnDirty() override;
 	void UpdateText(std::string text);
 	std::shared_ptr<Text> TextPtr;
-	int Transparency = 255;
 	Point TextBounds = {0, 0};
 	int currentLetters = 0;
 	bool WordWrap;
