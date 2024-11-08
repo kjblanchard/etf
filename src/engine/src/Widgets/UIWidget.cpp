@@ -12,6 +12,10 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 		auto panelOffsetLabel = "Offset X ##" + panelName;
 		auto panelOffsetYLabel = "Offset Y ##" + panelName;
 		auto panelTransparencyLabel = "Transparency ##" + panelName;
+		auto visibleLable = "Visible ##" + panelName;
+		if (ImGui::Checkbox(visibleLable.c_str(), &panel->_visible)) {
+			panel->Dirty = true;
+		}
 		if (ImGui::DragFloat(panelOffsetLabel.c_str(), &panel->Offset.X, 1.0f)) {
 			panel->Dirty = true;
 		}

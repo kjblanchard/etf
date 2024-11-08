@@ -21,7 +21,7 @@ ImageObject::ImageObject(Panel* parent) : UIObject(parent) {
 
 ImageObject::ImageObject(Panel* parent, json& imageJson) : UIObject(parent) {
 	WidgetType = (int)BuiltinWidgetTypes::Image;
-	Visible = imageJson["visible"].get<bool>();
+	_visible = imageJson["visible"].get<bool>();
 	_alpha = imageJson["alpha"].get<float>();
 	auto name = imageJson["name"].get<std::string>();
 	auto sourceData = imageJson["source"];

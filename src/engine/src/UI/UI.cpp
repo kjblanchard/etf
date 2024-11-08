@@ -37,7 +37,7 @@ Panel* UI::Initialize() {
 	auto path = std::string(SDL_GetBasePath()) + "assets/img/null.png";
 	fadePanel->ImagePtr = ContentRegistry::CreateContent<Image>(path);
 	fadePanel->ImagePtr->SetImageColor({0, 0, 0, 255});
-	fadePanel->Visible = true;
+	fadePanel->SetVisible(true);
 	fadePanel->Bounds = RectangleF{0, 0, (float)graphics->LogicalWidth(), (float)graphics->LogicalHeight()};
 	fadePanel->Offset.X = 0;
 	fadePanel->Offset.Y = 0;

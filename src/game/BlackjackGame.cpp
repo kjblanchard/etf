@@ -37,7 +37,7 @@ static void loadLevel() {
 	if (display) {
 		auto textBox = (UIText *)textPanel->Children["textman"].get();
 		assert(textBox);
-		textPanel->Visible = true;
+		textPanel->SetVisible(true);
 		textBox->UpdateText(*display);
 		// TODO this should be different.
 		for (auto &&animator : textPanel->Animators) {
@@ -45,7 +45,7 @@ static void loadLevel() {
 			animator->Play();
 		}
 	} else {
-		textPanel->Visible = false;
+		textPanel->SetVisible(false);
 	}
 
 	ContentRegistry::LoadAllContent();
@@ -63,9 +63,9 @@ class BlackjackGame : public Game {
 static void setupUINameChangeBox() {
 	auto ui = UI::UIInstance;
 	auto textPanel = std::make_shared<Panel>(ui);
-	textPanel->Offset = {15, 8};
+	textPanel->Offset = {145, 15};
 	auto text = std::make_shared<UIText>(textPanel.get(), "Hello world!");
-	text->Offset = {12, 21};
+	text->Offset = {40, 13};
 	textPanel->Children["textman"] = text;
 	ui->Children["textTesting"] = textPanel;
 	// Test creating the uitextbox
@@ -74,8 +74,8 @@ static void setupUINameChangeBox() {
 	auto uiImageFull = ContentRegistry::CreateContent<Image>(path);
 	uiImageFull->LoadContent();
 	// Create ui text image of the right size as a render target
-	float fullSizeX = 128;
-	float fullSizeY = 64;
+	float fullSizeX = 200;
+	float fullSizeY = 48;
 	auto textBoxImage = ContentRegistry::CreateContent<Image, int, int>("uitextbox", (int)fullSizeX, (int)fullSizeY);
 	textBoxImage->LoadContent();
 	// Set the background
@@ -129,7 +129,7 @@ static void setupUINameChangeBox() {
 	// Add this image to the ui panel
 	auto textBoxUIImage = std::make_shared<ImageObject>(textPanel.get());
 	textBoxUIImage->ImagePtr = textBoxImage;
-	textBoxUIImage->Visible = true;
+	textBoxUIImage->SetVisible(true);
 	textBoxUIImage->Bounds = RectangleF{0, 0, (float)textBoxImage->Width(), (float)textBoxImage->Height()};
 	textBoxUIImage->Offset.X = 0;
 	textBoxUIImage->Offset.Y = 0;
@@ -140,7 +140,7 @@ static void setupUINameChangeBox() {
 	auto waitTween = new Tween(1.0f);
 	auto fadeOutTween = new Tween(255, 0, 0.5, textPanel->AlphaHandle(), Supergoon::Easings::Linear);
 	fadeOutTween->EndFunc = [textPanel]() {
-		textPanel->Visible = false;
+		textPanel->SetVisible(false);
 		textPanel->SetAlpha(255);
 	};
 	animator->AddUIObjectTween(waitTween, textPanel.get());

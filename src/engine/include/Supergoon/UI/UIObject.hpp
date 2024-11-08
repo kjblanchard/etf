@@ -11,11 +11,14 @@ enum class BuiltinWidgetTypes {
 class UIObject {
    public:
 	inline UIObject() = default;
-	inline UIObject(UIObject* parent, bool enabled = true, bool visible = true) : Enabled(enabled), Visible(visible), Parent(parent) {}
+	inline UIObject(UIObject* parent, bool enabled = true, bool visible = true) : Enabled(enabled), Parent(parent), _visible(visible) {}
 	virtual ~UIObject() = default;
 	bool Enabled = true;
-	bool Visible = true;
 	bool Dirty = true;
+	inline void SetVisible(bool visible) {
+		_visible = visible;
+		Dirty = true;
+	}
 	inline void SetAlpha(int alpha) {
 		alpha < 0 ? _alpha = 0 : alpha > 255 ? _alpha = 255
 											 : _alpha = alpha;
@@ -28,6 +31,7 @@ class UIObject {
 	Vector2 Offset = {0, 0};
 	// Get the effective alpha for this object, taking the parents into consideration.
 	inline int EffectiveAlpha() { return Parent ? (int)((Parent->EffectiveAlpha() / 255.0) * (_alpha / 255.0) * 255) : _alpha; }
+	inline bool Visible() { return Parent ? Parent->Visible() ? _visible : false : _visible; }
 	int WidgetType = 0;
 	std::vector<std::shared_ptr<UIObjectAnimatorBase>> Animators;
 	inline virtual void OnDirty() {
@@ -48,7 +52,7 @@ class UIObject {
 		}
 	}
 	inline void DrawInternal() {
-		if (!Visible) {
+		if (!Visible()) {
 			return;
 		}
 		Draw();
@@ -56,8 +60,10 @@ class UIObject {
 
    protected:
 	int _alpha = 255;
+	bool _visible = true;
 	virtual void Update() {}
 	virtual void Draw() {}
+	// friend UIWidget;
 };
 
 }  // namespace Supergoon
