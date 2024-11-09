@@ -29,6 +29,10 @@ static void startPlayer(GameObject, PlayerComponent& playerComponent, AnimationC
 }
 
 static void playerInput(GameObject go, PlayerComponent& player) {
+	if (KeyDown(Supergoon::KeyboardKeys::Key_R)) {
+		Events::PushEvent(Events::BuiltinEvents.ResetGameEvent, 0);
+		return;
+	}
 	auto state = GameObject::GetGameObjectWithComponents<GameState>();
 	auto& stateComponent = state->GetComponent<GameState>();
 	assert(state.has_value());
