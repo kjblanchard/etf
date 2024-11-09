@@ -47,13 +47,13 @@ void UIText::OnDirty() {
 		// We want to use the whichever is smaller if we have a text bounds set.
 		auto width = Bounds.W ? std::min((int)Bounds.W, TextPtr->Size().X) : TextPtr->Size().X;
 		auto height = Bounds.H ? std::min((int)Bounds.H, TextPtr->Size().Y) : TextPtr->Size().Y;
-		TextSrcRect = RectangleF(0, 0, width, height);
+		TextSrcRect = RectangleF{0, 0, (float)width, (float)height};
 	}
 	auto x = Bounds.X;
 	if (CenterText) {
 		x = Bounds.X + ((Bounds.W / 2) - (TextPtr->Size().X / 2));
 	}
-	TextDrawRect = RectangleF(x, Bounds.Y, TextSrcRect.W, TextSrcRect.H);
+	TextDrawRect = RectangleF{x, Bounds.Y, TextSrcRect.W, TextSrcRect.H};
 }
 
 void UIText::UpdateText(std::string text) {
