@@ -19,8 +19,7 @@ void UIText::Draw() {
 	// We always want to draw the full text, if possible, otherwise we should cut off.
 	// Src rect should either be the full text, or the size of the text that we decide.
 	// Dst rect should always be the size of the src rect.
-	auto dst = RectangleF(Bounds.X, Bounds.Y, TextSrcRect.W, TextSrcRect.H);
-	TextPtr->Draw(TextSrcRect, dst);
+	TextPtr->Draw(TextSrcRect, TextDrawRect);
 }
 
 void UIText::OnDirty() {
@@ -35,6 +34,10 @@ void UIText::OnDirty() {
 	TextPtr->SetTextBounds({(int)Bounds.W, (int)Bounds.H});
 	TextPtr->SetLetterCount(currentLetters);
 	TextPtr->SetWordWrap(WordWrap);
+	// If we should center, adjust our X and Y accordingly.
+	// if (CenterText) {
+	// }
+
 	// If our bounds are set to 0, then we should use the full size.
 	if (Bounds.W == 0 && Bounds.H == 0) {
 		TextSrcRect = RectangleF(0, 0, TextPtr->Size().X, TextPtr->Size().Y);
@@ -44,6 +47,11 @@ void UIText::OnDirty() {
 		auto height = Bounds.H ? std::min((int)Bounds.H, TextPtr->Size().Y) : TextPtr->Size().Y;
 		TextSrcRect = RectangleF(0, 0, width, height);
 	}
+	auto x = Bounds.X;
+	if (CenterText) {
+		x = Bounds.X + ((Bounds.W / 2) - (TextPtr->Size().X / 2));
+	}
+	TextDrawRect = RectangleF(x, Bounds.Y, TextSrcRect.W, TextSrcRect.H);
 }
 
 void UIText::UpdateText(std::string text) {
@@ -52,8 +60,10 @@ void UIText::UpdateText(std::string text) {
 	}
 	TextPtr = ContentRegistry::CreateContent<Text, std::string, int>(text, "commodore", 16);
 	TextPtr->LoadContent();
-	Bounds.W = TextPtr->Size().X;
-	Bounds.H = TextPtr->Size().Y;
+	// Bounds.W = TextPtr->Size().X;
+	// Bounds.H = TextPtr->Size().Y;
+	// Bounds.W = Bounds
+	// Bounds.H = TextPtr->Size().Y;
 	// create new text?
 	// TextBounds = TextPtr->TextBounds();
 	currentLetters = TextPtr->_lettersToDraw;

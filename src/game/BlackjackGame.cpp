@@ -65,7 +65,7 @@ static void setupUINameChangeBox() {
 	auto textPanel = std::make_shared<Panel>(ui);
 	textPanel->Offset = {145, 15};
 	auto text = std::make_shared<UIText>(textPanel.get(), "Hello world!");
-	text->Offset = {40, 13};
+	text->Offset = {0, 13};
 	textPanel->Children["textman"] = text;
 	ui->Children["textTesting"] = textPanel;
 	// Test creating the uitextbox
@@ -76,6 +76,10 @@ static void setupUINameChangeBox() {
 	// Create ui text image of the right size as a render target
 	float fullSizeX = 200;
 	float fullSizeY = 48;
+	text->Bounds.W = fullSizeX;
+	text->Bounds.H = fullSizeY;
+	text->CenterText = true;
+	// text->SetCenter(true);
 	auto textBoxImage = ContentRegistry::CreateContent<Image, int, int>("uitextbox", (int)fullSizeX, (int)fullSizeY);
 	textBoxImage->LoadContent();
 	// Set the background

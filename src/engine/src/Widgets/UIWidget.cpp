@@ -1,12 +1,14 @@
 #include <SupergoonEngine/imgui/imgui.h>
 
 #include <Supergoon/UI/Panel.hpp>
+#include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIImage.hpp>
 #include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/Widgets/UIWidget.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
 using namespace Supergoon;
+static bool shouldDrawDebugBox = false;
 void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 	if (ImGui::TreeNode((panelName + "- panel").c_str())) {
 		auto panelOffsetLabel = "Offset X ##" + panelName;
@@ -64,7 +66,9 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 				std::string childXBounds = "TextBoundsX##" + key;
 				std::string childYBounds = "TextBoundsY##" + key;
 				std::string childWordWrapLabel = "WordWrap##" + key;
+				std::string childCenterLabel = "Center##" + key;
 				std::string childLettersToDraw = "Letters To Draw##" + key;
+				std::string childDebugBoxCheckbox = "DebugBox##" + key;
 				if (ImGui::TreeNode((key + "- text").c_str())) {
 					if (ImGui::DragFloat(childX_label.c_str(), &value->Offset.X, 1.0f)) {
 						value->Dirty = true;
@@ -81,6 +85,17 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 					if (ImGui::Checkbox(childWordWrapLabel.c_str(), &textUIObject->WordWrap)) {
 						value->Dirty = true;
 					};
+					ImGui::SameLine();
+					if (ImGui::Checkbox(childCenterLabel.c_str(), &textUIObject->CenterText)) {
+						value->Dirty = true;
+					};
+					ImGui::SameLine();
+					ImGui::Checkbox(childDebugBoxCheckbox.c_str(), &shouldDrawDebugBox);
+
+					if(shouldDrawDebugBox) {
+						Graphics::Instance()->DrawRect(textUIObject->Bounds, Color(255, 0, 0, 255));
+
+					}
 					if (ImGui::DragInt(childLettersToDraw.c_str(), &textUIObject->currentLetters, 1, 0, textUIObject->TextPtr->_text.length())) {
 						value->Dirty = true;
 					}

@@ -10,13 +10,17 @@ class UIText : public UIObject {
 	UIText(Panel* parent, std::string text);
 	virtual void Draw() override;
 	virtual void OnDirty() override;
+	inline void SetCenter(bool center) {
+		CenterText = center;
+		Dirty = true;
+	}
 	void UpdateText(std::string text);
 	std::shared_ptr<Text> TextPtr;
-	// Point TextBounds = {0, 0};
 	int currentLetters = 0;
+	RectangleF TextDrawRect = RectangleF();
 	RectangleF TextSrcRect = RectangleF();
 	bool WordWrap;
-	bool CenterText;
+	bool CenterText = false;
 	std::string DisplayText;
 
    private:
