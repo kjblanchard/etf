@@ -7,6 +7,7 @@ struct GameState {
 	int WindowWidth;
 	bool Loading;
 	bool CameraFollowTarget;
+	bool EnteringBattle;
 	// Level* CurrentLevel;
 };
 }  // namespace Supergoon

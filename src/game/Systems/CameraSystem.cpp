@@ -11,6 +11,8 @@ void getFollowTarget(CameraComponent& cc) {
 		cc.FollowTarget = &lc;
 	});
 }
+float colorFade = 255;
+static Tween* tweener = new Tween(255, 0, 1.0, &colorFade, Supergoon::Easings::Linear);
 
 void UpdateCamera() {
 	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
@@ -20,6 +22,16 @@ void UpdateCamera() {
 	}
 	auto& cc = c->GetComponent<CameraComponent>();
 	auto& gc = g->GetComponent<GameState>();
+	if (gc.EnteringBattle) {
+		// We should instead slowly decrement camera x
+		tweener->Update();
+		cc.Box.X -= 5;
+
+		auto color = Color{255, (uint8_t)colorFade, (uint8_t)colorFade, (uint8_t)colorFade};
+		Level::SetBackGroundColor(color);
+		Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
+		return;
+	}
 	if (!gc.CameraFollowTarget) {
 		return;
 	}

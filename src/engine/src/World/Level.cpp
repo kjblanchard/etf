@@ -293,3 +293,6 @@ void Level::Draw() {
 	}
 }
 
+void Level::SetBackGroundColor(Color color) {
+	_currentLevel->_background->SetImageColor(color);
+}

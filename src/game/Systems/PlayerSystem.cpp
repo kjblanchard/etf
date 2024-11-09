@@ -32,7 +32,7 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	auto state = GameObject::GetGameObjectWithComponents<GameState>();
 	auto& stateComponent = state->GetComponent<GameState>();
 	assert(state.has_value());
-	if (stateComponent.Loading) {
+	if (stateComponent.Loading || stateComponent.EnteringBattle) {
 		return;
 	}
 	auto vel = Vector2();
@@ -62,6 +62,15 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 		vel.X -= speed;
 		moved = true;
 		newDirection = Directions::West;
+	}
+	if (KeyDown(KeyboardKeys::Key_B)) {
+		// Start battle transition.
+		stateComponent.CameraFollowTarget = false;
+		stateComponent.EnteringBattle = true;
+		Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void*)strdup("battle1"));
+		anim.Playing = false;
+		return;
+		// Camera component handles the sliding.
 	}
 	auto deltatime = (float)Game::DeltaTime();
 	vel *= Vector2{deltatime, deltatime};
