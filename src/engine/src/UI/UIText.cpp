@@ -42,7 +42,7 @@ void UIText::OnDirty() {
 
 	// If our bounds are set to 0, then we should use the full size.
 	if (Bounds.W == 0 && Bounds.H == 0) {
-		TextSrcRect = RectangleF(0, 0, TextPtr->Size().X, TextPtr->Size().Y);
+		TextSrcRect = RectangleF{0, 0, (float)TextPtr->Size().X, (float)TextPtr->Size().Y};
 	} else {
 		// We want to use the whichever is smaller if we have a text bounds set.
 		auto width = Bounds.W ? std::min((int)Bounds.W, TextPtr->Size().X) : TextPtr->Size().X;

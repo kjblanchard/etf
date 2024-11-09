@@ -37,6 +37,7 @@ void UpdateCamera() {
 	}
 	if (!cc.FollowTarget) {
 		getFollowTarget(cc);
+		tweener->Restart();
 	}
 	auto pl = cc.FollowTarget;
 	if (!pl) {
