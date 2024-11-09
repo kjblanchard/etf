@@ -7,15 +7,20 @@
 namespace Supergoon {
 class UIText : public UIObject {
    public:
-	UIText(Panel* parent, std::string text);
+	UIText(Panel* parent, std::string text, std::string uiName = "");
 	virtual void Draw() override;
 	virtual void OnDirty() override;
+	inline void SetCenter(bool center) {
+		CenterText = center;
+		Dirty = true;
+	}
 	void UpdateText(std::string text);
 	std::shared_ptr<Text> TextPtr;
-	int Transparency = 255;
-	Point TextBounds = {0, 0};
 	int currentLetters = 0;
+	RectangleF TextDrawRect = RectangleF();
+	RectangleF TextSrcRect = RectangleF();
 	bool WordWrap;
+	bool CenterText = false;
 	std::string DisplayText;
 
    private:

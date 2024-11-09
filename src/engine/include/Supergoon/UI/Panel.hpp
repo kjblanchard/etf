@@ -4,14 +4,16 @@
 #include <string>
 #include <unordered_map>
 namespace Supergoon {
+class UIWidget;
 class Panel : public UIObject {
    public:
 	Panel();
-	Panel(Panel* parent);
+	Panel(Panel* parent, std::string name);
 	std::unordered_map<std::string, std::shared_ptr<UIObject>> Children;
 
 	void OnDirty() override;
 	void Update() override;
 	void Draw() override;
+	friend UIWidget;
 };
 }  // namespace Supergoon

@@ -22,10 +22,10 @@ void Text::Unload() {
 
 Text::~Text() {
 }
-void Text::Draw(RectangleF& dst) {
-	auto src = RectangleF();
-	auto realDst = RectangleF{dst.X, dst.Y, (float)_textSize.X, (float)_textSize.Y};
-	_image->Draw(src, realDst);
+void Text::Draw(RectangleF& src, RectangleF& dst) {
+	// auto src = RectangleF();
+	// auto realDst = RectangleF{dst.X, dst.Y, (float)_textSize.X, (float)_textSize.Y};
+	_image->Draw(src, dst);
 }
 
 void Text::MeasureText() {
@@ -275,4 +275,8 @@ void Text::SetWordWrap(bool wordWrap) {
 		_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
 	}
 	DrawLettersToTextImage();
+}
+
+void Text::SetAlpha(int alpha) {
+	_image->SetAlpha(alpha);
 }

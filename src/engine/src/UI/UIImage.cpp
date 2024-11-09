@@ -1,28 +1,29 @@
 #include <SDL3/SDL.h>
 
 #include <Supergoon/Content/ContentRegistry.hpp>
-#include <Supergoon/UI/ImageObject.hpp>
 #include <Supergoon/UI/Panel.hpp>
+#include <Supergoon/UI/UIImage.hpp>
 #include <SupergoonEngine/nlohmann/json.hpp>
 
 using namespace Supergoon;
 using json = nlohmann::json;
 
-void ImageObject::OnDirty() {
+void UIImage::OnDirty() {
 	auto parentBoundsX = Parent ? Parent->Bounds.X : 0;
 	auto parentBoundsY = Parent ? Parent->Bounds.Y : 0;
 	Bounds.X = Offset.X + parentBoundsX;
 	Bounds.Y = Offset.Y + parentBoundsY;
-	ImagePtr->SetAlpha(Transparency);
+	ImagePtr->SetAlpha(EffectiveAlpha());
 }
-ImageObject::ImageObject(Panel* parent) : UIObject(parent) {
+UIImage::UIImage(Panel* parent, std::string id) : UIObject(parent) {
+	parent->Children[id] = std::shared_ptr<UIObject>(this);
 	WidgetType = (int)BuiltinWidgetTypes::Image;
 }
 
-ImageObject::ImageObject(Panel* parent, json& imageJson) : UIObject(parent) {
+UIImage::UIImage(Panel* parent, json& imageJson) : UIObject(parent) {
 	WidgetType = (int)BuiltinWidgetTypes::Image;
-	Visible = imageJson["visible"].get<bool>();
-	Transparency = imageJson["alpha"].get<float>();
+	_visible = imageJson["visible"].get<bool>();
+	_alpha = imageJson["alpha"].get<float>();
 	auto name = imageJson["name"].get<std::string>();
 	auto sourceData = imageJson["source"];
 	auto destinationData = imageJson["destination"];
@@ -46,6 +47,6 @@ ImageObject::ImageObject(Panel* parent, json& imageJson) : UIObject(parent) {
 	Bounds.H = destinationData["height"].get<float>();
 };
 
-void ImageObject::Draw() {
+void UIImage::Draw() {
 	ImagePtr->Draw(ImageSourceRect, Bounds);
 }

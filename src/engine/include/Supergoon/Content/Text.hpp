@@ -11,13 +11,14 @@ class Text : public Content {
    public:
 	Text(std::string text, std::string fontName, int size);
 	~Text();
-	void Draw(RectangleF& dst);
+	void Draw(RectangleF& src, RectangleF& dst);
 	inline Point Size() { return _textSize; }
 	virtual void Load() override;
 	virtual void Unload() override;
 	void SetTextBounds(Point bounds);
 	void SetLetterCount(int letters);
 	void SetWordWrap(bool wordWrap);
+	void SetAlpha(int alpha);
 	inline Point TextBounds() { return _textBounds; }
 	inline virtual std::string Type() override { return "Text"; }
 
@@ -35,13 +36,19 @@ class Text : public Content {
 	bool _wordWrap = false;
 	int _lettersToDraw;
 	int _paddingL = 0, _paddingR = 0, _paddingT = 0;  //,_paddingB = 0;
+	int _alpha = 255;
 	std::shared_ptr<Font> _font;
 	std::shared_ptr<Image> _image;
+	// We will keep the text within this space
 	Point _textBounds = {0, 0};
+	// The actual size of the text
 	Point _textSize = {0, 0};
 	Color _backgroundColor = {0, 0, 0, 0};
+	// Where we will draw each letter in the text.
 	std::vector<Point> _letterPoints;
+	// For debugging
 	friend class UIWidget;
+	// For control of the text.
 	friend class UIText;
 };
 }  // namespace Supergoon

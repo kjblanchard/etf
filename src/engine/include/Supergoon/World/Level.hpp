@@ -30,6 +30,7 @@ class Level {
 	void LoadAllGameObjects();
 	void RestartLevel();
 	void CreateBackgroundImage();
+	static void SetBackGroundColor(Color color = Color{255, 255, 255, 255});
 	template <typename T>
 	static T *GetCurrentLevelProperty(std::string key);
 

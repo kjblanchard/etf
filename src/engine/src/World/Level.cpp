@@ -26,6 +26,9 @@ void Level::AddLevelEventHandlers() {
 	Events::RegisterEventHandler(Events::BuiltinEvents.CameraUpdate, [](int, void *newLoc, void *) {
 		assert((RectangleF *)newLoc);
 		auto rect = (RectangleF *)newLoc;
+		if (!Level::_currentLevel) {
+			return;
+		}
 		Level::_currentLevel->cameraX = rect->X;
 		Level::_currentLevel->cameraY = rect->Y;
 	});
@@ -293,3 +296,6 @@ void Level::Draw() {
 	}
 }
 
+void Level::SetBackGroundColor(Color color) {
+	_currentLevel->_background->SetImageColor(color);
+}

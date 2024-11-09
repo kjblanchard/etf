@@ -30,7 +30,10 @@ void Font::Load() {
 }
 
 void Font::Unload() {
-	FT_Done_Face(_face);
+	if (_face) {
+		FT_Done_Face(_face);
+		_face = nullptr;
+	}
 }
 
 const std::string Font::Filepath() {
