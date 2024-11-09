@@ -72,16 +72,10 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 					if (ImGui::DragFloat(childY_label.c_str(), &value->Offset.Y, 1.0f)) {
 						value->Dirty = true;
 					}
-					if (ImGui::DragFloat(childW_label.c_str(), &value->Bounds.W, 1.0f)) {
+					if (ImGui::DragFloat(childW_label.c_str(), &value->Bounds.W, 1.0f, 0.0f, FLT_MAX)) {
 						value->Dirty = true;
 					}
-					if (ImGui::DragFloat(childH_label.c_str(), &value->Bounds.H, 1.0f)) {
-						value->Dirty = true;
-					}
-					if (ImGui::DragInt(childXBounds.c_str(), &textUIObject->TextBounds.X, 1)) {
-						value->Dirty = true;
-					}
-					if (ImGui::DragInt(childYBounds.c_str(), &textUIObject->TextBounds.Y, 1)) {
+					if (ImGui::DragFloat(childH_label.c_str(), &value->Bounds.H, 1.0f, 0.0f, FLT_MAX)) {
 						value->Dirty = true;
 					}
 					if (ImGui::Checkbox(childWordWrapLabel.c_str(), &textUIObject->WordWrap)) {
