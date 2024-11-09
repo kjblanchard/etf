@@ -2,8 +2,9 @@
 using namespace Supergoon;
 Panel::Panel() : UIObject() {
 }
-Panel::Panel(Panel* parent) : UIObject(parent) {
+Panel::Panel(Panel* parent, std::string name) : UIObject(parent) {
 	WidgetType = (int)BuiltinWidgetTypes::Panel;
+	parent->Children[name] = std::shared_ptr<UIObject>(this);
 }
 void Panel::OnDirty() {
 	auto parentBoundsX = Parent ? Parent->Bounds.X : 0;

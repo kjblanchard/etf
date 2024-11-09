@@ -2,7 +2,9 @@
 #include <Supergoon/UI/UIText.hpp>
 using namespace Supergoon;
 
-UIText::UIText(Panel* parent, std::string text) : UIObject(parent), DisplayText(text) {
+UIText::UIText(Panel* parent, std::string text, std::string uiName) : UIObject(parent), DisplayText(text) {
+	auto uiname = uiName.empty() ? uiName : text;
+	parent->Children[uiName] = std::shared_ptr<UIObject>(this);
 	WidgetType = (int)BuiltinWidgetTypes::Text;
 	TextPtr = ContentRegistry::CreateContent<Text, std::string, int>(text, "commodore", 16);
 	// Start the bounds to be the size of textptr, for ease of use.

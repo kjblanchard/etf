@@ -7,7 +7,7 @@
 namespace Supergoon {
 class UIText : public UIObject {
    public:
-	UIText(Panel* parent, std::string text);
+	UIText(Panel* parent, std::string text, std::string uiName = "");
 	virtual void Draw() override;
 	virtual void OnDirty() override;
 	inline void SetCenter(bool center) {

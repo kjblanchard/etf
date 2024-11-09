@@ -32,7 +32,7 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 				assert((Panel *)value.get());
 				DrawPanel((Panel *)value.get(), key);
 			} else if (value->WidgetType == (int)BuiltinWidgetTypes::Image) {
-				auto imageObject = std::dynamic_pointer_cast<ImageObject>(value);
+				auto imageObject = std::dynamic_pointer_cast<UIImage>(value);
 				std::string childX_label = "Offset X##" + key;
 				std::string childY_label = "Offset Y##" + key;
 				std::string childWLabel = "Child W##" + key;

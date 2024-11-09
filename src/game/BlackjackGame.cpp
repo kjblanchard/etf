@@ -32,6 +32,7 @@ static void loadLevel() {
 	StartPlayers();
 	// Check if we should show the text at top
 	auto display = Level::GetCurrentLevelProperty<std::string>("display");
+	auto ui = UI::UIInstance;
 	auto textPanel = std::dynamic_pointer_cast<Panel>(UI::UIInstance->Children["textTesting"]);
 	assert(textPanel);
 	if (display) {
@@ -62,12 +63,12 @@ class BlackjackGame : public Game {
 // TODO this shouldn't be here
 static void setupUINameChangeBox() {
 	auto ui = UI::UIInstance;
-	auto textPanel = std::make_shared<Panel>(ui);
+	auto textPanel = new Panel(ui, "textTesting");
 	textPanel->Offset = {145, 15};
-	auto text = std::make_shared<UIText>(textPanel.get(), "Hello world!");
+	auto text = new UIText(textPanel, "Hello world!", "textman");
 	text->Offset = {0, 13};
-	textPanel->Children["textman"] = text;
-	ui->Children["textTesting"] = textPanel;
+	// textPanel->Children["textman"] = text;
+	// ui->Children["textTesting"] = textPanel;
 	// Test creating the uitextbox
 	// First, lets load in the picture for uiimage so that we can draw from it to the new one
 	auto path = std::string(SDL_GetBasePath()) + "assets/img/uibase.png";
@@ -131,13 +132,13 @@ static void setupUINameChangeBox() {
 	}
 
 	// Add this image to the ui panel
-	auto textBoxUIImage = std::make_shared<ImageObject>(textPanel.get());
+	auto textBoxUIImage = new UIImage(textPanel, "textBoxImage");
 	textBoxUIImage->ImagePtr = textBoxImage;
 	textBoxUIImage->SetVisible(true);
 	textBoxUIImage->Bounds = RectangleF{0, 0, (float)textBoxImage->Width(), (float)textBoxImage->Height()};
 	textBoxUIImage->Offset.X = 0;
 	textBoxUIImage->Offset.Y = 0;
-	textPanel->Children["uitextbox"] = textBoxUIImage;
+	// textPanel->Children["uitextbox"] = textBoxUIImage;
 	// textPanel->Visible = true;
 	// Setup the animators
 	auto animator = std::make_shared<UIObjectAnimatorBase>("levelDisplayAnimator");
@@ -147,16 +148,16 @@ static void setupUINameChangeBox() {
 		textPanel->SetVisible(false);
 		textPanel->SetAlpha(255);
 	};
-	animator->AddUIObjectTween(waitTween, textPanel.get());
-	animator->AddUIObjectTween(fadeOutTween, textPanel.get());
+	animator->AddUIObjectTween(waitTween, textPanel);
+	animator->AddUIObjectTween(fadeOutTween, textPanel);
 	textPanel->Animators.push_back(animator);
 }
 
 static void playLogos() {
 	UI::LoadUIFromFile("logos");
 	auto ui = UI::UIInstance;
-	auto thing = (ImageObject *)ui->Children["logoImage"].get();
-	auto thing2 = (ImageObject *)ui->Children["logoImage2"].get();
+	auto thing = (UIImage *)ui->Children["logoImage"].get();
+	auto thing2 = (UIImage *)ui->Children["logoImage2"].get();
 	auto animator = new UIObjectAnimatorBase("logo");
 	auto animator2 = new UIObjectAnimatorBase("logo2");
 	auto fadeInTween = new Tween(0, 255, 3.0, thing->AlphaHandle(), Supergoon::Easings::Linear);
