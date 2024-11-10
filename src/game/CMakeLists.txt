@@ -6,6 +6,7 @@ set(DEBUG_FILES)
 if(imgui)
     list(APPEND DEBUG_FILES
         Debug/PlayerCollider.cpp
+        Systems/DebugDrawSystem.cpp
     )
 endif(imgui)
 
@@ -27,7 +28,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Systems/ImageSystem.cpp
     Systems/AsepriteSystem.cpp
     Systems/CameraSystem.cpp
-    Systems/DebugDrawSystem.cpp
+    Systems/TextInteractionSystem.cpp
     ${DEBUG_FILES}
     ${ICON_PATH}
 )

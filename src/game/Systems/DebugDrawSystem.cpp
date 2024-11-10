@@ -38,6 +38,16 @@ static void drawPlayerExitDebugBoxes(GameObject, PlayerExitComponent& pe) {
 	auto graphics = Graphics::Instance();
 	graphics->DrawRect(dst, Color{0, 255, 0, 255});
 }
+static void drawPlayerInteractionDebugBoxes(GameObject, PlayerComponent& player) {
+	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+	auto& cc = c->GetComponent<CameraComponent>();
+
+	float adjustedX = player.InteractionRect.X - cc.Box.X;
+	float adjustedY = player.InteractionRect.Y - cc.Box.Y;
+	auto dst = RectangleF{adjustedX, adjustedY, (float)player.InteractionRect.W, (float)player.InteractionRect.H};
+	auto graphics = Graphics::Instance();
+	graphics->DrawRect(dst, Color{0, 255, 0, 255});
+}
 
 void Supergoon::DrawDebugBoxesPlayer() {
 	GameObject::ForEach<LocationComponent, PlayerComponent>(drawPlayerBodyDebugBoxes);
@@ -47,4 +57,8 @@ void Supergoon::DrawDebugBoxesSolid() {
 }
 void Supergoon::DrawDebugBoxesPlayerExit() {
 	GameObject::ForEach<PlayerExitComponent>(drawPlayerExitDebugBoxes);
+}
+
+void Supergoon::DrawDebugBoxesPlayerInteractionBox() {
+	GameObject::ForEach<PlayerComponent>(drawPlayerInteractionDebugBoxes);
 }

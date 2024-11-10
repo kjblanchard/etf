@@ -6,6 +6,8 @@ namespace Supergoon {
 struct PlayerComponent {
 	unsigned int PlayerNum;
 	RectangleF Body;
+	RectangleF InteractionRect;
 	Directions Direction;
 };
+
 }  // namespace Supergoon

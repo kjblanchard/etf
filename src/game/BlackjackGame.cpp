@@ -234,6 +234,9 @@ void BlackjackGame::Draw() {
 	if (PlayerWidget::ShowPlayerExitDebugBox) {
 		DrawDebugBoxesPlayerExit();
 	}
+	if (PlayerWidget::ShowPlayerInteractionDebugBox) {
+		DrawDebugBoxesPlayerInteractionBox();
+	}
 #endif
 }
 

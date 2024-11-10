@@ -5,6 +5,37 @@
 #include <Systems/PlayerSystem.hpp>
 using namespace Supergoon;
 
+static void updateInteractionRect(PlayerComponent& player, LocationComponent& location) {
+	auto ewWH = Point(26, 8);
+	auto nsWH = Point(8, 26);
+	switch (player.Direction) {
+		case Directions::East:
+			player.InteractionRect.X = location.Location.X + player.Body.X + (player.Body.W / 2);
+			player.InteractionRect.Y = location.Location.Y - (player.Body.Y / 2) + player.Body.H;
+			player.InteractionRect.W = ewWH.X;
+			player.InteractionRect.H = ewWH.Y;
+			break;
+		case Directions::West:
+			player.InteractionRect.X = location.Location.X - 10;
+			player.InteractionRect.Y = location.Location.Y - (player.Body.Y / 2) + player.Body.H;
+			player.InteractionRect.W = ewWH.X;
+			player.InteractionRect.H = ewWH.Y;
+			break;
+		case Directions::North:
+			player.InteractionRect.X = location.Location.X + player.Body.X + (player.Body.W / 2) - (nsWH.X / 2);
+			player.InteractionRect.Y = location.Location.Y - (player.Body.Y / 2);
+			player.InteractionRect.W = nsWH.X;
+			player.InteractionRect.H = nsWH.Y;
+			break;
+		case Directions::South:
+			player.InteractionRect.X = location.Location.X + player.Body.X + (player.Body.W / 2) - (nsWH.X / 2);
+			player.InteractionRect.Y = location.Location.Y + player.Body.H;
+			player.InteractionRect.W = nsWH.X;
+			player.InteractionRect.H = nsWH.Y;
+			break;
+	}
+}
+
 static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn) {
 	auto go = new GameObject();
 	auto playerLocation = LocationComponent();
@@ -18,6 +49,7 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn) {
 	playerComponent.Body = RectangleF{4, 9, 16, 22};
 	playerLocation.Location.X = playerSpawn.Location.X;
 	playerLocation.Location.Y = playerSpawn.Location.Y;
+	updateInteractionRect(playerComponent, playerLocation);
 	go->AddComponent<AnimationComponent>(playerAnimation);
 	go->AddComponent<LocationComponent>(playerLocation);
 	go->AddComponent<PlayerComponent>(playerComponent);
@@ -26,6 +58,9 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn) {
 static void startPlayer(GameObject, PlayerComponent& playerComponent, AnimationComponent& animComponent) {
 	auto letter = GetLetterForDirection(playerComponent.Direction);
 	animComponent.Animation->PlayAnimation("walk" + std::string(letter));
+}
+
+static bool interactionHandler(PlayerComponent& player, bool interactionKeyPressed) {
 }
 
 static void playerInput(GameObject go, PlayerComponent& player) {
@@ -106,7 +141,6 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 			}
 		}
 	});
-	// loc.Location += vel;
 	if (moved) {
 		loc.Location.X = std::round(desiredPosition.X);
 		loc.Location.Y = std::round(desiredPosition.Y);
@@ -116,6 +150,9 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 		auto letter = GetLetterForDirection(newDirection);
 		anim.Animation->PlayAnimation("walk" + std::string(letter));
 		player.Direction = newDirection;
+	}
+	if (moved) {
+		updateInteractionRect(player, loc);
 	}
 
 	// Did we exit?
@@ -139,6 +176,9 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	});
 	if (exited) {
 		return;
+	}
+	// Check for interactions.
+	if (KeyDown(KeyboardKeys::Key_SPACE)) {
 	}
 }
 
