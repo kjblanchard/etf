@@ -11,6 +11,7 @@ UIText::UIText(Panel* parent, std::string text, std::string uiName) : UIObject(p
 	Bounds.W = TextPtr->Size().X;
 	Bounds.H = TextPtr->Size().Y;
 	// TextBounds = TextPtr->TextBounds();
+	TextPtr->SetTextBounds({(int)Bounds.W, (int)Bounds.H});
 	currentLetters = TextPtr->_lettersToDraw;
 	WordWrap = TextPtr->_wordWrap;
 }
@@ -69,6 +70,6 @@ void UIText::UpdateText(std::string text) {
 	// create new text?
 	// TextBounds = TextPtr->TextBounds();
 	currentLetters = TextPtr->_lettersToDraw;
-	WordWrap = TextPtr->_wordWrap;
+	// WordWrap = WordWrap;
 	Dirty = true;
 }

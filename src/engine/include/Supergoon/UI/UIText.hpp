@@ -14,6 +14,10 @@ class UIText : public UIObject {
 		CenterText = center;
 		Dirty = true;
 	}
+	inline void SetWordWrap(bool wrap) {
+		WordWrap = wrap;
+		Dirty = true;
+	}
 	void UpdateText(std::string text);
 	std::shared_ptr<Text> TextPtr;
 	int currentLetters = 0;

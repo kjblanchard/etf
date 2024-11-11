@@ -11,8 +11,8 @@ void Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size) {
 	auto textPanel = new Panel(ui, "textTesting" + name);
 	textPanel->Offset = {(float)screenLoc.X, (float)screenLoc.Y};
 	auto text = new UIText(textPanel, "Hello world!", "textman" + name);
-	// text->Offset = {7, 7};
-	text->Offset = {0, 0};
+	text->Offset = {8, 8};
+	// text->Offset = {0, 0};
 	// textPanel->Children["textman"] = text;
 	// ui->Children["textTesting"] = textPanel;
 	// Test creating the uitextbox
@@ -23,11 +23,14 @@ void Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size) {
 	// Create ui text image of the right size as a render target
 	// float fullSizeX = 200;
 	// float fullSizeY = 48;
-	float fullSizeX = size.X - text->Offset.X;
-	float fullSizeY = size.Y - text->Offset.Y;
-	text->Bounds.W = fullSizeX;
-	text->Bounds.H = fullSizeY;
-	text->CenterText = true;
+	float fullSizeX = size.X;
+	float fullSizeY = size.Y;
+	text->Bounds.W = fullSizeX - (text->Offset.X * 2);
+	text->Bounds.H = fullSizeY - (text->Offset.Y * 2);
+	// text->CenterText = true;
+	// text->WordWrap = true;
+	text->SetCenter(true);
+	text->SetWordWrap(true);
 	// text->SetCenter(true);
 	auto textBoxImage = ContentRegistry::CreateContent<Image, int, int>("uitextbox" + name, (int)fullSizeX, (int)fullSizeY);
 	textBoxImage->LoadContent();
