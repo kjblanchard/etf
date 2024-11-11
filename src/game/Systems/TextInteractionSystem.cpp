@@ -29,6 +29,16 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 		textInteractionComponent.InteractionPressed = false;
 		currentInteractingText = &textInteractionComponent;
 		gameStateComponent->Interacting = true;
+		// update the text interaction box to say what this is.
+		auto ui = UI::UIInstance;
+		auto panelName = "textTesting" + std::string("regular");
+		auto thing = (Panel*)ui->Children[panelName].get();
+		assert(thing);
+		auto textName = "textman" + std::string("regular");
+		auto text = (UIText*)thing->Children[textName].get();
+		assert(text);
+		text->UpdateText(textInteractionComponent.Text);
+
 		// If we are not engaged in an interaction, then we should start it.
 	}
 }
@@ -47,7 +57,7 @@ void drawTextInteractionComponents(GameObject, LocationComponent& location, Play
 	playerInteraction.InteractionImage->Draw(src, dst);
 }
 void Supergoon::InitializeTextInteractionUI() {
-	CreateUITextbox("regular", Point{145, 200}, Point{200, 70});
+	CreateUITextbox("regular", Point{145, 200}, Point{236, 80});
 }
 
 void Supergoon::UpdateTextInteractions() {

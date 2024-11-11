@@ -70,4 +70,5 @@ void UIText::UpdateText(std::string text) {
 	// TextBounds = TextPtr->TextBounds();
 	currentLetters = TextPtr->_lettersToDraw;
 	WordWrap = TextPtr->_wordWrap;
+	Dirty = true;
 }
