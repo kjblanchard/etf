@@ -50,11 +50,15 @@ void UIText::OnDirty() {
 		auto height = Bounds.H ? std::min((int)Bounds.H, TextPtr->Size().Y) : TextPtr->Size().Y;
 		TextSrcRect = RectangleF{0, 0, (float)width, (float)height};
 	}
-	auto x = Bounds.X;
-	if (CenterText) {
-		x = Bounds.X + ((Bounds.W / 2) - (TextPtr->Size().X / 2));
+	auto x = (int)Bounds.X;
+	auto y = (int)Bounds.Y;
+	if (CenterTextX) {
+		x = (int)(Bounds.X + ((Bounds.W / 2) - (TextPtr->Size().X / 2)));
 	}
-	TextDrawRect = RectangleF{x, Bounds.Y, TextSrcRect.W, TextSrcRect.H};
+	if (_centerTextY) {
+		y = (int)(Bounds.Y + (Bounds.H - TextPtr->Size().Y) / 2);
+	}
+	TextDrawRect = RectangleF{(float)x, (float)y, TextSrcRect.W, TextSrcRect.H};
 }
 
 void UIText::UpdateText(std::string text) {

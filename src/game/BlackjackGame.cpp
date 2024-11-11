@@ -80,7 +80,7 @@ static void playLogos() {
 		animator2->Play();
 	};
 	fadeOutTween2->EndFunc = []() {
-		CreateUITextbox("screen", Point{145, 15}, Point{200, 48});
+		CreateUITextbox("screen", Point{145, 15}, Point{200, 48}, true);
 		InitializeTextInteractionUI();
 		// setupUINameChangeBox();
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTown"));
@@ -114,7 +114,7 @@ void BlackjackGame::Start() {
 		playLogos();
 	} else {
 		// UI::LoadUIFromFile("logos");
-		CreateUITextbox("screen", Point{145, 15}, Point{200, 48});
+		CreateUITextbox("screen", Point{145, 15}, Point{200, 48}, true);
 		InitializeTextInteractionUI();
 		// setupUINameChangeBox();
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTown"));

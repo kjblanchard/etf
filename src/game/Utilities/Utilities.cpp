@@ -6,7 +6,7 @@
 
 using namespace Supergoon;
 // 200/70 for textbox
-void Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size) {
+Panel* Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size, bool screen) {
 	auto ui = UI::UIInstance;
 	auto textPanel = new Panel(ui, "textTesting" + name);
 	textPanel->Offset = {(float)screenLoc.X, (float)screenLoc.Y};
@@ -30,6 +30,7 @@ void Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size) {
 	// text->CenterText = true;
 	// text->WordWrap = true;
 	text->SetCenter(true);
+	text->SetCenterY(true);
 	text->SetWordWrap(true);
 	// text->SetCenter(true);
 	auto textBoxImage = ContentRegistry::CreateContent<Image, int, int>("uitextbox" + name, (int)fullSizeX, (int)fullSizeY);
@@ -89,17 +90,18 @@ void Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size) {
 	textBoxUIImage->Bounds = RectangleF{0, 0, (float)textBoxImage->Width(), (float)textBoxImage->Height()};
 	textBoxUIImage->Offset.X = 0;
 	textBoxUIImage->Offset.Y = 0;
-	// textPanel->Children["uitextbox"] = textBoxUIImage;
-	// textPanel->Visible = true;
 	// Setup the animators
-	auto animator = std::make_shared<UIObjectAnimatorBase>("levelDisplayAnimator");
-	auto waitTween = new Tween(1.0f);
-	auto fadeOutTween = new Tween(255, 0, 0.5, textPanel->AlphaHandle(), Supergoon::Easings::Linear);
-	fadeOutTween->EndFunc = [textPanel]() {
-		textPanel->SetVisible(false);
-		textPanel->SetAlpha(255);
-	};
-	animator->AddUIObjectTween(waitTween, textPanel);
-	animator->AddUIObjectTween(fadeOutTween, textPanel);
-	textPanel->Animators.push_back(animator);
+	if (screen) {
+		auto animator = std::make_shared<UIObjectAnimatorBase>("levelDisplayAnimator");
+		auto waitTween = new Tween(1.0f);
+		auto fadeOutTween = new Tween(255, 0, 0.5, textPanel->AlphaHandle(), Supergoon::Easings::Linear);
+		fadeOutTween->EndFunc = [textPanel]() {
+			textPanel->SetVisible(false);
+			textPanel->SetAlpha(255);
+		};
+		animator->AddUIObjectTween(waitTween, textPanel);
+		animator->AddUIObjectTween(fadeOutTween, textPanel);
+		textPanel->Animators.push_back(animator);
+	}
+	return textPanel;
 }

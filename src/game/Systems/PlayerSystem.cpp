@@ -99,6 +99,11 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	auto& stateComponent = state->GetComponent<GameState>();
 	assert(state.has_value());
 	if (stateComponent.Loading || stateComponent.EnteringBattle) {
+		if (KeyDown(KeyboardKeys::Key_W)) {
+			if (stateComponent.EnteringBattle) {
+				Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void*)strdup("victory"));
+			}
+		}
 		return;
 	}
 	auto vel = Vector2();
@@ -109,25 +114,27 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	auto newDirection = player.Direction;
 	//
 	// Handle button presses
-	if (KeyDown(KeyboardKeys::Key_S)) {
-		vel.Y += speed;
-		moved = true;
-		newDirection = Directions::South;
-	}
-	if (KeyDown(KeyboardKeys::Key_D)) {
-		vel.X += speed;
-		moved = true;
-		newDirection = Directions::East;
-	}
-	if (KeyDown(KeyboardKeys::Key_W)) {
-		vel.Y -= speed;
-		moved = true;
-		newDirection = Directions::North;
-	}
-	if (KeyDown(KeyboardKeys::Key_A)) {
-		vel.X -= speed;
-		moved = true;
-		newDirection = Directions::West;
+	if (!stateComponent.Interacting) {
+		if (KeyDown(KeyboardKeys::Key_S)) {
+			vel.Y += speed;
+			moved = true;
+			newDirection = Directions::South;
+		}
+		if (KeyDown(KeyboardKeys::Key_D)) {
+			vel.X += speed;
+			moved = true;
+			newDirection = Directions::East;
+		}
+		if (KeyDown(KeyboardKeys::Key_W)) {
+			vel.Y -= speed;
+			moved = true;
+			newDirection = Directions::North;
+		}
+		if (KeyDown(KeyboardKeys::Key_A)) {
+			vel.X -= speed;
+			moved = true;
+			newDirection = Directions::West;
+		}
 	}
 	if (KeyDown(KeyboardKeys::Key_B)) {
 		// Start battle transition.

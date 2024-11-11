@@ -23,6 +23,10 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 
 		// If we are finished displaying, then we should close and give control back.
 		textInteractionComponent.InteractionPressed = false;
+		auto ui = UI::UIInstance;
+		auto panelName = "textTesting" + std::string("regular");
+		auto thing = (Panel*)ui->Children[panelName].get();
+		thing->SetVisible(false);
 		gameStateComponent->Interacting = false;
 		currentInteractingText = nullptr;
 	} else {
@@ -38,6 +42,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 		auto text = (UIText*)thing->Children[textName].get();
 		assert(text);
 		text->UpdateText(textInteractionComponent.Text);
+		thing->SetVisible(true);
 
 		// If we are not engaged in an interaction, then we should start it.
 	}
@@ -57,7 +62,8 @@ void drawTextInteractionComponents(GameObject, LocationComponent& location, Play
 	playerInteraction.InteractionImage->Draw(src, dst);
 }
 void Supergoon::InitializeTextInteractionUI() {
-	CreateUITextbox("regular", Point{145, 200}, Point{236, 80});
+	auto textPanel = CreateUITextbox("regular", Point{145, 200}, Point{236, 80}, false);
+	textPanel->SetVisible(false);
 }
 
 void Supergoon::UpdateTextInteractions() {

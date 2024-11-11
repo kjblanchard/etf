@@ -1,7 +1,8 @@
 #pragma once
 #include <Supergoon/Primitives/Point.hpp>
 namespace Supergoon {
+class Panel;
 
-void CreateUITextbox(std::string name, Point screenLoc, Point size);
+Panel* CreateUITextbox(std::string name, Point screenLoc, Point size, bool screen);
 
-}
+}  // namespace Supergoon
