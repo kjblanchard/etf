@@ -22,9 +22,13 @@ class UIText : public UIObject {
 		_centerTextY = center;
 		Dirty = true;
 	}
+	inline void SetCurrentLetters(int letters) {
+		_currentLetters = letters;
+		Dirty = true;
+	}
+	inline int* CurrentLettersRef() { return &_currentLetters; }
 	void UpdateText(std::string text);
 	std::shared_ptr<Text> TextPtr;
-	int currentLetters = 0;
 	RectangleF TextDrawRect = RectangleF();
 	RectangleF TextSrcRect = RectangleF();
 	bool WordWrap;
@@ -33,6 +37,7 @@ class UIText : public UIObject {
 
    private:
 	bool _centerTextY = false;
+	int _currentLetters = 0;
 
    private:
 	friend class UIWidget;

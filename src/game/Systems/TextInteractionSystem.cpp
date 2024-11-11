@@ -8,6 +8,8 @@ using namespace Supergoon;
 
 static GameState* gameStateComponent;
 static TextInteractionComponent* currentInteractingText;
+static Tween typingTween = Tween(0);
+static bool isTyping = false;
 
 void updateTextInteractionComponents(GameObject, TextInteractionComponent& textInteractionComponent) {
 	//  This is set when something interacts with it, ie player hits space, if it isn't being interacted with quick return;
@@ -15,21 +17,45 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 	// if (textInteractionComponent.InteractionPressed) {
 	// 	return;
 	// }
-	if (!textInteractionComponent.InteractionPressed || (currentInteractingText && currentInteractingText != &textInteractionComponent)) {
+	if ((currentInteractingText && currentInteractingText != &textInteractionComponent)) {
 		return;
 	}
+	// If we are already engaged in a interaction, then progress it.
 	if (gameStateComponent->Interacting) {
-		// If we are already engaged in a interaction, then progress it.
+		// If we still have some to type
+		if (isTyping) {
+			typingTween.Update();
+			auto ui = UI::UIInstance;
+			auto panelName = "textTesting" + std::string("regular");
+			auto thing = (Panel*)ui->Children[panelName].get();
+			thing->Dirty = true;
 
-		// If we are finished displaying, then we should close and give control back.
-		textInteractionComponent.InteractionPressed = false;
-		auto ui = UI::UIInstance;
-		auto panelName = "textTesting" + std::string("regular");
-		auto thing = (Panel*)ui->Children[panelName].get();
-		thing->SetVisible(false);
-		gameStateComponent->Interacting = false;
-		currentInteractingText = nullptr;
-	} else {
+			// If we are complete and click
+			if (typingTween.Complete()) {
+				// If we click, we should end
+				isTyping = false;
+				// If we click and it is not complete, finish typing the text.
+			} else if (textInteractionComponent.InteractionPressed) {
+				auto textName = "textman" + std::string("regular");
+				auto text = (UIText*)thing->Children[textName].get();
+				text->SetCurrentLetters(textInteractionComponent.Text.length());
+				isTyping = false;
+			}
+			// if we are finished typing and press a button, then we should exit.
+		} else {
+			if (textInteractionComponent.InteractionPressed) {
+				textInteractionComponent.InteractionPressed = false;
+				auto ui = UI::UIInstance;
+				auto panelName = "textTesting" + std::string("regular");
+				auto thing = (Panel*)ui->Children[panelName].get();
+				thing->SetVisible(false);
+				gameStateComponent->Interacting = false;
+				currentInteractingText = nullptr;
+				isTyping = false;
+			}
+		}
+		// If we aren't interacting, then we should start to
+	} else if (textInteractionComponent.InteractionPressed) {
 		textInteractionComponent.InteractionPressed = false;
 		currentInteractingText = &textInteractionComponent;
 		gameStateComponent->Interacting = true;
@@ -42,9 +68,10 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 		auto text = (UIText*)thing->Children[textName].get();
 		assert(text);
 		text->UpdateText(textInteractionComponent.Text);
+		text->SetCurrentLetters(0);
+		isTyping = true;
+		typingTween = Tween(0, textInteractionComponent.Text.length(), textInteractionComponent.Text.length() * 0.05, text->CurrentLettersRef(), Supergoon::Easings::Linear);
 		thing->SetVisible(true);
-
-		// If we are not engaged in an interaction, then we should start it.
 	}
 }
 

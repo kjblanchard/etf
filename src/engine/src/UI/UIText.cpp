@@ -12,7 +12,7 @@ UIText::UIText(Panel* parent, std::string text, std::string uiName) : UIObject(p
 	Bounds.H = TextPtr->Size().Y;
 	// TextBounds = TextPtr->TextBounds();
 	TextPtr->SetTextBounds({(int)Bounds.W, (int)Bounds.H});
-	currentLetters = TextPtr->_lettersToDraw;
+	_currentLetters = TextPtr->_lettersToDraw;
 	WordWrap = TextPtr->_wordWrap;
 }
 
@@ -35,7 +35,7 @@ void UIText::OnDirty() {
 	// If we don't have text bounds, then we should just use the bounds x/y and size of text
 	TextPtr->SetAlpha(EffectiveAlpha());
 	TextPtr->SetTextBounds({(int)Bounds.W, (int)Bounds.H});
-	TextPtr->SetLetterCount(currentLetters);
+	TextPtr->SetLetterCount(_currentLetters);
 	TextPtr->SetWordWrap(WordWrap);
 	// If we should center, adjust our X and Y accordingly.
 	// if (CenterText) {
@@ -73,7 +73,7 @@ void UIText::UpdateText(std::string text) {
 	// Bounds.H = TextPtr->Size().Y;
 	// create new text?
 	// TextBounds = TextPtr->TextBounds();
-	currentLetters = TextPtr->_lettersToDraw;
+	_currentLetters = TextPtr->_lettersToDraw;
 	// WordWrap = WordWrap;
 	Dirty = true;
 }
