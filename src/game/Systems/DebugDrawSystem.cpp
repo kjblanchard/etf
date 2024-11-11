@@ -1,5 +1,6 @@
 #include <Components/PlayerComponent.hpp>
 #include <Components/PlayerExitComponent.hpp>
+#include <Components/PlayerInteractionComponent.hpp>
 #include <Components/TextInteractionComponent.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Systems/DebugDrawSystem.hpp>
@@ -39,7 +40,7 @@ static void drawPlayerExitDebugBoxes(GameObject, PlayerExitComponent& pe) {
 	auto graphics = Graphics::Instance();
 	graphics->DrawRect(dst, Color{0, 255, 0, 255});
 }
-static void drawPlayerInteractionDebugBoxes(GameObject, PlayerComponent& player) {
+static void drawPlayerInteractionDebugBoxes(GameObject, PlayerInteractionComponent& player) {
 	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
 	auto& cc = c->GetComponent<CameraComponent>();
 
@@ -72,7 +73,7 @@ void Supergoon::DrawDebugBoxesPlayerExit() {
 }
 
 void Supergoon::DrawDebugBoxesPlayerInteractionBox() {
-	GameObject::ForEach<PlayerComponent>(drawPlayerInteractionDebugBoxes);
+	GameObject::ForEach<PlayerInteractionComponent>(drawPlayerInteractionDebugBoxes);
 }
 
 void Supergoon::DrawDebugBoxesTextInteractionBox() {

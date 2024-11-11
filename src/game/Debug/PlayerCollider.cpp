@@ -1,4 +1,5 @@
 #include <Components/PlayerComponent.hpp>
+#include <Components/PlayerInteractionComponent.hpp>
 #include <Debug/PlayerCollider.hpp>
 #include <Supergoon/Supergoon.hpp>
 
@@ -27,6 +28,7 @@ void PlayerWidget::ShowPlayerColliderWindow() {
 	}
 	auto& playerComponent = playerGo->GetComponent<PlayerComponent>();
 	auto& locationComponent = playerGo->GetComponent<LocationComponent>();
+	auto& playerInteractionComponent = playerGo->GetComponent<PlayerInteractionComponent>();
 	auto gamestateComponent = GameObject::FindComponent<GameState>();
 	assert(gamestateComponent);
 	if (ImGui::CollapsingHeader("Player")) {
@@ -36,10 +38,10 @@ void PlayerWidget::ShowPlayerColliderWindow() {
 		ImGui::DragFloat("BoxOffset Y", &playerComponent.Body.Y, 0.1f);
 		ImGui::DragFloat("BoxSize X", &playerComponent.Body.W, 0.1f);
 		ImGui::DragFloat("BoxSize Y", &playerComponent.Body.H, 0.1f);
-		ImGui::DragFloat("Interaction X", &playerComponent.InteractionRect.X, 0.1f);
-		ImGui::DragFloat("Interaction Y", &playerComponent.InteractionRect.Y, 0.1f);
-		ImGui::DragFloat("Interaction W", &playerComponent.InteractionRect.W, 0.1f);
-		ImGui::DragFloat("Interaction H", &playerComponent.InteractionRect.H, 0.1f);
+		ImGui::DragFloat("Interaction X", &playerInteractionComponent.InteractionRect.X, 0.1f);
+		ImGui::DragFloat("Interaction Y", &playerInteractionComponent.InteractionRect.Y, 0.1f);
+		ImGui::DragFloat("Interaction W", &playerInteractionComponent.InteractionRect.W, 0.1f);
+		ImGui::DragFloat("Interaction H", &playerInteractionComponent.InteractionRect.H, 0.1f);
 		ImGui::BeginDisabled(true);
 		ImGui::Checkbox("Interacting", &gamestateComponent->Interacting);
 		ImGui::EndDisabled();

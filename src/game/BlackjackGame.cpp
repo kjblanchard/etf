@@ -224,6 +224,7 @@ void BlackjackGame::Draw() {
 		Level::Draw();
 		DrawAnimationComponents();
 		DrawImages();
+		DrawTextInteractionDisplay();
 	}
 	UI::Draw();
 #ifdef imgui
