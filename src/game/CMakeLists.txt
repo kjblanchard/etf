@@ -24,6 +24,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     BlackjackGame.cpp
     Entities/PlayerStart.cpp
     Entities/PlayerExit.cpp
+    Entities/TextInteraction.cpp
     Systems/PlayerSystem.cpp
     Systems/ImageSystem.cpp
     Systems/AsepriteSystem.cpp

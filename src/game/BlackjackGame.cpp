@@ -4,6 +4,7 @@
 #include <Debug/PlayerCollider.hpp>
 #include <Entities/PlayerExit.hpp>
 #include <Entities/PlayerStart.hpp>
+#include <Entities/TextInteraction.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <SupergoonEngine/nlohmann/json.hpp>
 #include <Systems/AsepriteSystem.hpp>
@@ -11,6 +12,7 @@
 #include <Systems/DebugDrawSystem.hpp>
 #include <Systems/ImageSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
+#include <Systems/TextInteractionSystem.hpp>
 
 using json = nlohmann::json;
 extern json configData;
@@ -22,7 +24,9 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 	{"Exit", [](TiledMap::TiledObject &object) {
 		 return NewPlayerExit(object);
 	 }},
-};
+	{"TextInteract", [](TiledMap::TiledObject &object) {
+		 return NewTextInteraction(object);
+	 }}};
 }
 using namespace Supergoon;
 static bool inGame = false;
@@ -48,7 +52,7 @@ static void loadLevel() {
 	} else {
 		textPanel->SetVisible(false);
 	}
-
+	InitializeTextInteractionUI();
 	ContentRegistry::LoadAllContent();
 	inGame = true;
 }
@@ -209,6 +213,7 @@ void BlackjackGame::Update() {
 	if (inGame) {
 		PlayerInput();
 		UpdateAnimationComponents();
+		UpdateTextInteractions();
 		UpdateCamera();
 	}
 	UI::Update();
@@ -236,6 +241,9 @@ void BlackjackGame::Draw() {
 	}
 	if (PlayerWidget::ShowPlayerInteractionDebugBox) {
 		DrawDebugBoxesPlayerInteractionBox();
+	}
+	if (PlayerWidget::ShowInteractionDebugBox) {
+		DrawDebugBoxesTextInteractionBox();
 	}
 #endif
 }

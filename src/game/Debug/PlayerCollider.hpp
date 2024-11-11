@@ -6,5 +6,6 @@ class PlayerWidget {
 	static bool ShowPlayerColliderDebugBox;
 	static bool ShowPlayerExitDebugBox;
 	static bool ShowPlayerInteractionDebugBox;
+	static bool ShowInteractionDebugBox;
 };
 }  // namespace Supergoon

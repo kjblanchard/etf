@@ -1,6 +1,7 @@
 #include <Components/PlayerComponent.hpp>
 #include <Components/PlayerExitComponent.hpp>
 #include <Components/PlayerSpawnComponent.hpp>
+#include <Components/TextInteractionComponent.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Systems/PlayerSystem.hpp>
 using namespace Supergoon;
@@ -60,7 +61,23 @@ static void startPlayer(GameObject, PlayerComponent& playerComponent, AnimationC
 	animComponent.Animation->PlayAnimation("walk" + std::string(letter));
 }
 
-static bool interactionHandler(PlayerComponent& player, bool interactionKeyPressed) {
+static bool interactionHandler(PlayerComponent& player, GameState& gamestate, bool interactionKeyPressed) {
+	bool interactionFound = false;
+	GameObject::ForEach<TextInteractionComponent>([&player, interactionKeyPressed, &interactionFound, &gamestate](GameObject, TextInteractionComponent& text) {
+		if (interactionFound) {
+			return;
+		}
+		if (player.InteractionRect.IsOverlap(&text.InteractionRect)) {
+			interactionFound = true;
+			if (interactionKeyPressed) {
+				text.InteractionPressed = true;
+			} else {
+				text.InteractionPressed = false;
+				// we should display the logo here
+			}
+		}
+	});
+	return true;
 }
 
 static void playerInput(GameObject go, PlayerComponent& player) {
@@ -177,9 +194,9 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	if (exited) {
 		return;
 	}
-	// Check for interactions.
-	if (KeyDown(KeyboardKeys::Key_SPACE)) {
-	}
+	// Check for interactions if we pressed space.
+	auto interactionKeyPressed = KeyJustPressed(KeyboardKeys::Key_SPACE);
+	interactionHandler(player, stateComponent, interactionKeyPressed);
 }
 
 static void loadPlayerEach(GameObject go, PlayerSpawnComponent& ps) {
