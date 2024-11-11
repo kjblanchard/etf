@@ -3,6 +3,7 @@
 #include <Components/TextInteractionComponent.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Systems/TextInteractionSystem.hpp>
+#include <Utilities/Utilities.hpp>
 using namespace Supergoon;
 
 static GameState* gameStateComponent;
@@ -46,7 +47,7 @@ void drawTextInteractionComponents(GameObject, LocationComponent& location, Play
 	playerInteraction.InteractionImage->Draw(src, dst);
 }
 void Supergoon::InitializeTextInteractionUI() {
-	// Create the UI that we use for this.
+	CreateUITextbox("regular", Point{145, 200}, Point{200, 70});
 }
 
 void Supergoon::UpdateTextInteractions() {

@@ -30,6 +30,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Systems/AsepriteSystem.cpp
     Systems/CameraSystem.cpp
     Systems/TextInteractionSystem.cpp
+    Utilities/Utilities.cpp
     ${DEBUG_FILES}
     ${ICON_PATH}
 )
