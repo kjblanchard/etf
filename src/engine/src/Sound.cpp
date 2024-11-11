@@ -18,6 +18,15 @@ void Sound::InitializeSound() {
 		PlayBgm();
 		SDL_free(name);
 	});
+	Events::RegisterEventHandler(Events::BuiltinEvents.PlayBgmSecondaryEvent, [this](int, void* name, void*) {
+		auto nameStr = std::string((const char*)name);
+		LoadBgmSecondary(nameStr);
+		PlayBgmSecondary();
+		SDL_free(name);
+	});
+	Events::RegisterEventHandler(Events::BuiltinEvents.StopBgmSecondaryEvent, [this](int, void*, void*) {
+		StopBgmSecondary();
+	});
 	for (size_t i = 0; i < _totalSfxStreams; i++) {
 		auto stream = sgStreamNew();
 		_sfxStreams.push_back(std::unique_ptr<sgStream>(stream));
@@ -49,6 +58,30 @@ bool Sound::LoadBgm(std::string filename, float volume, int loops) {
 	_bgmOriginalVolume = _playingBgmVolume = volume;
 	return true;
 }
+bool Sound::LoadBgmSecondary(std::string filename, float volume, int loops) {
+	char* fullPath = NULL;
+	SDL_asprintf(&fullPath, "%sassets/bgm/%s%s", SDL_GetBasePath(), filename.c_str(), ".ogg");
+	if (_bgmSecondary && !strcmp(_bgm->Filename, fullPath)) {
+		SDL_free(fullPath);
+		return false;
+	}
+	if (_bgmSecondary) {
+		sgBgmDelete(_bgmSecondary);
+		_bgmSecondary = nullptr;
+	}
+	if (volume < 0 || volume > 1.0) {
+		sgLogWarn("Volume passed in for %s is %f which is below 0 or greater than 1, setting to 1\n", filename.c_str(), volume);
+		volume = 1.0;
+	}
+	auto bgm = sgBgmNew();
+	bgm->Filename = fullPath;
+	bgm->Loops = loops;
+	bgm->Volume = volume * _globalBgmVolume;
+	sgBgmLoad(bgm);
+	_bgmSecondary = bgm;
+	// _bgmOriginalVolume = _playingBgmVolume = volume;
+	return true;
+}
 
 void Sound::PlayBgm() {
 	if (!_bgm || !_bgm->CanPlay) {
@@ -56,6 +89,13 @@ void Sound::PlayBgm() {
 	}
 	SetPlayingBgmVolume(_bgmOriginalVolume);
 	sgBgmPlay(_bgm);
+}
+void Sound::PlayBgmSecondary() {
+	if (!_bgmSecondary || !_bgmSecondary->CanPlay) {
+		return;
+	}
+	SetPlayingBgmVolume(_bgmOriginalVolume);
+	sgBgmPlay(_bgmSecondary);
 }
 
 void Sound::PauseBgm() {
@@ -72,6 +112,13 @@ void Sound::StopBgm() {
 	sgBgmStop(_bgm);
 }
 
+void Sound::StopBgmSecondary() {
+	if (!_bgmSecondary) {
+		return;
+	}
+	sgBgmStop(_bgmSecondary);
+}
+
 void Sound::StopBgmFadeout() {
 	if (!_bgm || !_bgm->IsPlaying || _fadingOut) {
 		return;
@@ -86,6 +133,9 @@ void Sound::StopBgmFadeout() {
 void Sound::Update() {
 	if (_bgm) {
 		sgBgmUpdate(_bgm);
+	}
+	if (_bgmSecondary) {
+		sgBgmUpdate(_bgmSecondary);
 	}
 	if (_usableSfxStreams.empty()) {
 		CheckForStaleSfxStreams();

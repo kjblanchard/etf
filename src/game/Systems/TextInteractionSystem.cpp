@@ -34,12 +34,14 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 			if (typingTween.Complete()) {
 				// If we click, we should end
 				isTyping = false;
+				Events::PushEvent(Events::BuiltinEvents.StopBgmSecondaryEvent, 0);
 				// If we click and it is not complete, finish typing the text.
 			} else if (textInteractionComponent.InteractionPressed) {
 				auto textName = "textman" + std::string("regular");
 				auto text = (UIText*)thing->Children[textName].get();
 				text->SetCurrentLetters(textInteractionComponent.Text.length());
 				isTyping = false;
+				Events::PushEvent(Events::BuiltinEvents.StopBgmSecondaryEvent, 0);
 			}
 			// if we are finished typing and press a button, then we should exit.
 		} else {
@@ -71,6 +73,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 		text->SetCurrentLetters(0);
 		isTyping = true;
 		typingTween = Tween(0, textInteractionComponent.Text.length(), textInteractionComponent.Text.length() * 0.05, text->CurrentLettersRef(), Supergoon::Easings::Linear);
+		Events::PushEvent(Events::BuiltinEvents.PlayBgmSecondaryEvent, 0, (void*)strdup("typing"));
 		thing->SetVisible(true);
 	}
 }

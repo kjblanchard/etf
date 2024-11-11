@@ -23,12 +23,16 @@ class Sound {
 	 * @return false error
 	 */
 	bool LoadBgm(std::string filename, float volume = 1.0, int loops = -1);
+	// TODO this needs to be cleaned up
+	bool LoadBgmSecondary(std::string filename, float volume = 1.0, int loops = -1);
 	// Plays a bgm loaded into the bgm slot
 	void PlayBgm();
+	void PlayBgmSecondary();
 	// Pauses bgm in bgm slot
 	void PauseBgm();
 	// Pauses bgm in bgm slot
 	void StopBgm();
+	void StopBgmSecondary();
 	void StopBgmFadeout();
 	//  Sets current playing bgm volume, 0 - 1.0f
 	void SetPlayingBgmVolume(float volume);
@@ -53,6 +57,7 @@ class Sound {
 	float _bgmOriginalVolume = 0;
 	bool _fadingOut = false;
 	sgBgm* _bgm = nullptr;
+	sgBgm* _bgmSecondary = nullptr;
 	Tween* _bgmTween = nullptr;
 	static Sound* _instance;
 	friend class Game;
