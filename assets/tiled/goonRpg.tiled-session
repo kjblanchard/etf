@@ -1,5 +1,5 @@
 {
-    "activeFile": "debugSouth.tmj",
+    "activeFile": "debugTown.tmj",
     "expandedProjectPaths": [
         "."
     ],
@@ -25,10 +25,10 @@
                 3
             ],
             "scale": 2,
-            "selectedLayer": 4,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 304.25,
-                "y": 144.25
+                "x": 300.5,
+                "y": 140.5
             }
         },
         "debugTownHome.tmj": {
@@ -75,12 +75,12 @@
     ],
     "project": "goonRpg.tiled-project",
     "recentFiles": [
-        "debugTown.tmj",
-        "debugTownHome.tmj",
-        "house.tsj",
-        "inside.tsj",
-        "terrain.tsj",
+        "debugSouth.tmj",
         "outside.tsj",
-        "debugSouth.tmj"
+        "terrain.tsj",
+        "inside.tsj",
+        "house.tsj",
+        "debugTownHome.tmj",
+        "debugTown.tmj"
     ]
 }
