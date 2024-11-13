@@ -11,10 +11,6 @@
  */
 
 /**
- * @brief Wraps a function, or a line (so that you can return and define a variable) and measure it and display the time it took, identifier is a descriptive name for it
- *
- */
-/**
  * @brief The level that we should show debug events at.
  *
  */
@@ -72,6 +68,8 @@ void sgLogError(const char *format, ...);
  * @param ... The variables for the printf
  */
 void sgLogCritical(const char *fmt, ...);
+
+void sgSetDebugFunction(void (*)(const char *, const char *, int));
 
 void sgSetLogLevel(int newLevel);
 

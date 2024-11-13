@@ -7,6 +7,8 @@
 
 #define MAX_LOG_SIZE 400
 
+static void (*logFunc)(const char *, const char *, int) = NULL;
+
 /**
  * @brief The file that will be written to when logs are put.
  *
@@ -60,6 +62,9 @@ int sgInitializeDebugLogFile(void) {
 	sgLogError("Could not open file for logging!");
 	return 0;
 }
+void sgSetDebugFunction(void (*func)(const char *, const char *, int)) {
+	logFunc = func;
+}
 
 int sgCloseDebugLogFile(void) {
 	if (!openDebugFile)
@@ -77,6 +82,9 @@ static void Log(sgLogLevel level, const char *thing_to_write) {
 	strftime(buf, sizeof(buf), "%m-%d-%H:%M-%S", gm_time);
 	FILE *outStream = level == Log_LError ? stderr : stdout;
 	fprintf(outStream, "%s: %s end\n", buf, thing_to_write);
+	if (logFunc) {
+		logFunc(buf, thing_to_write, level);
+	}
 	if (level == Log_LError && openDebugFile) {
 		fprintf(openDebugFile, "%s: %s\n", buf, thing_to_write);
 	}

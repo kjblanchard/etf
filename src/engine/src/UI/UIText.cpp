@@ -11,7 +11,8 @@ UIText::UIText(Panel* parent, std::string text, std::string uiName) : UIObject(p
 	Bounds.W = TextPtr->Size().X;
 	Bounds.H = TextPtr->Size().Y;
 	// TextBounds = TextPtr->TextBounds();
-	currentLetters = TextPtr->_lettersToDraw;
+	TextPtr->SetTextBounds({(int)Bounds.W, (int)Bounds.H});
+	_currentLetters = TextPtr->_lettersToDraw;
 	WordWrap = TextPtr->_wordWrap;
 }
 
@@ -34,7 +35,7 @@ void UIText::OnDirty() {
 	// If we don't have text bounds, then we should just use the bounds x/y and size of text
 	TextPtr->SetAlpha(EffectiveAlpha());
 	TextPtr->SetTextBounds({(int)Bounds.W, (int)Bounds.H});
-	TextPtr->SetLetterCount(currentLetters);
+	TextPtr->SetLetterCount(_currentLetters);
 	TextPtr->SetWordWrap(WordWrap);
 	// If we should center, adjust our X and Y accordingly.
 	// if (CenterText) {
@@ -49,11 +50,15 @@ void UIText::OnDirty() {
 		auto height = Bounds.H ? std::min((int)Bounds.H, TextPtr->Size().Y) : TextPtr->Size().Y;
 		TextSrcRect = RectangleF{0, 0, (float)width, (float)height};
 	}
-	auto x = Bounds.X;
-	if (CenterText) {
-		x = Bounds.X + ((Bounds.W / 2) - (TextPtr->Size().X / 2));
+	auto x = (int)Bounds.X;
+	auto y = (int)Bounds.Y;
+	if (CenterTextX) {
+		x = (int)(Bounds.X + ((Bounds.W / 2) - (TextPtr->Size().X / 2)));
 	}
-	TextDrawRect = RectangleF{x, Bounds.Y, TextSrcRect.W, TextSrcRect.H};
+	if (_centerTextY) {
+		y = (int)(Bounds.Y + (Bounds.H - TextPtr->Size().Y) / 2);
+	}
+	TextDrawRect = RectangleF{(float)x, (float)y, TextSrcRect.W, TextSrcRect.H};
 }
 
 void UIText::UpdateText(std::string text) {
@@ -68,6 +73,7 @@ void UIText::UpdateText(std::string text) {
 	// Bounds.H = TextPtr->Size().Y;
 	// create new text?
 	// TextBounds = TextPtr->TextBounds();
-	currentLetters = TextPtr->_lettersToDraw;
-	WordWrap = TextPtr->_wordWrap;
+	_currentLetters = TextPtr->_lettersToDraw;
+	// WordWrap = WordWrap;
+	Dirty = true;
 }

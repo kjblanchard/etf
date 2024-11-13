@@ -58,7 +58,6 @@ void Image::Load() {
 	switch (_imageType) {
 		case ImageType::Default: {
 			void *pngData = nullptr;
-			sgLogError("%s", _filePath.c_str());
 			SDL_Surface *s = loadPNG(_filePath.c_str(), &pngData);
 			if (!s) {
 				sgLogError("Could not load PNG properly, content not fully loaded");

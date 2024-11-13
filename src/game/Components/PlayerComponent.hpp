@@ -8,4 +8,5 @@ struct PlayerComponent {
 	RectangleF Body;
 	Directions Direction;
 };
+
 }  // namespace Supergoon

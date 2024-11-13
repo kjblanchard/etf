@@ -1,5 +1,7 @@
 #include <Components/PlayerComponent.hpp>
 #include <Components/PlayerExitComponent.hpp>
+#include <Components/PlayerInteractionComponent.hpp>
+#include <Components/TextInteractionComponent.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <Systems/DebugDrawSystem.hpp>
 using namespace Supergoon;
@@ -38,6 +40,27 @@ static void drawPlayerExitDebugBoxes(GameObject, PlayerExitComponent& pe) {
 	auto graphics = Graphics::Instance();
 	graphics->DrawRect(dst, Color{0, 255, 0, 255});
 }
+static void drawPlayerInteractionDebugBoxes(GameObject, PlayerInteractionComponent& player) {
+	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+	auto& cc = c->GetComponent<CameraComponent>();
+
+	float adjustedX = player.InteractionRect.X - cc.Box.X;
+	float adjustedY = player.InteractionRect.Y - cc.Box.Y;
+	auto dst = RectangleF{adjustedX, adjustedY, (float)player.InteractionRect.W, (float)player.InteractionRect.H};
+	auto graphics = Graphics::Instance();
+	graphics->DrawRect(dst, Color{0, 255, 0, 255});
+}
+
+static void drawTextInteractionDebugBoxes(GameObject, TextInteractionComponent& text) {
+	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+	auto& cc = c->GetComponent<CameraComponent>();
+
+	float adjustedX = text.InteractionRect.X - cc.Box.X;
+	float adjustedY = text.InteractionRect.Y - cc.Box.Y;
+	auto dst = RectangleF{adjustedX, adjustedY, (float)text.InteractionRect.W, (float)text.InteractionRect.H};
+	auto graphics = Graphics::Instance();
+	graphics->DrawRect(dst, Color{0, 255, 255, 255});
+}
 
 void Supergoon::DrawDebugBoxesPlayer() {
 	GameObject::ForEach<LocationComponent, PlayerComponent>(drawPlayerBodyDebugBoxes);
@@ -47,4 +70,12 @@ void Supergoon::DrawDebugBoxesSolid() {
 }
 void Supergoon::DrawDebugBoxesPlayerExit() {
 	GameObject::ForEach<PlayerExitComponent>(drawPlayerExitDebugBoxes);
+}
+
+void Supergoon::DrawDebugBoxesPlayerInteractionBox() {
+	GameObject::ForEach<PlayerInteractionComponent>(drawPlayerInteractionDebugBoxes);
+}
+
+void Supergoon::DrawDebugBoxesTextInteractionBox() {
+	GameObject::ForEach<TextInteractionComponent>(drawTextInteractionDebugBoxes);
 }

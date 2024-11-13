@@ -42,6 +42,7 @@ if(imgui)
         src/Widgets/UIWidget.cpp
         src/Widgets/Global.cpp
         src/Widgets/LevelWidget.cpp
+        src/Widgets/ConsoleWidget.cpp
     )
 endif()
 

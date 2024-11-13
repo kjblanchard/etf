@@ -9,6 +9,8 @@
 #include <SupergoonEngine/input/keyboard.h>
 #ifdef imgui
 #include <SupergoonEngine/imgui/imgui.h>
+
+#include <Supergoon/Widgets/Widgets.hpp>
 #endif
 
 #include <Supergoon/Content/ContentRegistry.hpp>
@@ -34,6 +36,9 @@ SDL_AppResult SDL_AppInit(void **appState, int, char *[]) {
 		return SDL_APP_FAILURE;
 	}
 	sgInitializeDebugLogFile();
+#ifdef imgui
+	Widgets::InitializeWidgets();
+#endif
 	geInitializeKeyboard();
 	geInitializeJoysticks();
 
@@ -76,7 +81,6 @@ Game::~Game() {
 void Game::Initialize() {
 	char *jsonPath = NULL;
 	SDL_asprintf(&jsonPath, "%sassets/config.json", SDL_GetBasePath());
-	sgLogWarn("Going to read from file %s", jsonPath);
 	std::ifstream fileStream(jsonPath);
 	SDL_free(jsonPath);
 	configData = json::parse(fileStream);
