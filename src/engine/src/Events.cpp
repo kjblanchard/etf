@@ -19,8 +19,7 @@ Events::Events(Game* game) {
 	BuiltinEvents.LevelChangeEvent = RegisterEvent();
 	BuiltinEvents.ResetGameEvent = RegisterEvent();
 	BuiltinEvents.PlayBgmEvent = RegisterEvent();
-	BuiltinEvents.PlayBgmSecondaryEvent = RegisterEvent();
-	BuiltinEvents.StopBgmSecondaryEvent = RegisterEvent();
+	BuiltinEvents.StopBgmEvent = RegisterEvent();
 	BuiltinEvents.UiFadeInStart = RegisterEvent();
 	BuiltinEvents.UiFadeInEnd = RegisterEvent();
 	BuiltinEvents.UiFadeOutStart = RegisterEvent();

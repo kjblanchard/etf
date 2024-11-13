@@ -22,18 +22,17 @@ class Sound {
 	 * @return true loaded successfully
 	 * @return false error
 	 */
-	bool LoadBgm(std::string filename, float volume = 1.0, int loops = -1);
+	bool LoadBgm(std::string filename, float volume = 1.0, int loops = -1, int slot = 0);
 	// TODO this needs to be cleaned up
-	bool LoadBgmSecondary(std::string filename, float volume = 1.0, int loops = -1);
+	// bool LoadBgmSecondary(std::string filename, float volume = 1.0, int loops = -1);
 	// Plays a bgm loaded into the bgm slot
-	void PlayBgm();
-	void PlayBgmSecondary();
+	void PlayBgm(int slot = 0);
+	// void PlayBgmSecondary();
 	// Pauses bgm in bgm slot
-	void PauseBgm();
+	void PauseBgm(int slot = 0);
 	// Pauses bgm in bgm slot
-	void StopBgm();
-	void StopBgmSecondary();
-	void StopBgmFadeout();
+	void StopBgm(int slot = 0);
+	void StopBgmFadeout(int slot = 0);
 	//  Sets current playing bgm volume, 0 - 1.0f
 	void SetPlayingBgmVolume(float volume);
 	//  Sets the global volume multiplier for bgm, 0 - 1.0f
@@ -46,7 +45,7 @@ class Sound {
 	//  Updates all internal bgms
 	void Update();
 	void CheckForStaleSfxStreams();
-	void UpdatePlayingBgmVolume();
+	void UpdatePlayingBgmVolume(int slot = 0);
 	const size_t _totalSfxStreams = 4;
 	float _globalBgmVolume = 1.0f;
 	float _globalSfxVolume = 1.0f;
@@ -56,9 +55,12 @@ class Sound {
 	std::queue<sgStream*> _usableSfxStreams;
 	float _bgmOriginalVolume = 0;
 	bool _fadingOut = false;
-	sgBgm* _bgm = nullptr;
-	sgBgm* _bgmSecondary = nullptr;
-	Tween* _bgmTween = nullptr;
+	// sgBgm* _bgm = nullptr;
+	// sgBgm* _bgmSecondary = nullptr;
+	const int _bgmSlots = 2;
+	std::vector<sgBgm*> _bgms;
+	std::vector<Tween*> _tweens;
+	// Tween* _bgmTween = nullptr;
 	static Sound* _instance;
 	friend class Game;
 	friend class SoundWidget;
