@@ -24,15 +24,13 @@ class Sound {
 	 */
 	bool LoadBgm(std::string filename, float volume = 1.0, int loops = -1, int slot = 0);
 	// TODO this needs to be cleaned up
-	// bool LoadBgmSecondary(std::string filename, float volume = 1.0, int loops = -1);
 	// Plays a bgm loaded into the bgm slot
 	void PlayBgm(int slot = 0);
-	// void PlayBgmSecondary();
 	// Pauses bgm in bgm slot
 	void PauseBgm(int slot = 0);
 	// Pauses bgm in bgm slot
 	void StopBgm(int slot = 0);
-	void StopBgmFadeout(int slot = 0);
+	void StopBgmFadeout(int slot = 0, float fadeTime = 1.0);
 	//  Sets current playing bgm volume, 0 - 1.0f
 	void SetPlayingBgmVolume(float volume);
 	//  Sets the global volume multiplier for bgm, 0 - 1.0f

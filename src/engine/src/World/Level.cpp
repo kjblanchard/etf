@@ -156,6 +156,8 @@ void Level::LoadNewLevelFade(std::string level) {
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, false, (void *)strdup(level.c_str()));
 		UI::FadeIn();
 	});
+	static bool fadebool = true;
+	Events::PushEvent(Events::BuiltinEvents.StopBgmEvent, false, (void *)&fadebool);
 	UI::FadeOut();
 }
 

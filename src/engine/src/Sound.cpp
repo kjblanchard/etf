@@ -8,6 +8,7 @@
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Sound.hpp>
 #include <Supergoon/Tween/Tween.hpp>
+#include <cassert>
 
 namespace Supergoon {
 Sound* Sound::_instance = nullptr;
@@ -19,7 +20,14 @@ void Sound::InitializeSound() {
 		PlayBgm(slot);
 		SDL_free(name);
 	});
-	Events::RegisterEventHandler(Events::BuiltinEvents.StopBgmEvent, [this](int slot, void*, void*) {
+	Events::RegisterEventHandler(Events::BuiltinEvents.StopBgmEvent, [this](int slot, void* shouldFade, void*) {
+		if (shouldFade) {
+			auto fade = (bool)shouldFade;
+			if (fade) {
+				StopBgmFadeout(slot, 0.25);
+				return;
+			}
+		}
 		StopBgm(slot);
 	});
 	for (size_t i = 0; i < _totalSfxStreams; i++) {
@@ -82,16 +90,16 @@ void Sound::StopBgm(int slot) {
 	sgBgmStop(_bgm);
 }
 
-void Sound::StopBgmFadeout(int slot) {
+void Sound::StopBgmFadeout(int slot, float fadeTime) {
 	auto& _bgm = _bgms[slot];
 	if (!_bgm || !_bgm->IsPlaying || _fadingOut) {
 		return;
 	}
 	if (_tweens[slot]) {
-		delete (_tweens[slot]);
+		SDL_free(_tweens[slot]);
 		_tweens[slot] = nullptr;
 	}
-	_tweens[slot] = new Tween(1.0, 0, 1, &_playingBgmVolume, Supergoon::Easings::Linear);
+	_tweens[slot] = new Tween(_playingBgmVolume, 0, fadeTime, &_playingBgmVolume, Supergoon::Easings::Linear);
 	_tweens[slot]->UpdateFunc = [this]() {
 		UpdatePlayingBgmVolume();
 	};
@@ -108,7 +116,7 @@ void Sound::Update() {
 	if (_usableSfxStreams.empty()) {
 		CheckForStaleSfxStreams();
 	}
-	for (auto tween : _tweens) {
+	for (auto& tween : _tweens) {
 		if (!tween) return;
 		if (!tween->Complete()) {
 			tween->Update();
