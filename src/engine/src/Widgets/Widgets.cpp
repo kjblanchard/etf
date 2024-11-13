@@ -1,5 +1,6 @@
 #include <SupergoonEngine/imgui/imgui.h>
 
+#include <Supergoon/Widgets/ConsoleWidget.hpp>
 #include <Supergoon/Widgets/ContentWidget.hpp>
 #include <Supergoon/Widgets/Game.hpp>
 #include <Supergoon/Widgets/Global.hpp>
@@ -15,6 +16,7 @@ void Widgets::ShowWidgets(Game*) {
 	UIWidget::ShowUiDebugWindow();
 	LevelWidget::ShowLevelWidget();
 	GlobalWidget::ShowGlobalDebugWindow();
+	ConsoleWidget::ShowConsoleWidget();
 }
 int Widgets::GetDefaultWindowFlags() {
 	// static bool p_open = true;
@@ -44,6 +46,9 @@ int Widgets::GetDefaultWindowFlags() {
 	if (unsaved_document) window_flags |= ImGuiWindowFlags_UnsavedDocument;
 	// if (no_close) p_open = NULL;  // Don't pass our bool* to Begin
 	return window_flags;
+}
+void Widgets::InitializeWidgets() {
+	ConsoleWidget::InitializeConsoleWidget();
 }
 
 }  // namespace Supergoon

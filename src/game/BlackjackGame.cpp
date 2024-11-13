@@ -126,6 +126,7 @@ void BlackjackGame::Update() {
 		UpdateAnimationComponents();
 		UpdateTextInteractions();
 		UpdateCamera();
+		sgLogWarn("What even is borked");
 	}
 	UI::Update();
 }
