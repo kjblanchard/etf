@@ -44,6 +44,7 @@ static void loadLevel() {
 		auto textBox = (UIText *)textPanel->Children["textmanscreen"].get();
 		assert(textBox);
 		textPanel->SetVisible(true);
+		textPanel->SetAlpha(255);
 		textBox->UpdateText(*display);
 		// TODO this should be different.
 		for (auto &&animator : textPanel->Animators) {
@@ -113,10 +114,8 @@ void BlackjackGame::Start() {
 	if (!skipLogos) {
 		playLogos();
 	} else {
-		// UI::LoadUIFromFile("logos");
 		CreateUITextbox("screen", Point{145, 15}, Point{200, 48}, true);
 		InitializeTextInteractionUI();
-		// setupUINameChangeBox();
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTown"));
 	}
 }
