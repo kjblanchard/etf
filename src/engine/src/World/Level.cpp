@@ -122,16 +122,12 @@ void Level::LoadSurfaces() {
 	for (auto &tileset : _mapData->Tilesets) {
 		if (tileset.Type == TilesetType::Image) {
 			for (auto &tile : tileset.Tiles) {
-				char *fullPath = NULL;
-				SDL_asprintf(&fullPath, "%s%s", getBasePathForTiled().c_str(), tile.Image.c_str());
-				ContentRegistry::CreateContent<Image>(fullPath);
-				SDL_free(fullPath);
+				auto fullPath = getBasePathForTiled() + tile.Image;
+				_backgroundTilesetImages.push_back(ContentRegistry::CreateContent<Image>(fullPath));
 			}
 		} else {
-			char *fullPath = NULL;
-			SDL_asprintf(&fullPath, "%s%s", getBasePathForTiled().c_str(), tileset.Image.c_str());
-			auto i = ContentRegistry::CreateContent<Image>(fullPath);
-			SDL_free(fullPath);
+			auto fullPath = getBasePathForTiled() + tileset.Image;
+			_backgroundTilesetImages.push_back(ContentRegistry::CreateContent<Image>(fullPath));
 		}
 	}
 	ContentRegistry::LoadAllContent();
@@ -141,17 +137,11 @@ Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	if (tileset->Type == TilesetType::Image) {
 		for (auto &tile : tileset->Tiles) {
 			if (tile.Id + tileset->FirstGid == gid) {
-				return ContentRegistry::CreateContent<Image>(getBasePathForTiled() + tile.Image).get();
+				return ContentRegistry::GetContent<Image>(getBasePathForTiled() + tile.Image).get();
 			}
 		}
 	} else {
 		auto name = getBasePathForTiled() + tileset->Image;
-		if (!ContentRegistry::ContentExists(name)) {
-			auto newContent = ContentRegistry::CreateContent<Image>(getBasePathForTiled() + tileset->Image);
-			newContent->LoadContent();
-			_backgroundTilesetImages.push_back(newContent);
-			return newContent.get();
-		}
 		return ContentRegistry::GetContent<Image>(getBasePathForTiled() + tileset->Image).get();
 	}
 	sgLogError("Could not find loaded surface for gid %ud\n", gid);
