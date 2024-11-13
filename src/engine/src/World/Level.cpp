@@ -145,7 +145,14 @@ Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 			}
 		}
 	} else {
-		return ContentRegistry::CreateContent<Image>(getBasePathForTiled() + tileset->Image).get();
+		auto name = getBasePathForTiled() + tileset->Image;
+		if (!ContentRegistry::ContentExists(name)) {
+			auto newContent = ContentRegistry::CreateContent<Image>(getBasePathForTiled() + tileset->Image);
+			newContent->LoadContent();
+			_backgroundTilesetImages.push_back(newContent);
+			return newContent.get();
+		}
+		return ContentRegistry::GetContent<Image>(getBasePathForTiled() + tileset->Image).get();
 	}
 	sgLogError("Could not find loaded surface for gid %ud\n", gid);
 	return nullptr;
@@ -166,6 +173,7 @@ void Level::LoadNewLevel(std::string level) {
 	if (LoadFunc) {
 		LoadFunc();
 	}
+	ContentRegistry::ClearStaleContent();
 	auto bgm = _currentLevel->GetBgm();
 	auto goboi = GameObject::GetGameObjectWithComponents<GameState>();
 	auto &comp = goboi->GetComponent<GameState>();
@@ -219,6 +227,7 @@ void Level::CreateBackgroundImage() {
 					auto tiledMapTileset = _mapData->GetGidTiledMapTileset(tileGid);
 					auto tileset = _mapData->GetTiledMapTilesetTileset(tiledMapTileset);
 					auto tileSurface = GetSurfaceForGid(tileGid, tileset);
+					assert(tileSurface);
 					auto sourceRect = _mapData->GetGidSourceRect(tileGid);
 					auto dstX = x * _mapData->TileWidth;
 					auto dstY = y * _mapData->TileHeight;

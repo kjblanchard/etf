@@ -229,6 +229,7 @@ void Text::CreateSurfaceForLetter(std::string name, FT_Face fontFace, int r, int
 	}
 	auto content = ContentRegistry::CreateContent<Image, SDL_Surface*>(name, std::move(surface));
 	content->LoadContent();
+	_letterImages.push_back(content);
 }
 
 void Text::SetTextBounds(Point bounds) {

@@ -23,7 +23,10 @@ void ContentWidget::ShowContentDebugWindow() {
 	// Create a temporary vector to hold all the content and sort it properly, for display purposes..
 	std::unordered_map<std::string, std::vector<std::weak_ptr<Content>>> typedContents;
 	for (const auto& [key, value] : ContentRegistry::_loadedContent) {
-		typedContents[value->Type()].push_back(value);
+		auto content = value.lock();
+		if (content) {
+			typedContents[content->Type()].push_back(value);
+		}
 	}
 	if (ImGui::TreeNode("Contents")) {
 		for (const auto& [typeName, vectorOfValues] : typedContents) {

@@ -37,6 +37,7 @@ class Text : public Content {
 	int _lettersToDraw;
 	int _paddingL = 0, _paddingR = 0, _paddingT = 0;  //,_paddingB = 0;
 	int _alpha = 255;
+	std::vector<std::shared_ptr<Image>> _letterImages;
 	std::shared_ptr<Font> _font;
 	std::shared_ptr<Image> _image;
 	// We will keep the text within this space

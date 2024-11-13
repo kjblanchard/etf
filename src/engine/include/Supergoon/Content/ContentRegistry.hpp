@@ -27,9 +27,14 @@ class ContentRegistry {
 	static std::shared_ptr<T> CreateContent(const std::string& key, Args&&... args) {
 		auto it = _loadedContent.find(key);
 		if (it != _loadedContent.end()) {
-			std::shared_ptr<T> specificContent = std::dynamic_pointer_cast<T>(it->second);
-			if (specificContent) {
-				return specificContent;
+			if (it->second.lock()) {
+				auto shared = std::dynamic_pointer_cast<T>(it->second.lock());
+				if (shared) {
+					return shared;
+				}
+				// std::shared_ptr<T> specificContent = std::dynamic_pointer_cast<T>(it->second);
+				// if (specificContent) {
+				// 	return specificContent;
 			}
 		}
 		// If content doesn't exist or is expired, load it and store it in the map
@@ -39,7 +44,7 @@ class ContentRegistry {
 	}
 	static bool ContentExists(const std::string& key) {
 		auto it = _loadedContent.find(key);
-		if (it != _loadedContent.end()) {
+		if (it != _loadedContent.end() && !it->second.expired()) {
 			return true;
 		}
 		return false;
@@ -48,16 +53,23 @@ class ContentRegistry {
 	static std::shared_ptr<T> GetContent(const std::string& key) {
 		auto it = _loadedContent.find(key);
 		if (it != _loadedContent.end()) {
-			std::shared_ptr<T> specificContent = std::dynamic_pointer_cast<T>(it->second);
-			if (specificContent) {
-				return specificContent;
+			auto thing = it->second.lock();
+			if (it->second.lock()) {
+				auto shared = std::dynamic_pointer_cast<T>(it->second.lock());
+				if (shared) {
+					return shared;
+				}
 			}
+			// std::shared_ptr<T> specificContent = std::dynamic_pointer_cast<T>(it->second);
+			// if (specificContent) {
+			// 	return specificContent;
+			// }
 		}
 		return nullptr;
 	}
 
    private:
-	static std::unordered_map<std::string, std::shared_ptr<Content>> _loadedContent;
+	static std::unordered_map<std::string, std::weak_ptr<Content>> _loadedContent;
 	friend class ContentWidget;
 };
 
