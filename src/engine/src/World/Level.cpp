@@ -110,7 +110,7 @@ Level::~Level() {
 	_gameObjects.clear();
 }
 
-static std::string getBasePathForTiled() {
+std::string Level::GetBasePathForTiled() {
 	return std::string(SDL_GetBasePath()) + "assets/tiled/";
 }
 
@@ -122,11 +122,11 @@ void Level::LoadSurfaces() {
 	for (auto &tileset : _mapData->Tilesets) {
 		if (tileset.Type == TilesetType::Image) {
 			for (auto &tile : tileset.Tiles) {
-				auto fullPath = getBasePathForTiled() + tile.Image;
+				auto fullPath = GetBasePathForTiled() + tile.Image;
 				_backgroundTilesetImages.push_back(ContentRegistry::CreateContent<Image>(fullPath));
 			}
 		} else {
-			auto fullPath = getBasePathForTiled() + tileset.Image;
+			auto fullPath = GetBasePathForTiled() + tileset.Image;
 			_backgroundTilesetImages.push_back(ContentRegistry::CreateContent<Image>(fullPath));
 		}
 	}
@@ -137,12 +137,12 @@ Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	if (tileset->Type == TilesetType::Image) {
 		for (auto &tile : tileset->Tiles) {
 			if (tile.Id + tileset->FirstGid == gid) {
-				return ContentRegistry::GetContent<Image>(getBasePathForTiled() + tile.Image).get();
+				return ContentRegistry::GetContent<Image>(GetBasePathForTiled() + tile.Image).get();
 			}
 		}
 	} else {
-		auto name = getBasePathForTiled() + tileset->Image;
-		return ContentRegistry::GetContent<Image>(getBasePathForTiled() + tileset->Image).get();
+		auto name = GetBasePathForTiled() + tileset->Image;
+		return ContentRegistry::GetContent<Image>(GetBasePathForTiled() + tileset->Image).get();
 	}
 	sgLogError("Could not find loaded surface for gid %ud\n", gid);
 	return nullptr;

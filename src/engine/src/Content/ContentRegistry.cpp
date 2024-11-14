@@ -16,12 +16,6 @@ void ContentRegistry::ClearStaleContent(bool force) {
 		} else {
 			++it;
 		}
-		// if(it->second.lock)
-		// if (it->second.use_count() == 1) {
-		// 	it = _loadedContent.erase(it);	// erase returns next iterator
-		// } else {
-		// 	++it;
-		// }
 	}
 }
 
@@ -31,8 +25,6 @@ void ContentRegistry::LoadAllContent() {
 		if (shared) {
 			shared->LoadContent();
 		}
-		// if(value.lock())
-		// value->LoadContent();
 	}
 }
 
@@ -42,7 +34,6 @@ void ContentRegistry::DestroyAllContent() {
 		if (shared) {
 			shared->UnloadContent();
 		}
-		// value->UnloadContent();
 	}
 	_loadedContent.clear();
 }

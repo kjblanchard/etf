@@ -83,6 +83,7 @@ void Image::Load() {
 	SDL_GetTextureSize(_image, &_width, &_height);
 }
 void Image::Unload() {
+	sgLogError("Destroying image %s", Filepath().c_str());
 	if (_image) {
 		SDL_DestroyTexture(_image);
 		_image = nullptr;

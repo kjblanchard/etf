@@ -1,5 +1,6 @@
 #pragma once
 #include <Supergoon/Content/Content.hpp>
+#include <Supergoon/Log.hpp>
 #include <memory>
 #include <unordered_map>
 
@@ -27,18 +28,17 @@ class ContentRegistry {
 	static std::shared_ptr<T> CreateContent(const std::string& key, Args&&... args) {
 		auto it = _loadedContent.find(key);
 		if (it != _loadedContent.end()) {
-			if (it->second.lock()) {
-				auto shared = std::dynamic_pointer_cast<T>(it->second.lock());
-				if (shared) {
-					return shared;
+			auto shared = it->second.lock();
+			if (shared) {
+				auto sharedCast = std::dynamic_pointer_cast<T>(shared);
+				if (sharedCast) {
+					return sharedCast;
 				}
-				// std::shared_ptr<T> specificContent = std::dynamic_pointer_cast<T>(it->second);
-				// if (specificContent) {
-				// 	return specificContent;
 			}
 		}
 		// If content doesn't exist or is expired, load it and store it in the map
 		std::shared_ptr<T> newContent = std::make_shared<T>(key, std::forward<Args>(args)...);
+		sgLogWarn("Creating content: %s", key.c_str());
 		_loadedContent[key] = newContent;
 		return newContent;
 	}

@@ -116,7 +116,8 @@ void Sound::Update() {
 	if (_usableSfxStreams.empty()) {
 		CheckForStaleSfxStreams();
 	}
-	for (auto& tween : _tweens) {
+	for (size_t i = 0; i < _tweens.size(); i++) {
+		auto& tween = _tweens[i];
 		if (!tween) return;
 		if (!tween->Complete()) {
 			tween->Update();
@@ -124,7 +125,7 @@ void Sound::Update() {
 			// SetPlayingBgmVolume(_playingBgmVolume);
 		} else {
 			StopBgm();
-			SDL_free(tween);
+			SDL_free(_tweens[i]);
 			tween = nullptr;
 			_fadingOut = false;
 		}
