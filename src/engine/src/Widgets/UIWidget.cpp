@@ -113,7 +113,7 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 }
 
 void UIWidget::ShowUiDebugWindow() {
-	auto rootPanel = UI::UIInstance;
+	auto rootPanel = UI::UIInstance.get();
 	if (!rootPanel) {
 		return;
 	}

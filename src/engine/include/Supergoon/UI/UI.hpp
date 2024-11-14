@@ -11,12 +11,12 @@ class Panel;
 class UI {
    public:
 	static Panel* Initialize();
-	static void LoadUIFromFile(std::string filename, Panel* rootPanel = UIInstance);
+	static void LoadUIFromFile(std::string filename, Panel* rootPanel = UIInstance.get());
 	static void Draw();
 	static void Update();
-	static void Reset();
 	static void RegisterUIEvents();
-	static Panel* UIInstance;
+	inline static void Reset() { UIInstance.reset(); }
+	static std::unique_ptr<Panel> UIInstance;
 
 	// Set when the UI
 

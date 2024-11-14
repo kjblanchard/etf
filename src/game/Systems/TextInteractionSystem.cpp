@@ -25,7 +25,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 		// If we still have some to type
 		if (isTyping) {
 			typingTween.Update();
-			auto ui = UI::UIInstance;
+			auto ui = UI::UIInstance.get();
 			auto panelName = "textTesting" + std::string("regular");
 			auto thing = (Panel*)ui->Children[panelName].get();
 			thing->Dirty = true;
@@ -47,7 +47,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 		} else {
 			if (textInteractionComponent.InteractionPressed) {
 				textInteractionComponent.InteractionPressed = false;
-				auto ui = UI::UIInstance;
+				auto ui = UI::UIInstance.get();
 				auto panelName = "textTesting" + std::string("regular");
 				auto thing = (Panel*)ui->Children[panelName].get();
 				thing->SetVisible(false);
@@ -62,7 +62,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 		currentInteractingText = &textInteractionComponent;
 		gameStateComponent->Interacting = true;
 		// update the text interaction box to say what this is.
-		auto ui = UI::UIInstance;
+		auto ui = UI::UIInstance.get();
 		auto panelName = "textTesting" + std::string("regular");
 		auto thing = (Panel*)ui->Children[panelName].get();
 		assert(thing);

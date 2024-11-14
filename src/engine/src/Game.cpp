@@ -66,17 +66,9 @@ void SDL_AppQuit(void *appState, SDL_AppResult) {
 	game->Reset();
 }
 
-Game::Game() {
-	// SDL_assert(!Game::Instance());
-	// _game = this;
-	// _gameInternal = _game;
-}
 Game::~Game() {
 	sgCloseDebugLogFile();
-#ifdef imgui
-	ImGuiIO &io = ImGui::GetIO();
-	SDL_free((void *)io.IniFilename);
-#endif
+	_graphics->CloseImGui();
 }
 void Game::Initialize() {
 	char *jsonPath = NULL;
@@ -114,7 +106,6 @@ void Game::InitializeImGui() {
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;	   // IF using Docking Branch
 	static auto thing = std::string(SDL_GetPrefPath("Supergoon Games", "EscapeTheFate")) + "debug.ini";
 	io.IniFilename = thing.c_str();
-
 #endif
 }
 
@@ -132,9 +123,6 @@ void Game::InternalDraw() {
 }
 
 void Game::InternalReset() {
-	if (_sound) {
-		_sound->StopBgm();
-	}
 	Reset();
 	UI::Reset();
 	GameObject::ClearGameObjects();

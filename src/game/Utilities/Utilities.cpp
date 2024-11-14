@@ -7,14 +7,11 @@
 using namespace Supergoon;
 // 200/70 for textbox
 Panel* Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size, bool screen) {
-	auto ui = UI::UIInstance;
+	auto ui = UI::UIInstance.get();
 	auto textPanel = new Panel(ui, "textTesting" + name);
 	textPanel->Offset = {(float)screenLoc.X, (float)screenLoc.Y};
 	auto text = new UIText(textPanel, "Hello world!", "textman" + name);
 	text->Offset = {8, 8};
-	// text->Offset = {0, 0};
-	// textPanel->Children["textman"] = text;
-	// ui->Children["textTesting"] = textPanel;
 	// Test creating the uitextbox
 	// First, lets load in the picture for uiimage so that we can draw from it to the new one
 	auto path = std::string(SDL_GetBasePath()) + "assets/img/uibase.png";
