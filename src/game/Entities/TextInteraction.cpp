@@ -11,9 +11,10 @@ GameObject* Supergoon::NewTextInteraction(TiledMap::TiledObject& obj) {
 	textInteraction.InteractionRect.Y = obj.Y;
 	textInteraction.InteractionRect.W = obj.Width;
 	textInteraction.InteractionRect.H = obj.Height;
+	// textInteraction.TextPtr = nullptr;
 	for (auto&& prop : obj.Properties) {
 		if (prop.Name == "text") {
-			textInteraction.Text = std::get<std::string>(prop.Value);
+			textInteraction.DisplayText = std::get<std::string>(prop.Value);
 		}
 	}
 	go->AddComponent<TextInteractionComponent>(textInteraction);

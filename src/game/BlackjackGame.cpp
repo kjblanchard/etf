@@ -34,6 +34,7 @@ static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();
 	LoadAnimationComponents();
+	LoadTextInteractions();
 	StartPlayers();
 	// Check if we should show the text at top
 	auto display = Level::GetCurrentLevelProperty<std::string>("display");

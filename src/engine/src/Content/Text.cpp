@@ -1,4 +1,5 @@
 #include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/Content/Image.hpp>
 #include <Supergoon/Content/Text.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/Log.hpp>
@@ -23,8 +24,6 @@ void Text::Unload() {
 Text::~Text() {
 }
 void Text::Draw(RectangleF& src, RectangleF& dst) {
-	// auto src = RectangleF();
-	// auto realDst = RectangleF{dst.X, dst.Y, (float)_textSize.X, (float)_textSize.Y};
 	_image->Draw(src, dst);
 }
 

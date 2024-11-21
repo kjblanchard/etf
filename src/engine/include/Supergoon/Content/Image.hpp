@@ -33,10 +33,10 @@ class Image : public Content {
 	void SetAlpha(int alpha);
 
    private:
-	SDL_Texture* _image;
+	SDL_Texture* _image = nullptr;
 	ImageType _imageType;
-	float _width;
-	float _height;
+	float _width = 0;
+	float _height = 0;
 	SDL_Surface* _surface = nullptr;
 	Color _imageColor = {255, 255, 255, 255};
 
