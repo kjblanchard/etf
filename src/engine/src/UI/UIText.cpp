@@ -2,6 +2,9 @@
 #include <Supergoon/UI/UIText.hpp>
 using namespace Supergoon;
 
+// TODO, not sure why this is needed
+static const int _centerYOffsetCorrection = 2;
+
 UIText::UIText(Panel* parent, std::string text, std::string uiName) : UIObject(parent), DisplayText(text) {
 	auto uiname = uiName.empty() ? uiName : text;
 	parent->Children[uiName] = std::shared_ptr<UIObject>(this);
@@ -16,8 +19,6 @@ UIText::UIText(Panel* parent, std::string text, std::string uiName) : UIObject(p
 }
 
 void UIText::Draw() {
-	//  TODO this probably shouldn't be here.
-	// TextPtr->LoadContent();
 	// We always want to draw the full text, if possible, otherwise we should cut off.
 	// Src rect should either be the full text, or the size of the text that we decide.
 	// Dst rect should always be the size of the src rect.
@@ -36,10 +37,6 @@ void UIText::OnDirty() {
 	TextPtr->SetTextBounds({(int)Bounds.W, (int)Bounds.H});
 	TextPtr->SetLetterCount(_currentLetters);
 	TextPtr->SetWordWrap(WordWrap);
-	// If we should center, adjust our X and Y accordingly.
-	// if (CenterText) {
-	// }
-
 	// If our bounds are set to 0, then we should use the full size.
 	if (Bounds.W == 0 && Bounds.H == 0) {
 		TextSrcRect = RectangleF{0, 0, (float)TextPtr->Size().X, (float)TextPtr->Size().Y};
@@ -55,7 +52,7 @@ void UIText::OnDirty() {
 		x = (int)(Bounds.X + ((Bounds.W / 2) - (TextPtr->Size().X / 2)));
 	}
 	if (_centerTextY) {
-		y = (int)(Bounds.Y + (Bounds.H - TextPtr->Size().Y) / 2);
+		y = (int)(Bounds.Y + ((Bounds.H / 2) - (TextPtr->Size().Y / 2) - _centerYOffsetCorrection));
 	}
 	TextDrawRect = RectangleF{(float)x, (float)y, TextSrcRect.W, TextSrcRect.H};
 }
