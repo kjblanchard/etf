@@ -10,15 +10,14 @@ UIText::UIText(Panel* parent, std::string text, std::string uiName) : UIObject(p
 	// Start the bounds to be the size of textptr, for ease of use.
 	Bounds.W = TextPtr->Size().X;
 	Bounds.H = TextPtr->Size().Y;
-	// TextBounds = TextPtr->TextBounds();
-	TextPtr->SetTextBounds({(int)Bounds.W, (int)Bounds.H});
+	// TextPtr->SetTextBounds({(int)Bounds.W, (int)Bounds.H});
 	_currentLetters = TextPtr->_lettersToDraw;
 	WordWrap = TextPtr->_wordWrap;
 }
 
 void UIText::Draw() {
 	//  TODO this probably shouldn't be here.
-	TextPtr->LoadContent();
+	// TextPtr->LoadContent();
 	// We always want to draw the full text, if possible, otherwise we should cut off.
 	// Src rect should either be the full text, or the size of the text that we decide.
 	// Dst rect should always be the size of the src rect.
@@ -26,7 +25,7 @@ void UIText::Draw() {
 }
 
 void UIText::OnDirty() {
-	TextPtr->LoadContent();
+	// TextPtr->LoadContent();
 	auto parentBoundsX = Parent ? Parent->Bounds.X : 0;
 	auto parentBoundsY = Parent ? Parent->Bounds.Y : 0;
 	Bounds.X = Offset.X + parentBoundsX;

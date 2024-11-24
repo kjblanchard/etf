@@ -15,6 +15,7 @@
 
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Events.hpp>
+#include <Supergoon/Filesystem.hpp>
 #include <Supergoon/Game.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/Log.hpp>
@@ -71,11 +72,10 @@ Game::~Game() {
 	_graphics->CloseImGui();
 }
 void Game::Initialize() {
-	char *jsonPath = NULL;
-	SDL_asprintf(&jsonPath, "%sassets/config.json", SDL_GetBasePath());
-	std::ifstream fileStream(jsonPath);
-	SDL_free(jsonPath);
+	std::string filename = SDL_GetBasePath() + std::string("assets/config.json");
+	auto fileStream = SafeLoadFile(filename);
 	configData = json::parse(fileStream);
+
 	int windowWidth = configData["window"]["x"];
 	int windowHeight = configData["window"]["y"];
 	int worldWidth = configData["world"]["x"];
