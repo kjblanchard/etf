@@ -159,11 +159,12 @@ void Level::LoadNewLevelFade(std::string level) {
 }
 
 void Level::LoadNewLevel(std::string level) {
+	// auto levelptr = new Level(level.c_str());
+	// _currentLevel = std::unique_ptr<Level>(levelptr);
 	_currentLevel = std::make_unique<Level>(level.c_str());
 	if (LoadFunc) {
 		LoadFunc();
 	}
-	ContentRegistry::ClearStaleContent();
 	auto bgm = _currentLevel->GetBgm();
 	auto goboi = GameObject::GetGameObjectWithComponents<GameState>();
 	auto &comp = goboi->GetComponent<GameState>();

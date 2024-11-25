@@ -38,7 +38,6 @@ class ContentRegistry {
 		}
 		// If content doesn't exist or is expired, load it and store it in the map
 		std::shared_ptr<T> newContent = std::make_shared<T>(key, std::forward<Args>(args)...);
-		sgLogWarn("Creating content: %s", key.c_str());
 		_loadedContent[key] = newContent;
 		return newContent;
 	}
