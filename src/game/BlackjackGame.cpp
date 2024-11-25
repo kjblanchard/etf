@@ -61,6 +61,7 @@ static void loadLevel() {
 
 class BlackjackGame : public Game {
    public:
+	~BlackjackGame() = default;
 	void Start() override;
 	void Update() override;
 	void Draw() override;
