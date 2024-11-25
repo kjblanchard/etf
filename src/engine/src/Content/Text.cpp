@@ -1,10 +1,11 @@
 #include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/Content/Image.hpp>
 #include <Supergoon/Content/Text.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/Log.hpp>
 using namespace Supergoon;
 
-Text::Text(std::string text, std::string fontName, int size) : Content(text), _fontSize(size), _text(text) {
+Text::Text(std::string text, std::string fontName, int size) : Content(text), _text(text), _fontSize(size) {
 	_font = ContentRegistry::CreateContent<Font, int>(fontName, std::move(size));
 	_lettersToDraw = text.length();
 }
@@ -23,8 +24,6 @@ void Text::Unload() {
 Text::~Text() {
 }
 void Text::Draw(RectangleF& src, RectangleF& dst) {
-	// auto src = RectangleF();
-	// auto realDst = RectangleF{dst.X, dst.Y, (float)_textSize.X, (float)_textSize.Y};
 	_image->Draw(src, dst);
 }
 
@@ -118,8 +117,8 @@ bool Text::CheckShouldWrap(int x, int wordLength, int glyphWidth, int maxX) {
 
 void Text::AddWordToLetterPoints(FT_Face fontFace, int wordEndPos, int wordLength, int penX, int penY) {
 	int x = penX, y = penY, wordStartPos = wordEndPos - wordLength;
-	for (size_t i = 0; i < wordLength; i++) {
-		int wordI = wordStartPos + i;
+	for (auto i = 0; i < wordLength; i++) {
+		size_t wordI = wordStartPos + i;
 		if (wordI >= _text.length()) {
 			sgLogWarn("How is this possible?");
 			return;
@@ -135,7 +134,7 @@ void Text::AddWordToLetterPoints(FT_Face fontFace, int wordEndPos, int wordLengt
 	}
 }
 int Text::GetKerning(FT_Face fontFace, int i) {
-	if (_text.length() <= i) {
+	if (_text.length() <= (size_t)i) {
 		return 0;
 	}
 	if (!FT_HAS_KERNING(fontFace)) {
@@ -169,7 +168,7 @@ void Text::DrawLettersToTextImage(int startLoc) {
 	if (startLoc == 0) {
 		_image->Clear(_backgroundColor);
 	}
-	for (size_t i = startLoc; i < _lettersToDraw; i++) {
+	for (auto i = startLoc; i < _lettersToDraw; i++) {
 		auto letter = _text[i];
 		if (letter == ' ' || letter == '\n') {
 			continue;
@@ -229,6 +228,7 @@ void Text::CreateSurfaceForLetter(std::string name, FT_Face fontFace, int r, int
 	}
 	auto content = ContentRegistry::CreateContent<Image, SDL_Surface*>(name, std::move(surface));
 	content->LoadContent();
+	_letterImages.push_back(content);
 }
 
 void Text::SetTextBounds(Point bounds) {
@@ -241,10 +241,12 @@ void Text::SetTextBounds(Point bounds) {
 	MeasureText();
 	auto imageName = std::string(_text.substr(0, 30)) + std::to_string(_fontSize) + std::to_string(_textSize.X) + std::to_string(_textSize.Y);
 	// If we need a new image to draw on from the size changing, then we should create new content, otherwise we should clear the current Image before redrawing.
-	if (imageName != _image->ContentKey()) {
-		_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
+	if (_isLoaded) {
+		if (imageName != _image->ContentKey()) {
+			_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
+		}
+		DrawLettersToTextImage();
 	}
-	DrawLettersToTextImage();
 }
 void Text::SetLetterCount(int letters) {
 	if (letters == _lettersToDraw) {
@@ -271,10 +273,12 @@ void Text::SetWordWrap(bool wordWrap) {
 	MeasureText();
 	auto imageName = std::string(_text.substr(0, 30)) + std::to_string(_fontSize) + std::to_string(_textSize.X) + std::to_string(_textSize.Y);
 	// If we need a new image to draw on from the size changing, then we should create new content, otherwise we should clear the current Image before redrawing.
-	if (imageName != _image->ContentKey()) {
-		_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
+	if (_isLoaded) {
+		if (imageName != _image->ContentKey()) {
+			_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
+		}
+		DrawLettersToTextImage();
 	}
-	DrawLettersToTextImage();
 }
 
 void Text::SetAlpha(int alpha) {

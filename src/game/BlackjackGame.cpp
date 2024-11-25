@@ -34,10 +34,11 @@ static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();
 	LoadAnimationComponents();
+	LoadTextInteractions();
 	StartPlayers();
 	// Check if we should show the text at top
 	auto display = Level::GetCurrentLevelProperty<std::string>("display");
-	auto ui = UI::UIInstance;
+	// auto ui = UI::UIInstance.get();
 	auto textPanel = std::dynamic_pointer_cast<Panel>(UI::UIInstance->Children["textTestingscreen"]);
 	assert(textPanel);
 	if (display) {
@@ -68,7 +69,7 @@ class BlackjackGame : public Game {
 
 static void playLogos() {
 	UI::LoadUIFromFile("logos");
-	auto ui = UI::UIInstance;
+	auto ui = UI::UIInstance.get();
 	auto thing = (UIImage *)ui->Children["logoImage"].get();
 	auto thing2 = (UIImage *)ui->Children["logoImage2"].get();
 	auto animator = new UIObjectAnimatorBase("logo");

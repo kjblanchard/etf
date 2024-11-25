@@ -51,7 +51,9 @@ class Level {
 	GameObject *NewSolidObject(Rectangle r);
 
    private:
+   std::string GetBasePathForTiled();
 	std::string _name;
+	std::vector<std::shared_ptr<Image>> _backgroundTilesetImages;
 	std::shared_ptr<Image> _background;
 	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;

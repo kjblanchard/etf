@@ -11,6 +11,10 @@ SDL_Surface *loadPNG(const char *filename, void **dataToFree) {
 	// Read data
 	int width, height, bytesPerPixel;
 	void *data = stbi_load(filename, &width, &height, &bytesPerPixel, 0);
+	if (!data) {
+		sgLogError("Couldn't open image file for loading, %s", filename);
+		return nullptr;
+	}
 
 	// Calculate pitch
 	int pitch;

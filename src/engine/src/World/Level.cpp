@@ -110,7 +110,7 @@ Level::~Level() {
 	_gameObjects.clear();
 }
 
-static std::string getBasePathForTiled() {
+std::string Level::GetBasePathForTiled() {
 	return std::string(SDL_GetBasePath()) + "assets/tiled/";
 }
 
@@ -122,16 +122,12 @@ void Level::LoadSurfaces() {
 	for (auto &tileset : _mapData->Tilesets) {
 		if (tileset.Type == TilesetType::Image) {
 			for (auto &tile : tileset.Tiles) {
-				char *fullPath = NULL;
-				SDL_asprintf(&fullPath, "%s%s", getBasePathForTiled().c_str(), tile.Image.c_str());
-				ContentRegistry::CreateContent<Image>(fullPath);
-				SDL_free(fullPath);
+				auto fullPath = GetBasePathForTiled() + tile.Image;
+				_backgroundTilesetImages.push_back(ContentRegistry::CreateContent<Image>(fullPath));
 			}
 		} else {
-			char *fullPath = NULL;
-			SDL_asprintf(&fullPath, "%s%s", getBasePathForTiled().c_str(), tileset.Image.c_str());
-			auto i = ContentRegistry::CreateContent<Image>(fullPath);
-			SDL_free(fullPath);
+			auto fullPath = GetBasePathForTiled() + tileset.Image;
+			_backgroundTilesetImages.push_back(ContentRegistry::CreateContent<Image>(fullPath));
 		}
 	}
 	ContentRegistry::LoadAllContent();
@@ -141,11 +137,12 @@ Image *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	if (tileset->Type == TilesetType::Image) {
 		for (auto &tile : tileset->Tiles) {
 			if (tile.Id + tileset->FirstGid == gid) {
-				return ContentRegistry::CreateContent<Image>(getBasePathForTiled() + tile.Image).get();
+				return ContentRegistry::GetContent<Image>(GetBasePathForTiled() + tile.Image).get();
 			}
 		}
 	} else {
-		return ContentRegistry::CreateContent<Image>(getBasePathForTiled() + tileset->Image).get();
+		auto name = GetBasePathForTiled() + tileset->Image;
+		return ContentRegistry::GetContent<Image>(GetBasePathForTiled() + tileset->Image).get();
 	}
 	sgLogError("Could not find loaded surface for gid %ud\n", gid);
 	return nullptr;
@@ -162,6 +159,8 @@ void Level::LoadNewLevelFade(std::string level) {
 }
 
 void Level::LoadNewLevel(std::string level) {
+	// auto levelptr = new Level(level.c_str());
+	// _currentLevel = std::unique_ptr<Level>(levelptr);
 	_currentLevel = std::make_unique<Level>(level.c_str());
 	if (LoadFunc) {
 		LoadFunc();
@@ -219,6 +218,7 @@ void Level::CreateBackgroundImage() {
 					auto tiledMapTileset = _mapData->GetGidTiledMapTileset(tileGid);
 					auto tileset = _mapData->GetTiledMapTilesetTileset(tiledMapTileset);
 					auto tileSurface = GetSurfaceForGid(tileGid, tileset);
+					assert(tileSurface);
 					auto sourceRect = _mapData->GetGidSourceRect(tileGid);
 					auto dstX = x * _mapData->TileWidth;
 					auto dstY = y * _mapData->TileHeight;

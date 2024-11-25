@@ -8,7 +8,6 @@ class AsepriteDocument;
 class AsepriteAnimation {
    public:
 	AsepriteAnimation(std::string n);
-	~AsepriteAnimation();
 	std::string Filename();
 	void Load();
 	void UpdateAnimation(double d);

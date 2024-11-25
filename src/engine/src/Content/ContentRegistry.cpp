@@ -2,23 +2,17 @@
 #include <Supergoon/Log.hpp>
 #include <algorithm>
 using namespace Supergoon;
-std::unordered_map<std::string, std::shared_ptr<Content>> ContentRegistry::_loadedContent = {};
+std::unordered_map<std::string, std::weak_ptr<Content>> ContentRegistry::_loadedContent = {};
 
 void ContentRegistry::LoadContent(Content& content) {
 	content.LoadContent();
 }
 
-void ContentRegistry::ClearStaleContent(bool force) {
-	// If there is a lot of stale content, clear it all.
-	int count = std::count_if(_loadedContent.begin(), _loadedContent.end(),
-							  [](const auto& pair) { return pair.second.use_count() <= 1; });
-	if (!force && count < 20) {
-		return;
-	}
-	sgLogWarn("Clearing stale content as stale content count is %d", count);
+void ContentRegistry::ClearStaleContent() {
 	for (auto it = _loadedContent.begin(); it != _loadedContent.end();) {
-		if (it->second.use_count() == 1) {
-			it = _loadedContent.erase(it);	// erase returns next iterator
+		auto ptr = it->second.lock();
+		if (!ptr) {
+			it = _loadedContent.erase(it);
 		} else {
 			++it;
 		}
@@ -27,13 +21,19 @@ void ContentRegistry::ClearStaleContent(bool force) {
 
 void ContentRegistry::LoadAllContent() {
 	for (auto&& [key, value] : _loadedContent) {
-		value->LoadContent();
+		auto shared = value.lock();
+		if (shared) {
+			shared->LoadContent();
+		}
 	}
 }
 
 void ContentRegistry::DestroyAllContent() {
 	for (auto&& [key, value] : _loadedContent) {
-		value->UnloadContent();
+		auto shared = value.lock();
+		if (shared) {
+			shared->UnloadContent();
+		}
 	}
 	_loadedContent.clear();
 }
