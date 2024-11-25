@@ -17,7 +17,7 @@ void ContentWidget::ShowContentDebugWindow() {
 		return;
 	}
 	if (ImGui::Button("Clear StaleContent")) {
-		ContentRegistry::ClearStaleContent(true);
+		ContentRegistry::ClearStaleContent();
 	}
 	ImGui::Text("Number of loaded content is %zu", ContentRegistry::_loadedContent.size());
 	// Create a temporary vector to hold all the content and sort it properly, for display purposes..

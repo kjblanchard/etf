@@ -71,7 +71,7 @@ static void startPlayer(GameObject, PlayerComponent& playerComponent, AnimationC
 
 static bool interactionHandler(PlayerInteractionComponent& player, GameState& gamestate, bool interactionKeyPressed) {
 	bool interactionFound = false;
-	GameObject::ForEach<TextInteractionComponent>([&player, interactionKeyPressed, &interactionFound, &gamestate](GameObject, TextInteractionComponent& text) {
+	GameObject::ForEach<TextInteractionComponent>([&player, interactionKeyPressed, &interactionFound](GameObject, TextInteractionComponent& text) {
 		if (interactionFound) {
 			return;
 		}

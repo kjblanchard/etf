@@ -14,7 +14,7 @@ class ContentRegistry {
 	//  Loads all content that isn't loaded
 	static void LoadAllContent();
 	// Clear any content that isn't being used, useful to run between loading levels, if forced it will force destroy(usually only actually cleans when above 20 stale)
-	static void ClearStaleContent(bool force = false);
+	static void ClearStaleContent();
 	// Unloads all content and clears the loaded content list, even if shared ptrs still have references
 	static void DestroyAllContent();
 	/**

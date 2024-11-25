@@ -59,23 +59,23 @@ Panel* Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size,
 	int height = fullSizeY - (sizeY);
 	// top
 	srcRect = RectangleF{1 + sizeX, 0, 1, sizeY};
-	for (size_t i = sizeX; i < length; i++) {
+	for (auto i = sizeX; i < length; i++) {
 		dstRect = RectangleF{(float)i, 0, 1, sizeY};
 		textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
 	}
 	// bottom
-	for (size_t i = sizeX; i < length; i++) {
+	for (auto i = sizeX; i < length; i++) {
 		dstRect = RectangleF{(float)i, fullSizeY - sizeY + 4, 1, sizeY};
 		textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
 	}
 	// left
 	srcRect = RectangleF({0, sizeY + 1, sizeX, 1});
-	for (size_t i = sizeY; i < height; i++) {
+	for (auto i = sizeY; i < height; i++) {
 		dstRect = RectangleF{0, (float)i, sizeX, 1};
 		textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
 	}
 	// right
-	for (size_t i = sizeY; i < height; i++) {
+	for (auto i = sizeY; i < height; i++) {
 		dstRect = RectangleF{fullSizeX - sizeX + 3, (float)i, sizeX, 1};
 		textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
 	}

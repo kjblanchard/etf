@@ -5,7 +5,7 @@
 #include <Supergoon/Log.hpp>
 using namespace Supergoon;
 
-Text::Text(std::string text, std::string fontName, int size) : Content(text), _fontSize(size), _text(text) {
+Text::Text(std::string text, std::string fontName, int size) : Content(text), _text(text), _fontSize(size) {
 	_font = ContentRegistry::CreateContent<Font, int>(fontName, std::move(size));
 	_lettersToDraw = text.length();
 }
@@ -117,8 +117,8 @@ bool Text::CheckShouldWrap(int x, int wordLength, int glyphWidth, int maxX) {
 
 void Text::AddWordToLetterPoints(FT_Face fontFace, int wordEndPos, int wordLength, int penX, int penY) {
 	int x = penX, y = penY, wordStartPos = wordEndPos - wordLength;
-	for (size_t i = 0; i < wordLength; i++) {
-		int wordI = wordStartPos + i;
+	for (auto i = 0; i < wordLength; i++) {
+		size_t wordI = wordStartPos + i;
 		if (wordI >= _text.length()) {
 			sgLogWarn("How is this possible?");
 			return;
@@ -134,7 +134,7 @@ void Text::AddWordToLetterPoints(FT_Face fontFace, int wordEndPos, int wordLengt
 	}
 }
 int Text::GetKerning(FT_Face fontFace, int i) {
-	if (_text.length() <= i) {
+	if (_text.length() <= (size_t)i) {
 		return 0;
 	}
 	if (!FT_HAS_KERNING(fontFace)) {
@@ -168,7 +168,7 @@ void Text::DrawLettersToTextImage(int startLoc) {
 	if (startLoc == 0) {
 		_image->Clear(_backgroundColor);
 	}
-	for (size_t i = startLoc; i < _lettersToDraw; i++) {
+	for (auto i = startLoc; i < _lettersToDraw; i++) {
 		auto letter = _text[i];
 		if (letter == ' ' || letter == '\n') {
 			continue;

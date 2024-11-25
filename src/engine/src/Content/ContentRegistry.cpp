@@ -8,7 +8,7 @@ void ContentRegistry::LoadContent(Content& content) {
 	content.LoadContent();
 }
 
-void ContentRegistry::ClearStaleContent(bool force) {
+void ContentRegistry::ClearStaleContent() {
 	for (auto it = _loadedContent.begin(); it != _loadedContent.end();) {
 		auto ptr = it->second.lock();
 		if (!ptr) {

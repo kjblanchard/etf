@@ -28,11 +28,8 @@ Panel* UI::Initialize() {
 		UIInstance.reset();
 	}
 	UIInstance = std::make_unique<Panel>();
-	// auto rootPanel = new Panel();
 	auto graphics = Graphics::Instance();
 	UIInstance->Bounds = RectangleF{0, 0, (float)graphics->LogicalWidth(), (float)graphics->LogicalHeight()};
-	// UIInstance = rootPanel;
-	auto name = "fadeImage";
 	auto fadeImage = new UIImage(UIInstance.get(), "Fade Panel");
 	fadeImage->SetAlpha(0);
 	auto path = std::string(SDL_GetBasePath()) + "assets/img/null.png";
