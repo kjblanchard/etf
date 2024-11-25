@@ -33,10 +33,13 @@ void UIText::OnDirty() {
 	Bounds.Y = Offset.Y + parentBoundsY;
 	// Figure out the new src rect.
 	// If we don't have text bounds, then we should just use the bounds x/y and size of text
-	TextPtr->SetAlpha(EffectiveAlpha());
+	// if loaded do these things
 	TextPtr->SetTextBounds({(int)Bounds.W, (int)Bounds.H});
-	TextPtr->SetLetterCount(_currentLetters);
 	TextPtr->SetWordWrap(WordWrap);
+	// Load before getting the bounds if this is a new one
+	TextPtr->LoadContent();
+	TextPtr->SetLetterCount(_currentLetters);
+	TextPtr->SetAlpha(EffectiveAlpha());
 	// If our bounds are set to 0, then we should use the full size.
 	if (Bounds.W == 0 && Bounds.H == 0) {
 		TextSrcRect = RectangleF{0, 0, (float)TextPtr->Size().X, (float)TextPtr->Size().Y};
@@ -62,7 +65,7 @@ void UIText::UpdateText(std::string text) {
 		return;
 	}
 	TextPtr = ContentRegistry::CreateContent<Text, std::string, int>(text, "commodore", 16);
-	TextPtr->LoadContent();
+	// TextPtr->LoadContent();
 	// Bounds.W = TextPtr->Size().X;
 	// Bounds.H = TextPtr->Size().Y;
 	// Bounds.W = Bounds

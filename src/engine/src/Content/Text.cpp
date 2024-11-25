@@ -241,10 +241,12 @@ void Text::SetTextBounds(Point bounds) {
 	MeasureText();
 	auto imageName = std::string(_text.substr(0, 30)) + std::to_string(_fontSize) + std::to_string(_textSize.X) + std::to_string(_textSize.Y);
 	// If we need a new image to draw on from the size changing, then we should create new content, otherwise we should clear the current Image before redrawing.
-	if (imageName != _image->ContentKey()) {
-		_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
+	if (_isLoaded) {
+		if (imageName != _image->ContentKey()) {
+			_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
+		}
+		DrawLettersToTextImage();
 	}
-	DrawLettersToTextImage();
 }
 void Text::SetLetterCount(int letters) {
 	if (letters == _lettersToDraw) {
@@ -271,10 +273,12 @@ void Text::SetWordWrap(bool wordWrap) {
 	MeasureText();
 	auto imageName = std::string(_text.substr(0, 30)) + std::to_string(_fontSize) + std::to_string(_textSize.X) + std::to_string(_textSize.Y);
 	// If we need a new image to draw on from the size changing, then we should create new content, otherwise we should clear the current Image before redrawing.
-	if (imageName != _image->ContentKey()) {
-		_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
+	if (_isLoaded) {
+		if (imageName != _image->ContentKey()) {
+			_image = ContentRegistry::CreateContent<Image, int, int>(imageName, std::move(_textSize.X), std::move(_textSize.Y));
+		}
+		DrawLettersToTextImage();
 	}
-	DrawLettersToTextImage();
 }
 
 void Text::SetAlpha(int alpha) {
