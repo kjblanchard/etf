@@ -97,6 +97,15 @@ void drawTextInteractionComponents(GameObject, LocationComponent& location, Play
 
 void loadTextInteractionComponents(GameObject, TextInteractionComponent& textInteraction) {
 	// textInteraction.TextPtr = ContentRegistry::CreateContent<Text, std::string, int>(textInteraction.DisplayText, "commodore", 16);
+	auto ui = UI::UIInstance.get();
+	auto panelName = "textTesting" + std::string("regular");
+	auto thing = (Panel*)ui->Children[panelName].get();
+	assert(thing);
+	auto textName = "textman" + std::string("regular");
+	auto text = (UIText*)thing->Children[textName].get();
+	textInteraction.TextPtr = text->TextPtr;
+	text->UpdateText(textInteraction.DisplayText);
+	text->OnDirty();
 }
 void Supergoon::InitializeTextInteractionUI() {
 	auto textPanel = CreateUITextbox("regular", Point{145, 200}, Point{236, 80}, false);

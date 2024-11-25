@@ -9,7 +9,7 @@ struct TextInteractionComponent {
 	RectangleF InteractionRect;
 	bool InteractionPressed;
 	std::string DisplayText;
-	// std::shared_ptr<Text> TextPtr;
+	std::shared_ptr<Text> TextPtr;
 };
 
 }  // namespace Supergoon

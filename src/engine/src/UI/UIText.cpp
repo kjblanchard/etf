@@ -65,14 +65,6 @@ void UIText::UpdateText(std::string text) {
 		return;
 	}
 	TextPtr = ContentRegistry::CreateContent<Text, std::string, int>(text, "commodore", 16);
-	// TextPtr->LoadContent();
-	// Bounds.W = TextPtr->Size().X;
-	// Bounds.H = TextPtr->Size().Y;
-	// Bounds.W = Bounds
-	// Bounds.H = TextPtr->Size().Y;
-	// create new text?
-	// TextBounds = TextPtr->TextBounds();
 	_currentLetters = TextPtr->_lettersToDraw;
-	// WordWrap = WordWrap;
 	Dirty = true;
 }
