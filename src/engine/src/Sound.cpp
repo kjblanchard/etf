@@ -12,6 +12,16 @@
 
 namespace Supergoon {
 Sound* Sound::_instance = nullptr;
+Sound::Sound() {
+	_instance = this;
+}
+Sound::~Sound() {
+	for (auto bgm : _bgms) {
+		if (bgm) {
+			sgBgmDelete(bgm);
+		}
+	}
+}
 void Sound::InitializeSound() {
 	Events::RegisterEventHandler(Events::BuiltinEvents.PlayBgmEvent, [this](int slot, void* name, void*) {
 		auto nameStr = std::string((const char*)name);
@@ -99,7 +109,7 @@ void Sound::StopBgmFadeout(int slot, float fadeTime) {
 		return;
 	}
 	if (_tweens[slot]) {
-		SDL_free(_tweens[slot]);
+		delete _tweens[slot];
 		_tweens[slot] = nullptr;
 	}
 	_tweens[slot] = new Tween(_playingBgmVolume[slot], 0, fadeTime, &_playingBgmVolume[slot], Supergoon::Easings::Linear);

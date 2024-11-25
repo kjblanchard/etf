@@ -74,6 +74,7 @@ void Image::Load() {
 		}
 		case ImageType::Surface: {
 			_image = graphics->CreateTextureFromSurface(_surface);
+			_surface = nullptr;
 			break;
 		}
 		case ImageType::RenderTarget: {

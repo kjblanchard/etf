@@ -11,7 +11,9 @@ namespace Supergoon {
 class Tween;
 class Sound {
    public:
-	inline Sound() { _instance = this; }
+	// inline Sound() { _instance = this; }
+	Sound();
+	~Sound();
 	//  Initializes the Supergoon Sound
 	void InitializeSound();
 	/**
