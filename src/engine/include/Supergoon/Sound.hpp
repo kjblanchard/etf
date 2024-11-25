@@ -32,7 +32,7 @@ class Sound {
 	void StopBgm(int slot = 0);
 	void StopBgmFadeout(int slot = 0, float fadeTime = 1.0);
 	//  Sets current playing bgm volume, 0 - 1.0f
-	void SetPlayingBgmVolume(float volume);
+	void SetPlayingBgmVolume(float volume, int slot = 0);
 	//  Sets the global volume multiplier for bgm, 0 - 1.0f
 	void SetGlobalBgmVolume(float volume);
 	inline void SetGlobalSfxVolume(float volume) { _globalSfxVolume = volume; };
@@ -47,16 +47,16 @@ class Sound {
 	const size_t _totalSfxStreams = 4;
 	float _globalBgmVolume = 1.0f;
 	float _globalSfxVolume = 1.0f;
-	float _playingBgmVolume = 0;
 	std::vector<std::unique_ptr<sgStream>> _sfxStreams;
 	std::vector<sgStream*> _playingStreams;
 	std::queue<sgStream*> _usableSfxStreams;
-	float _bgmOriginalVolume = 0;
 	bool _fadingOut = false;
 	// sgBgm* _bgm = nullptr;
 	// sgBgm* _bgmSecondary = nullptr;
 	const int _bgmSlots = 2;
 	std::vector<sgBgm*> _bgms;
+	std::vector<float> _playingBgmVolume;
+	std::vector<float> _bgmOriginalVolume;
 	std::vector<Tween*> _tweens;
 	// Tween* _bgmTween = nullptr;
 	static Sound* _instance;

@@ -8,9 +8,9 @@
 - ![Build All Platforms]( https://github.com/kjblanchard/sgEngine/actions/workflows/build.yml/badge.svg)
 
 - Current Status picture
--- ![Status Picture](https://github.com/kjblanchard/sgEngine/blob/master/img/state.gif?raw=true)
+  - ![Status Picture](https://github.com/kjblanchard/sgEngine/blob/master/img/state.gif?raw=true)
 - Uses imgui for development debugging.
--- ![Status Picture](https://github.com/kjblanchard/sgEngine/blob/master/img/state.gif?raw=true)
+  - ![Status Picture](https://github.com/kjblanchard/sgEngine/blob/master/img/state.gif?raw=true)
 
 
 ## Installation

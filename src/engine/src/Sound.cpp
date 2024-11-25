@@ -37,6 +37,8 @@ void Sound::InitializeSound() {
 	}
 	_bgms.resize(_bgmSlots);
 	_tweens.resize(_bgmSlots);
+	_playingBgmVolume.resize(_bgmSlots);
+	_bgmOriginalVolume.resize(_bgmSlots);
 }
 
 bool Sound::LoadBgm(std::string filename, float volume, int loops, int slot) {
@@ -61,7 +63,8 @@ bool Sound::LoadBgm(std::string filename, float volume, int loops, int slot) {
 	bgm->Volume = volume * _globalBgmVolume;
 	sgBgmLoad(bgm);
 	_bgm = bgm;
-	_bgmOriginalVolume = _playingBgmVolume = volume;
+	_bgmOriginalVolume[slot] = volume;
+	_playingBgmVolume[slot] = bgm->Volume;
 	return true;
 }
 
@@ -70,7 +73,7 @@ void Sound::PlayBgm(int slot) {
 	if (!_bgm || !_bgm->CanPlay) {
 		return;
 	}
-	SetPlayingBgmVolume(_bgmOriginalVolume);
+	SetPlayingBgmVolume(_bgmOriginalVolume[slot], slot);
 	sgBgmPlay(_bgm);
 }
 
@@ -99,7 +102,7 @@ void Sound::StopBgmFadeout(int slot, float fadeTime) {
 		SDL_free(_tweens[slot]);
 		_tweens[slot] = nullptr;
 	}
-	_tweens[slot] = new Tween(_playingBgmVolume, 0, fadeTime, &_playingBgmVolume, Supergoon::Easings::Linear);
+	_tweens[slot] = new Tween(_playingBgmVolume[slot], 0, fadeTime, &_playingBgmVolume[slot], Supergoon::Easings::Linear);
 	_tweens[slot]->UpdateFunc = [this]() {
 		UpdatePlayingBgmVolume();
 	};
@@ -137,7 +140,7 @@ void Sound::UpdatePlayingBgmVolume(int slot) {
 	if (!_bgm) {
 		return;
 	}
-	sgBgmUpdateVolume(_bgm, _globalBgmVolume * _playingBgmVolume);
+	sgBgmUpdateVolume(_bgm, _globalBgmVolume * _playingBgmVolume[slot]);
 }
 
 void Sound::SetGlobalBgmVolume(float volume) {
@@ -148,12 +151,12 @@ void Sound::SetGlobalBgmVolume(float volume) {
 	UpdatePlayingBgmVolume();
 }
 
-void Sound::SetPlayingBgmVolume(float volume) {
+void Sound::SetPlayingBgmVolume(float volume, int slot) {
 	if (volume < 0 || volume > 1.0) {
 		return;
 	}
-	_playingBgmVolume = volume;
-	UpdatePlayingBgmVolume();
+	_playingBgmVolume[slot] = volume;
+	UpdatePlayingBgmVolume(slot);
 }
 
 void Sound::CheckForStaleSfxStreams() {
