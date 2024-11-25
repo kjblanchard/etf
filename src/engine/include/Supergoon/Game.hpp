@@ -3,9 +3,14 @@
 
 #include <memory>
 
+typedef union SDL_Event SDL_Event;
+
 namespace Supergoon {
+class Sound;
+class Graphics;
+class Events;
 class Game;
-}
+}  // namespace Supergoon
 
 #define REGISTER_GAME(DERIVED_GAME_CLASS) \
 	extern "C" Game* sgRegisterGame() {   \
@@ -20,12 +25,7 @@ Supergoon::Game* sgRegisterGame();
 }
 #endif
 
-typedef union SDL_Event SDL_Event;
-
 namespace Supergoon {
-class Sound;
-class Graphics;
-class Events;
 class Game {
    public:
 	virtual ~Game();
