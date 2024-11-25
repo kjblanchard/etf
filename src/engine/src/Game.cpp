@@ -14,13 +14,13 @@
 #endif
 
 #include <Supergoon/Content/ContentRegistry.hpp>
-#include <Supergoon/Filesystem.hpp>
-#include <Supergoon/Sound.hpp>
-#include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/Events.hpp>
-#include <Supergoon/UI/UI.hpp>
+#include <Supergoon/Filesystem.hpp>
 #include <Supergoon/Game.hpp>
+#include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/Log.hpp>
+#include <Supergoon/Sound.hpp>
+#include <Supergoon/UI/UI.hpp>
 #include <SupergoonEngine/nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
@@ -81,9 +81,9 @@ void Game::Initialize() {
 	int worldWidth = configData["world"]["x"];
 	int worldHeight = configData["world"]["y"];
 	std::string windowTitle = configData["window"]["title"];
-	_events = std::make_unique<Events>(this);
-	_sound = std::make_unique<Sound>();
-	_graphics = std::make_unique<Graphics>();
+	_events = std::make_shared<Events>(this);
+	_sound = std::make_shared<Sound>();
+	_graphics = std::make_shared<Graphics>();
 	_graphics->CreateWindow(windowWidth, windowHeight, windowTitle);
 	_graphics->SetWindowScaling(worldWidth, worldHeight);
 	geClockStart(&_clock);

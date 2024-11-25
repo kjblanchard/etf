@@ -52,8 +52,8 @@ class Game {
 	void InitializeImGui();
 	bool _initialized = false;
 	geClock _clock;
-	std::unique_ptr<Sound> _sound = nullptr;
-	std::unique_ptr<Graphics> _graphics = nullptr;
-	std::unique_ptr<Events> _events = nullptr;
+	std::shared_ptr<Sound> _sound = nullptr;
+	std::shared_ptr<Graphics> _graphics = nullptr;
+	std::shared_ptr<Events> _events = nullptr;
 };
 }  // namespace Supergoon
