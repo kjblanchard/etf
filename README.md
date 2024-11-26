@@ -7,8 +7,7 @@
 - Project board [Board](https://github.com/users/kjblanchard/projects/11)
 - ![Build All Platforms]( https://github.com/kjblanchard/sgEngine/actions/workflows/build.yml/badge.svg)
 
-- Current Status picture
-  - hello ![Status Picture](https://github.com/kjblanchard/sgEngine/blob/master/img/state.gif?raw=true)
+- ![Status Picture](https://github.com/kjblanchard/sgEngine/blob/master/img/state.gif?raw=true)
 - Uses imgui for development debugging.
   - hello2 ![Status Picture](https://github.com/kjblanchard/sgEngine/blob/master/img/debug.gif?raw=true)
 
