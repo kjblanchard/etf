@@ -12,11 +12,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: windows
-            make_cmd: wrebuild
-            suffix: zip
-            zlib: wzlib
-            name: win
+          # - os: windows
+          #   make_cmd: wrebuild
+          #   suffix: zip
+          #   zlib: wzlib
+          #   name: win
           - os: macos
             make_cmd: xrebuild
             suffix: tgz
