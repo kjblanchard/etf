@@ -88,9 +88,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: win
-            artifact_name: EscapeTheFate.zip
-            asset_name: supergoon_win.zip
+          # - os: win
+          #   artifact_name: EscapeTheFate.zip
+          #   asset_name: supergoon_win.zip
           - os: mac
             artifact_name: EscapeTheFate.tgz
             asset_name: supergoon_mac.tgz
