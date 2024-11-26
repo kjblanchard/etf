@@ -11,6 +11,7 @@ set(SRC_FILES
     src/Tween/Tween.cpp
     src/Tween/Sequence.cpp
     src/Events.cpp
+    src/Filesystem.cpp
     src/Aseprite/AsepriteAnimation.cpp
     src/Content/AsepriteDocument.cpp
     src/Content/Font.cpp
@@ -42,6 +43,7 @@ if(imgui)
         src/Widgets/UIWidget.cpp
         src/Widgets/Global.cpp
         src/Widgets/LevelWidget.cpp
+        src/Widgets/ConsoleWidget.cpp
     )
 endif()
 

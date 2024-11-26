@@ -21,6 +21,7 @@ int GameObject::NumberGameObjects() {
 	auto count = 0;
 	auto view = _registry.view<entt::entity>();
 	for (auto &&i : view) {
+		(void)i;
 		count++;
 	}
 	return count;

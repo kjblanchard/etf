@@ -1,7 +1,7 @@
 #include <SupergoonEngine/imgui/imgui.h>
 
-#include <Supergoon/UI/Panel.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
+#include <Supergoon/UI/Panel.hpp>
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIImage.hpp>
 #include <Supergoon/UI/UIText.hpp>
@@ -67,6 +67,7 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 				std::string childYBounds = "TextBoundsY##" + key;
 				std::string childWordWrapLabel = "WordWrap##" + key;
 				std::string childCenterLabel = "Center##" + key;
+				std::string childCenterLabelY = "CenterY##" + key;
 				std::string childLettersToDraw = "Letters To Draw##" + key;
 				std::string childDebugBoxCheckbox = "DebugBox##" + key;
 				if (ImGui::TreeNode((key + "- text").c_str())) {
@@ -86,17 +87,20 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 						value->Dirty = true;
 					};
 					ImGui::SameLine();
-					if (ImGui::Checkbox(childCenterLabel.c_str(), &textUIObject->CenterText)) {
+					if (ImGui::Checkbox(childCenterLabel.c_str(), &textUIObject->CenterTextX)) {
+						value->Dirty = true;
+					};
+					ImGui::SameLine();
+					if (ImGui::Checkbox(childCenterLabelY.c_str(), &textUIObject->_centerTextY)) {
 						value->Dirty = true;
 					};
 					ImGui::SameLine();
 					ImGui::Checkbox(childDebugBoxCheckbox.c_str(), &shouldDrawDebugBox);
 
-					if(shouldDrawDebugBox) {
+					if (shouldDrawDebugBox) {
 						Graphics::Instance()->DrawRect(textUIObject->Bounds, Color(255, 0, 0, 255));
-
 					}
-					if (ImGui::DragInt(childLettersToDraw.c_str(), &textUIObject->currentLetters, 1, 0, textUIObject->TextPtr->_text.length())) {
+					if (ImGui::DragInt(childLettersToDraw.c_str(), &textUIObject->_currentLetters, 1, 0, textUIObject->TextPtr->_text.length())) {
 						value->Dirty = true;
 					}
 					ImGui::TreePop();
@@ -109,7 +113,7 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 }
 
 void UIWidget::ShowUiDebugWindow() {
-	auto rootPanel = UI::UIInstance;
+	auto rootPanel = UI::UIInstance.get();
 	if (!rootPanel) {
 		return;
 	}

@@ -12,6 +12,7 @@ struct BuiltinEventTypes {
 	uint32_t LevelChangeEvent;
 	uint32_t ResetGameEvent;
 	uint32_t PlayBgmEvent;
+	uint32_t StopBgmEvent;
 	uint32_t UiFadeInStart;
 	uint32_t UiFadeInEnd;
 	uint32_t UiFadeOutStart;

@@ -64,6 +64,16 @@ void Graphics::InitializeImGui() {
 #endif
 }
 
+void Graphics::CloseImGui() {
+#ifdef imgui
+	ImGuiIO& io = ImGui::GetIO();
+	SDL_free((void*)io.IniFilename);
+	ImGui_ImplSDLRenderer3_Shutdown();
+	ImGui_ImplSDL3_Shutdown();
+	ImGui::DestroyContext();
+#endif
+}
+
 void Graphics::DrawStart() {
 	SDL_RenderClear(_renderer);
 #ifdef imgui
@@ -77,12 +87,9 @@ void Graphics::DrawStart() {
 }
 
 void Graphics::DrawImGui() {
-	// Draw imgui
 #ifdef imgui
 	SDL_SetRenderTarget(_renderer, NULL);
 	ImGui::ShowDemoWindow();
-	ImGui::Render();
-	ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), _renderer);
 	ImGui::Render();
 	ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), _renderer);
 #endif
@@ -162,12 +169,10 @@ SDL_Texture* Graphics::CreateTextureFromSurface(SDL_Surface* surface) {
 	SDL_Texture* t = SDL_CreateTextureFromSurface(_renderer, surface);
 	SDL_SetTextureBlendMode(t, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureScaleMode(t, SDL_SCALEMODE_NEAREST);
-	// SDL_SetTextureScaleMode(t, SDL_SCALEMODE_LINEAR);
 	if (t == NULL) {
 		sgLogError("Could not create texture, Error: %s", SDL_GetError());
 		return NULL;
 	}
-	// TODO why
 	SDL_DestroySurface(surface);
 	return t;
 }

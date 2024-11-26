@@ -7,19 +7,11 @@
 
 using namespace Supergoon;
 
-// #ifdef GN_PLATFORM_MACOS
-// static const char *_animationPrefix = "../Resources/assets/img/";
-// #else
-// static const char *_animationPrefix = "assets/img/";
-// #endif
-
 AsepriteAnimation::AsepriteAnimation(std::string n) : _animNum(0), _frame(0), _nextFrame(0), _frameTime(0), _aseDocument(nullptr) {
 	_filePath = n;
 	Load();
 }
 
-AsepriteAnimation::~AsepriteAnimation() {
-}
 std::string AsepriteAnimation::Filename() {
 	return std::string(SDL_GetBasePath()) + "assets/img/" + _aseDocument->meta.image;
 }

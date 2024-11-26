@@ -8,25 +8,52 @@
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Sound.hpp>
 #include <Supergoon/Tween/Tween.hpp>
+#include <cassert>
 
 namespace Supergoon {
 Sound* Sound::_instance = nullptr;
+Sound::Sound() {
+	_instance = this;
+}
+Sound::~Sound() {
+	for (auto bgm : _bgms) {
+		if (bgm) {
+			sgBgmDelete(bgm);
+		}
+	}
+}
 void Sound::InitializeSound() {
-	Events::RegisterEventHandler(Events::BuiltinEvents.PlayBgmEvent, [this](int, void* name, void*) {
+	Events::RegisterEventHandler(Events::BuiltinEvents.PlayBgmEvent, [this](int slot, void* name, void*) {
 		auto nameStr = std::string((const char*)name);
-		LoadBgm(nameStr);
-		PlayBgm();
+		// TODO this doesn't pass in any thing correctly, probably pass in an actual object
+		LoadBgm(nameStr, 1, -1, slot);
+		PlayBgm(slot);
 		SDL_free(name);
+	});
+	Events::RegisterEventHandler(Events::BuiltinEvents.StopBgmEvent, [this](int slot, void* shouldFade, void*) {
+		if (shouldFade) {
+			auto fade = (bool)shouldFade;
+			if (fade) {
+				StopBgmFadeout(slot, 0.25);
+				return;
+			}
+		}
+		StopBgm(slot);
 	});
 	for (size_t i = 0; i < _totalSfxStreams; i++) {
 		auto stream = sgStreamNew();
 		_sfxStreams.push_back(std::unique_ptr<sgStream>(stream));
 		_usableSfxStreams.push(stream);
 	}
+	_bgms.resize(_bgmSlots);
+	_tweens.resize(_bgmSlots);
+	_playingBgmVolume.resize(_bgmSlots);
+	_bgmOriginalVolume.resize(_bgmSlots);
 }
 
-bool Sound::LoadBgm(std::string filename, float volume, int loops) {
+bool Sound::LoadBgm(std::string filename, float volume, int loops, int slot) {
 	char* fullPath = NULL;
+	auto& _bgm = _bgms[slot];
 	SDL_asprintf(&fullPath, "%sassets/bgm/%s%s", SDL_GetBasePath(), filename.c_str(), ".ogg");
 	if (_bgm && !strcmp(_bgm->Filename, fullPath)) {
 		SDL_free(fullPath);
@@ -46,68 +73,84 @@ bool Sound::LoadBgm(std::string filename, float volume, int loops) {
 	bgm->Volume = volume * _globalBgmVolume;
 	sgBgmLoad(bgm);
 	_bgm = bgm;
-	_bgmOriginalVolume = _playingBgmVolume = volume;
+	_bgmOriginalVolume[slot] = volume;
+	_playingBgmVolume[slot] = bgm->Volume;
 	return true;
 }
 
-void Sound::PlayBgm() {
+void Sound::PlayBgm(int slot) {
+	auto& _bgm = _bgms[slot];
 	if (!_bgm || !_bgm->CanPlay) {
 		return;
 	}
-	SetPlayingBgmVolume(_bgmOriginalVolume);
+	SetPlayingBgmVolume(_bgmOriginalVolume[slot], slot);
 	sgBgmPlay(_bgm);
 }
 
-void Sound::PauseBgm() {
+void Sound::PauseBgm(int slot) {
+	auto& _bgm = _bgms[slot];
 	if (!_bgm || !_bgm->IsPlaying) {
 		return;
 	}
 	sgBgmPause(_bgm);
 }
 
-void Sound::StopBgm() {
+void Sound::StopBgm(int slot) {
+	auto& _bgm = _bgms[slot];
 	if (!_bgm) {
 		return;
 	}
 	sgBgmStop(_bgm);
 }
 
-void Sound::StopBgmFadeout() {
+void Sound::StopBgmFadeout(int slot, float fadeTime) {
+	auto& _bgm = _bgms[slot];
 	if (!_bgm || !_bgm->IsPlaying || _fadingOut) {
 		return;
 	}
-	_bgmTween = new Tween(1.0, 0, 1, &_playingBgmVolume, Supergoon::Easings::Linear);
-	_bgmTween->UpdateFunc = [this]() {
+	if (_tweens[slot]) {
+		delete _tweens[slot];
+		_tweens[slot] = nullptr;
+	}
+	_tweens[slot] = new Tween(_playingBgmVolume[slot], 0, fadeTime, &_playingBgmVolume[slot], Supergoon::Easings::Linear);
+	_tweens[slot]->UpdateFunc = [this]() {
 		UpdatePlayingBgmVolume();
 	};
 	_fadingOut = true;
 }
 
 void Sound::Update() {
-	if (_bgm) {
-		sgBgmUpdate(_bgm);
+	for (auto bgm : _bgms) {
+		if (bgm) {
+			sgBgmUpdate(bgm);
+		}
 	}
+
 	if (_usableSfxStreams.empty()) {
 		CheckForStaleSfxStreams();
 	}
-	if (!_bgmTween) return;
-	if (!_bgmTween->Complete()) {
-		_bgmTween->Update();
-		// UpdatePlayingBgmVolume();
-		// SetPlayingBgmVolume(_playingBgmVolume);
-	} else {
-		StopBgm();
-		SDL_free(_bgmTween);
-		_bgmTween = nullptr;
-		_fadingOut = false;
+	for (size_t i = 0; i < _tweens.size(); i++) {
+		auto& tween = _tweens[i];
+		if (!tween) return;
+		if (!tween->Complete()) {
+			tween->Update();
+			// UpdatePlayingBgmVolume();
+			// SetPlayingBgmVolume(_playingBgmVolume);
+		} else {
+			StopBgm();
+			SDL_free(_tweens[i]);
+			tween = nullptr;
+			_fadingOut = false;
+		}
 	}
 }
 
-void Sound::UpdatePlayingBgmVolume() {
+void Sound::UpdatePlayingBgmVolume(int slot) {
+	auto& _bgm = _bgms[slot];
 	if (!_bgm) {
 		return;
 	}
-	sgBgmUpdateVolume(_bgm, _globalBgmVolume * _playingBgmVolume);
+	sgBgmUpdateVolume(_bgm, _globalBgmVolume * _playingBgmVolume[slot]);
 }
 
 void Sound::SetGlobalBgmVolume(float volume) {
@@ -118,12 +161,12 @@ void Sound::SetGlobalBgmVolume(float volume) {
 	UpdatePlayingBgmVolume();
 }
 
-void Sound::SetPlayingBgmVolume(float volume) {
+void Sound::SetPlayingBgmVolume(float volume, int slot) {
 	if (volume < 0 || volume > 1.0) {
 		return;
 	}
-	_playingBgmVolume = volume;
-	UpdatePlayingBgmVolume();
+	_playingBgmVolume[slot] = volume;
+	UpdatePlayingBgmVolume(slot);
 }
 
 void Sound::CheckForStaleSfxStreams() {

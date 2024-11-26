@@ -11,6 +11,10 @@ SDL_Surface *loadPNG(const char *filename, void **dataToFree) {
 	// Read data
 	int width, height, bytesPerPixel;
 	void *data = stbi_load(filename, &width, &height, &bytesPerPixel, 0);
+	if (!data) {
+		sgLogError("Couldn't open image file for loading, %s", filename);
+		return nullptr;
+	}
 
 	// Calculate pitch
 	int pitch;
@@ -58,7 +62,6 @@ void Image::Load() {
 	switch (_imageType) {
 		case ImageType::Default: {
 			void *pngData = nullptr;
-			sgLogError("%s", _filePath.c_str());
 			SDL_Surface *s = loadPNG(_filePath.c_str(), &pngData);
 			if (!s) {
 				sgLogError("Could not load PNG properly, content not fully loaded");
@@ -71,6 +74,7 @@ void Image::Load() {
 		}
 		case ImageType::Surface: {
 			_image = graphics->CreateTextureFromSurface(_surface);
+			_surface = nullptr;
 			break;
 		}
 		case ImageType::RenderTarget: {

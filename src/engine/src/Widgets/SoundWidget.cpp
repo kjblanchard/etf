@@ -133,7 +133,7 @@ void SoundWidget::ShowSoundDebugWindow() {
 			if (ImGui::Button("Stop Fadeout")) {
 				sound->StopBgmFadeout();
 			}
-			if (ImGui::SliderFloat("Bgm Playing Volume", &Sound::Instance()->_playingBgmVolume, 0, 1.0)) {
+			if (ImGui::SliderFloat("Bgm Playing Volume", &Sound::Instance()->_playingBgmVolume[item_current], 0, 1.0)) {
 				Sound::Instance()->UpdatePlayingBgmVolume();
 			}
 			ImGui::SameLine();

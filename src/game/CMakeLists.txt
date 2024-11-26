@@ -6,6 +6,7 @@ set(DEBUG_FILES)
 if(imgui)
     list(APPEND DEBUG_FILES
         Debug/PlayerCollider.cpp
+        Systems/DebugDrawSystem.cpp
     )
 endif(imgui)
 
@@ -23,11 +24,13 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     BlackjackGame.cpp
     Entities/PlayerStart.cpp
     Entities/PlayerExit.cpp
+    Entities/TextInteraction.cpp
     Systems/PlayerSystem.cpp
     Systems/ImageSystem.cpp
     Systems/AsepriteSystem.cpp
     Systems/CameraSystem.cpp
-    Systems/DebugDrawSystem.cpp
+    Systems/TextInteractionSystem.cpp
+    Utilities/Utilities.cpp
     ${DEBUG_FILES}
     ${ICON_PATH}
 )

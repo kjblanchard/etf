@@ -10,13 +10,13 @@
 #include <fstream>
 using namespace Supergoon;
 using json = nlohmann::json;
-Panel* UI::UIInstance = nullptr;
+std::unique_ptr<Panel> UI::UIInstance = nullptr;
 UIObjectAnimatorBase* UI::_fadeInAnimator = nullptr;
 UIObjectAnimatorBase* UI::_fadeOutAnimator = nullptr;
 // std::vector<std::shared_ptr<UIObjectAnimatorBase>> UI::Animators;
 void UI::RegisterUIEvents() {
 	Events::RegisterEventHandler(Events::BuiltinEvents.UiDestroyObject, [](int, void* name, void*) {
-		auto ui = UI::UIInstance;
+		auto ui = UI::UIInstance.get();
 		auto nameString = (const char*)name;
 		assert(nameString);
 		ui->Children.erase(nameString);
@@ -25,14 +25,12 @@ void UI::RegisterUIEvents() {
 
 Panel* UI::Initialize() {
 	if (UIInstance) {
-		return UIInstance;
+		UIInstance.reset();
 	}
-	auto rootPanel = new Panel();
+	UIInstance = std::make_unique<Panel>();
 	auto graphics = Graphics::Instance();
-	rootPanel->Bounds = RectangleF{0, 0, (float)graphics->LogicalWidth(), (float)graphics->LogicalHeight()};
-	UIInstance = rootPanel;
-	auto name = "fadeImage";
-	auto fadeImage = new UIImage(rootPanel, "Fade Panel");
+	UIInstance->Bounds = RectangleF{0, 0, (float)graphics->LogicalWidth(), (float)graphics->LogicalHeight()};
+	auto fadeImage = new UIImage(UIInstance.get(), "Fade Panel");
 	fadeImage->SetAlpha(0);
 	auto path = std::string(SDL_GetBasePath()) + "assets/img/null.png";
 	fadeImage->ImagePtr = ContentRegistry::CreateContent<Image>(path);
@@ -52,7 +50,7 @@ Panel* UI::Initialize() {
 	_fadeOutAnimator = fadeOutAnimator.get();
 	_fadeInAnimator = fadeInAnimator.get();
 	// rootPanel->Children[name] = fadePanel;
-	return rootPanel;
+	return UIInstance.get();
 }
 
 void UI::Update() {
@@ -64,12 +62,6 @@ void UI::Update() {
 void UI::Draw() {
 	if (UIInstance) {
 		UIInstance->Draw();
-	}
-}
-void UI::Reset() {
-	if (UIInstance) {
-		delete UIInstance;
-		UIInstance = nullptr;
 	}
 }
 

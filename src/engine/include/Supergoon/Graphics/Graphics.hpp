@@ -15,6 +15,7 @@ class Graphics {
 	~Graphics();
 	void CreateWindow(int width, int height, std::string name);
 	void InitializeImGui();
+	void CloseImGui();
 	void DrawStart();
 	void DrawEnd();
 	void DrawImGui();

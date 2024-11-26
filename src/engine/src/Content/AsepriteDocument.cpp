@@ -9,6 +9,10 @@ using json = nlohmann::json;
 using namespace Supergoon;
 void AsepriteDocument::Load() {
 	std::ifstream fileStream(_filePath);
+	if (!fileStream.is_open()) {
+		sgLogError("Could not open file to load aseprite document for %s", _filePath.c_str());
+		return;
+	}
 	auto j = json::parse(fileStream);
 	for (const auto &frameJson : j["frames"]) {
 		Frame frame;

@@ -1,16 +1,16 @@
 #pragma once
-#include <SDL3/SDL_render.h>
-#include <SDL3/SDL_video.h>
 #include <SupergoonEngine/clock.h>
 
-#include <Supergoon/Events.hpp>
-#include <Supergoon/Graphics/Graphics.hpp>
-#include <Supergoon/Sound.hpp>
 #include <memory>
 
+typedef union SDL_Event SDL_Event;
+
 namespace Supergoon {
+class Sound;
+class Graphics;
+class Events;
 class Game;
-}
+}  // namespace Supergoon
 
 #define REGISTER_GAME(DERIVED_GAME_CLASS) \
 	extern "C" Game* sgRegisterGame() {   \
@@ -26,12 +26,8 @@ Supergoon::Game* sgRegisterGame();
 #endif
 
 namespace Supergoon {
-class Sound;
-class Graphics;
-class Events;
 class Game {
    public:
-	Game();
 	virtual ~Game();
 	//    Happens once before game start
 	void Initialize();
@@ -48,19 +44,16 @@ class Game {
 	//  Happens after update
 	virtual void Draw() = 0;
 	virtual void Reset() = 0;
-	// inline Sound& GetSound() { return *_sound; }
-	// static inline Game* Instance() { return _game; }
 	static double DeltaTime();
 	static double DeltaTimeMS();
-	// static inline void SetGameInstance(Game* game) { _game = game; };
 
+   protected:
    private:
 	void InitializeImGui();
 	bool _initialized = false;
 	geClock _clock;
-	std::unique_ptr<Sound> _sound = nullptr;
-	std::unique_ptr<Graphics> _graphics = nullptr;
-	std::unique_ptr<Events> _events = nullptr;
-	// static Game* _game;
+	std::shared_ptr<Sound> _sound = nullptr;
+	std::shared_ptr<Graphics> _graphics = nullptr;
+	std::shared_ptr<Events> _events = nullptr;
 };
 }  // namespace Supergoon

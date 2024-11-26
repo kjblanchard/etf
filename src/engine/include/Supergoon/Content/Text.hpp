@@ -1,12 +1,13 @@
 #pragma once
 #include <Supergoon/Content/Content.hpp>
 #include <Supergoon/Content/Font.hpp>
-#include <Supergoon/Content/Image.hpp>
+#include <Supergoon/Primitives/Color.hpp>
 #include <Supergoon/Primitives/Point.hpp>
 #include <Supergoon/Primitives/Rectangle.hpp>
 #include <memory>
 #include <vector>
 namespace Supergoon {
+class Image;
 class Text : public Content {
    public:
 	Text(std::string text, std::string fontName, int size);
@@ -37,6 +38,7 @@ class Text : public Content {
 	int _lettersToDraw;
 	int _paddingL = 0, _paddingR = 0, _paddingT = 0;  //,_paddingB = 0;
 	int _alpha = 255;
+	std::vector<std::shared_ptr<Image>> _letterImages;
 	std::shared_ptr<Font> _font;
 	std::shared_ptr<Image> _image;
 	// We will keep the text within this space
