@@ -1,6 +1,11 @@
 {
-    "activeFile": "debugTown.tmj",
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "forest1.tmx",
     "expandedProjectPaths": [
+        "templates",
         "."
     ],
     "fileStates": {
@@ -13,9 +18,9 @@
                 2
             ],
             "scale": 2,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 393,
+                "x": 392.75,
                 "y": 243
             }
         },
@@ -24,11 +29,11 @@
                 5,
                 3
             ],
-            "scale": 2,
+            "scale": 1.0924,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 300.5,
-                "y": 140.5
+                "x": 224.2768216770414,
+                "y": 88.79531307213475
             }
         },
         "debugTownHome.tmj": {
@@ -42,8 +47,27 @@
             "scale": 3,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 125.66666666666669,
-                "y": 85.66666666666664
+                "x": 128,
+                "y": 88
+            }
+        },
+        "forest1.tmj": {
+            "scale": 0.9528,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 250.3148614609572,
+                "y": 137.4895046179681
+            }
+        },
+        "forest1.tmx": {
+            "expandedGroupLayers": [
+                2
+            ],
+            "scale": 1.0533,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 260.6095129592709,
+                "y": 277.22396278363243
             }
         },
         "house.tsj": {
@@ -64,6 +88,12 @@
         }
     },
     "last.imagePath": "/Users/kevin/git/c/sgEngine/assets/img",
+    "last.objectTemplatePath": "/Users/kevin/git/c/sgEngine/assets/tiled/templates",
+    "map.height": 18,
+    "map.lastUsedFormat": "json",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 32,
     "openFiles": [
         "debugSouth.tmj",
         "outside.tsj",
@@ -71,9 +101,12 @@
         "inside.tsj",
         "house.tsj",
         "debugTownHome.tmj",
-        "debugTown.tmj"
+        "debugTown.tmj",
+        "forest1.tmj",
+        "forest1.tmx"
     ],
     "project": "goonRpg.tiled-project",
+    "property.type": "int",
     "recentFiles": [
         "debugSouth.tmj",
         "outside.tsj",
@@ -81,6 +114,8 @@
         "inside.tsj",
         "house.tsj",
         "debugTownHome.tmj",
-        "debugTown.tmj"
+        "debugTown.tmj",
+        "forest1.tmj",
+        "forest1.tmx"
     ]
 }
