@@ -128,8 +128,8 @@ TiledMap::TiledMap(std::string filename) {
 					auto object = TiledObject();
 					object.Name = objectJson["name"];
 					object.Id = objectJson["id"];
-					object.Height = objectJson["height"];
-					object.Width = objectJson["width"];
+					object.Height = objectJson.contains("height") ? objectJson["height"].get<int>() : 0;
+					object.Width = objectJson.contains("width") ? objectJson["width"].get<int>() : 0;
 					object.ObjectType = objectJson["type"];
 					object.X = objectJson["x"];
 					object.Y = objectJson["y"];

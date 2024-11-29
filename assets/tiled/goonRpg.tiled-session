@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "debugSouth.tmj",
+    "activeFile": "forest1.tmj",
     "expandedProjectPaths": [
-        "templates",
-        "."
+        ".",
+        "templates"
     ],
     "fileStates": {
         "debugSouth.tmj": {
@@ -20,8 +20,8 @@
             "scale": 2.541,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 239.66942148760333,
-                "y": 157.41833923652106
+                "x": 240.0629673356946,
+                "y": 158.008658008658
             }
         },
         "debugTown.tmj": {
@@ -32,8 +32,8 @@
             "scale": 1.0924,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 303.9179787623581,
-                "y": 144.63566459172463
+                "x": 304.8333943610399,
+                "y": 144.17795679238378
             }
         },
         "debugTownHome.tmj": {
@@ -47,16 +47,27 @@
             "scale": 3,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 128,
-                "y": 88
+                "x": 127.99999999999997,
+                "y": 88.16666666666664
+            }
+        },
+        "forest1 6.10.31 PM.tmx": {
+            "scale": 2.6904296875,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 256.27876588021775,
+                "y": 144.21488203266787
             }
         },
         "forest1.tmj": {
-            "scale": 0.9528,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 2.6904296875,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 247.6910159529807,
-                "y": 144.83627204030225
+                "x": 251.0751361161524,
+                "y": 139.01125226860256
             }
         },
         "forest1.tmx": {
@@ -64,10 +75,10 @@
                 2
             ],
             "scale": 1.0533,
-            "selectedLayer": 4,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 255.38782872875726,
-                "y": 144.30836418874014
+                "x": 256.8119244279883,
+                "y": 144.3083641887402
             }
         },
         "house.tsj": {
@@ -87,9 +98,11 @@
             "scaleInEditor": 1
         }
     },
+    "last.exportedFilePath": "/Users/kevin/git/c/sgEngine/assets/tiled",
     "last.imagePath": "/Users/kevin/git/c/sgEngine/assets/img",
     "last.objectTemplatePath": "/Users/kevin/git/c/sgEngine/assets/tiled/templates",
     "map.height": 18,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "json",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
@@ -102,20 +115,20 @@
         "house.tsj",
         "debugTownHome.tmj",
         "debugTown.tmj",
-        "forest1.tmj",
-        "forest1.tmx"
+        "forest1.tmj"
     ],
     "project": "goonRpg.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "forest1.tmx",
         "forest1.tmj",
-        "debugTown.tmj",
-        "debugTownHome.tmj",
-        "house.tsj",
-        "inside.tsj",
-        "terrain.tsj",
+        "debugSouth.tmj",
         "outside.tsj",
-        "debugSouth.tmj"
+        "terrain.tsj",
+        "inside.tsj",
+        "house.tsj",
+        "debugTownHome.tmj",
+        "debugTown.tmj",
+        "forest1.tmx",
+        "forest1 6.10.31 PM.tmx"
     ]
 }

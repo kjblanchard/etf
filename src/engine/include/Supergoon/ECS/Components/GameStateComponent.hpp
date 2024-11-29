@@ -13,5 +13,6 @@ struct GameState {
 	bool CameraFollowTarget;
 	bool EnteringBattle;
 	bool Interacting;
+	bool InBattle;
 };
 }  // namespace Supergoon

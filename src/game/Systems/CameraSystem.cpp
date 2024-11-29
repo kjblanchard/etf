@@ -12,8 +12,35 @@ void getFollowTarget(CameraComponent& cc) {
 	});
 }
 float colorFade = 255;
-static Tween* tweener = new Tween(255, 0, 1.0, &colorFade, Supergoon::Easings::Linear);
+static Tween* tweener = nullptr;
 
+void InitializeCamera() {
+	tweener = new Tween(255, 0, 1.0, &colorFade, Supergoon::Easings::Linear);
+	tweener->UpdateFunc = []() {
+		auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+		auto g = GameObject::GetGameObjectWithComponents<GameState>();
+		auto& cc = c->GetComponent<CameraComponent>();
+		auto& gc = g->GetComponent<GameState>();
+		if (gc.EnteringBattle) {
+			cc.Box.X -= 5;
+			auto color = Color{255, (uint8_t)colorFade, (uint8_t)colorFade, (uint8_t)colorFade};
+			Level::SetBackGroundColor(color);
+			Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
+			return;
+		};
+	};
+	tweener->EndFunc = []() {
+		auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+		auto& cc = c->GetComponent<CameraComponent>();
+		auto g = GameObject::GetGameObjectWithComponents<GameState>();
+		auto& gc = g->GetComponent<GameState>();
+		gc.EnteringBattle = false;
+		gc.InBattle = true;
+		gc.Loading = true;
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void*)strdup(("forest1")));
+		tweener->Restart();
+	};
+}
 void UpdateCamera() {
 	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
 	auto g = GameObject::GetGameObjectWithComponents<GameState>();
@@ -23,13 +50,7 @@ void UpdateCamera() {
 	auto& cc = c->GetComponent<CameraComponent>();
 	auto& gc = g->GetComponent<GameState>();
 	if (gc.EnteringBattle) {
-		// We should instead slowly decrement camera x
 		tweener->Update();
-		cc.Box.X -= 5;
-
-		auto color = Color{255, (uint8_t)colorFade, (uint8_t)colorFade, (uint8_t)colorFade};
-		Level::SetBackGroundColor(color);
-		Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
 		return;
 	}
 	if (!gc.CameraFollowTarget) {
@@ -37,7 +58,6 @@ void UpdateCamera() {
 	}
 	if (!cc.FollowTarget) {
 		getFollowTarget(cc);
-		tweener->Restart();
 	}
 	auto pl = cc.FollowTarget;
 	if (!pl) {

@@ -82,6 +82,7 @@ Level::Level(const char *filename)
 		gamestate.CameraFollowTarget = true;
 		gamestate.Loading = false;
 		// Battle
+		gamestate.InBattle = false;
 		gamestate.BattleData.BattleID = 0;
 		gsGo->AddComponent<GameState>(gamestate);
 		gsGo->AddComponent<KeepAliveComponent>(keepalive);
@@ -161,8 +162,6 @@ void Level::LoadNewLevelFade(std::string level) {
 }
 
 void Level::LoadNewLevel(std::string level) {
-	// auto levelptr = new Level(level.c_str());
-	// _currentLevel = std::unique_ptr<Level>(levelptr);
 	_currentLevel = std::make_unique<Level>(level.c_str());
 	if (LoadFunc) {
 		LoadFunc();
@@ -171,7 +170,12 @@ void Level::LoadNewLevel(std::string level) {
 	auto goboi = GameObject::GetGameObjectWithComponents<GameState>();
 	auto &comp = goboi->GetComponent<GameState>();
 	comp.Loading = false;
-	Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup(bgm.c_str()));
+	if (!bgm.empty()) {
+		Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup(bgm.c_str()));
+	}
+	if (comp.InBattle) {
+		UI::FadeIn();
+	}
 }
 
 void Level::LoadAllGameObjects() {

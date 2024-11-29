@@ -9,6 +9,8 @@
 #include <Systems/Battle/BattleZoneSystem.hpp>
 using namespace Supergoon;
 
+static bool zonesStarted = false;
+
 void updateBattleZones(GameObject go, PlayerComponent& player, LocationComponent& loc) {
 	auto state = GameObject::GetGameObjectWithComponents<GameState>();
 	auto& stateComponent = state->GetComponent<GameState>();
@@ -31,6 +33,13 @@ void updateBattleZones(GameObject go, PlayerComponent& player, LocationComponent
 			return;
 		}
 	});
+}
+void Supergoon::StartBattleZones() {
+	if (zonesStarted) {
+		return;
+	}
+
+
 }
 
 void Supergoon::UpdateBattleZones() {

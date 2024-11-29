@@ -16,6 +16,7 @@
 #include <Systems/ImageSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
 #include <Systems/TextInteractionSystem.hpp>
+#include <Utilities/Events.hpp>
 #include <Utilities/Utilities.hpp>
 
 using json = nlohmann::json;
@@ -135,6 +136,8 @@ void BlackjackGame::Start() {
 		InitializeTextInteractionUI();
 		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTown"));
 	}
+	InitializeEvents();
+	InitializeCamera();
 }
 
 void BlackjackGame::Update() {

@@ -33,6 +33,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Systems/TextInteractionSystem.cpp
     Systems/Battle/BattleZoneSystem.cpp
     Utilities/Utilities.cpp
+    Utilities/Events.cpp
     ${DEBUG_FILES}
     ${ICON_PATH}
 )
