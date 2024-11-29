@@ -21,15 +21,17 @@ endif(EMSCRIPTEN)
 
 add_executable(${EXECUTABLE_TARGET_NAME}
     ${IS_BUNDLE} ${IS_WIN32}
-    BlackjackGame.cpp
+    EscapeTheFate.cpp
     Entities/PlayerStart.cpp
     Entities/PlayerExit.cpp
     Entities/TextInteraction.cpp
+    Entities/Battle/BattleZone.cpp
     Systems/PlayerSystem.cpp
     Systems/ImageSystem.cpp
     Systems/AsepriteSystem.cpp
     Systems/CameraSystem.cpp
     Systems/TextInteractionSystem.cpp
+    Systems/Battle/BattleZoneSystem.cpp
     Utilities/Utilities.cpp
     ${DEBUG_FILES}
     ${ICON_PATH}

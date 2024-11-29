@@ -136,15 +136,6 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 			newDirection = Directions::West;
 		}
 	}
-	if (KeyDown(KeyboardKeys::Key_B)) {
-		// Start battle transition.
-		stateComponent.CameraFollowTarget = false;
-		stateComponent.EnteringBattle = true;
-		Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void*)strdup("battle1"));
-		anim.Playing = false;
-		return;
-		// Camera component handles the sliding.
-	}
 	auto deltatime = (float)Game::DeltaTime();
 	vel *= Vector2{deltatime, deltatime};
 	// Handle Collisions

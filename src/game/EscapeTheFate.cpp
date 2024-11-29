@@ -1,13 +1,16 @@
 
 #include <SDL3/SDL.h>
 
+#include <Components/BattleComponent.hpp>
 #include <Debug/PlayerCollider.hpp>
+#include <Entities/Battle/BattleZone.hpp>
 #include <Entities/PlayerExit.hpp>
 #include <Entities/PlayerStart.hpp>
 #include <Entities/TextInteraction.hpp>
 #include <Supergoon/Supergoon.hpp>
 #include <SupergoonEngine/nlohmann/json.hpp>
 #include <Systems/AsepriteSystem.hpp>
+#include <Systems/Battle/BattleZoneSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/DebugDrawSystem.hpp>
 #include <Systems/ImageSystem.hpp>
@@ -24,6 +27,9 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 	 }},
 	{"Exit", [](TiledMap::TiledObject &object) {
 		 return NewPlayerExit(object);
+	 }},
+	{"BattleZone", [](TiledMap::TiledObject &object) {
+		 return NewBattleZone(object);
 	 }},
 	{"TextInteract", [](TiledMap::TiledObject &object) {
 		 return NewTextInteraction(object);
@@ -54,6 +60,15 @@ static void loadLevel() {
 		}
 	} else {
 		textPanel->SetVisible(false);
+	}
+	auto gamestateGameObject = GameObject::GetGameObjectWithComponents<GameState>();
+	assert(gamestateGameObject);
+	auto battleComponent = gamestateGameObject->HasComponent<BattleComponent>();
+	if (!battleComponent) {
+		auto battleComp = BattleComponent();
+		battleComp.BattleId = 0;
+		battleComp.BattleMapId = 0;
+		gamestateGameObject->AddComponent<BattleComponent>(battleComp);
 	}
 	ContentRegistry::LoadAllContent();
 	inGame = true;
@@ -125,6 +140,7 @@ void BlackjackGame::Start() {
 void BlackjackGame::Update() {
 	if (inGame) {
 		PlayerInput();
+		UpdateBattleZones();
 		UpdateAnimationComponents();
 		UpdateTextInteractions();
 		UpdateCamera();

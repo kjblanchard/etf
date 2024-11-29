@@ -81,6 +81,8 @@ Level::Level(const char *filename)
 		gamestate.WindowWidth = Graphics::Instance()->LogicalWidth();
 		gamestate.CameraFollowTarget = true;
 		gamestate.Loading = false;
+		// Battle
+		gamestate.BattleData.BattleID = 0;
 		gsGo->AddComponent<GameState>(gamestate);
 		gsGo->AddComponent<KeepAliveComponent>(keepalive);
 		AddGameObjectToLevel(gsGo);

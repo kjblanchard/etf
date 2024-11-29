@@ -2,6 +2,10 @@
 #include <Supergoon/World/Level.hpp>
 namespace Supergoon {
 struct GameState {
+	struct Battle {
+		int BattleID;
+	};
+	Battle BattleData;
 	int PlayerSpawnLocation;
 	int WindowHeight;
 	int WindowWidth;
@@ -9,6 +13,5 @@ struct GameState {
 	bool CameraFollowTarget;
 	bool EnteringBattle;
 	bool Interacting;
-	// Level* CurrentLevel;
 };
 }  // namespace Supergoon

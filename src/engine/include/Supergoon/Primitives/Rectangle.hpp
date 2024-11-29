@@ -16,6 +16,9 @@ struct Rectangle {
 	inline bool IsOverlap(Rectangle* rhs) {
 		return SDL_HasRectIntersection((SDL_Rect*)this, (SDL_Rect*)rhs);
 	}
+	inline bool IsOverlap(Rectangle& rhs) {
+		return SDL_HasRectIntersection((SDL_Rect*)this, (SDL_Rect*)&rhs);
+	}
 	inline Rectangle GetOverlapRect(Rectangle* rhs) {
 		if (!IsOverlap(rhs)) {
 			return Rectangle();

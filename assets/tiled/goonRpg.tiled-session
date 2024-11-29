@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "forest1.tmx",
+    "activeFile": "debugSouth.tmj",
     "expandedProjectPaths": [
         "templates",
         "."
@@ -17,11 +17,11 @@
                 5,
                 2
             ],
-            "scale": 2,
-            "selectedLayer": 2,
+            "scale": 2.541,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 392.75,
-                "y": 243
+                "x": 239.66942148760333,
+                "y": 157.41833923652106
             }
         },
         "debugTown.tmj": {
@@ -32,8 +32,8 @@
             "scale": 1.0924,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 224.2768216770414,
-                "y": 88.79531307213475
+                "x": 303.9179787623581,
+                "y": 144.63566459172463
             }
         },
         "debugTownHome.tmj": {
@@ -41,8 +41,8 @@
                 4
             ],
             "expandedObjectLayers": [
-                6,
-                5
+                5,
+                6
             ],
             "scale": 3,
             "selectedLayer": 4,
@@ -55,8 +55,8 @@
             "scale": 0.9528,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 250.3148614609572,
-                "y": 137.4895046179681
+                "x": 247.6910159529807,
+                "y": 144.83627204030225
             }
         },
         "forest1.tmx": {
@@ -66,8 +66,8 @@
             "scale": 1.0533,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 260.6095129592709,
-                "y": 277.22396278363243
+                "x": 255.38782872875726,
+                "y": 144.30836418874014
             }
         },
         "house.tsj": {
@@ -106,16 +106,16 @@
         "forest1.tmx"
     ],
     "project": "goonRpg.tiled-project",
-    "property.type": "int",
+    "property.type": "string",
     "recentFiles": [
-        "debugSouth.tmj",
-        "outside.tsj",
-        "terrain.tsj",
-        "inside.tsj",
-        "house.tsj",
-        "debugTownHome.tmj",
-        "debugTown.tmj",
+        "forest1.tmx",
         "forest1.tmj",
-        "forest1.tmx"
+        "debugTown.tmj",
+        "debugTownHome.tmj",
+        "house.tsj",
+        "inside.tsj",
+        "terrain.tsj",
+        "outside.tsj",
+        "debugSouth.tmj"
     ]
 }

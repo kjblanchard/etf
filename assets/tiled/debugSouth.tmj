@@ -212,6 +212,23 @@
                  "width":16,
                  "x":352,
                  "y":208
+                }, 
+                {
+                 "height":64,
+                 "id":21,
+                 "name":"BattleZone",
+                 "properties":[
+                        {
+                         "name":"battleId",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"BattleZone",
+                 "visible":true,
+                 "width":48,
+                 "x":64,
+                 "y":176
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -220,7 +237,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":18,
+ "nextobjectid":22,
  "orientation":"orthogonal",
  "properties":[
         {
