@@ -26,12 +26,14 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Entities/PlayerExit.cpp
     Entities/TextInteraction.cpp
     Entities/Battle/BattleZone.cpp
+    Entities/Battle/BattleLocation.cpp
     Systems/PlayerSystem.cpp
     Systems/ImageSystem.cpp
     Systems/AsepriteSystem.cpp
     Systems/CameraSystem.cpp
     Systems/TextInteractionSystem.cpp
     Systems/Battle/BattleZoneSystem.cpp
+    Systems/Battle/BattleLocationSystem.cpp
     Utilities/Utilities.cpp
     Utilities/Events.cpp
     ${DEBUG_FILES}

@@ -14,26 +14,26 @@
                 3
             ],
             "expandedObjectLayers": [
-                5,
-                2
+                2,
+                5
             ],
             "scale": 2.541,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 240.0629673356946,
-                "y": 158.008658008658
+                "x": -31.09012199921291,
+                "y": 17.709563164108616
             }
         },
         "debugTown.tmj": {
             "expandedObjectLayers": [
-                5,
-                3
+                3,
+                5
             ],
             "scale": 1.0924,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 304.8333943610399,
-                "y": 144.17795679238378
+                "x": 303.9179787623581,
+                "y": 144.63566459172466
             }
         },
         "debugTownHome.tmj": {
@@ -41,14 +41,14 @@
                 4
             ],
             "expandedObjectLayers": [
-                5,
-                6
+                6,
+                5
             ],
             "scale": 3,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 127.99999999999997,
-                "y": 88.16666666666664
+                "x": 128,
+                "y": 88
             }
         },
         "forest1 6.10.31 PM.tmx": {

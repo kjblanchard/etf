@@ -3,6 +3,7 @@
 
 #include <Components/BattleComponent.hpp>
 #include <Debug/PlayerCollider.hpp>
+#include <Entities/Battle/BattleLocation.hpp>
 #include <Entities/Battle/BattleZone.hpp>
 #include <Entities/PlayerExit.hpp>
 #include <Entities/PlayerStart.hpp>
@@ -10,6 +11,7 @@
 #include <Supergoon/Supergoon.hpp>
 #include <SupergoonEngine/nlohmann/json.hpp>
 #include <Systems/AsepriteSystem.hpp>
+#include <Systems/Battle/BattleLocationSystem.hpp>
 #include <Systems/Battle/BattleZoneSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/DebugDrawSystem.hpp>
@@ -32,6 +34,9 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 	{"BattleZone", [](TiledMap::TiledObject &object) {
 		 return NewBattleZone(object);
 	 }},
+	{"BattleLocation", [](TiledMap::TiledObject &object) {
+		 return NewBattleLocation(object);
+	 }},
 	{"TextInteract", [](TiledMap::TiledObject &object) {
 		 return NewTextInteraction(object);
 	 }}};
@@ -40,9 +45,11 @@ using namespace Supergoon;
 static bool inGame = false;
 static void loadLevel() {
 	LoadPlayers();
+	LoadBattlers();
 	LoadAnimationComponents();
 	LoadTextInteractions();
 	StartPlayers();
+	StartBattlers();
 	// Check if we should show the text at top
 	auto display = Level::GetCurrentLevelProperty<std::string>("display");
 	// auto ui = UI::UIInstance.get();
