@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "forest1..tmj",
+    "activeFile": "forest1.tmj",
     "expandedProjectPaths": [
         "templates",
         "."
@@ -74,8 +74,8 @@
             "scale": 2.6904296875,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 252.93357531760432,
-                "y": 141.05553539019962
+                "x": 103.70090744101631,
+                "y": 156.48058076225044
             }
         },
         "forest1.tmx": {
@@ -123,8 +123,7 @@
         "house.tsj",
         "debugTownHome.tmj",
         "debugTown.tmj",
-        "forest1.tmj",
-        "forest1..tmj"
+        "forest1.tmj"
     ],
     "project": "goonRpg.tiled-project",
     "property.type": "string",

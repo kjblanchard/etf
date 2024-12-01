@@ -10,7 +10,8 @@ namespace Supergoon {
 struct AnimationComponent {
 	std::string AnimationName;
 	float AnimationSpeed;
-	Point Offset;
+	Point Offset = Point();
+	Point OverrideDrawSize = Point();
 	bool Playing;
 	std::shared_ptr<AsepriteAnimation> Animation;
 	std::shared_ptr<Image> AnimationImage;

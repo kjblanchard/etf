@@ -29,7 +29,12 @@ void Supergoon::DrawAnimationComponents() {
 	auto& cameraComponent = cameraGO->GetComponent<CameraComponent>();
 	GameObject::ForEach<AnimationComponent, LocationComponent>([&cameraComponent](GameObject, AnimationComponent& a, LocationComponent& l) {
 		auto srcRect = a.Animation->FrameCoords();
-		auto d = RectangleF{(float)(int)(l.Location.X + a.Offset.X) - (int)cameraComponent.Box.X, (float)(int)(l.Location.Y + a.Offset.Y) - (int)cameraComponent.Box.Y, (float)srcRect.W, (float)srcRect.H};
+		auto dWidth = a.OverrideDrawSize.X ? a.OverrideDrawSize.X : srcRect.W;
+		auto dHeight = a.OverrideDrawSize.Y ? a.OverrideDrawSize.Y : srcRect.H;
+		auto d = RectangleF{(float)(int)(l.Location.X + a.Offset.X) - (int)cameraComponent.Box.X,
+							(float)(int)(l.Location.Y + a.Offset.Y) - (int)cameraComponent.Box.Y,
+							(float)dWidth,
+							(float)dHeight};
 		a.AnimationImage->Draw(srcRect, d);
 	});
 }
