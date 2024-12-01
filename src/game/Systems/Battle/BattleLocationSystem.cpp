@@ -37,7 +37,7 @@ void startBattlers(GameObject, BattlerComponent& battler, AnimationComponent& an
 		anim.Animation->PlayAnimation("idle1");
 		anim.Offset.X = -5;
 		anim.Offset.Y = -5;
-		anim.OverrideDrawSize = Point(48, 48);
+		anim.OverrideDrawSize = Point(72, 72);
 		anim.Playing = true;
 	} else {
 		anim.Animation->PlayAnimation("idleR");

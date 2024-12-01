@@ -87,7 +87,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 144, "h": 144 },
     "sourceSize": { "w": 144, "h": 144 },
-    "duration": 150
+    "duration": 200
    },
    {
     "filename": "player1 10.aseprite",
@@ -96,7 +96,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 144, "h": 144 },
     "sourceSize": { "w": 144, "h": 144 },
-    "duration": 150
+    "duration": 200
    },
    {
     "filename": "player1 11.aseprite",
@@ -105,7 +105,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 144, "h": 144 },
     "sourceSize": { "w": 144, "h": 144 },
-    "duration": 150
+    "duration": 200
    },
    {
     "filename": "player1 12.aseprite",

@@ -14,20 +14,20 @@
                 3
             ],
             "expandedObjectLayers": [
-                2,
-                5
+                5,
+                2
             ],
             "scale": 2.541,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": -31.09012199921291,
-                "y": 17.709563164108616
+                "x": 239.6694214876033,
+                "y": 157.41833923652106
             }
         },
         "debugTown.tmj": {
             "expandedObjectLayers": [
-                3,
-                5
+                5,
+                3
             ],
             "scale": 1.0924,
             "selectedLayer": 5,
@@ -41,8 +41,8 @@
                 4
             ],
             "expandedObjectLayers": [
-                6,
-                5
+                5,
+                6
             ],
             "scale": 3,
             "selectedLayer": 4,
