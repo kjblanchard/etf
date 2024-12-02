@@ -167,7 +167,10 @@ void Graphics::DrawImageToImage(Image& src, Image& dst, RectangleF* srcR, Rectan
 
 SDL_Texture* Graphics::CreateTextureFromSurface(SDL_Surface* surface) {
 	SDL_Texture* t = SDL_CreateTextureFromSurface(_renderer, surface);
+#ifndef imgui
+// TODO, not sure why this is, but there is a pixel bug when using imgui and scaling.  Have texted on linux and mac and get this, but software renderer works fine.
 	SDL_SetTextureScaleMode(t, SDL_SCALEMODE_NEAREST);
+#endif
 	SDL_SetTextureBlendMode(t, SDL_BLENDMODE_BLEND);
 	if (t == NULL) {
 		sgLogError("Could not create texture, Error: %s", SDL_GetError());
