@@ -37,8 +37,7 @@ void GameWidget::ShowGameDebugWindow() {
 
 	// Step 3: Render the SDL_Texture in ImGui with the same scaling
 	ImVec2 imguiSize(scaledWidth, scaledHeight);  // Use the scaled size
-	auto tex = graphics->ImGuiTexture();
-	// ImGui::Image(tex, ImVec2(graphics.WindowWidth(), graphics.WindowHeight()));
+	auto tex = (ImTextureID)(intptr_t)graphics->ImGuiTexture();
 	ImGui::Image(tex, imguiSize);
 	ImGui::End();
 }

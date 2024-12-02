@@ -167,8 +167,8 @@ void Graphics::DrawImageToImage(Image& src, Image& dst, RectangleF* srcR, Rectan
 
 SDL_Texture* Graphics::CreateTextureFromSurface(SDL_Surface* surface) {
 	SDL_Texture* t = SDL_CreateTextureFromSurface(_renderer, surface);
-	SDL_SetTextureBlendMode(t, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureScaleMode(t, SDL_SCALEMODE_NEAREST);
+	SDL_SetTextureBlendMode(t, SDL_BLENDMODE_BLEND);
 	if (t == NULL) {
 		sgLogError("Could not create texture, Error: %s", SDL_GetError());
 		return NULL;

@@ -68,14 +68,17 @@
             }
         },
         "forest1.tmj": {
+            "expandedGroupLayers": [
+                2
+            ],
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 2.6904296875,
+            "scale": 1.363,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 103.70090744101631,
-                "y": 156.48058076225044
+                "x": 265.5906089508438,
+                "y": 246.51504035216436
             }
         },
         "forest1.tmx": {

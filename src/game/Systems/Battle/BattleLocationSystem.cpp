@@ -35,8 +35,8 @@ void loadBattlers(GameObject, BattleLocationComponent& battleLocation) {
 void startBattlers(GameObject, BattlerComponent& battler, AnimationComponent& anim) {
 	if (battler.Id == 1) {
 		anim.Animation->PlayAnimation("idle1");
-		anim.Offset.X = -5;
-		anim.Offset.Y = -5;
+		anim.Offset.X = -21;
+		anim.Offset.Y = -41;
 		anim.OverrideDrawSize = Point(72, 72);
 		anim.Playing = true;
 	} else {
