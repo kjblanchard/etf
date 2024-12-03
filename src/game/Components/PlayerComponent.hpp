@@ -7,6 +7,7 @@ struct PlayerComponent {
 	unsigned int PlayerNum;
 	RectangleF Body;
 	Directions Direction;
+	bool Moving = false;
 };
 
 }  // namespace Supergoon

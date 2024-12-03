@@ -222,6 +222,11 @@
                          "name":"battleId",
                          "type":"string",
                          "value":"1"
+                        }, 
+                        {
+                         "name":"encounterTime",
+                         "type":"float",
+                         "value":2
                         }],
                  "rotation":0,
                  "type":"BattleZone",

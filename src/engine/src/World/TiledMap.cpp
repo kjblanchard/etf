@@ -143,6 +143,8 @@ TiledMap::TiledMap(std::string filename) {
 
 						} else if (prop.PropertyType == "string") {
 							prop.Value = property["value"].get<std::string>();
+						} else if (prop.PropertyType == "float") {
+							prop.Value = property["value"].get<float>();
 						}
 
 						object.Properties.push_back(prop);

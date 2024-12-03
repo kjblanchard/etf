@@ -13,9 +13,11 @@ GameObject* Supergoon::NewBattleZone(TiledMap::TiledObject& obj) {
 	for (auto&& prop : obj.Properties) {
 		if (prop.Name == "battleId") {
 			battleZone.BattleId = 1;
-			// p.SpawnLocationId = std::get<int>(prop.Value);
 		}
-		go->AddComponent<BattleZoneComponent>(battleZone);
-		return go;
+		if (prop.Name == "encounterTime") {
+			battleZone.EncounterTime = std::get<float>(prop.Value);
+		}
 	}
+	go->AddComponent<BattleZoneComponent>(battleZone);
+	return go;
 }

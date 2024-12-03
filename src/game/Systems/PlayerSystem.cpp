@@ -180,6 +180,7 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	if (moved) {
 		updateInteractionRect(player, interaction, loc);
 	}
+	player.Moving = moved;
 
 	// Did we exit?
 	auto playerBodyRect = RectangleF{loc.Location.X + player.Body.X, loc.Location.Y + player.Body.Y, player.Body.W, player.Body.H};
