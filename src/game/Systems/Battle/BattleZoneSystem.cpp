@@ -7,6 +7,7 @@
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Game.hpp>
 #include <Supergoon/Input.hpp>
+#include <Supergoon/World/Level.hpp>
 #include <Systems/Battle/BattleZoneSystem.hpp>
 using namespace Supergoon;
 
@@ -35,10 +36,14 @@ void updateBattleZones(GameObject go, PlayerComponent& player, LocationComponent
 			}
 			assert(go.HasComponent<AnimationComponent>());
 			auto& anim = go.GetComponent<AnimationComponent>();
+			stateComponent.PlayerLoadLocation.X = loc.Location.X;
+			stateComponent.PlayerLoadLocation.Y = loc.Location.Y;
+			stateComponent.PlayerLoadLevel = Level::GetName();
 			stateComponent.CameraFollowTarget = false;
 			stateComponent.EnteringBattle = true;
 			Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void*)strdup("battle1"));
 			anim.Playing = false;
+			currentTime = 0;
 			return;
 		}
 	});

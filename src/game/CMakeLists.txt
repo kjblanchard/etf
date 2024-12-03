@@ -34,6 +34,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Systems/TextInteractionSystem.cpp
     Systems/Battle/BattleZoneSystem.cpp
     Systems/Battle/BattleLocationSystem.cpp
+    Systems/Battle/BattleSystem.cpp
     Utilities/Utilities.cpp
     Utilities/Events.cpp
     ${DEBUG_FILES}

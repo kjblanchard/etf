@@ -21,7 +21,8 @@ class Level {
 	Level(const char *filename);
 	~Level();
 	std::string GetBgm();
-	const inline std::string &GetName() const { return _name; }
+	// const inline std::string &GetName() const { return _name; }
+	static const inline std::string &GetName() { return _currentLevel->_name; }
 	inline Point GetSize() { return Point{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
 	static std::function<void()> LoadFunc;
 	static void AddLevelEventHandlers();
@@ -51,7 +52,7 @@ class Level {
 	GameObject *NewSolidObject(Rectangle r);
 
    private:
-   std::string GetBasePathForTiled();
+	std::string GetBasePathForTiled();
 	std::string _name;
 	std::vector<std::shared_ptr<Image>> _backgroundTilesetImages;
 	std::shared_ptr<Image> _background;
