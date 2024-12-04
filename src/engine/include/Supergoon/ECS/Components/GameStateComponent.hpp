@@ -5,6 +5,7 @@ namespace Supergoon {
 struct GameState {
 	struct Battle {
 		int BattleID;
+		int CurrentBattler;
 	};
 	Battle BattleData;
 	int PlayerSpawnLocation;
