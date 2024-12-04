@@ -34,6 +34,7 @@ void updateBattleZones(GameObject go, PlayerComponent& player, LocationComponent
 			if (currentTime < zone.EncounterTime) {
 				return;
 			}
+			// TODO, why is this happening here?  Should probably be a function to enter the battle with?  We are setting follow target etc here, and we do it in the battle widget.
 			assert(go.HasComponent<AnimationComponent>());
 			auto& anim = go.GetComponent<AnimationComponent>();
 			stateComponent.PlayerLoadLocation.X = loc.Location.X;
@@ -41,6 +42,7 @@ void updateBattleZones(GameObject go, PlayerComponent& player, LocationComponent
 			stateComponent.PlayerLoadLevel = Level::GetName();
 			stateComponent.CameraFollowTarget = false;
 			stateComponent.EnteringBattle = true;
+			stateComponent.PlayerLoadDirection = (int)player.Direction;
 			Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void*)strdup("battle1"));
 			anim.Playing = false;
 			currentTime = 0;

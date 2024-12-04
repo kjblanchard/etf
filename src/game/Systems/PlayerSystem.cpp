@@ -50,13 +50,15 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState&
 	playerAnimation.Offset = Point{0, 0};
 	playerAnimation.AnimationSpeed = 1.0;
 	playerComponent.PlayerNum = 0;
-	playerComponent.Direction = (Directions)playerSpawn.SpawnDirection;
 	playerComponent.Body = RectangleF{4, 9, 16, 22};
 	// TODO, probably use this differently, this is hacked in basically.
 	if (gameState.ExitingBattle) {
 		playerLocation.Location.X = gameState.PlayerLoadLocation.X;
 		playerLocation.Location.Y = gameState.PlayerLoadLocation.Y;
+		playerComponent.Direction = (Directions)gameState.PlayerLoadDirection;
+		gameState.CameraFollowTarget = true;
 	} else {
+		playerComponent.Direction = (Directions)playerSpawn.SpawnDirection;
 		playerLocation.Location.X = playerSpawn.Location.X;
 		playerLocation.Location.Y = playerSpawn.Location.Y;
 	}

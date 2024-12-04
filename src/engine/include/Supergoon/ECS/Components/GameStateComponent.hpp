@@ -19,5 +19,6 @@ struct GameState {
 	bool InBattle;
 	std::string PlayerLoadLevel = "";
 	Vector2 PlayerLoadLocation = Vector2();
+	int PlayerLoadDirection;
 };
 }  // namespace Supergoon
