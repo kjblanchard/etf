@@ -6,6 +6,7 @@ set(DEBUG_FILES)
 if(imgui)
     list(APPEND DEBUG_FILES
         Debug/PlayerCollider.cpp
+        Debug/BattleWidget.cpp
         Systems/DebugDrawSystem.cpp
     )
 endif(imgui)

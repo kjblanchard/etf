@@ -2,6 +2,7 @@
 #include <SDL3/SDL.h>
 
 #include <Components/BattleComponent.hpp>
+#include <Debug/BattleWidget.hpp>
 #include <Debug/PlayerCollider.hpp>
 #include <Entities/Battle/BattleLocation.hpp>
 #include <Entities/Battle/BattleZone.hpp>
@@ -175,6 +176,7 @@ void BlackjackGame::Draw() {
 
 	Widgets::ShowWidgets(this);
 	PlayerWidget::ShowPlayerColliderWindow();
+	BattleWidget::ShowBattleWidget();
 	if (PlayerWidget::ShowPlayerColliderDebugBox) {
 		DrawDebugBoxesPlayer();
 	}
