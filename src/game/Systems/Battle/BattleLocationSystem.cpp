@@ -41,7 +41,7 @@ void startBattlers(GameObject, BattlerComponent& battler, AnimationComponent& an
 		anim.Playing = true;
 	} else {
 		anim.Offset.X = -15;
-		anim.Offset.Y = -30;
+		anim.Offset.Y = -26;
 		anim.Animation->PlayAnimation("idleR");
 		anim.Playing = true;
 	}
