@@ -11,10 +11,14 @@ using namespace Supergoon;
 static bool shouldDrawDebugBox = false;
 void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 	if (ImGui::TreeNode((panelName + "- panel").c_str())) {
+		auto panelLayerLabel = "Layer ##" + panelName;
 		auto panelOffsetLabel = "Offset X ##" + panelName;
 		auto panelOffsetYLabel = "Offset Y ##" + panelName;
 		auto panelTransparencyLabel = "Transparency ##" + panelName;
 		auto visibleLable = "Visible ##" + panelName;
+		if (ImGui::DragInt(panelLayerLabel.c_str(), &panel->_layer, 1, 0, 100)) {
+			panel->Dirty = true;
+		}
 		if (ImGui::Checkbox(visibleLable.c_str(), &panel->_visible)) {
 			panel->Dirty = true;
 		}
@@ -33,12 +37,17 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 				DrawPanel((Panel *)value.get(), key);
 			} else if (value->WidgetType == (int)BuiltinWidgetTypes::Image) {
 				auto imageObject = std::dynamic_pointer_cast<UIImage>(value);
+				std::string childLayerLabel = "Layer##" + key;
 				std::string childX_label = "Offset X##" + key;
 				std::string childY_label = "Offset Y##" + key;
 				std::string childWLabel = "Child W##" + key;
 				std::string childHLabel = "Child H##" + key;
 				std::string transLabel = "Child Transparency##" + key;
 				if (ImGui::TreeNode((key + "- image").c_str())) {
+					if (ImGui::DragInt(childLayerLabel.c_str(), &value->_layer, 1, 0, 100)) {
+						value->Dirty = true;
+						panel->Dirty = true;
+					}
 					if (ImGui::DragFloat(childX_label.c_str(), &value->Offset.X, 1.0f)) {
 						value->Dirty = true;
 					}
@@ -59,6 +68,7 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 			} else if (value->WidgetType == (int)BuiltinWidgetTypes::Text) {
 				assert((UIText *)value.get());
 				auto textUIObject = (UIText *)value.get();
+				std::string childLayerLabel = "Layer##" + key;
 				std::string childX_label = "Offset X##" + key;
 				std::string childY_label = "Offset Y##" + key;
 				std::string childW_label = "Width##" + key;
@@ -71,6 +81,10 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 				std::string childLettersToDraw = "Letters To Draw##" + key;
 				std::string childDebugBoxCheckbox = "DebugBox##" + key;
 				if (ImGui::TreeNode((key + "- text").c_str())) {
+					if (ImGui::DragInt(childLayerLabel.c_str(), &value->_layer, 1, 0, 100)) {
+						value->Dirty = true;
+						panel->Dirty = true;
+					}
 					if (ImGui::DragFloat(childX_label.c_str(), &value->Offset.X, 1.0f)) {
 						value->Dirty = true;
 					}

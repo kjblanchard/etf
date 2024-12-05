@@ -36,6 +36,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Systems/Battle/BattleZoneSystem.cpp
     Systems/Battle/BattleLocationSystem.cpp
     Systems/Battle/BattleSystem.cpp
+    Systems/Battle/BattleUISystem.cpp
     Utilities/Utilities.cpp
     Utilities/Events.cpp
     ${DEBUG_FILES}

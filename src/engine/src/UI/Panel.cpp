@@ -1,4 +1,6 @@
 #include <Supergoon/UI/Panel.hpp>
+#include <algorithm>
+#include <cassert>
 using namespace Supergoon;
 Panel::Panel() : UIObject() {
 }
@@ -14,6 +16,13 @@ void Panel::OnDirty() {
 	for (auto& [name, uiObject] : Children) {
 		uiObject->OnDirty();
 	}
+	_drawOrder.clear();
+	for (auto& [name, uiObject] : Children) {
+		_drawOrder.push_back(uiObject.get());
+	}
+	std::sort(_drawOrder.begin(), _drawOrder.end(), [](UIObject* lhs, UIObject* rhs) {
+		return lhs->Layer() <= rhs->Layer();
+	});
 }
 void Panel::Update() {
 	for (auto& [name, uiObject] : Children) {
@@ -24,7 +33,11 @@ void Panel::Update() {
 	}
 }
 void Panel::Draw() {
-	for (auto& [name, uiObject] : Children) {
-		uiObject->DrawInternal();
+	// for (auto& [name, uiObject] : Children) {
+	// 	uiObject->DrawInternal();
+	// }
+	for (auto child : _drawOrder) {
+		assert(child);
+		child->DrawInternal();
 	}
 }

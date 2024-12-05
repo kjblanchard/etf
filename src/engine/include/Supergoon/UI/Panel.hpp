@@ -14,6 +14,9 @@ class Panel : public UIObject {
 	void OnDirty() override;
 	void Update() override;
 	void Draw() override;
+
+   private:
+	std::vector<UIObject*> _drawOrder;
 	friend UIWidget;
 };
 }  // namespace Supergoon

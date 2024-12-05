@@ -3,6 +3,7 @@
 #include <Supergoon/Primitives/Vector2.hpp>
 #include <Supergoon/UI/UIObjectAnimator.hpp>
 namespace Supergoon {
+class UIWidget;
 enum class BuiltinWidgetTypes {
 	Image = 1,
 	Text,
@@ -22,6 +23,14 @@ class UIObject {
 	inline void SetAlpha(int alpha) {
 		alpha < 0 ? _alpha = 0 : alpha > 255 ? _alpha = 255
 											 : _alpha = alpha;
+		Dirty = true;
+	}
+	inline unsigned int Layer() { return _layer; }
+	inline void SetLayer(unsigned int layer) {
+		_layer = layer;
+		if (Parent) {
+			Parent->Dirty = true;
+		}
 		Dirty = true;
 	}
 	// TODO Used for tweening alpha.. probably isn't great
@@ -61,9 +70,10 @@ class UIObject {
    protected:
 	int _alpha = 255;
 	bool _visible = true;
+	int _layer = 0;
 	virtual void Update() {}
 	virtual void Draw() {}
-	// friend UIWidget;
+	friend UIWidget;
 };
 
 }  // namespace Supergoon

@@ -14,6 +14,7 @@
 #include <Systems/AsepriteSystem.hpp>
 #include <Systems/Battle/BattleLocationSystem.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
+#include <Systems/Battle/BattleUISystem.hpp>
 #include <Systems/Battle/BattleZoneSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/DebugDrawSystem.hpp>
@@ -147,6 +148,7 @@ void BlackjackGame::Start() {
 	}
 	InitializeEvents();
 	InitializeCamera();
+	InitializeBattleUI();
 }
 
 void BlackjackGame::Update() {
@@ -156,6 +158,7 @@ void BlackjackGame::Update() {
 		UpdateAnimationComponents();
 		UpdateTextInteractions();
 		UpdateBattle();
+		UpdateBattleUI();
 		UpdateCamera();
 	}
 	UI::Update();
