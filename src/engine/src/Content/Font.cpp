@@ -5,7 +5,7 @@
 using namespace Supergoon;
 FT_Library Font::_loadedLibrary = nullptr;
 
-Font::Font(std::string name, int size) : Content(name), _size(size) {}
+Font::Font(std::string name, int size) : Content(name + std::to_string(_size)), _size(size) {}
 Font::~Font() {
 	Unload();
 }
@@ -26,6 +26,9 @@ void Font::Load() {
 		sgLogError("Could not open font %s with error %d\n", _filePath.c_str(), result);
 		return;
 	}
+	// int dpi = 96;
+	// int point_size = _size;	 // Your `_size` is the desired point size
+	// FT_Set_Char_Size(_face, 0, point_size * 64, dpi, dpi);
 	FT_Set_Pixel_Sizes(_face, 0, _size);
 }
 
