@@ -7,7 +7,7 @@ using namespace Supergoon;
 void Supergoon::InitializeBattleUI() {
 	auto fullSize = Point{435, 66};
 	auto panel = CreateUIBasePanel("battleBasePanel", Point{45, 222}, fullSize);
-	auto text = new UIText(panel, "Kevin:     HP: 500 | 500    MP: 50 | 50", "battleDisplayText", 8);
+	auto text = new UIText(panel, "Kevin:     HP: 500 | 500    MP: 50 | 50", "battleDisplayText", 12);
 	text->SetLayer(1);
 	text->Offset = {6, 6};
 	text->Bounds.W = fullSize.X - (text->Offset.X * 2);

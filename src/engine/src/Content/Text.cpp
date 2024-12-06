@@ -6,7 +6,7 @@
 using namespace Supergoon;
 
 Text::Text(std::string text, std::string fontName, int size) : Content(text), _text(text), _fontSize(size) {
-	_font = ContentRegistry::CreateContent<Font, int>(fontName + std::to_string(size), std::move(size));
+	_font = ContentRegistry::CreateContent<Font, int>(fontName + "_" + std::to_string(size), std::move(size));
 	_lettersToDraw = text.length();
 }
 
