@@ -5,7 +5,7 @@
 #include <Components/PlayerInteractionComponent.hpp>
 #include <Components/PlayerSpawnComponent.hpp>
 #include <Components/TextInteractionComponent.hpp>
-#include <Supergoon/Supergoon.hpp>
+#include <Supergoon/pch.hpp>
 #include <Systems/PlayerSystem.hpp>
 using namespace Supergoon;
 

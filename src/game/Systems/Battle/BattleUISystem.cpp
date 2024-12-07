@@ -1,5 +1,4 @@
-#include <Supergoon/UI/Panel.hpp>
-#include <Supergoon/UI/UIText.hpp>
+#include <Supergoon/pch.hpp>
 #include <Systems/Battle/BattleUISystem.hpp>
 #include <Utilities/Utilities.hpp>
 using namespace Supergoon;

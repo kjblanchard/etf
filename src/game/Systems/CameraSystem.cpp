@@ -1,6 +1,5 @@
 #include <Components/PlayerComponent.hpp>
-#include <Supergoon/Supergoon.hpp>
-#include <algorithm>
+#include <Supergoon/pch.hpp>
 namespace Supergoon {
 
 void getFollowTarget(CameraComponent& cc) {
@@ -36,7 +35,7 @@ void InitializeCamera() {
 	auto waitTween = std::make_shared<Tween>(0.1);
 	sequence->Tweens.push_back(waitTween);
 	waitTween->EndFunc = []() {
-		auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+		// auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
 		auto g = GameObject::GetGameObjectWithComponents<GameState>();
 		auto& gc = g->GetComponent<GameState>();
 		gc.EnteringBattle = false;

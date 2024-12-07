@@ -1,4 +1,4 @@
-#include <Supergoon/Supergoon.hpp>
+#include <Supergoon/pch.hpp>
 #include <Systems/ImageSystem.hpp>
 using namespace Supergoon;
 static void drawImageEach(GameObject, ImageComponent& imageComponent, LocationComponent& locationComponent) {

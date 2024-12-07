@@ -1,4 +1,5 @@
 #include <Utilities/Events.hpp>
+#include <Supergoon/pch.hpp>
 using namespace Supergoon;
 EscapeTheFateEvent Supergoon::EscapeTheFateEvents;
 

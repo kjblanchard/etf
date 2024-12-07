@@ -1,8 +1,5 @@
-#include <SDL3/SDL_filesystem.h>
-
-#include <Supergoon/Supergoon.hpp>
+#include <Supergoon/pch.hpp>
 #include <Utilities/Utilities.hpp>
-#include <string>
 
 using namespace Supergoon;
 

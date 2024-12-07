@@ -1,7 +1,7 @@
 #include <Components/PlayerComponent.hpp>
 #include <Components/PlayerInteractionComponent.hpp>
 #include <Debug/PlayerCollider.hpp>
-#include <Supergoon/Supergoon.hpp>
+#include <Supergoon/pch.hpp>
 
 using namespace Supergoon;
 bool PlayerWidget::ShowPlayerColliderDebugBox = false;

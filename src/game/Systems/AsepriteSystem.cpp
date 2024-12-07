@@ -1,6 +1,5 @@
-#include <Supergoon/Supergoon.hpp>
+#include <Supergoon/pch.hpp>
 #include <Systems/AsepriteSystem.hpp>
-#include <memory>
 using namespace Supergoon;
 
 void loadAnimationComponent(AnimationComponent& a) {

@@ -1,8 +1,7 @@
 #include <Components/PlayerComponent.hpp>
 #include <Components/PlayerInteractionComponent.hpp>
 #include <Components/TextInteractionComponent.hpp>
-#include <Supergoon/Supergoon.hpp>
-#include <Supergoon/UI/UIText.hpp>
+#include <Supergoon/pch.hpp>
 #include <Systems/TextInteractionSystem.hpp>
 #include <Utilities/Utilities.hpp>
 using namespace Supergoon;

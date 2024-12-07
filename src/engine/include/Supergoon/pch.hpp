@@ -1,4 +1,12 @@
 #pragma once
+// sdl
+#include <SDL3/SDL.h>
+// std
+#include <algorithm>
+#include <memory>
+#include <optional>
+#include <string>
+// engine
 #include <Supergoon/Aseprite/AsepriteAnimation.hpp>
 #include <Supergoon/Content/AsepriteDocument.hpp>
 #include <Supergoon/Content/Content.hpp>
@@ -28,12 +36,11 @@
 #include <Supergoon/Primitives/Rectangle.hpp>
 #include <Supergoon/Primitives/Vector2.hpp>
 #include <Supergoon/Sound.hpp>
-#include <Supergoon/Supergoon.hpp>
 #include <Supergoon/Tween/Sequence.hpp>
 #include <Supergoon/Tween/Tween.hpp>
-#include <Supergoon/UI/UIImage.hpp>
 #include <Supergoon/UI/Panel.hpp>
 #include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/UIImage.hpp>
 #include <Supergoon/UI/UIObject.hpp>
 #include <Supergoon/UI/UIObjectAnimator.hpp>
 #include <Supergoon/UI/UIText.hpp>

@@ -9,7 +9,7 @@
 #include <Entities/PlayerExit.hpp>
 #include <Entities/PlayerStart.hpp>
 #include <Entities/TextInteraction.hpp>
-#include <Supergoon/Supergoon.hpp>
+#include <Supergoon/pch.hpp>
 #include <SupergoonEngine/nlohmann/json.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <Systems/Battle/BattleLocationSystem.hpp>
