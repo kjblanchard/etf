@@ -1,14 +1,16 @@
 #pragma once
-#include <Supergoon/Primitives/Rectangle.hpp>
 #include <Supergoon/UI/UIObject.hpp>
 namespace Supergoon {
 class Panel;
-class UIImage : public UIObject {
+class UIHorizontalLayoutGroup : public UIObject {
    public:
-	//  If you want to initialize everything about this Object.
-	HorizontalLayoutGroup(Panel* parent, std::string id);
-	RectangleF ImageSourceRect = {0, 0, 0, 0};
+	UIHorizontalLayoutGroup(UIObject* parent, std::string id);
 	virtual void Draw() override;
 	virtual void OnDirty() override;
+	float YSpaceBetweenElements = 0;
+
+   private:
+	std::vector<UIObject*> _drawOrder;
+	friend UIWidget;
 };
 }  // namespace Supergoon

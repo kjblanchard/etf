@@ -5,7 +5,8 @@ using namespace Supergoon;
 // TODO, not sure why this is needed
 static const int _centerYOffsetCorrection = 2;
 
-UIText::UIText(Panel* parent, std::string text, std::string uiName, unsigned int size) : UIObject(parent), DisplayText(text) {
+// UIText::UIText(Panel* parent, std::string text, std::string uiName, unsigned int size) : UIObject(parent), DisplayText(text) {
+UIText::UIText(UIObject* parent, std::string text, std::string uiName, unsigned int size) : UIObject(parent), DisplayText(text) {
 	auto uiname = uiName.empty() ? uiName : text;
 	parent->Children[uiName] = std::shared_ptr<UIObject>(this);
 	WidgetType = (int)BuiltinWidgetTypes::Text;
@@ -26,11 +27,6 @@ void UIText::Draw() {
 }
 
 void UIText::OnDirty() {
-	// TextPtr->LoadContent();
-	auto parentBoundsX = Parent ? Parent->Bounds.X : 0;
-	auto parentBoundsY = Parent ? Parent->Bounds.Y : 0;
-	Bounds.X = Offset.X + parentBoundsX;
-	Bounds.Y = Offset.Y + parentBoundsY;
 	// Figure out the new src rect.
 	// If we don't have text bounds, then we should just use the bounds x/y and size of text
 	// if loaded do these things

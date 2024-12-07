@@ -1,16 +1,18 @@
-#include <Supergoon/UI/Panel.hpp>
-#include <algorithm>
-#include <cassert>
+#include <Supergoon/UI/UIHorizontalLayoutGroup.hpp>
+#include <Supergoon/pch.hpp>
+
 using namespace Supergoon;
-Panel::Panel() : UIObject() {
-}
-Panel::Panel(Panel* parent, std::string name) : UIObject(parent) {
-	WidgetType = (int)BuiltinWidgetTypes::Panel;
+
+UIHorizontalLayoutGroup::UIHorizontalLayoutGroup(UIObject* parent, std::string name) : UIObject(parent) {
+	WidgetType = (int)BuiltinWidgetTypes::HorizontalLayoutGroup;
 	parent->Children[name] = std::shared_ptr<UIObject>(this);
 }
-void Panel::OnDirty() {
+void UIHorizontalLayoutGroup::OnDirty() {
+	int i = 0;
 	for (auto& [name, uiObject] : Children) {
+		uiObject->LayoutGroupOffset.Y = i * YSpaceBetweenElements;
 		uiObject->DirtyInternal();
+		++i;
 	}
 	_drawOrder.clear();
 	for (auto& [name, uiObject] : Children) {
@@ -20,15 +22,8 @@ void Panel::OnDirty() {
 		return lhs->Layer() <= rhs->Layer();
 	});
 }
-void Panel::Update() {
-	for (auto& [name, uiObject] : Children) {
-		if (!uiObject) {
-			continue;
-		}
-		uiObject->UpdateInternal();
-	}
-}
-void Panel::Draw() {
+
+void UIHorizontalLayoutGroup::Draw() {
 	for (auto child : _drawOrder) {
 		assert(child);
 		child->DrawInternal();

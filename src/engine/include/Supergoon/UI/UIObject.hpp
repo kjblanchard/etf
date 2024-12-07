@@ -2,12 +2,14 @@
 #include <Supergoon/Primitives/Rectangle.hpp>
 #include <Supergoon/Primitives/Vector2.hpp>
 #include <Supergoon/UI/UIObjectAnimator.hpp>
+#include <map>
 namespace Supergoon {
 class UIWidget;
 enum class BuiltinWidgetTypes {
 	Image = 1,
 	Text,
 	Panel,
+	HorizontalLayoutGroup,
 };
 class UIObject {
    public:
@@ -37,22 +39,31 @@ class UIObject {
 	inline int* AlphaHandle() { return &_alpha; }
 	UIObject* Parent = nullptr;
 	RectangleF Bounds = {0, 0, 0, 0};
+	// std::unordered_map<std::string, std::shared_ptr<UIObject>> Children;
+	// TODO, using ordered map here for hori layout groups.. is it best?
+	std::map<std::string, std::shared_ptr<UIObject>> Children;
 	Vector2 Offset = {0, 0};
+	Vector2 LayoutGroupOffset = {0, 0};
 	// Get the effective alpha for this object, taking the parents into consideration.
 	inline int EffectiveAlpha() { return Parent ? (int)((Parent->EffectiveAlpha() / 255.0) * (_alpha / 255.0) * 255) : _alpha; }
 	inline bool Visible() { return Parent ? Parent->Visible() ? _visible : false : _visible; }
 	int WidgetType = 0;
 	std::vector<std::shared_ptr<UIObjectAnimatorBase>> Animators;
 	inline virtual void OnDirty() {
-		Bounds.X = Offset.X + Parent->Bounds.X;
-		Bounds.Y = Offset.Y + Parent->Bounds.Y;
+	}
+	inline void DirtyInternal() {
+		const auto parentX = Parent ? Parent->Bounds.X : 0;
+		const auto parentY = Parent ? Parent->Bounds.Y : 0;
+		Bounds.X = Offset.X + LayoutGroupOffset.X + parentX;
+		Bounds.Y = Offset.Y + LayoutGroupOffset.Y + parentY;
+		OnDirty();
 	}
 	inline void UpdateInternal() {
 		if (!Enabled) {
 			return;
 		}
 		if (Dirty) {
-			OnDirty();
+			DirtyInternal();
 			Dirty = false;
 		}
 		Update();

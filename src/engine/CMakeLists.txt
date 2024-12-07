@@ -31,7 +31,7 @@ set(SRC_FILES
     src/UI/UIImage.cpp
     src/UI/UIText.cpp
     src/UI/UIObjectAnimator.cpp
-    src/UI/HorizontalLayoutGroup.cpp
+    src/UI/UIHorizontalLayoutGroup.cpp
 )
 
 if(imgui)
@@ -52,10 +52,12 @@ add_library(${LIBRARY_TARGET_NAME}
     STATIC
     ${SRC_FILES}
 )
-target_precompile_headers(${LIBRARY_TARGET_NAME} PRIVATE
 
-    # "$<$<COMPILE_LANGUAGE:C>:${CMAKE_CURRENT_SOURCE_DIR}/include/GoonEngine/gnpch.h>"
-    "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/include/Supergoon/pch.hpp>")
+# Do this when we aren't updating the engine all the time.
+# target_precompile_headers(${LIBRARY_TARGET_NAME} PRIVATE
+
+# # "$<$<COMPILE_LANGUAGE:C>:${CMAKE_CURRENT_SOURCE_DIR}/include/GoonEngine/gnpch.h>"
+# "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/include/Supergoon/pch.hpp>")
 target_compile_options(${LIBRARY_TARGET_NAME} PRIVATE ${FULL_COMPILE_OPTIONS})
 target_link_libraries(${LIBRARY_TARGET_NAME}
     PUBLIC

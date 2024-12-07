@@ -3,6 +3,7 @@
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/UI/Panel.hpp>
 #include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/UIHorizontalLayoutGroup.hpp>
 #include <Supergoon/UI/UIImage.hpp>
 #include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/Widgets/UIWidget.hpp>
@@ -119,8 +120,35 @@ void UIWidget::DrawPanel(Panel *panel, std::string panelName) {
 					}
 					ImGui::TreePop();
 				}
+			} else if (value->WidgetType == (int)BuiltinWidgetTypes::HorizontalLayoutGroup) {
+				assert((UIHorizontalLayoutGroup *)value.get());
+				auto horiGroup = (UIHorizontalLayoutGroup *)value.get();
+				std::string childLayerLabel = "Layer##" + key;
+				std::string childXLabel = "Offset X##" + key;
+				std::string childYLabel = "Offset Y##" + key;
+				std::string childSpaceLabel = "Space Y##" + key;
+				if (ImGui::TreeNode((key + "- text").c_str())) {
+					if (ImGui::DragInt(childLayerLabel.c_str(), &value->_layer, 1, 0, 100)) {
+						value->Dirty = true;
+						panel->Dirty = true;
+					}
+					if (ImGui::DragFloat(childXLabel.c_str(), &value->Offset.X, 1.0f)) {
+						value->Dirty = true;
+					}
+					if (ImGui::DragFloat(childYLabel.c_str(), &value->Offset.Y, 1.0f)) {
+						value->Dirty = true;
+					}
+					if (ImGui::DragFloat(childSpaceLabel.c_str(), &horiGroup->YSpaceBetweenElements, 1.0f, -255, 255)) {
+						value->Dirty = true;
+					}
+					ImGui::BeginDisabled();
+					ImGui::Text("Layout Group X: %f, LayoutGroup Y: %f ##%s", value->LayoutGroupOffset.X, value->LayoutGroupOffset.Y, key.c_str());
+					ImGui::EndDisabled();
+					ImGui::TreePop();
+				}
+
+				// ImGui::End();
 			}
-			// ImGui::End();
 		}
 		ImGui::TreePop();
 	}

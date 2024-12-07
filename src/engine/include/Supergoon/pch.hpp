@@ -43,6 +43,7 @@
 #include <Supergoon/UI/UIImage.hpp>
 #include <Supergoon/UI/UIObject.hpp>
 #include <Supergoon/UI/UIObjectAnimator.hpp>
+#include <Supergoon/UI/UIHorizontalLayoutGroup.hpp>
 #include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/Video.hpp>
 #include <Supergoon/World/Level.hpp>
