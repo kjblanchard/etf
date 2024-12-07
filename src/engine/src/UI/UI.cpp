@@ -1,13 +1,10 @@
-#include <SDL3/SDL.h>
-
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Graphics/Graphics.hpp>
 #include <Supergoon/UI/Panel.hpp>
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIImage.hpp>
-#include <SupergoonEngine/nlohmann/json.hpp>
-#include <fstream>
+#include <Supergoon/pch.hpp>
 using namespace Supergoon;
 using json = nlohmann::json;
 std::unique_ptr<Panel> UI::UIInstance = nullptr;

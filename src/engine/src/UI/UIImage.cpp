@@ -1,10 +1,5 @@
-#include <SDL3/SDL.h>
-
-#include <Supergoon/Content/ContentRegistry.hpp>
-#include <Supergoon/UI/Panel.hpp>
+#include <Supergoon/pch.hpp>
 #include <Supergoon/UI/UIImage.hpp>
-#include <SupergoonEngine/nlohmann/json.hpp>
-
 using namespace Supergoon;
 using json = nlohmann::json;
 
@@ -15,12 +10,12 @@ void UIImage::OnDirty() {
 	Bounds.Y = Offset.Y + parentBoundsY;
 	ImagePtr->SetAlpha(EffectiveAlpha());
 }
-UIImage::UIImage(Panel* parent, std::string id) : UIObject(parent) {
+UIImage::UIImage(UIObject* parent, std::string id) : UIObject(parent) {
 	parent->Children[id] = std::shared_ptr<UIObject>(this);
 	WidgetType = (int)BuiltinWidgetTypes::Image;
 }
 
-UIImage::UIImage(Panel* parent, json& imageJson) : UIObject(parent) {
+UIImage::UIImage(UIObject* parent, json& imageJson) : UIObject(parent) {
 	WidgetType = (int)BuiltinWidgetTypes::Image;
 	_visible = imageJson["visible"].get<bool>();
 	_alpha = imageJson["alpha"].get<float>();

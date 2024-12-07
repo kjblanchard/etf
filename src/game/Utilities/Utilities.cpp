@@ -1,3 +1,7 @@
+#include <Supergoon/UI/Panel.hpp>
+#include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/UIImage.hpp>
+#include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/pch.hpp>
 #include <Utilities/Utilities.hpp>
 

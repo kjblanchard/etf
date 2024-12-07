@@ -1,8 +1,12 @@
 #pragma once
 // sdl
 #include <SDL3/SDL.h>
+// 3rd party
+#include <SupergoonEngine/nlohmann/json.hpp>
 // std
 #include <algorithm>
+#include <fstream>
+#include <istream>
 #include <memory>
 #include <optional>
 #include <string>
@@ -38,17 +42,22 @@
 #include <Supergoon/Sound.hpp>
 #include <Supergoon/Tween/Sequence.hpp>
 #include <Supergoon/Tween/Tween.hpp>
-#include <Supergoon/UI/Panel.hpp>
-#include <Supergoon/UI/UI.hpp>
-#include <Supergoon/UI/UIImage.hpp>
-#include <Supergoon/UI/UIObject.hpp>
-#include <Supergoon/UI/UIObjectAnimator.hpp>
-#include <Supergoon/UI/UIHorizontalLayoutGroup.hpp>
-#include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/Video.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <Supergoon/World/TiledMap.hpp>
 #include <Supergoon/World/World.hpp>
+
+#ifdef experimentalPCH
+
+#include <Supergoon/UI/Panel.hpp>
+#include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/UIHorizontalLayoutGroup.hpp>
+#include <Supergoon/UI/UIImage.hpp>
+#include <Supergoon/UI/UIObject.hpp>
+#include <Supergoon/UI/UIObjectAnimator.hpp>
+#include <Supergoon/UI/UIText.hpp>
+#endif
+
 #ifdef imgui
 #include <SupergoonEngine/imgui/imgui.h>
 

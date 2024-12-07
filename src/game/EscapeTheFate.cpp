@@ -1,6 +1,4 @@
 
-#include <SDL3/SDL.h>
-
 #include <Components/BattleComponent.hpp>
 #include <Debug/BattleWidget.hpp>
 #include <Debug/PlayerCollider.hpp>
@@ -10,7 +8,6 @@
 #include <Entities/PlayerStart.hpp>
 #include <Entities/TextInteraction.hpp>
 #include <Supergoon/pch.hpp>
-#include <SupergoonEngine/nlohmann/json.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <Systems/Battle/BattleLocationSystem.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
@@ -23,6 +20,10 @@
 #include <Systems/TextInteractionSystem.hpp>
 #include <Utilities/Events.hpp>
 #include <Utilities/Utilities.hpp>
+#include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/Panel.hpp>
+#include <Supergoon/UI/UIText.hpp>
+#include <Supergoon/UI/UIImage.hpp>
 
 using json = nlohmann::json;
 extern json configData;

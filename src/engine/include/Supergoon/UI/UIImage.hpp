@@ -8,9 +8,11 @@ class Panel;
 class UIImage : public UIObject {
    public:
 	//  If you want to initialize everything about this Object.
-	UIImage(Panel* parent, std::string id);
+	UIImage(UIObject* parent, std::string id);
+	// UIImage(Panel* parent, std::string id);
 	// If you are loading from a ui json file.
-	UIImage(Panel* parent, nlohmann::json& json);
+	// UIImage(Panel* parent, nlohmann::json& json);
+	UIImage(UIObject* parent, nlohmann::json& json);
 	RectangleF ImageSourceRect = {0, 0, 0, 0};
 	std::shared_ptr<Image> ImagePtr = nullptr;
 	virtual void Draw() override;
