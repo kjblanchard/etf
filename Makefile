@@ -54,7 +54,7 @@ idevices:
 	xcrun simctl list devices
 #Helpers
 buildtime:
-	./tools/quick_build_times.py
+	./tools/quick_build_times.py -C build
 trace:
 	./tools/ninja_trace.py build/.ninja_log > trace.json
 # Upload trace to about:trace in chrome, or https://ui.perfetto.dev/
