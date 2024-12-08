@@ -1,5 +1,11 @@
 #include <Components/BattleZoneComponent.hpp>
 #include <Components/PlayerComponent.hpp>
+#include <Supergoon/ECS/Components/AnimationComponent.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
+#include <Supergoon/Events.hpp>
+#include <Supergoon/World/Level.hpp>
 #include <Supergoon/pch.hpp>
 #include <Systems/Battle/BattleZoneSystem.hpp>
 using namespace Supergoon;
@@ -23,7 +29,7 @@ void updateBattleZones(GameObject go, PlayerComponent& player, LocationComponent
 									player.Body.W,
 									player.Body.H);
 		if (playerRect.IsOverlap(zone.BoundingBox)) {
-			currentTime += Game::DeltaTime();
+			currentTime += stateComponent.DeltaTime;
 			if (currentTime < zone.EncounterTime) {
 				return;
 			}

@@ -1,4 +1,11 @@
 #include <Components/PlayerComponent.hpp>
+#include <Supergoon/ECS/Components/CameraComponent.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/Events.hpp>
+#include <Supergoon/Log.hpp>
+#include <Supergoon/Tween/Sequence.hpp>
+#include <Supergoon/World/Level.hpp>
 #include <Supergoon/pch.hpp>
 namespace Supergoon {
 

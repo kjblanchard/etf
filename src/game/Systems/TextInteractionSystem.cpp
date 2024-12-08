@@ -3,7 +3,11 @@
 #include <Components/TextInteractionComponent.hpp>
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIText.hpp>
-#include <Supergoon/pch.hpp>
+// #include <Supergoon/pch.hpp>
+#include <Supergoon/Events.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/CameraComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Systems/TextInteractionSystem.hpp>
 #include <Utilities/Utilities.hpp>
 using namespace Supergoon;

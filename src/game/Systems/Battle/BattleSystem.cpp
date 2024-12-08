@@ -1,4 +1,8 @@
-#include <Supergoon/pch.hpp>
+// #include <Supergoon/pch.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
+#include <Supergoon/Log.hpp>
+#include <Supergoon/Input.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
 #include <Utilities/Events.hpp>
 using namespace Supergoon;

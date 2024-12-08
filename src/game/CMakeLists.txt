@@ -31,6 +31,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Systems/PlayerSystem.cpp
     Systems/ImageSystem.cpp
     Systems/AsepriteSystem.cpp
+    Systems/GameStateSystem.cpp
     Systems/CameraSystem.cpp
     Systems/TextInteractionSystem.cpp
     Systems/Battle/BattleZoneSystem.cpp

@@ -7,6 +7,14 @@
 #include <Entities/PlayerExit.hpp>
 #include <Entities/PlayerStart.hpp>
 #include <Entities/TextInteraction.hpp>
+#include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/Game.hpp>
+#include <Supergoon/Sound.hpp>
+#include <Supergoon/UI/Panel.hpp>
+#include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/UIImage.hpp>
+#include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/pch.hpp>
 #include <Systems/AsepriteSystem.hpp>
 #include <Systems/Battle/BattleLocationSystem.hpp>
@@ -15,15 +23,16 @@
 #include <Systems/Battle/BattleZoneSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/DebugDrawSystem.hpp>
+#include <Systems/GameStateSystem.hpp>
 #include <Systems/ImageSystem.hpp>
 #include <Systems/PlayerSystem.hpp>
 #include <Systems/TextInteractionSystem.hpp>
 #include <Utilities/Events.hpp>
 #include <Utilities/Utilities.hpp>
-#include <Supergoon/UI/UI.hpp>
-#include <Supergoon/UI/Panel.hpp>
-#include <Supergoon/UI/UIText.hpp>
-#include <Supergoon/UI/UIImage.hpp>
+#ifdef imgui
+#include <Supergoon/Widgets/Global.hpp>
+#include <Supergoon/Widgets/Widgets.hpp>
+#endif
 
 using json = nlohmann::json;
 extern json configData;
@@ -154,6 +163,7 @@ void BlackjackGame::Start() {
 
 void BlackjackGame::Update() {
 	if (inGame) {
+		UpdateGameState();
 		PlayerInput();
 		UpdateBattleZones();
 		UpdateAnimationComponents();

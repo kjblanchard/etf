@@ -5,7 +5,18 @@
 #include <Components/PlayerInteractionComponent.hpp>
 #include <Components/PlayerSpawnComponent.hpp>
 #include <Components/TextInteractionComponent.hpp>
-#include <Supergoon/pch.hpp>
+#include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/ECS/Components/AnimationComponent.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/ECS/Components/SolidComponent.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
+#include <Supergoon/Events.hpp>
+#include <Supergoon/Sound.hpp>
+#include <Supergoon/Input.hpp>
+// TODO remove this plz
+#include <Supergoon/Physics/AABB.hpp>
+// #include <Supergoon/pch.hpp>
 #include <Systems/PlayerSystem.hpp>
 using namespace Supergoon;
 
@@ -144,7 +155,7 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 			newDirection = Directions::West;
 		}
 	}
-	auto deltatime = (float)Game::DeltaTime();
+	auto deltatime = stateComponent.DeltaTime;
 	vel *= Vector2{deltatime, deltatime};
 	// Handle Collisions
 	auto desiredPosition = loc.Location;
@@ -155,6 +166,7 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 		auto bcf = RectangleF{l.Location.X, l.Location.Y, (float)s.Size.X, (float)s.Size.Y};
 		if (playerBodyRect.IsOverlap(&bcf)) {
 			auto desiredPlayerOverlapRect = playerBodyRect.GetOverlapRect(&bcf);
+			// TODO Should this actually be a function on a rect?
 			auto direction = GetOverlapDirectionF(&playerBodyRect, &desiredPlayerOverlapRect);
 			switch (direction) {
 				case Directions::North:

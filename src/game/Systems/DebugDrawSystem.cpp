@@ -2,7 +2,12 @@
 #include <Components/PlayerExitComponent.hpp>
 #include <Components/PlayerInteractionComponent.hpp>
 #include <Components/TextInteractionComponent.hpp>
-#include <Supergoon/pch.hpp>
+#include <Supergoon/Graphics/Graphics.hpp>
+#include <Supergoon/ECS/Components/CameraComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/ECS/Components/SolidComponent.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
+// #include <Supergoon/pch.hpp>
 #include <Systems/DebugDrawSystem.hpp>
 using namespace Supergoon;
 static void drawPlayerBodyDebugBoxes(GameObject, LocationComponent& location, PlayerComponent& sb) {

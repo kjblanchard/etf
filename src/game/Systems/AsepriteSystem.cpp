@@ -1,4 +1,10 @@
 #include <Supergoon/pch.hpp>
+#include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/ECS/Components/AnimationComponent.hpp>
+#include <Supergoon/ECS/Components/CameraComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
+#include <Supergoon/Game.hpp>
 #include <Systems/AsepriteSystem.hpp>
 using namespace Supergoon;
 

@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
+set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
 if(CMAKE_GENERATOR STREQUAL "Xcode")
     message(STATUS "Setting Build to Universal Binary")
     set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "" FORCE)
@@ -39,7 +40,8 @@ else()
         engine
         GIT_REPOSITORY https://github.com/kjblanchard/sgEngine
         GIT_TAG master
-        EXCLUDE_FROM_ALL
+
+        # EXCLUDE_FROM_ALL
     )
     FetchContent_MakeAvailable(engine)
 endif(SYSTEM_PACKAGES)

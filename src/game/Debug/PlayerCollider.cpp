@@ -1,6 +1,10 @@
 #include <Components/PlayerComponent.hpp>
 #include <Components/PlayerInteractionComponent.hpp>
 #include <Debug/PlayerCollider.hpp>
+#include <Supergoon/Widgets/Widgets.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/pch.hpp>
 
 using namespace Supergoon;

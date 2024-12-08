@@ -1,3 +1,4 @@
+#include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/UI/Panel.hpp>
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIImage.hpp>
