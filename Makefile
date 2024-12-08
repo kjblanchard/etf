@@ -32,9 +32,6 @@ run:
 package:
 	$(PACKAGE_COMMAND)
 
-
-# Generate dsym for bloaty
-
 # Custom build commands that set variables accordingly based on platform.. rebuild is macos, brebuild is backup, wrebuild is windows, erebuild is emscripten, irebuild is ios simulator
 rebuild:
 	@$(MAKE) CMAKE_GENERATOR=$(DEFAULT_GENERATOR) clean configure build install

@@ -32,7 +32,18 @@ if(imgui)
     add_definitions(-Dimgui)
 endif(imgui)
 
-add_subdirectory(src/engine)
+if(SYSTEM_PACKAGES)
+    add_subdirectory(engine)
+else()
+    FetchContent_Declare(
+        engine
+        GIT_REPOSITORY https://github.com/kjblanchard/sgEngine
+        GIT_TAG master
+        EXCLUDE_FROM_ALL
+    )
+    FetchContent_MakeAvailable(engine)
+endif(SYSTEM_PACKAGES)
+
 add_subdirectory(src/game)
 
 if(DEBUG_CMAKE_VARIABLES)
