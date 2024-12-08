@@ -53,6 +53,11 @@ irun:
 idevices:
 	xcrun simctl list devices
 #Helpers
+buildtime:
+	./tools/quick_build_times.py
+trace:
+	./tools/ninja_trace.py build/.ninja_log > trace.json
+# Upload trace to about:trace in chrome, or https://ui.perfetto.dev/
 bloaty:
 	dsymutil ./$(EXECUTABLE_NAME) -o SupergoonClient.dSYM
 	bloaty -d compileunits SupergoonClient --debug-file SupergoonClient.dSYM/Contents/Resources/DWARF/SupergoonClient

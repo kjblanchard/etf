@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
 
-set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
 if(CMAKE_GENERATOR STREQUAL "Xcode")
     message(STATUS "Setting Build to Universal Binary")
     set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "" FORCE)
@@ -21,7 +20,11 @@ option(imgui "Include ImGui support" ON)
 option(SYSTEM_PACKAGES "Use system packages if available" ON)
 option(BUILD_TESTING "Should we build test projects" OFF)
 option(DEBUG_CMAKE_VARIABLES "Print out all debug variables near end of configure" ON)
-option(experimentalPCH "Add in the pch that I think will be changing a bit" OFF)
+option(DEBUG_BUILD_TIME "Add in the pch that I think will be changing a bit" ON)
+
+if(DEBUG_BUILD_TIME)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
+endif(DEBUG_BUILD_TIME)
 
 include(FetchContent)
 
