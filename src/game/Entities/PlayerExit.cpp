@@ -1,11 +1,12 @@
+#include <Supergoon/ECS/GameObject.h>
+
 #include <Components/PlayerExitComponent.hpp>
 #include <Entities/PlayerExit.hpp>
-#include <Supergoon/ECS/Gameobject.hpp>
 #include <variant>
 namespace Supergoon {
 
-GameObject* NewPlayerExit(TiledMap::TiledObject& obj) {
-	auto go = new GameObject();
+GameObject NewPlayerExit(TiledMap::TiledObject& obj) {
+	auto go = sgGameObjectCreate();
 	auto p = PlayerExitComponent();
 	p.BoundingBox.X = obj.X;
 	p.BoundingBox.Y = obj.Y;
@@ -19,7 +20,9 @@ GameObject* NewPlayerExit(TiledMap::TiledObject& obj) {
 			p.NextMap = std::get<std::string>(prop.Value);
 		}
 	}
-	go->AddComponent<PlayerExitComponent>(p);
+	sgComponentDeclare(PlayerExitComponent);
+	sgGameObjectAddComponent(go, PlayerExitComponent, &p);
+	// go->AddComponent<PlayerExitComponent>(p);
 	return go;
 }
 }  // namespace Supergoon

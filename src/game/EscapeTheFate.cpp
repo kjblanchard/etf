@@ -1,5 +1,6 @@
 
 #include <Components/BattleComponent.hpp>
+#include <Components/Components.hpp>
 #include <Debug/BattleWidget.hpp>
 #include <Debug/PlayerCollider.hpp>
 #include <Entities/Battle/BattleLocation.hpp>
@@ -29,6 +30,7 @@
 #include <Systems/TextInteractionSystem.hpp>
 #include <Utilities/Events.hpp>
 #include <Utilities/Utilities.hpp>
+#include <SupergoonEngine/nlohmann/json.hpp>
 #ifdef imgui
 #include <Supergoon/Widgets/Global.hpp>
 #include <Supergoon/Widgets/Widgets.hpp>
@@ -37,7 +39,7 @@
 using json = nlohmann::json;
 extern json configData;
 namespace Supergoon {
-std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap = {
+std::unordered_map<std::string, std::function<GameObject(TiledMap::TiledObject &)>> GameSpawnMap = {
 	{"Start", [](TiledMap::TiledObject &object) {
 		 return NewPlayerSpawn(object);
 	 }},
@@ -82,15 +84,16 @@ static void loadLevel() {
 	} else {
 		textPanel->SetVisible(false);
 	}
-	auto gamestateGameObject = GameObject::GetGameObjectWithComponents<GameState>();
-	assert(gamestateGameObject);
-	auto battleComponent = gamestateGameObject->HasComponent<BattleComponent>();
-	if (!battleComponent) {
-		auto battleComp = BattleComponent();
-		battleComp.BattleId = 0;
-		battleComp.BattleMapId = 0;
-		gamestateGameObject->AddComponent<BattleComponent>(battleComp);
-	}
+	// auto gamestateGameObject = GameObject::GetGameObjectWithComponents<GameState>();
+	// assert(gamestateGameObject);
+	// auto battleComponent = gamestateGameObject->HasComponent<BattleComponent>();
+	// if (!battleComponent) {
+	// 	auto battleComp = BattleComponent();
+	// 	battleComp.BattleId = 0;
+	// 	battleComp.BattleMapId = 0;
+	// 	sgComponentDeclare(BattleComponent);
+	// 	sgGameObjectAddComponent(gamestateGameObject, BattleComponent, &battleComp);
+	// }
 	ContentRegistry::LoadAllContent();
 	inGame = true;
 }
@@ -142,6 +145,7 @@ static void playLogos() {
 }
 
 void BlackjackGame::Start() {
+	InitializeComponents();
 	Level::LoadFunc = loadLevel;
 	auto muted = configData["mute"];
 	if (muted) {

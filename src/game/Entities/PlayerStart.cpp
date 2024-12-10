@@ -1,10 +1,11 @@
+#include <Supergoon/ECS/Gameobject.h>
+
 #include <Components/PlayerSpawnComponent.hpp>
 #include <Entities/PlayerStart.hpp>
-#include <Supergoon/ECS/Gameobject.hpp>
 using namespace Supergoon;
 
-GameObject* Supergoon::NewPlayerSpawn(TiledMap::TiledObject& obj) {
-	auto go = new GameObject();
+GameObject Supergoon::NewPlayerSpawn(TiledMap::TiledObject& obj) {
+	auto go = sgGameObjectCreate();
 	auto p = PlayerSpawnComponent();
 	p.Location.X = obj.X;
 	p.Location.Y = obj.Y;
@@ -16,6 +17,7 @@ GameObject* Supergoon::NewPlayerSpawn(TiledMap::TiledObject& obj) {
 			p.SpawnDirection = std::get<int>(prop.Value);
 		}
 	}
-	go->AddComponent<PlayerSpawnComponent>(p);
+	sgComponentDeclare(PlayerSpawnComponent);
+	sgGameObjectAddComponent(go, PlayerSpawnComponent, &p);
 	return go;
 }

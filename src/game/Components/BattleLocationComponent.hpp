@@ -5,5 +5,4 @@ struct BattleLocationComponent {
 	Vector2 Location;
 	int BattleLocationId;
 };
-
 }  // namespace Supergoon

@@ -1,7 +1,8 @@
 #pragma once
+#include <Supergoon/ECS/GameObject.h>
+
 #include <Supergoon/World/TiledMap.hpp>
 namespace Supergoon {
-class GameObject;
-GameObject* NewBattleZone(TiledMap::TiledObject&);
+GameObject NewBattleZone(TiledMap::TiledObject&);
 
 }  // namespace Supergoon

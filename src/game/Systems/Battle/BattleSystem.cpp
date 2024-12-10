@@ -1,8 +1,9 @@
 // #include <Supergoon/pch.hpp>
+#include <Supergoon/ECS/GameObject.h>
+
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
-#include <Supergoon/ECS/Gameobject.hpp>
-#include <Supergoon/Log.hpp>
 #include <Supergoon/Input.hpp>
+#include <Supergoon/Log.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
 #include <Utilities/Events.hpp>
 using namespace Supergoon;
@@ -11,10 +12,10 @@ using namespace Supergoon;
 static bool initialized = false;
 // gets gamestate and checks if we are in battle.
 static bool isInBattle(GameState** state) {
-	auto gamestate = GameObject::FindComponent<GameState>();
-	assert(gamestate);
-	*state = gamestate;
-	return gamestate->InBattle;
+	// auto gamestate = GameObject::FindComponent<GameState>();
+	// assert(gamestate);
+	// *state = gamestate;
+	// return gamestate->InBattle;
 }
 
 static void initialize() {
