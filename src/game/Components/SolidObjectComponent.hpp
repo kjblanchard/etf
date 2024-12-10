@@ -1,5 +1,5 @@
 #pragma once
-#include <Supergoon/Primitives/Rectangle.hpp>
+#include <Supergoon/Rectangle.hpp>
 namespace Supergoon {
 struct SolidObjectComponent {
 	RectangleF Rectangle;

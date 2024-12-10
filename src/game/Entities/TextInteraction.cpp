@@ -1,12 +1,11 @@
-#include <Supergoon/ECS/GameObject.h>
-
 #include <Components/TextInteractionComponent.hpp>
 #include <Entities/TextInteraction.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
 #include <string>
 #include <variant>
 using namespace Supergoon;
-GameObject Supergoon::NewTextInteraction(TiledMap::TiledObject& obj) {
-	auto go = sgGameObjectCreate();
+GameObject* Supergoon::NewTextInteraction(TiledMap::TiledObject& obj) {
+	auto go = new GameObject();
 	auto textInteraction = TextInteractionComponent();
 	textInteraction.InteractionRect.X = obj.X;
 	textInteraction.InteractionRect.Y = obj.Y;
@@ -18,7 +17,6 @@ GameObject Supergoon::NewTextInteraction(TiledMap::TiledObject& obj) {
 			textInteraction.DisplayText = std::get<std::string>(prop.Value);
 		}
 	}
-	sgComponentDeclare(TextInteractionComponent);
-	sgGameObjectAddComponent(go, TextInteractionComponent, &textInteraction);
+	go->AddComponent<TextInteractionComponent>(textInteraction);
 	return go;
 }

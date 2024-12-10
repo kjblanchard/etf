@@ -1,20 +1,18 @@
-#include <Supergoon/ECS/GameObject.h>
-
 #include <Components/BattleLocationComponent.hpp>
 #include <Entities/Battle/BattleLocation.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
 using namespace Supergoon;
 
-GameObject Supergoon::NewBattleLocation(TiledMap::TiledObject& obj) {
-	auto go = sgGameObjectCreate();
-	auto id = 0;
-	auto vec = Vector2(obj.X, obj.Y);
+GameObject* Supergoon::NewBattleLocation(TiledMap::TiledObject& obj) {
+	auto go = new GameObject();
+	auto p = BattleLocationComponent();
+	p.Location.X = obj.X;
+	p.Location.Y = obj.Y;
 	for (auto&& prop : obj.Properties) {
 		if (prop.Name == "id") {
-			id = std::get<int>(prop.Value);
+			p.BattleLocationId = std::get<int>(prop.Value);
 		}
 	}
-	BattleLocationComponent blc = {vec, id};
-	sgComponentDeclare(BattleLocationComponent);
-	sgGameObjectAddComponent(go, BattleLocationComponent, &blc);
+	go->AddComponent<BattleLocationComponent>(p);
 	return go;
 }

@@ -4,10 +4,10 @@
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIText.hpp>
 // #include <Supergoon/pch.hpp>
-#include <Supergoon/ECS/Components/CameraComponent.hpp>
-#include <Supergoon/ECS/Components/GameStateComponent.hpp>
-#include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/Events.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/CameraComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Systems/TextInteractionSystem.hpp>
 #include <Utilities/Utilities.hpp>
 using namespace Supergoon;
@@ -90,14 +90,14 @@ void drawTextInteractionComponents(GameObject, LocationComponent& location, Play
 	if (!playerInteraction.ImageShowing) {
 		return;
 	}
-	// auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
-	// auto& cc = c->GetComponent<CameraComponent>();
+	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+	auto& cc = c->GetComponent<CameraComponent>();
 
-	// float adjustedX = location.Location.X + 14 - cc.Box.X;
-	// float adjustedY = location.Location.Y - 4 - cc.Box.Y;
-	// auto dst = RectangleF{adjustedX, adjustedY, (float)playerInteraction.InteractionImage->Width(), (float)playerInteraction.InteractionImage->Height()};
-	// auto src = RectangleF{0, 0, 0, 0};
-	// playerInteraction.InteractionImage->Draw(src, dst);
+	float adjustedX = location.Location.X + 14 - cc.Box.X;
+	float adjustedY = location.Location.Y - 4 - cc.Box.Y;
+	auto dst = RectangleF{adjustedX, adjustedY, (float)playerInteraction.InteractionImage->Width(), (float)playerInteraction.InteractionImage->Height()};
+	auto src = RectangleF{0, 0, 0, 0};
+	playerInteraction.InteractionImage->Draw(src, dst);
 }
 
 void loadTextInteractionComponents(GameObject, TextInteractionComponent& textInteraction) {
@@ -118,14 +118,14 @@ void Supergoon::InitializeTextInteractionUI() {
 }
 
 void Supergoon::UpdateTextInteractions() {
-	// assert(GameObject::FindComponent<GameState>());
-	// gameStateComponent = GameObject::FindComponent<GameState>();
-	// GameObject::ForEach<TextInteractionComponent>(updateTextInteractionComponents);
+	assert(GameObject::FindComponent<GameState>());
+	gameStateComponent = GameObject::FindComponent<GameState>();
+	GameObject::ForEach<TextInteractionComponent>(updateTextInteractionComponents);
 }
 
 void Supergoon::DrawTextInteractionDisplay() {
-	// GameObject::ForEach<LocationComponent, PlayerInteractionComponent>(drawTextInteractionComponents);
+	GameObject::ForEach<LocationComponent, PlayerInteractionComponent>(drawTextInteractionComponents);
 }
 void Supergoon::LoadTextInteractions() {
-	// GameObject::ForEach<TextInteractionComponent>(loadTextInteractionComponents);
+	GameObject::ForEach<TextInteractionComponent>(loadTextInteractionComponents);
 }

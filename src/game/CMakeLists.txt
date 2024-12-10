@@ -28,7 +28,6 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Entities/TextInteraction.cpp
     Entities/Battle/BattleZone.cpp
     Entities/Battle/BattleLocation.cpp
-    Components/Components.cpp
     Systems/PlayerSystem.cpp
     Systems/ImageSystem.cpp
     Systems/AsepriteSystem.cpp

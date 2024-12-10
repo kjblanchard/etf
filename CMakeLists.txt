@@ -34,6 +34,7 @@ set(EXECUTABLE_TARGET_NAME EscapeTheFate)
 
 add_definitions(
     -DFLECS_CUSTOM_BUILD
+    -DFLECS_CPP
 )
 
 if(imgui)

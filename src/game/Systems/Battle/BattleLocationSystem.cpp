@@ -1,9 +1,8 @@
-#include <Supergoon/ECS/GameObject.h>
-
 #include <Components/BattleLocationComponent.hpp>
 #include <Components/BattlerComponent.hpp>
 #include <Supergoon/ECS/Components/AnimationComponent.hpp>
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Events.hpp>
 #include <Systems/Battle/BattleLocationSystem.hpp>
 using namespace Supergoon;
@@ -12,7 +11,7 @@ void loadBattlers(GameObject, BattleLocationComponent& battleLocation) {
 	if (battleLocation.BattleLocationId != 4 && battleLocation.BattleLocationId != 1) {
 		return;
 	}
-	auto go = sgGameObjectCreate();
+	auto go = new GameObject();
 	auto battleLocationComponent = BattleLocationComponent();
 	auto battleLocationLoc = LocationComponent();
 	auto battlerAnimation = AnimationComponent();
@@ -28,12 +27,9 @@ void loadBattlers(GameObject, BattleLocationComponent& battleLocation) {
 	battlerAnimation.AnimationSpeed = 1.0;
 	battleLocationLoc.Location.X = battleLocation.Location.X;
 	battleLocationLoc.Location.Y = battleLocation.Location.Y;
-	sgComponentDeclare(AnimationComponent);
-	sgComponentDeclare(BattlerComponent);
-	sgComponentDeclare(LocationComponent);
-	sgGameObjectAddComponent(go, AnimationComponent, &battlerAnimation);
-	sgGameObjectAddComponent(go, BattlerComponent, &battlerComponent);
-	sgGameObjectAddComponent(go, LocationComponent, &battleLocationLoc);
+	go->AddComponent<AnimationComponent>(battlerAnimation);
+	go->AddComponent<BattlerComponent>(battlerComponent);
+	go->AddComponent<LocationComponent>(battleLocationLoc);
 	Events::PushEvent(Events::BuiltinEvents.GameObjectAdd, true, (void*)go);
 }
 void startBattlers(GameObject, BattlerComponent& battler, AnimationComponent& anim) {
@@ -52,9 +48,9 @@ void startBattlers(GameObject, BattlerComponent& battler, AnimationComponent& an
 }
 
 void Supergoon::LoadBattlers() {
-	// GameObject::ForEach<BattleLocationComponent>(loadBattlers);
+	GameObject::ForEach<BattleLocationComponent>(loadBattlers);
 }
 
 void Supergoon::StartBattlers() {
-	// GameObject::ForEach<BattlerComponent, AnimationComponent>(startBattlers);
+	GameObject::ForEach<BattlerComponent, AnimationComponent>(startBattlers);
 }

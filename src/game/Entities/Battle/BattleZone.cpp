@@ -1,11 +1,10 @@
-#include <Supergoon/ECS/GameObject.h>
-
 #include <Components/BattleZoneComponent.hpp>
 #include <Entities/Battle/BattleZone.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
 using namespace Supergoon;
 
-GameObject Supergoon::NewBattleZone(TiledMap::TiledObject& obj) {
-	auto go = sgGameObjectCreate();
+GameObject* Supergoon::NewBattleZone(TiledMap::TiledObject& obj) {
+	auto go = new GameObject();
 	auto battleZone = BattleZoneComponent();
 	battleZone.BoundingBox.X = obj.X;
 	battleZone.BoundingBox.Y = obj.Y;
@@ -19,7 +18,6 @@ GameObject Supergoon::NewBattleZone(TiledMap::TiledObject& obj) {
 			battleZone.EncounterTime = std::get<float>(prop.Value);
 		}
 	}
-	sgComponentDeclare(BattleZoneComponent);
-	sgGameObjectAddComponent(go, BattleZoneComponent, &battleZone);
+	go->AddComponent<BattleZoneComponent>(battleZone);
 	return go;
 }
