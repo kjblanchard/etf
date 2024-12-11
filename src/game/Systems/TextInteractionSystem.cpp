@@ -32,7 +32,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 		if (isTyping) {
 			typingTween.Update();
 			auto ui = UI::UIInstance.get();
-			auto panelName = "textTesting" + std::string("regular");
+			auto panelName = std::string("regular");
 			auto thing = (Panel*)ui->GetChildByName(panelName);
 			thing->SetDirty();
 
@@ -54,7 +54,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 			if (textInteractionComponent.InteractionPressed) {
 				textInteractionComponent.InteractionPressed = false;
 				auto ui = UI::UIInstance.get();
-				auto panelName = "textTesting" + std::string("regular");
+				auto panelName = std::string("regular");
 				auto thing = (Panel*)ui->GetChildByName(panelName);
 				thing->SetVisible(false);
 				gameStateComponent->Interacting = false;
@@ -69,7 +69,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 		gameStateComponent->Interacting = true;
 		// update the text interaction box to say what this is.
 		auto ui = UI::UIInstance.get();
-		auto panelName = "textTesting" + std::string("regular");
+		auto panelName = std::string("regular");
 		auto thing = (Panel*)ui->GetChildByName(panelName);
 		assert(thing);
 		auto textName = "textman" + std::string("regular");
