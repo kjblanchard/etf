@@ -1,4 +1,5 @@
 #include <SDL3/SDL_filesystem.h>
+#include <cmath>
 
 #include <Components/PlayerComponent.hpp>
 #include <Components/PlayerExitComponent.hpp>
