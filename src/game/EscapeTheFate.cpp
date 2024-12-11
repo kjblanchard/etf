@@ -66,10 +66,10 @@ static void loadLevel() {
 	// Check if we should show the text at top
 	auto display = Level::GetCurrentLevelProperty<std::string>("display");
 	// auto ui = UI::UIInstance.get();
-	auto textPanel = std::dynamic_pointer_cast<Panel>(UI::UIInstance->Children["textTestingscreen"]);
+	auto textPanel = dynamic_cast<Panel *>(UI::UIInstance->GetChildByName("textTestingscreen"));
 	assert(textPanel);
 	if (display) {
-		auto textBox = (UIText *)textPanel->Children["textmanscreen"].get();
+		auto textBox = (UIText *)textPanel->GetChildByName("textmanscreen");
 		assert(textBox);
 		textPanel->SetVisible(true);
 		textPanel->SetAlpha(255);
@@ -107,8 +107,8 @@ class BlackjackGame : public Game {
 static void playLogos() {
 	UI::LoadUIFromFile("logos");
 	auto ui = UI::UIInstance.get();
-	auto thing = (UIImage *)ui->Children["logoImage"].get();
-	auto thing2 = (UIImage *)ui->Children["logoImage2"].get();
+	auto thing = (UIImage *)ui->GetChildByName("logoImage");
+	auto thing2 = (UIImage *)ui->GetChildByName("logoImage2");
 	auto animator = new UIObjectAnimatorBase("logo");
 	auto animator2 = new UIObjectAnimatorBase("logo2");
 	auto fadeInTween = new Tween(0, 255, 3.0, thing->AlphaHandle(), Supergoon::Easings::Linear);

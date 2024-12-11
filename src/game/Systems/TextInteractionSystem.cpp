@@ -4,10 +4,10 @@
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIText.hpp>
 // #include <Supergoon/pch.hpp>
-#include <Supergoon/Events.hpp>
-#include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Components/CameraComponent.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/Events.hpp>
 #include <Systems/TextInteractionSystem.hpp>
 #include <Utilities/Utilities.hpp>
 using namespace Supergoon;
@@ -33,7 +33,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 			typingTween.Update();
 			auto ui = UI::UIInstance.get();
 			auto panelName = "textTesting" + std::string("regular");
-			auto thing = (Panel*)ui->Children[panelName].get();
+			auto thing = (Panel*)ui->GetChildByName(panelName);
 			thing->Dirty = true;
 
 			// If we are complete and click
@@ -44,7 +44,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 				// If we click and it is not complete, finish typing the text.
 			} else if (textInteractionComponent.InteractionPressed) {
 				auto textName = "textman" + std::string("regular");
-				auto text = (UIText*)thing->Children[textName].get();
+				auto text = (UIText*)thing->GetChildByName(textName);
 				text->SetCurrentLetters(textInteractionComponent.DisplayText.length());
 				isTyping = false;
 				Events::PushEvent(Events::BuiltinEvents.StopBgmEvent, 1);
@@ -55,7 +55,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 				textInteractionComponent.InteractionPressed = false;
 				auto ui = UI::UIInstance.get();
 				auto panelName = "textTesting" + std::string("regular");
-				auto thing = (Panel*)ui->Children[panelName].get();
+				auto thing = (Panel*)ui->GetChildByName(panelName);
 				thing->SetVisible(false);
 				gameStateComponent->Interacting = false;
 				currentInteractingText = nullptr;
@@ -70,10 +70,10 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 		// update the text interaction box to say what this is.
 		auto ui = UI::UIInstance.get();
 		auto panelName = "textTesting" + std::string("regular");
-		auto thing = (Panel*)ui->Children[panelName].get();
+		auto thing = (Panel*)ui->GetChildByName(panelName);
 		assert(thing);
 		auto textName = "textman" + std::string("regular");
-		auto text = (UIText*)thing->Children[textName].get();
+		auto text = (UIText*)thing->GetChildByName(textName);
 		// auto text = std::dynamic_pointer_cast<UIText>(thing->Children[textName]);
 		assert(text);
 		// text->TextPtr = textInteractionComponent.TextPtr;
@@ -104,10 +104,10 @@ void loadTextInteractionComponents(GameObject, TextInteractionComponent& textInt
 	// textInteraction.TextPtr = ContentRegistry::CreateContent<Text, std::string, int>(textInteraction.DisplayText, "commodore", 16);
 	auto ui = UI::UIInstance.get();
 	auto panelName = "textTesting" + std::string("regular");
-	auto thing = (Panel*)ui->Children[panelName].get();
+	auto thing = (Panel*)ui->GetChildByName(panelName);
 	assert(thing);
 	auto textName = "textman" + std::string("regular");
-	auto text = (UIText*)thing->Children[textName].get();
+	auto text = (UIText*)thing->GetChildByName(textName);
 	textInteraction.TextPtr = text->TextPtr;
 	text->UpdateText(textInteraction.DisplayText);
 	text->OnDirty();
