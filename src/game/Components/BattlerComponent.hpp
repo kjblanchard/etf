@@ -1,5 +1,6 @@
 #pragma once
 namespace Supergoon {
-void InitializeCamera();
-void UpdateCamera();
+struct BattlerComponent {
+	unsigned int Id;
+};
 }  // namespace Supergoon

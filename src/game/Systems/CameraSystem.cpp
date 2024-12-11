@@ -1,6 +1,12 @@
 #include <Components/PlayerComponent.hpp>
-#include <Supergoon/Supergoon.hpp>
-#include <algorithm>
+#include <Supergoon/ECS/Components/CameraComponent.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/Events.hpp>
+#include <Supergoon/Log.hpp>
+#include <Supergoon/Tween/Sequence.hpp>
+#include <Supergoon/World/Level.hpp>
+#include <Supergoon/pch.hpp>
 namespace Supergoon {
 
 void getFollowTarget(CameraComponent& cc) {
@@ -12,8 +18,40 @@ void getFollowTarget(CameraComponent& cc) {
 	});
 }
 float colorFade = 255;
-static Tween* tweener = new Tween(255, 0, 1.0, &colorFade, Supergoon::Easings::Linear);
+// static Tween* tweener = nullptr;
+static Sequence* sequence = nullptr;
 
+void InitializeCamera() {
+	// TODO , this needs memory management.
+	sequence = new Sequence();
+	auto tweener = std::make_shared<Tween>(255, 0, 1.0, &colorFade, Supergoon::Easings::Linear);
+	tweener->UpdateFunc = []() {
+		auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+		auto g = GameObject::GetGameObjectWithComponents<GameState>();
+		auto& cc = c->GetComponent<CameraComponent>();
+		auto& gc = g->GetComponent<GameState>();
+		if (gc.EnteringBattle) {
+			cc.Box.X -= 5;
+			auto color = Color{255, (uint8_t)colorFade, (uint8_t)colorFade, (uint8_t)colorFade};
+			Level::SetBackGroundColor(color);
+			Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
+			return;
+		};
+	};
+	sequence->Tweens.push_back(tweener);
+	auto waitTween = std::make_shared<Tween>(0.1);
+	sequence->Tweens.push_back(waitTween);
+	waitTween->EndFunc = []() {
+		// auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
+		auto g = GameObject::GetGameObjectWithComponents<GameState>();
+		auto& gc = g->GetComponent<GameState>();
+		gc.EnteringBattle = false;
+		gc.InBattle = true;
+		gc.Loading = true;
+		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void*)strdup(("forest1")));
+		sequence->Restart();
+	};
+}
 void UpdateCamera() {
 	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
 	auto g = GameObject::GetGameObjectWithComponents<GameState>();
@@ -23,13 +61,7 @@ void UpdateCamera() {
 	auto& cc = c->GetComponent<CameraComponent>();
 	auto& gc = g->GetComponent<GameState>();
 	if (gc.EnteringBattle) {
-		// We should instead slowly decrement camera x
-		tweener->Update();
-		cc.Box.X -= 5;
-
-		auto color = Color{255, (uint8_t)colorFade, (uint8_t)colorFade, (uint8_t)colorFade};
-		Level::SetBackGroundColor(color);
-		Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
+		sequence->Update();
 		return;
 	}
 	if (!gc.CameraFollowTarget) {
@@ -37,11 +69,10 @@ void UpdateCamera() {
 	}
 	if (!cc.FollowTarget) {
 		getFollowTarget(cc);
-		tweener->Restart();
 	}
 	auto pl = cc.FollowTarget;
 	if (!pl) {
-		sgLogError(" no follow boi");
+		sgLogError("Trying to follow a target, but no target is found!");
 		Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
 		return;
 	}
@@ -57,11 +88,6 @@ void UpdateCamera() {
 	} else if (cc.Box.Y > (cc.Bounds.Y - gc.WindowHeight)) {
 		cc.Box.Y = cc.Bounds.Y - gc.WindowHeight;
 	}
-
-	// gc.CurrentLevel->cameraX = (int)cc.Box.X;
-	// gc.CurrentLevel->cameraY = (int)cc.Box.Y;
 	Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void*)&cc.Box);
-	// gc.CurrentLevel->cameraX = cc.Box.X;
-	// gc.CurrentLevel->cameraY = cc.Box.Y;
 }
 }  // namespace Supergoon

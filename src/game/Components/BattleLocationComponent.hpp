@@ -1,9 +1,9 @@
 #pragma once
 #include <Supergoon/Primitives/Vector2.hpp>
 namespace Supergoon {
-struct PlayerSpawnComponent {
+struct BattleLocationComponent {
 	Vector2 Location;
-	int SpawnLocationId;
-	int SpawnDirection;
+	int BattleLocationId;
 };
+
 }  // namespace Supergoon

@@ -6,13 +6,14 @@ set(DEBUG_FILES)
 if(imgui)
     list(APPEND DEBUG_FILES
         Debug/PlayerCollider.cpp
+        Debug/BattleWidget.cpp
         Systems/DebugDrawSystem.cpp
     )
 endif(imgui)
 
 if(EMSCRIPTEN)
     set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE STRING "Use html" FORCE)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s 'DEFAULT_LIBRARY_FUNCS_TO_INCLUDE=[\"$autoResumeAudioContext\",\"$dynCall\"]'")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s ALLOW_MEMORY_GROWTH=1 -s STACK_SIZE=1mb -s EXPORTED_RUNTIME_METHODS=cwrap -s MODULARIZE=1 -s EXPORT_NAME='my_app' -s 'DEFAULT_LIBRARY_FUNCS_TO_INCLUDE=[\"$autoResumeAudioContext\",\"$dynCall\"]'")
 elseif(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "Minimum OS X deployment version")
     set(IS_BUNDLE "MACOSX_BUNDLE" CACHE STRING "Is this a bundle")
@@ -21,16 +22,24 @@ endif(EMSCRIPTEN)
 
 add_executable(${EXECUTABLE_TARGET_NAME}
     ${IS_BUNDLE} ${IS_WIN32}
-    BlackjackGame.cpp
+    EscapeTheFate.cpp
     Entities/PlayerStart.cpp
     Entities/PlayerExit.cpp
     Entities/TextInteraction.cpp
+    Entities/Battle/BattleZone.cpp
+    Entities/Battle/BattleLocation.cpp
     Systems/PlayerSystem.cpp
     Systems/ImageSystem.cpp
     Systems/AsepriteSystem.cpp
+    Systems/GameStateSystem.cpp
     Systems/CameraSystem.cpp
     Systems/TextInteractionSystem.cpp
+    Systems/Battle/BattleZoneSystem.cpp
+    Systems/Battle/BattleLocationSystem.cpp
+    Systems/Battle/BattleSystem.cpp
+    Systems/Battle/BattleUISystem.cpp
     Utilities/Utilities.cpp
+    Utilities/Events.cpp
     ${DEBUG_FILES}
     ${ICON_PATH}
 )

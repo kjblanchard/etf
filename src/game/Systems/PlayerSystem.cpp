@@ -5,7 +5,18 @@
 #include <Components/PlayerInteractionComponent.hpp>
 #include <Components/PlayerSpawnComponent.hpp>
 #include <Components/TextInteractionComponent.hpp>
-#include <Supergoon/Supergoon.hpp>
+#include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/ECS/Components/AnimationComponent.hpp>
+#include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
+#include <Supergoon/ECS/Components/SolidComponent.hpp>
+#include <Supergoon/ECS/Gameobject.hpp>
+#include <Supergoon/Events.hpp>
+#include <Supergoon/Input.hpp>
+#include <Supergoon/Sound.hpp>
+// TODO remove this plz
+#include <Supergoon/Physics/AABB.hpp>
+// #include <Supergoon/pch.hpp>
 #include <Systems/PlayerSystem.hpp>
 using namespace Supergoon;
 
@@ -40,7 +51,7 @@ static void updateInteractionRect(PlayerComponent& player, PlayerInteractionComp
 	}
 }
 
-static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn) {
+static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn, GameState& gameState) {
 	auto go = new GameObject();
 	auto playerLocation = LocationComponent();
 	auto playerComponent = PlayerComponent();
@@ -50,10 +61,18 @@ static void loadPlayer(GameObject, PlayerSpawnComponent& playerSpawn) {
 	playerAnimation.Offset = Point{0, 0};
 	playerAnimation.AnimationSpeed = 1.0;
 	playerComponent.PlayerNum = 0;
-	playerComponent.Direction = (Directions)playerSpawn.SpawnDirection;
 	playerComponent.Body = RectangleF{4, 9, 16, 22};
-	playerLocation.Location.X = playerSpawn.Location.X;
-	playerLocation.Location.Y = playerSpawn.Location.Y;
+	// TODO, probably use this differently, this is hacked in basically.
+	if (gameState.ExitingBattle) {
+		playerLocation.Location.X = gameState.PlayerLoadLocation.X;
+		playerLocation.Location.Y = gameState.PlayerLoadLocation.Y;
+		playerComponent.Direction = (Directions)gameState.PlayerLoadDirection;
+		gameState.CameraFollowTarget = true;
+	} else {
+		playerComponent.Direction = (Directions)playerSpawn.SpawnDirection;
+		playerLocation.Location.X = playerSpawn.Location.X;
+		playerLocation.Location.Y = playerSpawn.Location.Y;
+	}
 	updateInteractionRect(playerComponent, playerInteraction, playerLocation);
 	auto path = std::string(SDL_GetBasePath()) + "assets/img/interaction.png";
 	playerInteraction.InteractionImage = ContentRegistry::CreateContent<Image>(path);
@@ -99,11 +118,6 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	auto& stateComponent = state->GetComponent<GameState>();
 	assert(state.has_value());
 	if (stateComponent.Loading || stateComponent.EnteringBattle) {
-		if (KeyDown(KeyboardKeys::Key_W)) {
-			if (stateComponent.EnteringBattle) {
-				Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void*)strdup("victory"));
-			}
-		}
 		return;
 	}
 	auto vel = Vector2();
@@ -136,16 +150,7 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 			newDirection = Directions::West;
 		}
 	}
-	if (KeyDown(KeyboardKeys::Key_B)) {
-		// Start battle transition.
-		stateComponent.CameraFollowTarget = false;
-		stateComponent.EnteringBattle = true;
-		Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void*)strdup("battle1"));
-		anim.Playing = false;
-		return;
-		// Camera component handles the sliding.
-	}
-	auto deltatime = (float)Game::DeltaTime();
+	auto deltatime = stateComponent.DeltaTime;
 	vel *= Vector2{deltatime, deltatime};
 	// Handle Collisions
 	auto desiredPosition = loc.Location;
@@ -156,6 +161,7 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 		auto bcf = RectangleF{l.Location.X, l.Location.Y, (float)s.Size.X, (float)s.Size.Y};
 		if (playerBodyRect.IsOverlap(&bcf)) {
 			auto desiredPlayerOverlapRect = playerBodyRect.GetOverlapRect(&bcf);
+			// TODO Should this actually be a function on a rect?
 			auto direction = GetOverlapDirectionF(&playerBodyRect, &desiredPlayerOverlapRect);
 			switch (direction) {
 				case Directions::North:
@@ -189,6 +195,7 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	if (moved) {
 		updateInteractionRect(player, interaction, loc);
 	}
+	player.Moving = moved;
 
 	// Did we exit?
 	auto playerBodyRect = RectangleF{loc.Location.X + player.Body.X, loc.Location.Y + player.Body.Y, player.Body.W, player.Body.H};
@@ -223,12 +230,11 @@ static void loadPlayerEach(GameObject go, PlayerSpawnComponent& ps) {
 		return;
 	}
 	auto& stateComponent = state->GetComponent<GameState>();
-
 	if (ps.SpawnLocationId != stateComponent.PlayerSpawnLocation) {
 		return;
 	}
-
-	loadPlayer(go, ps);
+	loadPlayer(go, ps, stateComponent);
+	stateComponent.ExitingBattle = false;
 }
 
 void Supergoon::StartPlayers() {

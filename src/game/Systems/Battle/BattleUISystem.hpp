@@ -1,5 +1,4 @@
 #pragma once
 namespace Supergoon {
-void InitializeCamera();
-void UpdateCamera();
+void UpdateBattleUI();
 }  // namespace Supergoon

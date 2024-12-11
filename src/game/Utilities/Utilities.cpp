@@ -1,37 +1,24 @@
-#include <SDL3/SDL_filesystem.h>
-
-#include <Supergoon/Supergoon.hpp>
+#include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/UI/Panel.hpp>
+#include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/UIImage.hpp>
+#include <Supergoon/UI/UIText.hpp>
+#include <Supergoon/pch.hpp>
 #include <Utilities/Utilities.hpp>
-#include <string>
 
 using namespace Supergoon;
-// 200/70 for textbox
-Panel* Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size, bool screen) {
+
+Panel* Supergoon::CreateUIBasePanel(std::string name, Point screenLoc, Point size) {
 	auto ui = UI::UIInstance.get();
-	auto textPanel = new Panel(ui, "textTesting" + name);
-	textPanel->Offset = {(float)screenLoc.X, (float)screenLoc.Y};
-	auto text = new UIText(textPanel, "Hello world!", "textman" + name);
-	text->Offset = {8, 8};
-	// Test creating the uitextbox
-	// First, lets load in the picture for uiimage so that we can draw from it to the new one
+	auto panel = new Panel(ui, name);
+	float fullSizeX = size.X;
+	float fullSizeY = size.Y;
+	panel->Offset = {(float)screenLoc.X, (float)screenLoc.Y};
+	auto textBoxImage = ContentRegistry::CreateContent<Image, int, int>("uitextbox" + name, (int)fullSizeX, (int)fullSizeY);
+	textBoxImage->LoadContent();
 	auto path = std::string(SDL_GetBasePath()) + "assets/img/uibase.png";
 	auto uiImageFull = ContentRegistry::CreateContent<Image>(path);
 	uiImageFull->LoadContent();
-	// Create ui text image of the right size as a render target
-	// float fullSizeX = 200;
-	// float fullSizeY = 48;
-	float fullSizeX = size.X;
-	float fullSizeY = size.Y;
-	text->Bounds.W = fullSizeX - (text->Offset.X * 2);
-	text->Bounds.H = fullSizeY - (text->Offset.Y * 2);
-	// text->CenterText = true;
-	// text->WordWrap = true;
-	text->SetCenter(true);
-	text->SetCenterY(true);
-	text->SetWordWrap(true);
-	// text->SetCenter(true);
-	auto textBoxImage = ContentRegistry::CreateContent<Image, int, int>("uitextbox" + name, (int)fullSizeX, (int)fullSizeY);
-	textBoxImage->LoadContent();
 	// Set the background
 	textBoxImage->Clear({80, 0, 80, 220});
 	float sizeX = 8;
@@ -79,14 +66,31 @@ Panel* Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size,
 		dstRect = RectangleF{fullSizeX - sizeX + 3, (float)i, sizeX, 1};
 		textBoxImage->DrawImageToImage(*uiImageFull, srcRect, dstRect);
 	}
-
-	// Add this image to the ui panel
-	auto textBoxUIImage = new UIImage(textPanel, "textBoxImage");
+	auto textBoxUIImage = new UIImage(panel, "textBoxImage");
 	textBoxUIImage->ImagePtr = textBoxImage;
 	textBoxUIImage->SetVisible(true);
 	textBoxUIImage->Bounds = RectangleF{0, 0, (float)textBoxImage->Width(), (float)textBoxImage->Height()};
 	textBoxUIImage->Offset.X = 0;
 	textBoxUIImage->Offset.Y = 0;
+	return panel;
+}
+// 200/70 for textbox
+Panel* Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size, bool screen) {
+	auto textPanel = CreateUIBasePanel(name, screenLoc, size);
+	// auto ui = UI::UIInstance.get();
+	auto text = new UIText(textPanel, "Hello world!", "textman" + name);
+	text->SetLayer(1);
+	text->Offset = {8, 8};
+	// Test creating the uitextbox
+	// First, lets load in the picture for uiimage so that we can draw from it to the new one
+	// Create ui text image of the right size as a render target
+	float fullSizeX = size.X;
+	float fullSizeY = size.Y;
+	text->Bounds.W = fullSizeX - (text->Offset.X * 2);
+	text->Bounds.H = fullSizeY - (text->Offset.Y * 2);
+	text->SetCenter(true);
+	text->SetCenterY(true);
+	text->SetWordWrap(true);
 	// Setup the animators
 	if (screen) {
 		auto animator = std::make_shared<UIObjectAnimatorBase>("levelDisplayAnimator");

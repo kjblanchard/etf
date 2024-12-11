@@ -5,11 +5,11 @@
 - BGMs created by me in Garageband
 - Play the game here, or likely watch its "progress" [Play!](https://escapethefate.supergoon.com)
 - Project board [Board](https://github.com/users/kjblanchard/projects/11)
-- ![Build All Platforms]( https://github.com/kjblanchard/sgEngine/actions/workflows/build.yml/badge.svg)
+- ![Build All Platforms]( https://github.com/kjblanchard/etf/actions/workflows/build.yml/badge.svg)
 
-- ![Status Picture](https://github.com/kjblanchard/sgEngine/blob/master/img/state.gif?raw=true)
+- ![Status Picture](https://github.com/kjblanchard/etf/blob/master/img/state.gif?raw=true)
 - Uses imgui for development debugging.
-  - hello2 ![Status Picture](https://github.com/kjblanchard/sgEngine/blob/master/img/debug.gif?raw=true)
+  - hello2 ![Status Picture](https://github.com/kjblanchard/etf/blob/master/img/debug.gif?raw=true)
 
 
 ## Installation
