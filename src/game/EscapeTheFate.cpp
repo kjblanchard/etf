@@ -66,7 +66,7 @@ static void loadLevel() {
 	// Check if we should show the text at top
 	auto display = Level::GetCurrentLevelProperty<std::string>("display");
 	// auto ui = UI::UIInstance.get();
-	auto textPanel = dynamic_cast<Panel *>(UI::UIInstance->GetChildByName("textTestingscreen"));
+	auto textPanel = dynamic_cast<Panel *>(UI::UIInstance->GetChildByName("screen"));
 	assert(textPanel);
 	if (display) {
 		auto textBox = (UIText *)textPanel->GetChildByName("textmanscreen");
@@ -158,7 +158,6 @@ void BlackjackGame::Start() {
 	}
 	InitializeEvents();
 	InitializeCamera();
-	InitializeBattleUI();
 }
 
 void BlackjackGame::Update() {

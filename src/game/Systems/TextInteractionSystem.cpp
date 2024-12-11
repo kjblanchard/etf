@@ -34,7 +34,7 @@ void updateTextInteractionComponents(GameObject, TextInteractionComponent& textI
 			auto ui = UI::UIInstance.get();
 			auto panelName = "textTesting" + std::string("regular");
 			auto thing = (Panel*)ui->GetChildByName(panelName);
-			thing->Dirty = true;
+			thing->SetDirty();
 
 			// If we are complete and click
 			if (typingTween.Complete()) {
@@ -103,7 +103,7 @@ void drawTextInteractionComponents(GameObject, LocationComponent& location, Play
 void loadTextInteractionComponents(GameObject, TextInteractionComponent& textInteraction) {
 	// textInteraction.TextPtr = ContentRegistry::CreateContent<Text, std::string, int>(textInteraction.DisplayText, "commodore", 16);
 	auto ui = UI::UIInstance.get();
-	auto panelName = "textTesting" + std::string("regular");
+	auto panelName = std::string("regular");
 	auto thing = (Panel*)ui->GetChildByName(panelName);
 	assert(thing);
 	auto textName = "textman" + std::string("regular");

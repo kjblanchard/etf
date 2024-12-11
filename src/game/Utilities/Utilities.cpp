@@ -10,7 +10,7 @@ using namespace Supergoon;
 
 Panel* Supergoon::CreateUIBasePanel(std::string name, Point screenLoc, Point size) {
 	auto ui = UI::UIInstance.get();
-	auto panel = new Panel(ui, "textTesting" + name);
+	auto panel = new Panel(ui, name);
 	float fullSizeX = size.X;
 	float fullSizeY = size.Y;
 	panel->Offset = {(float)screenLoc.X, (float)screenLoc.Y};
