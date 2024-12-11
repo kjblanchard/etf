@@ -1,14 +1,15 @@
 // #include <Supergoon/pch.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
-#include <Supergoon/Log.hpp>
 #include <Supergoon/Input.hpp>
+#include <Supergoon/Log.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
 #include <Utilities/Events.hpp>
 using namespace Supergoon;
 
 // are the events registered?
 static bool initialized = false;
+static bool battleEnded = false;
 // gets gamestate and checks if we are in battle.
 static bool isInBattle(GameState** state) {
 	auto gamestate = GameObject::FindComponent<GameState>();
@@ -49,11 +50,19 @@ void Supergoon::UpdateBattle() {
 	if (!isInBattle(&gamestate)) {
 		return;
 	}
-	if (!gamestate->Loading && KeyDown(KeyboardKeys::Key_W)) {
-		gamestate->InBattle = false;
-		gamestate->ExitingBattle = true;
-		gamestate->Loading = true;
-		Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, true, (void*)strdup((gamestate->PlayerLoadLevel.c_str())));
+	if (!gamestate->Loading && KeyJustPressed(KeyboardKeys::Key_W)) {
+		if (!battleEnded) {
+			Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void*)strdup("victory"));
+			gamestate->BattleData.BattleVictory = true;
+			battleEnded = true;
+		} else {
+			Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, true, (void*)strdup((gamestate->PlayerLoadLevel.c_str())));
+			gamestate->BattleData.BattleVictory = false;
+			gamestate->InBattle = false;
+			gamestate->ExitingBattle = true;
+			gamestate->Loading = true;
+			battleEnded = false;
+		}
 	}
 	// Switch to next turn if it is the players turn
 	if (gamestate->BattleData.CurrentBattler == 1 && KeyJustPressed(KeyboardKeys::Key_N)) {

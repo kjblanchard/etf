@@ -214,7 +214,7 @@
                  "y":208
                 }, 
                 {
-                 "height":64,
+                 "height":240,
                  "id":21,
                  "name":"BattleZone",
                  "properties":[
@@ -231,9 +231,9 @@
                  "rotation":0,
                  "type":"BattleZone",
                  "visible":true,
-                 "width":48,
-                 "x":64,
-                 "y":176
+                 "width":384,
+                 "x":48,
+                 "y":16
                 }],
          "opacity":1,
          "type":"objectgroup",

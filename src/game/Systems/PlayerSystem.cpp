@@ -12,8 +12,8 @@
 #include <Supergoon/ECS/Components/SolidComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Events.hpp>
-#include <Supergoon/Sound.hpp>
 #include <Supergoon/Input.hpp>
+#include <Supergoon/Sound.hpp>
 // TODO remove this plz
 #include <Supergoon/Physics/AABB.hpp>
 // #include <Supergoon/pch.hpp>
@@ -118,11 +118,6 @@ static void playerInput(GameObject go, PlayerComponent& player) {
 	auto& stateComponent = state->GetComponent<GameState>();
 	assert(state.has_value());
 	if (stateComponent.Loading || stateComponent.EnteringBattle) {
-		if (KeyDown(KeyboardKeys::Key_W)) {
-			if (stateComponent.EnteringBattle) {
-				Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void*)strdup("victory"));
-			}
-		}
 		return;
 	}
 	auto vel = Vector2();

@@ -48,10 +48,10 @@ void Supergoon::UpdateBattleUI() {
 		gameState = GameObject::FindComponent<GameState>();
 	}
 	assert(gameState && "Gamestate not created");
-	if (!initialized && gameState->InBattle) {
+	if (!initialized && gameState->InBattle && !gameState->BattleData.BattleVictory) {
 		initializeBattleUI();
 
-	} else if (gameState->ExitingBattle) {
+	} else if (battlePanel && gameState->BattleData.BattleVictory) {
 		Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void*)"battleBasePanel");
 		battlePanel = nullptr;
 		initialized = false;
