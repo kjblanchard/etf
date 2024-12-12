@@ -29,6 +29,9 @@ install:
 	@cmake --install $(BUILD_DIR) --config $(BUILD_TYPE)
 run:
 	@open ./build/bin/$(EXECUTABLE_NAME).app || ./build/bin/$(EXECUTABLE_NAME)
+debug: build
+	@lldb -s breakpoints.lldb ./build/bin/$(EXECUTABLE_NAME).app/Contents/MacOS/$(EXECUTABLE_NAME)
+
 package:
 	$(PACKAGE_COMMAND)
 

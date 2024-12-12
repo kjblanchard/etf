@@ -63,6 +63,7 @@ static void loadLevel() {
 	LoadTextInteractions();
 	StartPlayers();
 	StartBattlers();
+	
 	// Check if we should show the text at top
 	auto display = Level::GetCurrentLevelProperty<std::string>("display");
 	// auto ui = UI::UIInstance.get();
