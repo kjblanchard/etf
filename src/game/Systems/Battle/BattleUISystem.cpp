@@ -1,11 +1,15 @@
 #include "SDL3/SDL_filesystem.h"
 #include "Supergoon/Primitives/Rectangle.hpp"
 #include "Supergoon/UI/UIImage.hpp"
+#include "Utilities/Events.hpp"
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Events.hpp>
+#include <Supergoon/Input.hpp>
+#include <Supergoon/Tween/Sequence.hpp>
+#include <Supergoon/Tween/Tween.hpp>
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIHorizontalLayoutGroup.hpp>
 #include <Supergoon/UI/UIText.hpp>
@@ -13,16 +17,32 @@
 #include <Systems/Battle/BattleUISystem.hpp>
 #include <UI/Battle/BattlerDisplay.hpp>
 #include <Utilities/Utilities.hpp>
+#include <memory>
 #include <sstream>
 using namespace Supergoon;
 using namespace std;
-
+static const int battleCommandsSize = 3;
+static const char *battleCommands[] = {"Attack", "Magic", "Item"};
 static Panel *battlePanel;
 static Panel *battleCommandPanel;
 static UIImage *battleFinger;
-static UIText *attackText;
+static UIText *battleCommandTexts[battleCommandsSize];
+// static UIText *attackText;
+// static UIText *magicText;
+// static UIText *itemText;
 static GameState *gameState;
 static bool initialized = false;
+static Sequence fingerSequence;
+static int currentFingerPos = 0;
+static bool fingerPosChanged = false;
+enum class battleStates {
+  Begin,
+  Initialized,
+  Ready,
+  Victory,
+  Exit,
+};
+static battleStates currentBattleState = battleStates::Begin;
 
 static void createPlayersPanel(UIObject *parent, string name, int hp, int maxHp,
                                int mp, int maxMp) {
@@ -47,20 +67,22 @@ static void initializePlayerUI() {
   verticalLayoutGroup->SetLayer(2);
   verticalLayoutGroup->YSpaceBetweenElements = 17;
   verticalLayoutGroup->Offset = {18, 9};
-  attackText = new UIText(verticalLayoutGroup, "Attack", "attackText", 12);
-  new UIText(verticalLayoutGroup, "Magic", "magicText", 12);
-  new UIText(verticalLayoutGroup, "Item", "itemText", 12);
+  for (int i = 0; i < battleCommandsSize; ++i) {
+    battleCommandTexts[i] = new UIText(verticalLayoutGroup, battleCommands[i], battleCommands[i], 12);
+  }
   auto path = std::string(SDL_GetBasePath()) + "assets/img/fingers.png";
   auto fingerImage = ContentRegistry::CreateContent<Image>(path);
   fingerImage->LoadContent();
   battleFinger = new UIImage(battleCommandPanel, "battleFinger");
   battleFinger->ImagePtr = fingerImage;
-  battleFinger->Bounds.X =
-      battleFinger->Bounds.W = 16;
+  battleFinger->Bounds.X = battleFinger->Bounds.W = 16;
   battleFinger->Bounds.H = 16;
   battleFinger->ImageSourceRect = {16, 48, 16, 16};
-  // battleFinger->ImageSourceRect = RectangleF(48, 16, 16, 16);
   battleFinger->SetLayer(3);
+}
+
+static void initializeFinger() {
+  fingerPosChanged = true;
 }
 
 static void initializeBattleUI() {
@@ -74,7 +96,67 @@ static void initializeBattleUI() {
   createPlayersPanel(verticalLayoutGroup, "Quinn", 100, 100, 10, 20);
   createPlayersPanel(verticalLayoutGroup, "Misha", 300, 300, 100, 100);
   initializePlayerUI();
+  initializeFinger();
   initialized = true;
+}
+
+static void handleInput() {
+  if (KeyJustPressed(KeyboardKeys::Key_W)) {
+    currentFingerPos = --currentFingerPos < 0 ? battleCommandsSize - 1 : currentFingerPos;
+    fingerPosChanged = true;
+  } else if (KeyJustPressed(KeyboardKeys::Key_S)) {
+    currentFingerPos = ++currentFingerPos > battleCommandsSize - 1 ? 0 : currentFingerPos;
+    fingerPosChanged = true;
+  }
+}
+
+static void battleUpdate() {
+  handleInput();
+  if (fingerPosChanged) {
+    auto text = battleCommandTexts[currentFingerPos];
+    auto x = text->TextDrawRect.X - 5 - battleFinger->ImageSourceRect.W;
+    auto y = text->TextDrawRect.Y;
+    battleFinger->SetDrawOverride({*battleFinger->DrawOverrideXHandle(), y});
+    text->SetDirty();
+    UI::UIInstance->UpdateInternal();
+    float *xHandle = &battleFinger->DrawOverrideHandle()->X;
+    fingerSequence = Sequence();
+    auto fingerbackTween = new Tween(x, x - 5, 1.0, xHandle, Easings::Linear, -1);
+    auto fingerForwardTween = new Tween(x - 5, x, 1.0, xHandle, Easings::Linear, -1);
+    fingerForwardTween->UpdateFunc = []() {
+      battleFinger->SetDirty();
+    };
+    fingerbackTween->UpdateFunc = []() {
+      battleFinger->SetDirty();
+    };
+    fingerSequence.Tweens.push_back(shared_ptr<Tween>(fingerForwardTween));
+    fingerSequence.Tweens.push_back(shared_ptr<Tween>(fingerbackTween));
+    fingerPosChanged = false;
+  }
+  fingerSequence.Update();
+  if (fingerSequence.IsComplete()) {
+    fingerSequence.Restart();
+  };
+}
+
+static void battleVictory() {
+  Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleBasePanel");
+  Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleCommandPanel");
+  battlePanel = nullptr;
+  for (int i = 0; i < battleCommandsSize; ++i) {
+    battleCommandTexts[i] = nullptr;
+  }
+  initialized = false;
+}
+
+static void battleCleanup() {
+  currentBattleState = battleStates::Begin;
+}
+
+void InitializeBattleUI() {
+  Events::RegisterEventHandler(EscapeTheFateEvents.EnterBattleFinished, [](int, void *, void *) {
+    currentBattleState = battleStates::Begin;
+  });
 }
 
 void Supergoon::UpdateBattleUI() {
@@ -82,18 +164,28 @@ void Supergoon::UpdateBattleUI() {
     gameState = GameObject::FindComponent<GameState>();
   }
   assert(gameState && "Gamestate not created");
-  if (!initialized && gameState->InBattle &&
-      !gameState->BattleData.BattleVictory) {
-    initializeBattleUI();
-
-  } else if (battlePanel && gameState->BattleData.BattleVictory) {
-    Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0,
-                      (void *)"battleBasePanel");
-    battlePanel = nullptr;
-    initialized = false;
+  if (!gameState->InBattle) {
+    return;
   }
-  if (battlePanel) {
-    // TODO this should only happen when we actually move it
-    battleFinger->SetDrawOverride({attackText->TextDrawRect.X - 5 - battleFinger->ImageSourceRect.W, attackText->TextDrawRect.Y});
+  if (gameState->BattleData.BattleVictory) {
+    currentBattleState = battleStates::Victory;
+  }
+  switch (currentBattleState) {
+  case battleStates::Begin:
+    initializeBattleUI();
+    currentBattleState = battleStates::Initialized;
+    break;
+  case battleStates::Initialized:
+    currentBattleState = battleStates::Ready;
+    break;
+  case battleStates::Ready:
+    battleUpdate();
+    break;
+  case battleStates::Victory:
+    battleVictory();
+    break;
+  case battleStates::Exit:
+    battleCleanup();
+    break;
   }
 }
