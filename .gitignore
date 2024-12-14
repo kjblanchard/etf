@@ -9,3 +9,5 @@ memcheck.txt
 engine/
 .cache/
 *.swp
+*.swn
+*.swo
