@@ -9,7 +9,7 @@
 
 using namespace Supergoon;
 
-Panel *Supergoon::CreateUIBasePanel(std::string name, Point screenLoc, Point size, int alpha) {
+Panel *Supergoon::CreateUIBasePanel(std::string name, sgPoint screenLoc, sgPoint size, int alpha) {
   auto ui = UI::UIInstance.get();
   auto panel = new Panel(ui, name);
   float fullSizeX = size.X;
@@ -76,7 +76,7 @@ Panel *Supergoon::CreateUIBasePanel(std::string name, Point screenLoc, Point siz
   return panel;
 }
 // 200/70 for textbox
-Panel *Supergoon::CreateUITextbox(std::string name, Point screenLoc, Point size, bool screen) {
+Panel *Supergoon::CreateUITextbox(std::string name, sgPoint screenLoc, sgPoint size, bool screen) {
   auto textPanel = CreateUIBasePanel(name, screenLoc, size);
   // auto ui = UI::UIInstance.get();
   auto text = new UIText(textPanel, "Hello world!", "textman" + name);

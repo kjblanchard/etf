@@ -27,7 +27,7 @@ static void drawStaticBodyDebugBoxes(GameObject, LocationComponent &location, So
   auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
   auto &cc = c->GetComponent<CameraComponent>();
   Vector2 bodyPos = location.Location; // Assuming this is the center of the physics body
-  Point size = sb.Size;                // Size of the static body (in pixels)
+  sgPoint size = sb.Size;                // Size of the static body (in pixels)
 
   float adjustedX = bodyPos.X - cc.Box.X;
   float adjustedY = bodyPos.Y - cc.Box.Y;

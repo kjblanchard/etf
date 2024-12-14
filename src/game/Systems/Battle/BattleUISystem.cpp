@@ -1,4 +1,5 @@
 #include "SDL3/SDL_filesystem.h"
+#include "Supergoon/Primitives/Point.h"
 #include "Supergoon/Primitives/Rectangle.hpp"
 #include "Supergoon/UI/UIImage.hpp"
 #include "Utilities/Events.hpp"
@@ -48,8 +49,8 @@ static void createPlayersPanel(UIObject *parent, string name, int hp, int maxHp,
 }
 
 static void initializePlayerUI() {
-  auto fullSize = Point{100, 65};
-  battleCommandPanel = CreateUIBasePanel("battleCommandPanel", Point{95, 215}, fullSize, 255);
+  auto fullSize = sgPoint{100, 65};
+  battleCommandPanel = CreateUIBasePanel("battleCommandPanel", {95, 215}, fullSize, 255);
   battleCommandPanel->SetLayer(1);
   auto verticalLayoutGroup = new UIVerticalLayoutGroup(battleCommandPanel, "battleCommandVLG");
   verticalLayoutGroup->SetLayer(2);
@@ -72,13 +73,13 @@ static void initializePlayerUI() {
 static void initializeFinger() {
   UI::UIInstance->UpdateInternal();
   fingerPosChanged = true;
-  //battleFinger->SetDirty(true);
-  // UpdateBattleUI();
+  // battleFinger->SetDirty(true);
+  //  UpdateBattleUI();
 }
 
 static void initializeBattleUI() {
-  auto fullSize = Point{435, 66};
-  battlePanel = CreateUIBasePanel("battleBasePanel", Point{39, 222}, fullSize, 255);
+  auto fullSize = sgPoint{435, 66};
+  battlePanel = CreateUIBasePanel("battleBasePanel", {39, 222}, fullSize, 255);
   auto verticalLayoutGroup = new UIVerticalLayoutGroup(battlePanel, "battlersVerticalGroup");
   verticalLayoutGroup->SetLayer(1);
   verticalLayoutGroup->YSpaceBetweenElements = 16;
@@ -114,9 +115,9 @@ static void battleUpdate() {
     return;
   }
   if (fingerPosChanged) {
-   // if (!battleFinger) {
-   //   return;
-   // }
+    // if (!battleFinger) {
+    //   return;
+    // }
     auto text = battleCommandTexts[currentFingerPos];
     auto x = text->TextDrawRect.X - 5 - battleFinger->ImageSourceRect.W;
     auto y = text->TextDrawRect.Y;

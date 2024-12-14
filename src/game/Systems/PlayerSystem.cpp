@@ -22,8 +22,8 @@
 using namespace Supergoon;
 
 static void updateInteractionRect(PlayerComponent &player, PlayerInteractionComponent &playerInteraction, LocationComponent &location) {
-  auto ewWH = Point(26, 8);
-  auto nsWH = Point(8, 26);
+  auto ewWH = sgPoint{26, 8};
+  auto nsWH = sgPoint{8, 26};
   switch (player.Direction) {
   case Directions::East:
     playerInteraction.InteractionRect.X = location.Location.X + player.Body.X + (player.Body.W / 2);
@@ -59,7 +59,7 @@ static void loadPlayer(GameObject, PlayerSpawnComponent &playerSpawn, GameState 
   auto playerAnimation = AnimationComponent();
   auto playerInteraction = PlayerInteractionComponent();
   playerAnimation.AnimationName = "player" + std::to_string(playerComponent.PlayerNum + 1);
-  playerAnimation.Offset = Point{0, 0};
+  playerAnimation.Offset = {0, 0};
   playerAnimation.AnimationSpeed = 1.0;
   playerComponent.PlayerNum = 0;
   playerComponent.Body = RectangleF{4, 9, 16, 22};
