@@ -1,10 +1,12 @@
 // #include <Supergoon/pch.hpp>
 #include "Supergoon/Events.hpp"
+#include "SupergoonEngine/nlohmann/json.hpp"
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Input.hpp>
 #include <Supergoon/Log.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
+#include <Systems/Battle/BattleUISystem.hpp>
 #include <Utilities/Events.hpp>
 using namespace Supergoon;
 
@@ -12,6 +14,14 @@ using namespace Supergoon;
 static bool initialized = false;
 static bool battleEnded = false;
 static bool battleJustStarted = true;
+enum class battleStates {
+  Begin,
+  Initialized,
+  Ready,
+  Victory,
+  Exit,
+};
+//static battleStates currentBattleState = battleStates::Begin;
 // gets gamestate and checks if we are in battle.
 static bool isInBattle(GameState **state) {
   auto gamestate = GameObject::FindComponent<GameState>();
@@ -54,15 +64,23 @@ void Supergoon::UpdateBattle() {
   }
   if (gamestate->InBattle && battleJustStarted) {
     battleJustStarted = false;
+    InitializeBattleUI();
+    // This should signal to the UI that we should load the UI.
     Events::PushEvent(EscapeTheFateEvents.EnterBattleFinished, 0);
   }
-  if (!gamestate->Loading && KeyJustPressed(KeyboardKeys::Key_Q)) {
+  // If we are loading, break here.
+  if (gamestate->Loading) {
+    return;
+  }
+  if (KeyJustPressed(KeyboardKeys::Key_Q)) {
     if (!battleEnded) {
       Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup("victory"));
+      Events::PushEvent(EscapeTheFateEvents.VictoryStart, 0);
       gamestate->BattleData.BattleVictory = true;
       battleEnded = true;
     } else {
       Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, true, (void *)strdup((gamestate->PlayerLoadLevel.c_str())));
+      Events::PushEvent(EscapeTheFateEvents.VictoryEnd, 0);
       gamestate->BattleData.BattleVictory = false;
       gamestate->InBattle = false;
       gamestate->ExitingBattle = true;
@@ -70,9 +88,15 @@ void Supergoon::UpdateBattle() {
       battleEnded = false;
       battleJustStarted = true;
     }
+  } else if (KeyJustPressed(KeyboardKeys::Key_W)) {
+    Events::PushEvent(EscapeTheFateEvents.BattleButtonPressed, (int)KeyboardKeys::Key_W, nullptr);
+  } else if (KeyJustPressed(KeyboardKeys::Key_S)) {
+    Events::PushEvent(EscapeTheFateEvents.BattleButtonPressed, (int)KeyboardKeys::Key_S, nullptr);
   }
+
   // Switch to next turn if it is the players turn
   if (gamestate->BattleData.CurrentBattler == 1 && KeyJustPressed(KeyboardKeys::Key_N)) {
     Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, 0);
   }
+  UpdateBattleUI();
 }

@@ -27,22 +27,10 @@ static Panel *battlePanel;
 static Panel *battleCommandPanel;
 static UIImage *battleFinger;
 static UIText *battleCommandTexts[battleCommandsSize];
-// static UIText *attackText;
-// static UIText *magicText;
-// static UIText *itemText;
-static GameState *gameState;
-static bool initialized = false;
+// static GameState *gameState;
 static Sequence fingerSequence;
 static int currentFingerPos = 0;
 static bool fingerPosChanged = false;
-enum class battleStates {
-  Begin,
-  Initialized,
-  Ready,
-  Victory,
-  Exit,
-};
-static battleStates currentBattleState = battleStates::Begin;
 
 static void createPlayersPanel(UIObject *parent, string name, int hp, int maxHp,
                                int mp, int maxMp) {
@@ -82,7 +70,10 @@ static void initializePlayerUI() {
 }
 
 static void initializeFinger() {
+  UI::UIInstance->UpdateInternal();
   fingerPosChanged = true;
+  //battleFinger->SetDirty(true);
+  // UpdateBattleUI();
 }
 
 static void initializeBattleUI() {
@@ -97,22 +88,35 @@ static void initializeBattleUI() {
   createPlayersPanel(verticalLayoutGroup, "Misha", 300, 300, 100, 100);
   initializePlayerUI();
   initializeFinger();
-  initialized = true;
+  //  if (!gameState) {
+  //    gameState = GameObject::FindComponent<GameState>();
+  //    assert(gameState);
+  //  }
 }
 
-static void handleInput() {
-  if (KeyJustPressed(KeyboardKeys::Key_W)) {
+static void handleInput(KeyboardKeys key) {
+  switch (key) {
+  case Supergoon::KeyboardKeys::Key_W:
     currentFingerPos = --currentFingerPos < 0 ? battleCommandsSize - 1 : currentFingerPos;
     fingerPosChanged = true;
-  } else if (KeyJustPressed(KeyboardKeys::Key_S)) {
+    break;
+  case Supergoon::KeyboardKeys::Key_S:
     currentFingerPos = ++currentFingerPos > battleCommandsSize - 1 ? 0 : currentFingerPos;
     fingerPosChanged = true;
+    break;
+  default:
+    return;
   }
 }
 
 static void battleUpdate() {
-  handleInput();
+  if (!battlePanel) {
+    return;
+  }
   if (fingerPosChanged) {
+   // if (!battleFinger) {
+   //   return;
+   // }
     auto text = battleCommandTexts[currentFingerPos];
     auto x = text->TextDrawRect.X - 5 - battleFinger->ImageSourceRect.W;
     auto y = text->TextDrawRect.Y;
@@ -146,46 +150,34 @@ static void battleVictory() {
   for (int i = 0; i < battleCommandsSize; ++i) {
     battleCommandTexts[i] = nullptr;
   }
-  initialized = false;
 }
 
 static void battleCleanup() {
-  currentBattleState = battleStates::Begin;
+  fingerPosChanged = false;
+  currentFingerPos = 0;
 }
 
-void InitializeBattleUI() {
+void Supergoon::InitializeBattleUI() {
   Events::RegisterEventHandler(EscapeTheFateEvents.EnterBattleFinished, [](int, void *, void *) {
-    currentBattleState = battleStates::Begin;
+    initializeBattleUI();
+  });
+  Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int, void *, void *) {
+  });
+  Events::RegisterEventHandler(EscapeTheFateEvents.BattleButtonPressed, [](int pressedKey, void *, void *) {
+    if (!battlePanel) {
+      return;
+    }
+    auto key = (KeyboardKeys)pressedKey;
+    handleInput(key);
+  });
+  Events::RegisterEventHandler(EscapeTheFateEvents.VictoryStart, [](int, void *, void *) {
+    battleVictory();
+  });
+  Events::RegisterEventHandler(EscapeTheFateEvents.VictoryEnd, [](int, void *, void *) {
+    battleCleanup();
   });
 }
 
 void Supergoon::UpdateBattleUI() {
-  if (!gameState) {
-    gameState = GameObject::FindComponent<GameState>();
-  }
-  assert(gameState && "Gamestate not created");
-  if (!gameState->InBattle) {
-    return;
-  }
-  if (gameState->BattleData.BattleVictory) {
-    currentBattleState = battleStates::Victory;
-  }
-  switch (currentBattleState) {
-  case battleStates::Begin:
-    initializeBattleUI();
-    currentBattleState = battleStates::Initialized;
-    break;
-  case battleStates::Initialized:
-    currentBattleState = battleStates::Ready;
-    break;
-  case battleStates::Ready:
-    battleUpdate();
-    break;
-  case battleStates::Victory:
-    battleVictory();
-    break;
-  case battleStates::Exit:
-    battleCleanup();
-    break;
-  }
+  battleUpdate();
 }
