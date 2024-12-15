@@ -2,6 +2,7 @@
 #include "Components/BattlerComponent.hpp"
 #include "Supergoon/Content/ContentRegistry.hpp"
 #include "Supergoon/Content/Sfx.hpp"
+#include "Supergoon/ECS/Components/AnimationComponent.hpp"
 #include "Supergoon/Events.hpp"
 #include "SupergoonEngine/log.h"
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
@@ -25,6 +26,7 @@ static bool battleEnded = false;
 static bool battleJustStarted = true;
 static int currentBattler = -1;
 static BattlerComponent *currentBattlerComp = nullptr;
+static AnimationComponent *currentBattlerAnimationComp = nullptr;
 enum class battleStates {
   Begin,
   Initialized,
@@ -63,25 +65,28 @@ static void updateATBs(GameState &gamestate) {
 }
 
 static int findReadyBattler() {
-  //sgLogWarn("Need to find a ready battler...");
+  // sgLogWarn("Need to find a ready battler...");
   auto battler = -1;
   bool foundBattler = false;
   BattlerComponent *comp = nullptr;
-  GameObject::ForEach<BattlerComponent>([&foundBattler, &battler, &comp](GameObject, BattlerComponent &battleComponent) {
+  AnimationComponent *animComp = nullptr;
+  GameObject::ForEach<BattlerComponent, AnimationComponent>([&foundBattler, &battler, &comp, &animComp](GameObject, BattlerComponent &battleComponent, AnimationComponent &animComponent) {
     if (foundBattler) {
       return;
     }
-    //sgLogWarn("Checking battler %d, who has atb of %f of %f", battleComponent.Id, battleComponent.CurrentATB, battleComponent.FullATB);
+    // sgLogWarn("Checking battler %d, who has atb of %f of %f", battleComponent.Id, battleComponent.CurrentATB, battleComponent.FullATB);
     if (battleComponent.IsPlayer && battleComponent.CurrentATB >= battleComponent.FullATB) {
       foundBattler = true;
       comp = &battleComponent;
+      animComp = &animComponent;
       battler = battleComponent.Id;
     }
   });
   if (battler != -1) {
-    //sgLogWarn("Battler found, pushing event");
+    // sgLogWarn("Battler found, pushing event");
     Sound::Instance()->PlaySfx(playerTurnSfx.get());
     currentBattlerComp = comp;
+    currentBattlerAnimationComp = animComp;
     Events::PushEvent(EscapeTheFateEvents.PlayerBattlerTurnBegin, battler);
   }
   return battler;
@@ -93,6 +98,7 @@ void handlePlayerInputForBattler(GameState *gamestate) {
     if (!battleEnded) {
       Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup("victory"));
       Events::PushEvent(EscapeTheFateEvents.VictoryStart, 0);
+      currentBattlerAnimationComp->Animation->PlayAnimation("cheer1");
       gamestate->BattleData.BattleVictory = true;
       battleEnded = true;
     } else {
@@ -119,6 +125,7 @@ void handlePlayerInputForBattler(GameState *gamestate) {
     currentBattlerComp->CurrentATB = 0;
     currentBattler = -1;
     Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, 0);
+    currentBattlerAnimationComp = nullptr;
     currentBattlerComp = nullptr;
   }
   // Switch to next turn if it is the players turn
