@@ -63,7 +63,7 @@ static void loadPlayer(GameObject, PlayerSpawnComponent &playerSpawn, GameState 
   playerAnimation.Offset = {0, 0};
   playerAnimation.AnimationSpeed = 1.0;
   playerComponent.PlayerNum = 0;
-  playerComponent.Body = RectangleF{4, 9, 16, 22};
+  playerComponent.Body = RectangleF{4, 21, 15, 15};
   // TODO, probably use this differently, this is hacked in basically.
   if (gameState.ExitingBattle) {
     playerLocation.Location.X = gameState.PlayerLoadLocation.X;
