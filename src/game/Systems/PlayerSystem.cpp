@@ -1,3 +1,4 @@
+#include "Supergoon/Primitives/Vector2.h"
 #include <SDL3/SDL_filesystem.h>
 #include <cmath>
 
@@ -124,7 +125,7 @@ static void playerInput(GameObject go, PlayerComponent &player) {
   if (stateComponent.Loading || stateComponent.EnteringBattle) {
     return;
   }
-  auto vel = Vector2();
+  auto vel = sgVector2{0, 0};
   auto &loc = go.GetComponent<LocationComponent>();
   auto speed = 100;
   auto moved = false;
@@ -154,7 +155,7 @@ static void playerInput(GameObject go, PlayerComponent &player) {
     }
   }
   auto deltatime = stateComponent.DeltaTime;
-  vel *= Vector2{deltatime, deltatime};
+  sgVector2Multiply(&vel, {deltatime, deltatime});
   // Handle Collisions
   auto desiredPosition = loc.Location;
   desiredPosition.X += vel.X;

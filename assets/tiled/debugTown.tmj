@@ -429,7 +429,7 @@
                         {
                          "name":"text",
                          "type":"string",
-                         "value":"Scary Forest ahead!\nIf you get in a battle, press \"W\" to win!"
+                         "value":"Scary Forest ahead!\nIf you get in a battle, press \"Q\" to win!"
                         }],
                  "rotation":0,
                  "type":"TextInteract",

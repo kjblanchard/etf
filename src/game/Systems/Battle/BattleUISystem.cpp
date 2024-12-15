@@ -68,6 +68,7 @@ static void initializePlayerUI() {
   battleFinger->Bounds.H = 16;
   battleFinger->ImageSourceRect = {16, 48, 16, 16};
   battleFinger->SetLayer(3);
+  battleCommandPanel->SetVisible(false);
 }
 
 static void initializeFinger() {
@@ -89,10 +90,6 @@ static void initializeBattleUI() {
   createPlayersPanel(verticalLayoutGroup, "Misha", 300, 300, 100, 100);
   initializePlayerUI();
   initializeFinger();
-  //  if (!gameState) {
-  //    gameState = GameObject::FindComponent<GameState>();
-  //    assert(gameState);
-  //  }
 }
 
 static void handleInput(KeyboardKeys key) {
@@ -163,6 +160,13 @@ void Supergoon::InitializeBattleUI() {
     initializeBattleUI();
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int, void *, void *) {
+    battleCommandPanel->SetVisible(false);
+    currentFingerPos = 0;
+    fingerPosChanged = true;
+  });
+  Events::RegisterEventHandler(EscapeTheFateEvents.PlayerBattlerTurnBegin, [](int, void *, void *) {
+    battleCommandPanel->SetVisible(true);
+    battleCommandPanel->SetDirty();
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.BattleButtonPressed, [](int pressedKey, void *, void *) {
     if (!battlePanel) {

@@ -12,16 +12,20 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     return;
   }
   auto go = new GameObject();
-  auto battleLocationComponent = BattleLocationComponent();
+  //  auto battleLocationComponent = BattleLocationComponent();
   auto battleLocationLoc = LocationComponent();
   auto battlerAnimation = AnimationComponent();
   auto battlerComponent = BattlerComponent();
+  battlerComponent.CurrentATB = 0;
+  battlerComponent.FullATB = 3;
   if (battleLocation.BattleLocationId == 1) {
     battlerAnimation.AnimationName = "player1Battler";
     battlerComponent.Id = 1;
+    battlerComponent.IsPlayer = true;
   } else {
     battlerAnimation.AnimationName = "blackBird";
     battlerComponent.Id = 4;
+    battlerComponent.IsPlayer = false;
   }
   battlerAnimation.Offset = {0, 0};
   battlerAnimation.AnimationSpeed = 1.0;
