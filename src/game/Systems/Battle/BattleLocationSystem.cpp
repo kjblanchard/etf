@@ -22,6 +22,12 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     battlerAnimation.AnimationName = "player1Battler";
     battlerComponent.Id = 1;
     battlerComponent.IsPlayer = true;
+    // TODO we need to script this somehow,
+    battlerAnimation.OnAnimationEnd = [](AsepriteAnimation *anim, std::string animEnding) {
+      if (animEnding == "slash2") {
+        anim->PlayAnimation("idle1");
+      }
+    };
   } else {
     battlerAnimation.AnimationName = "blackBird";
     battlerComponent.Id = 4;

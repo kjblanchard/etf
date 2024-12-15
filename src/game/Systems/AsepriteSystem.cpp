@@ -1,4 +1,3 @@
-#include "Supergoon/ECS/Components/GameStateComponent.hpp"
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/ECS/Components/AnimationComponent.hpp>
 #include <Supergoon/ECS/Components/CameraComponent.hpp>
@@ -13,6 +12,10 @@ void loadAnimationComponent(AnimationComponent &a) {
   if (!a.Animation) {
     a.Animation = std::make_shared<AsepriteAnimation>(a.AnimationName);
   }
+  if (a.OnAnimationEnd) {
+    a.Animation->OnAnimationEnd = a.OnAnimationEnd;
+  }
+
   a.AnimationImage = ContentRegistry::CreateContent<Image>(a.Animation->Filename());
 }
 

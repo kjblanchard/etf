@@ -124,6 +124,7 @@ void handlePlayerInputForBattler(GameState *gamestate) {
     Sound::Instance()->PlaySfx(menuSelectSfx.get());
     currentBattlerComp->CurrentATB = 0;
     currentBattler = -1;
+    currentBattlerAnimationComp->Animation->PlayAnimation("slash2");
     Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, 0);
     currentBattlerAnimationComp = nullptr;
     currentBattlerComp = nullptr;
