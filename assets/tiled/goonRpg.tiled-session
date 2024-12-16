@@ -5,8 +5,8 @@
     },
     "activeFile": "debugTown.tmj",
     "expandedProjectPaths": [
-        "templates",
-        "."
+        ".",
+        "templates"
     ],
     "fileStates": {
         "debugSouth.tmj": {
@@ -32,8 +32,8 @@
             "scale": 2.9504,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 303.68763557483726,
-                "y": 143.70932754880693
+                "x": 303.34869848156177,
+                "y": 143.37039045553144
             }
         },
         "debugTownHome.tmj": {
