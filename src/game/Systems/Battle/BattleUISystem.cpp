@@ -2,6 +2,7 @@
 #include "Supergoon/Primitives/Point.h"
 #include "Supergoon/Primitives/Rectangle.hpp"
 #include "Supergoon/UI/UIImage.hpp"
+#include "SupergoonEngine/log.h"
 #include "Utilities/Events.hpp"
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
@@ -28,9 +29,7 @@ static Panel *battlePanel;
 static Panel *battleCommandPanel;
 static UIImage *battleFinger;
 static UIText *battleCommandTexts[battleCommandsSize];
-// static GameState *gameState;
 static Sequence fingerSequence;
-static int currentFingerPos = 0;
 static bool fingerPosChanged = false;
 
 static void createPlayersPanel(UIObject *parent, string name, int hp, int maxHp,
@@ -74,8 +73,6 @@ static void initializePlayerUI() {
 static void initializeFinger() {
   UI::UIInstance->UpdateInternal();
   fingerPosChanged = true;
-  // battleFinger->SetDirty(true);
-  //  UpdateBattleUI();
 }
 
 static void initializeBattleUI() {
@@ -86,54 +83,38 @@ static void initializeBattleUI() {
   verticalLayoutGroup->YSpaceBetweenElements = 16;
   verticalLayoutGroup->Offset = {9, 9};
   createPlayersPanel(verticalLayoutGroup, "Kevin", 500, 500, 50, 50);
-  createPlayersPanel(verticalLayoutGroup, "Quinn", 100, 100, 10, 20);
-  createPlayersPanel(verticalLayoutGroup, "Misha", 300, 300, 100, 100);
+  // createPlayersPanel(verticalLayoutGroup, "Quinn", 100, 100, 10, 20);
+  // createPlayersPanel(verticalLayoutGroup, "Misha", 300, 300, 100, 100);
   initializePlayerUI();
   initializeFinger();
 }
 
-static void handleInput(KeyboardKeys key) {
-  switch (key) {
-  case Supergoon::KeyboardKeys::Key_W:
-    currentFingerPos = --currentFingerPos < 0 ? battleCommandsSize - 1 : currentFingerPos;
-    fingerPosChanged = true;
-    break;
-  case Supergoon::KeyboardKeys::Key_S:
-    currentFingerPos = ++currentFingerPos > battleCommandsSize - 1 ? 0 : currentFingerPos;
-    fingerPosChanged = true;
-    break;
-  default:
-    return;
-  }
+static void handleInput(int loc) {
+  sgLogWarn("Moving to finger pos %d", loc);
+  auto currentFingerPos = loc;
+  auto text = battleCommandTexts[currentFingerPos];
+  auto x = text->TextDrawRect.X - 5 - battleFinger->ImageSourceRect.W;
+  auto y = text->TextDrawRect.Y;
+  battleFinger->SetDrawOverride({*battleFinger->DrawOverrideXHandle(), y});
+  text->SetDirty();
+  UI::UIInstance->UpdateInternal();
+  float *xHandle = &battleFinger->DrawOverrideHandle()->X;
+  fingerSequence = Sequence();
+  auto fingerbackTween = new Tween(x, x - 5, 1.0, xHandle, Easings::Linear, -1);
+  auto fingerForwardTween = new Tween(x - 5, x, 1.0, xHandle, Easings::Linear, -1);
+  fingerForwardTween->UpdateFunc = []() {
+    battleFinger->SetDirty();
+  };
+  fingerbackTween->UpdateFunc = []() {
+    battleFinger->SetDirty();
+  };
+  fingerSequence.Tweens.push_back(shared_ptr<Tween>(fingerForwardTween));
+  fingerSequence.Tweens.push_back(shared_ptr<Tween>(fingerbackTween));
 }
 
 static void battleUpdate() {
   if (!battlePanel) {
     return;
-  }
-  if (fingerPosChanged) {
-    // if (!battleFinger) {
-    //   return;
-    // }
-    auto text = battleCommandTexts[currentFingerPos];
-    auto x = text->TextDrawRect.X - 5 - battleFinger->ImageSourceRect.W;
-    auto y = text->TextDrawRect.Y;
-    battleFinger->SetDrawOverride({*battleFinger->DrawOverrideXHandle(), y});
-    text->SetDirty();
-    UI::UIInstance->UpdateInternal();
-    float *xHandle = &battleFinger->DrawOverrideHandle()->X;
-    fingerSequence = Sequence();
-    auto fingerbackTween = new Tween(x, x - 5, 1.0, xHandle, Easings::Linear, -1);
-    auto fingerForwardTween = new Tween(x - 5, x, 1.0, xHandle, Easings::Linear, -1);
-    fingerForwardTween->UpdateFunc = []() {
-      battleFinger->SetDirty();
-    };
-    fingerbackTween->UpdateFunc = []() {
-      battleFinger->SetDirty();
-    };
-    fingerSequence.Tweens.push_back(shared_ptr<Tween>(fingerForwardTween));
-    fingerSequence.Tweens.push_back(shared_ptr<Tween>(fingerbackTween));
-    fingerPosChanged = false;
   }
   fingerSequence.Update();
   if (fingerSequence.IsComplete()) {
@@ -152,7 +133,6 @@ static void battleVictory() {
 
 static void battleCleanup() {
   fingerPosChanged = false;
-  currentFingerPos = 0;
 }
 
 void Supergoon::InitializeBattleUI() {
@@ -161,19 +141,18 @@ void Supergoon::InitializeBattleUI() {
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int, void *, void *) {
     battleCommandPanel->SetVisible(false);
-    currentFingerPos = 0;
     fingerPosChanged = true;
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.PlayerBattlerTurnBegin, [](int, void *, void *) {
+    handleInput(0);
     battleCommandPanel->SetVisible(true);
     battleCommandPanel->SetDirty();
   });
-  Events::RegisterEventHandler(EscapeTheFateEvents.BattleButtonPressed, [](int pressedKey, void *, void *) {
+  Events::RegisterEventHandler(EscapeTheFateEvents.commandCursorUpdate, [](int buttonLoc, void *, void *) {
     if (!battlePanel) {
       return;
     }
-    auto key = (KeyboardKeys)pressedKey;
-    handleInput(key);
+    handleInput(buttonLoc);
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.VictoryStart, [](int, void *, void *) {
     battleVictory();

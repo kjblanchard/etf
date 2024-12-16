@@ -28,13 +28,13 @@ static void updateInteractionRect(PlayerComponent &player, PlayerInteractionComp
   switch (player.Direction) {
   case Directions::East:
     playerInteraction.InteractionRect.X = location.Location.X + player.Body.X + (player.Body.W / 2);
-    playerInteraction.InteractionRect.Y = location.Location.Y - (player.Body.Y / 2) + player.Body.H;
+    playerInteraction.InteractionRect.Y = location.Location.Y + 15;
     playerInteraction.InteractionRect.W = ewWH.X;
     playerInteraction.InteractionRect.H = ewWH.Y;
     break;
   case Directions::West:
     playerInteraction.InteractionRect.X = location.Location.X - 10;
-    playerInteraction.InteractionRect.Y = location.Location.Y - (player.Body.Y / 2) + player.Body.H;
+    playerInteraction.InteractionRect.Y = location.Location.Y + 15;
     playerInteraction.InteractionRect.W = ewWH.X;
     playerInteraction.InteractionRect.H = ewWH.Y;
     break;

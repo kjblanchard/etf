@@ -73,5 +73,3 @@ viclean:
 	find . -name '*.swo' | xargs rm -rf
 	find . -name '*.swp' | xargs rm -rf
 	find . -name '*.swn' | xargs rm -rf
-
-

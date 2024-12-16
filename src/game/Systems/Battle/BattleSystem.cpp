@@ -4,7 +4,6 @@
 #include "Supergoon/Content/Sfx.hpp"
 #include "Supergoon/ECS/Components/AnimationComponent.hpp"
 #include "Supergoon/Events.hpp"
-#include "SupergoonEngine/log.h"
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Input.hpp>
@@ -27,14 +26,17 @@ static bool battleJustStarted = true;
 static int currentBattler = -1;
 static BattlerComponent *currentBattlerComp = nullptr;
 static AnimationComponent *currentBattlerAnimationComp = nullptr;
-enum class battleStates {
-  Begin,
-  Initialized,
-  Ready,
-  Victory,
-  Exit,
+
+enum class battleMenus {
+  None,
+  Commands,
+  Magic,
+  Item,
 };
-// static battleStates currentBattleState = battleStates::Begin;
+static battleMenus currentBattleMenu = battleMenus::None;
+static const int numCommands = 3; // Attack, Magic, items
+static int currentFingerPos = 0;
+
 //  gets gamestate and checks if we are in battle.
 static bool isInBattle(GameState **state) {
   auto gamestate = GameObject::FindComponent<GameState>();
@@ -65,7 +67,6 @@ static void updateATBs(GameState &gamestate) {
 }
 
 static int findReadyBattler() {
-  // sgLogWarn("Need to find a ready battler...");
   auto battler = -1;
   bool foundBattler = false;
   BattlerComponent *comp = nullptr;
@@ -74,7 +75,6 @@ static int findReadyBattler() {
     if (foundBattler) {
       return;
     }
-    // sgLogWarn("Checking battler %d, who has atb of %f of %f", battleComponent.Id, battleComponent.CurrentATB, battleComponent.FullATB);
     if (battleComponent.IsPlayer && battleComponent.CurrentATB >= battleComponent.FullATB) {
       foundBattler = true;
       comp = &battleComponent;
@@ -83,7 +83,6 @@ static int findReadyBattler() {
     }
   });
   if (battler != -1) {
-    // sgLogWarn("Battler found, pushing event");
     Sound::Instance()->PlaySfx(playerTurnSfx.get());
     currentBattlerComp = comp;
     currentBattlerAnimationComp = animComp;
@@ -93,6 +92,9 @@ static int findReadyBattler() {
 }
 
 void handlePlayerInputForBattler(GameState *gamestate) {
+  if (currentBattler == -1) {
+    return;
+  }
   // TODO currently this happens before the UI updates (1 frame off) when a players turn starts, is this bad?
   if (KeyJustPressed(KeyboardKeys::Key_Q)) {
     if (!battleEnded) {
@@ -115,10 +117,12 @@ void handlePlayerInputForBattler(GameState *gamestate) {
   // If players turn, we should pop up the UI for the player and handle the input.
   else if (KeyJustPressed(KeyboardKeys::Key_W)) {
     Sound::Instance()->PlaySfx(menuMoveSfx.get());
-    Events::PushEvent(EscapeTheFateEvents.BattleButtonPressed, (int)KeyboardKeys::Key_W, nullptr);
+    currentFingerPos = --currentFingerPos < 0 ? numCommands - 1 : currentFingerPos;
+    Events::PushEvent(EscapeTheFateEvents.commandCursorUpdate, currentFingerPos, nullptr);
   } else if (KeyJustPressed(KeyboardKeys::Key_S)) {
+    currentFingerPos = ++currentFingerPos >= numCommands ? 0 : currentFingerPos;
     Sound::Instance()->PlaySfx(menuMoveSfx.get());
-    Events::PushEvent(EscapeTheFateEvents.BattleButtonPressed, (int)KeyboardKeys::Key_S, nullptr);
+    Events::PushEvent(EscapeTheFateEvents.commandCursorUpdate, currentFingerPos, nullptr);
   } else if (KeyJustPressed(KeyboardKeys::Key_SPACE)) {
     // We selected something, this should end our turn, resetting the atb and hiding the menu until the player is ready again.
     Sound::Instance()->PlaySfx(menuSelectSfx.get());
@@ -131,6 +135,7 @@ void handlePlayerInputForBattler(GameState *gamestate) {
   }
   // Switch to next turn if it is the players turn
   if (gamestate->BattleData.CurrentBattler == 1 && KeyJustPressed(KeyboardKeys::Key_N)) {
+    currentBattler = -1;
     Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, 0);
   }
 }
@@ -148,6 +153,7 @@ void Supergoon::UpdateBattle() {
     currentBattler = -1;
     currentBattlerComp = nullptr;
     battleJustStarted = false;
+    currentBattleMenu = battleMenus::None;
     InitializeBattleUI();
     // This should signal to the UI that we should load the UI.
     Events::PushEvent(EscapeTheFateEvents.EnterBattleFinished, 0);
@@ -157,10 +163,10 @@ void Supergoon::UpdateBattle() {
     return;
   }
   updateATBs(*gamestate);
-  // Handle exiting the battle for testing.
-  currentBattler = currentBattler == -1 ? findReadyBattler() : currentBattler;
-  if (currentBattler >= 0) {
-    handlePlayerInputForBattler(gamestate);
+  if (currentBattler == -1 && (currentBattler = findReadyBattler()) != -1) {
+    currentBattleMenu = battleMenus::Commands;
+    currentFingerPos = 0;
   }
+  handlePlayerInputForBattler(gamestate);
   UpdateBattleUI();
 }

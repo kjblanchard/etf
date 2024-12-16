@@ -8,6 +8,7 @@ void Supergoon::InitializeEvents() {
   EscapeTheFateEvents.BattleTurnFinished = Events::RegisterEvent();
   EscapeTheFateEvents.VictoryStart = Events::RegisterEvent();
   EscapeTheFateEvents.VictoryEnd = Events::RegisterEvent();
-  EscapeTheFateEvents.BattleButtonPressed = Events::RegisterEvent();
+//  EscapeTheFateEvents.BattleButtonPressed = Events::RegisterEvent();
   EscapeTheFateEvents.PlayerBattlerTurnBegin = Events::RegisterEvent();
+  EscapeTheFateEvents.commandCursorUpdate = Events::RegisterEvent();
 }
