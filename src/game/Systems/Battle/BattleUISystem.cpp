@@ -58,6 +58,9 @@ static void initializePlayerUI() {
   for (int i = 0; i < battleCommandsSize; ++i) {
     battleCommandTexts[i] = new UIText(verticalLayoutGroup, battleCommands[i], battleCommands[i], 12);
   }
+  // Currently gray these out, as they can't be used
+  battleCommandTexts[1]->SetColor({160, 160, 160, 255});
+  battleCommandTexts[2]->SetColor({160, 160, 160, 255});
   auto path = std::string(SDL_GetBasePath()) + "assets/img/fingers.png";
   auto fingerImage = ContentRegistry::CreateContent<Image>(path);
   fingerImage->LoadContent();
@@ -90,6 +93,9 @@ static void initializeBattleUI() {
 }
 
 static void handleInput(int loc) {
+  if (!battlePanel) {
+    return;
+  }
   sgLogWarn("Moving to finger pos %d", loc);
   auto currentFingerPos = loc;
   auto text = battleCommandTexts[currentFingerPos];

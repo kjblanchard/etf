@@ -1,29 +1,37 @@
-// #include <Supergoon/pch.hpp>
 #include "Components/BattlerComponent.hpp"
 #include "Supergoon/Content/ContentRegistry.hpp"
 #include "Supergoon/Content/Sfx.hpp"
 #include "Supergoon/ECS/Components/AnimationComponent.hpp"
 #include "Supergoon/Events.hpp"
+#include "Supergoon/Tween/Tween.hpp"
+#include <Entities/Battle/BattleCommandArgs.hpp>
+#include <Supergoon/Coroutine.h>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Input.hpp>
 #include <Supergoon/Log.hpp>
 #include <Supergoon/Sound.hpp>
+#include <Systems/Battle/BattleAbilitySystem.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
 #include <Systems/Battle/BattleUISystem.hpp>
 #include <Utilities/Events.hpp>
 #include <memory>
+#include <sys/_types/_u_int64_t.h>
 using namespace Supergoon;
 using namespace std;
+static void Victory(GameState *gamestate);
 
-// are the events registered?
 static shared_ptr<Sfx> menuMoveSfx = nullptr;
 static shared_ptr<Sfx> menuSelectSfx = nullptr;
 static shared_ptr<Sfx> playerTurnSfx = nullptr;
+static shared_ptr<Sfx> enemyDiedSfx = nullptr;
+static shared_ptr<Sfx> slashSfx = nullptr;
+static shared_ptr<Sfx> errorSfx = nullptr;
 static bool initialized = false;
 static bool battleEnded = false;
 static bool battleJustStarted = true;
 static int currentBattler = -1;
+static Tween enemyDiedTween = Tween(1.0);
 static BattlerComponent *currentBattlerComp = nullptr;
 static AnimationComponent *currentBattlerAnimationComp = nullptr;
 
@@ -50,17 +58,58 @@ static void initialize() {
   if (!isInBattle(&gamestate)) {
     return;
   }
-  // determine whose turn it is first, currently set it to the player.
+  Events::RegisterEventHandler(EscapeTheFateEvents.BattleDamageEvent, [](int battlerId, void *damage, void *) {
+    GameObject::ForEach<BattlerComponent>([battlerId, &damage](GameObject, BattlerComponent &battlerComponent) {
+      if (battlerComponent.Id != battlerId) {
+        return;
+      }
+      assert((u_int64_t)damage && "Cannot convert damage to int");
+      auto damageInt = (u_int64_t)damage;
+      battlerComponent.Stats.HP -= damageInt;
+      // If it's a enemy, we should play a sound and then victory.
+      if (battlerComponent.Stats.HP <= 0) {
+        Sound::Instance()->PlaySfx(enemyDiedSfx.get());
+        enemyDiedTween.Restart();
+      }
+      // TODO If it's a player, we should update the hp
+    });
+  });
   gamestate->BattleData.CurrentBattler = 1;
   menuMoveSfx = ContentRegistry::CreateContent<Sfx>("menuMove");
   menuSelectSfx = ContentRegistry::CreateContent<Sfx>("menuSelect");
   playerTurnSfx = ContentRegistry::CreateContent<Sfx>("playerTurn");
+  errorSfx = ContentRegistry::CreateContent<Sfx>("error1");
+  enemyDiedSfx = ContentRegistry::CreateContent<Sfx>("enemyDead");
+  slashSfx = ContentRegistry::CreateContent<Sfx>("slash1");
+  enemyDiedTween = Tween(1.0);
+  enemyDiedTween.SetAutostart(false);
+  enemyDiedTween.EndFunc = [gamestate]() {
+    bool allEnemiesDead = true;
+    GameObject::ForEach<BattlerComponent>([&allEnemiesDead](GameObject, BattlerComponent &battlerComp) {
+      if (battlerComp.IsPlayer) {
+        return;
+      }
+      if (battlerComp.Stats.HP > 0) {
+        allEnemiesDead = false;
+      }
+    });
+    if (allEnemiesDead) {
+      Victory(gamestate);
+    }
+  };
   menuMoveSfx->LoadContent();
   menuSelectSfx->LoadContent();
   playerTurnSfx->LoadContent();
+  enemyDiedSfx->LoadContent();
+  errorSfx->LoadContent();
+  slashSfx->LoadContent();
+  InitializeBattleAbilitySystem();
   initialized = true;
 }
 static void updateATBs(GameState &gamestate) {
+  if (battleEnded) {
+    return;
+  }
   GameObject::ForEach<BattlerComponent>([&gamestate](GameObject, BattlerComponent &battleComp) {
     battleComp.CurrentATB = battleComp.CurrentATB < battleComp.FullATB ? battleComp.CurrentATB += gamestate.DeltaTime * 1 : battleComp.FullATB;
   });
@@ -90,29 +139,49 @@ static int findReadyBattler() {
   }
   return battler;
 }
+static void battlerStartAnimation(void *userdata) {
+  auto comp = (AnimationComponent *)userdata;
+  assert(comp);
+  comp->Animation->PlayAnimation("slash2");
+  auto co = sgAddCoroutine(
+      0.25, [](void *udata) {
+        // auto sfx = (Sfx *)udata;
+        Sound::Instance()->PlaySfx(slashSfx.get());
+      },
+      slashSfx.get());
+  sgStartCoroutine(co);
+
+  auto args = new BattleCommandArgs{4, 1, 0};
+  Events::PushEvent(EscapeTheFateEvents.BattleAbilityUsed, 0, (void *)args);
+}
+static void Victory(GameState *gamestate) {
+  Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup("victory"));
+  GameObject::ForEach<BattlerComponent, AnimationComponent>([](GameObject, BattlerComponent &battler, AnimationComponent &anim) {
+    if (!battler.IsPlayer) {
+      return;
+    }
+    anim.Animation->PlayAnimation("cheer1");
+  });
+  Events::PushEvent(EscapeTheFateEvents.VictoryStart, 0);
+  gamestate->BattleData.BattleVictory = true;
+  battleEnded = true;
+}
 
 void handlePlayerInputForBattler(GameState *gamestate) {
-  if (currentBattler == -1) {
+  // TODO currently this happens before the UI updates (1 frame off) when a players turn starts, is this bad?
+  if (battleEnded && KeyJustPressed(KeyboardKeys::Key_SPACE)) {
+    Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, true, (void *)strdup((gamestate->PlayerLoadLevel.c_str())));
+    Events::PushEvent(EscapeTheFateEvents.VictoryEnd, 0);
+    gamestate->BattleData.BattleVictory = false;
+    gamestate->InBattle = false;
+    gamestate->ExitingBattle = true;
+    gamestate->Loading = true;
+    battleEnded = false;
+    battleJustStarted = true;
     return;
   }
-  // TODO currently this happens before the UI updates (1 frame off) when a players turn starts, is this bad?
-  if (KeyJustPressed(KeyboardKeys::Key_Q)) {
-    if (!battleEnded) {
-      Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup("victory"));
-      Events::PushEvent(EscapeTheFateEvents.VictoryStart, 0);
-      currentBattlerAnimationComp->Animation->PlayAnimation("cheer1");
-      gamestate->BattleData.BattleVictory = true;
-      battleEnded = true;
-    } else {
-      Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, true, (void *)strdup((gamestate->PlayerLoadLevel.c_str())));
-      Events::PushEvent(EscapeTheFateEvents.VictoryEnd, 0);
-      gamestate->BattleData.BattleVictory = false;
-      gamestate->InBattle = false;
-      gamestate->ExitingBattle = true;
-      gamestate->Loading = true;
-      battleEnded = false;
-      battleJustStarted = true;
-    }
+  if (currentBattler == -1) {
+    return;
   }
   // If players turn, we should pop up the UI for the player and handle the input.
   else if (KeyJustPressed(KeyboardKeys::Key_W)) {
@@ -125,13 +194,20 @@ void handlePlayerInputForBattler(GameState *gamestate) {
     Events::PushEvent(EscapeTheFateEvents.commandCursorUpdate, currentFingerPos, nullptr);
   } else if (KeyJustPressed(KeyboardKeys::Key_SPACE)) {
     // We selected something, this should end our turn, resetting the atb and hiding the menu until the player is ready again.
-    Sound::Instance()->PlaySfx(menuSelectSfx.get());
-    currentBattlerComp->CurrentATB = 0;
-    currentBattler = -1;
-    currentBattlerAnimationComp->Animation->PlayAnimation("slash2");
-    Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, 0);
-    currentBattlerAnimationComp = nullptr;
-    currentBattlerComp = nullptr;
+    if (currentFingerPos == 0) {
+      Sound::Instance()->PlaySfx(menuSelectSfx.get());
+      currentBattlerComp->CurrentATB = 0;
+      currentBattler = -1;
+      // animation and sound should happen after a wait time.
+      auto co = sgAddCoroutine(0.25, battlerStartAnimation, currentBattlerAnimationComp);
+      sgStartCoroutine(co);
+      //
+      Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, 0);
+      currentBattlerAnimationComp = nullptr;
+      currentBattlerComp = nullptr;
+    } else {
+      Sound::Instance()->PlaySfx(errorSfx.get());
+    }
   }
   // Switch to next turn if it is the players turn
   if (gamestate->BattleData.CurrentBattler == 1 && KeyJustPressed(KeyboardKeys::Key_N)) {
@@ -168,5 +244,6 @@ void Supergoon::UpdateBattle() {
     currentFingerPos = 0;
   }
   handlePlayerInputForBattler(gamestate);
+  enemyDiedTween.Update();
   UpdateBattleUI();
 }
