@@ -96,7 +96,6 @@ static void handleInput(int loc) {
   if (!battlePanel) {
     return;
   }
-  sgLogWarn("Moving to finger pos %d", loc);
   auto currentFingerPos = loc;
   auto text = battleCommandTexts[currentFingerPos];
   auto x = text->TextDrawRect.X - 5 - battleFinger->ImageSourceRect.W;

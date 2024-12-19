@@ -32,7 +32,7 @@ void InitializeCamera() {
     auto &gc = g->GetComponent<GameState>();
     if (gc.EnteringBattle) {
       cc.Box.X -= 5;
-      sgColor color = {255, (uint8_t)colorFade, (uint8_t)colorFade, (uint8_t)colorFade};
+      sgColor color = {(uint8_t)colorFade, (uint8_t)colorFade, (uint8_t)colorFade, (uint8_t)colorFade};
       Level::SetBackGroundColor(color);
       Events::PushEvent(Events::BuiltinEvents.CameraUpdate, true, (void *)&cc.Box);
       return;

@@ -144,7 +144,7 @@ static void battlerStartAnimation(void *userdata) {
   assert(comp);
   comp->Animation->PlayAnimation("slash2");
   auto co = sgAddCoroutine(
-      0.25, [](void *udata) {
+      0.25, [](void *) {
         // auto sfx = (Sfx *)udata;
         Sound::Instance()->PlaySfx(slashSfx.get());
       },
