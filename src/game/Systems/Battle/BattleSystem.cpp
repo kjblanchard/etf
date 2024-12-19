@@ -111,7 +111,11 @@ static void updateATBs(GameState &gamestate) {
     return;
   }
   GameObject::ForEach<BattlerComponent>([&gamestate](GameObject, BattlerComponent &battleComp) {
-    battleComp.CurrentATB = battleComp.CurrentATB < battleComp.FullATB ? battleComp.CurrentATB += gamestate.DeltaTime * 1 : battleComp.FullATB;
+    //TODO this could go over full atb currently, not sure if that matters
+    if(battleComp.CurrentATB < battleComp.FullATB) {
+      battleComp.CurrentATB += gamestate.DeltaTime * 1;
+    }
+    // battleComp.CurrentATB = battleComp.CurrentATB < battleComp.FullATB ? battleComp.CurrentATB += gamestate.DeltaTime * 1 : battleComp.FullATB;
   });
 }
 
