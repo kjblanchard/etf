@@ -23,8 +23,8 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     battlerAnimation.AnimationName = "player1Battler";
     battlerComponent.Id = 1;
     battlerComponent.IsPlayer = true;
-    battlerComponent.Stats.HP = 10;
-    battlerComponent.Stats.MaxHP = 10;
+    battlerComponent.Stat.HP = 10;
+    battlerComponent.Stat.MaxHP = 10;
     // TODO we need to script this somehow,
     battlerAnimation.OnAnimationEnd = [](AsepriteAnimation *anim, std::string animEnding) {
       if (animEnding == "slash2") {
@@ -33,8 +33,8 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     };
   } else {
     battlerAnimation.AnimationName = "blackBird";
-    battlerComponent.Stats.HP = 2;
-    battlerComponent.Stats.MaxHP = 2;
+    battlerComponent.Stat.HP = 2;
+    battlerComponent.Stat.MaxHP = 2;
     battlerComponent.Id = 4;
     battlerComponent.IsPlayer = false;
   }

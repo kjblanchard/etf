@@ -7,6 +7,6 @@ struct BattlerComponent {
   bool IsPlayer;
   float CurrentATB;
   float FullATB;
-  Stats Stats;
+  Stats Stat;
 };
 } // namespace Supergoon

@@ -5,7 +5,7 @@
 #include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/pch.hpp>
 #include <Utilities/Utilities.hpp>
-#include <sys/_types/_u_int8_t.h>
+#include <cstdint>
 
 using namespace Supergoon;
 

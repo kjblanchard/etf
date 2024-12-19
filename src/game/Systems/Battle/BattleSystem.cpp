@@ -16,7 +16,7 @@
 #include <Systems/Battle/BattleUISystem.hpp>
 #include <Utilities/Events.hpp>
 #include <memory>
-#include <sys/_types/_u_int64_t.h>
+#include <cstdint>
 using namespace Supergoon;
 using namespace std;
 static void Victory(GameState *gamestate);
@@ -65,9 +65,9 @@ static void initialize() {
       }
       assert((u_int64_t)damage && "Cannot convert damage to int");
       auto damageInt = (u_int64_t)damage;
-      battlerComponent.Stats.HP -= damageInt;
+      battlerComponent.Stat.HP -= damageInt;
       // If it's a enemy, we should play a sound and then victory.
-      if (battlerComponent.Stats.HP <= 0) {
+      if (battlerComponent.Stat.HP <= 0) {
         Sound::Instance()->PlaySfx(enemyDiedSfx.get());
         enemyDiedTween.Restart();
       }
@@ -89,7 +89,7 @@ static void initialize() {
       if (battlerComp.IsPlayer) {
         return;
       }
-      if (battlerComp.Stats.HP > 0) {
+      if (battlerComp.Stat.HP > 0) {
         allEnemiesDead = false;
       }
     });
