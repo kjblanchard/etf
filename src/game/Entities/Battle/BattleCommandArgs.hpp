@@ -1,6 +1,6 @@
 #pragma once
 typedef struct BattleCommandArgs {
-  unsigned int TargetBattlerId;
-  unsigned int AttackingBattlerId;
-  unsigned int AbilityId;
+  unsigned int TargetBattlerId = 0;
+  unsigned int AttackingBattlerId = 0;
+  unsigned int AbilityId = 0;
 } BattleCommandArgs;

@@ -2,10 +2,10 @@
 #include <cstdint>
 namespace Supergoon {
 struct Stats {
-  int HP;
-  int MaxHP;
-  int Str;
-  int Def;
-  int Spd;
+  int HP = 0;
+  int MaxHP = 0;
+  int Str = 0;
+  int Def = 0;
+  int Spd = 0;
 };
 } // namespace Supergoon

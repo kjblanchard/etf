@@ -24,7 +24,8 @@ static void HandleAbilityUsed(int, void *abilityArgs, void *) {
     damage = 1;
   }
   Events::PushEvent(EscapeTheFateEvents.BattleDamageEvent, abilityArg->TargetBattlerId, (void *)damage);
-  delete (abilityArg);
+  //TODO without this it's a memory leak, just testing.
+  // delete (abilityArg);
 }
 
 void Supergoon::InitializeBattleAbilitySystem() {

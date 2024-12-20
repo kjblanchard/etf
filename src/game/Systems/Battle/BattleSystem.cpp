@@ -15,8 +15,8 @@
 #include <Systems/Battle/BattleSystem.hpp>
 #include <Systems/Battle/BattleUISystem.hpp>
 #include <Utilities/Events.hpp>
-#include <memory>
 #include <cstdint>
+#include <memory>
 using namespace Supergoon;
 using namespace std;
 static void Victory(GameState *gamestate);
@@ -63,8 +63,9 @@ static void initialize() {
       if (battlerComponent.Id != battlerId) {
         return;
       }
-      assert((u_int64_t)damage && "Cannot convert damage to int");
-      auto damageInt = (u_int64_t)damage;
+      // assert((u_int64_t)damage && "Cannot convert damage to int");
+      // auto damageInt = (u_int64_t)damage;
+      auto damageInt = 1;
       battlerComponent.Stat.HP -= damageInt;
       // If it's a enemy, we should play a sound and then victory.
       if (battlerComponent.Stat.HP <= 0) {
@@ -111,8 +112,8 @@ static void updateATBs(GameState &gamestate) {
     return;
   }
   GameObject::ForEach<BattlerComponent>([&gamestate](GameObject, BattlerComponent &battleComp) {
-    //TODO this could go over full atb currently, not sure if that matters
-    if(battleComp.CurrentATB < battleComp.FullATB) {
+    // TODO this could go over full atb currently, not sure if that matters
+    if (battleComp.CurrentATB < battleComp.FullATB) {
       battleComp.CurrentATB += gamestate.DeltaTime * 1;
     }
     // battleComp.CurrentATB = battleComp.CurrentATB < battleComp.FullATB ? battleComp.CurrentATB += gamestate.DeltaTime * 1 : battleComp.FullATB;
@@ -147,13 +148,13 @@ static void battlerStartAnimation(void *userdata) {
   auto comp = (AnimationComponent *)userdata;
   assert(comp);
   comp->Animation->PlayAnimation("slash2");
-  auto co = sgAddCoroutine(
-      0.25, [](void *) {
-        // auto sfx = (Sfx *)udata;
-        Sound::Instance()->PlaySfx(slashSfx.get());
-      },
-      slashSfx.get());
-  sgStartCoroutine(co);
+  // auto co = sgAddCoroutine(
+  //     0.25, [](void *) {
+  //       // auto sfx = (Sfx *)udata;
+  //       Sound::Instance()->PlaySfx(slashSfx.get());
+  //     },
+  //     slashSfx.get());
+  // sgStartCoroutine(co);
 
   auto args = new BattleCommandArgs{4, 1, 0};
   Events::PushEvent(EscapeTheFateEvents.BattleAbilityUsed, 0, (void *)args);
@@ -203,6 +204,8 @@ void handlePlayerInputForBattler(GameState *gamestate) {
       currentBattlerComp->CurrentATB = 0;
       currentBattler = -1;
       // animation and sound should happen after a wait time.
+      // auto co = sgAddCoroutine(0.25, battlerStartAnimation, currentBattlerAnimationComp);
+      battlerStartAnimation(currentBattlerAnimationComp);
       auto co = sgAddCoroutine(0.25, battlerStartAnimation, currentBattlerAnimationComp);
       sgStartCoroutine(co);
       //
