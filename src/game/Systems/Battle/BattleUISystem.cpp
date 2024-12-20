@@ -93,11 +93,12 @@ static void initializeBattleUI() {
 }
 
 static void handleInput(int loc) {
+  return;
   if (!battlePanel || !battleFinger) {
     return;
   }
   auto gamestate = GameObject::FindComponent<GameState>();
-  if (!gamestate->InBattle) {
+  if (!gamestate->InBattle || gamestate->BattleData.BattleVictory || gamestate->ExitingBattle || gamestate->Loading) {
     return;
   }
 

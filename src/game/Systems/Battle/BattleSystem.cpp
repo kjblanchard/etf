@@ -85,7 +85,11 @@ static void initialize() {
   enemyDiedTween = Tween(1.0);
   enemyDiedTween.SetAutostart(false);
   enemyDiedTween.EndFunc = [gamestate]() {
+    if (gamestate->BattleData.BattleVictory) {
+      return;
+    }
     bool allEnemiesDead = true;
+    sgLogWarn("Running endfunc");
     GameObject::ForEach<BattlerComponent>([&allEnemiesDead](GameObject, BattlerComponent &battlerComp) {
       if (battlerComp.IsPlayer) {
         return;
@@ -246,7 +250,8 @@ void Supergoon::UpdateBattle() {
     Events::PushEvent(EscapeTheFateEvents.EnterBattleFinished, 0);
   }
   // If we are loading, break here.
-  if (gamestate->Loading) {
+  // if (gamestate->Loading || gamestate->BattleData.BattleVictory || gamestate->ExitingBattle) {
+  if (gamestate->Loading || gamestate->ExitingBattle) {
     return;
   }
   updateATBs(*gamestate);
