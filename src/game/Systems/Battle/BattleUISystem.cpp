@@ -93,16 +93,21 @@ static void initializeBattleUI() {
 }
 
 static void handleInput(int loc) {
-  if (!battlePanel) {
+  if (!battlePanel || !battleFinger) {
     return;
   }
+  auto gamestate = GameObject::FindComponent<GameState>();
+  if (!gamestate->InBattle) {
+    return;
+  }
+
   auto currentFingerPos = loc;
   auto text = battleCommandTexts[currentFingerPos];
   auto x = text->TextDrawRect.X - 5 - battleFinger->ImageSourceRect.W;
   auto y = text->TextDrawRect.Y;
   battleFinger->SetDrawOverride({*battleFinger->DrawOverrideXHandle(), y});
   text->SetDirty();
-  UI::UIInstance->UpdateInternal();
+  // UI::UIInstance->UpdateInternal();
   float *xHandle = &battleFinger->DrawOverrideHandle()->X;
   fingerSequence = Sequence();
   auto fingerbackTween = new Tween(x, x - 5, 1.0, xHandle, Easings::Linear, -1);

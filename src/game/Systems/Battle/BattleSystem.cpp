@@ -191,7 +191,11 @@ void handlePlayerInputForBattler(GameState *gamestate) {
   // If players turn, we should pop up the UI for the player and handle the input.
   else if (KeyJustPressed(KeyboardKeys::Key_W)) {
     Sound::Instance()->PlaySfx(menuMoveSfx.get());
-    currentFingerPos = --currentFingerPos < 0 ? numCommands - 1 : currentFingerPos;
+    // currentFingerPos = --currentFingerPos < 0 ? numCommands - 1 : currentFingerPos;
+    --currentFingerPos;
+    if (currentFingerPos < 0) {
+      currentFingerPos = numCommands - 1;
+    }
     Events::PushEvent(EscapeTheFateEvents.commandCursorUpdate, currentFingerPos, nullptr);
   } else if (KeyJustPressed(KeyboardKeys::Key_S)) {
     currentFingerPos = ++currentFingerPos >= numCommands ? 0 : currentFingerPos;
