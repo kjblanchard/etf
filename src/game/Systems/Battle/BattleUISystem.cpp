@@ -4,6 +4,8 @@
 #include "Supergoon/UI/UIImage.hpp"
 #include "SupergoonEngine/log.h"
 #include "Utilities/Events.hpp"
+#include <Components/BattleComponent.hpp>
+#include <Entities/Battle/BattleState.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
@@ -93,15 +95,10 @@ static void initializeBattleUI() {
 }
 
 static void handleInput(int loc) {
-  return;
-  if (!battlePanel || !battleFinger) {
+  auto battleComponent = GameObject::FindComponent<BattleComponent>();
+  if (!battlePanel || !battleFinger || battleComponent->CurrentBattleState != BattleState::Battle) {
     return;
   }
-  auto gamestate = GameObject::FindComponent<GameState>();
-  if (!gamestate->InBattle || gamestate->BattleData.BattleVictory || gamestate->ExitingBattle || gamestate->Loading) {
-    return;
-  }
-
   auto currentFingerPos = loc;
   auto text = battleCommandTexts[currentFingerPos];
   auto x = text->TextDrawRect.X - 5 - battleFinger->ImageSourceRect.W;
@@ -114,9 +111,15 @@ static void handleInput(int loc) {
   auto fingerbackTween = new Tween(x, x - 5, 1.0, xHandle, Easings::Linear, -1);
   auto fingerForwardTween = new Tween(x - 5, x, 1.0, xHandle, Easings::Linear, -1);
   fingerForwardTween->UpdateFunc = []() {
+    if (!battleFinger) {
+      return;
+    }
     battleFinger->SetDirty();
   };
   fingerbackTween->UpdateFunc = []() {
+    if (!battleFinger) {
+      return;
+    }
     battleFinger->SetDirty();
   };
   fingerSequence.Tweens.push_back(shared_ptr<Tween>(fingerForwardTween));
@@ -124,7 +127,7 @@ static void handleInput(int loc) {
 }
 
 static void battleUpdate() {
-  if (!battlePanel) {
+  if (!battlePanel || !battleCommandPanel) {
     return;
   }
   fingerSequence.Update();
@@ -137,6 +140,7 @@ static void battleVictory() {
   Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleBasePanel");
   Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleCommandPanel");
   battlePanel = nullptr;
+  battleCommandPanel = nullptr;
   for (int i = 0; i < battleCommandsSize; ++i) {
     battleCommandTexts[i] = nullptr;
   }
@@ -147,7 +151,7 @@ static void battleCleanup() {
 }
 
 void Supergoon::InitializeBattleUI() {
-  Events::RegisterEventHandler(EscapeTheFateEvents.EnterBattleFinished, [](int, void *, void *) {
+  Events::RegisterEventHandler(EscapeTheFateEvents.BattleFullyStarted, [](int, void *, void *) {
     initializeBattleUI();
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int, void *, void *) {
@@ -155,11 +159,14 @@ void Supergoon::InitializeBattleUI() {
     fingerPosChanged = true;
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.PlayerBattlerTurnBegin, [](int, void *, void *) {
-    handleInput(0);
-    battleCommandPanel->SetVisible(true);
-    battleCommandPanel->SetDirty();
+    if (battleCommandPanel) {
+      battleCommandPanel->SetVisible(true);
+      handleInput(0);
+      battleCommandPanel->SetDirty();
+    }
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.commandCursorUpdate, [](int buttonLoc, void *, void *) {
+    return;
     if (!battlePanel) {
       return;
     }

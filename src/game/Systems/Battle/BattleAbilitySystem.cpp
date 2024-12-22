@@ -1,3 +1,4 @@
+#include <Components/BattleComponent.hpp>
 #include <Entities/Battle/BattleCommandArgs.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
@@ -7,14 +8,18 @@
 #include <cassert>
 using namespace Supergoon;
 static GameState *gamestate = nullptr;
+static BattleComponent *battleComponent = nullptr;
 
 static void HandleAbilityUsed(int, void *abilityArgs, void *) {
   if (!gamestate) {
     gamestate = GameObject::FindComponent<GameState>();
   }
+  if (!battleComponent) {
+    battleComponent = GameObject::FindComponent<BattleComponent>();
+  }
   assert((BattleCommandArgs *)abilityArgs && "Bad battle command arg event passed");
   auto abilityArg = (BattleCommandArgs *)abilityArgs;
-  if (!abilityArg || !gamestate || !gamestate->InBattle) {
+  if (!battleComponent->InBattle || !abilityArg || !gamestate) {
     return;
   }
   auto damage = 0;
@@ -24,8 +29,8 @@ static void HandleAbilityUsed(int, void *abilityArgs, void *) {
     damage = 1;
   }
   Events::PushEvent(EscapeTheFateEvents.BattleDamageEvent, abilityArg->TargetBattlerId, (void *)damage);
-  //TODO without this it's a memory leak, just testing.
-  // delete (abilityArg);
+  // TODO without this it's a memory leak, just testing.
+  //  delete (abilityArg);
 }
 
 void Supergoon::InitializeBattleAbilitySystem() {

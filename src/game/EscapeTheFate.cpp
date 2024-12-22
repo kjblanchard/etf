@@ -22,6 +22,7 @@
 #include <Systems/Battle/BattleSystem.hpp>
 #include <Systems/Battle/BattleUISystem.hpp>
 #include <Systems/Battle/BattleZoneSystem.hpp>
+#include <Systems/Battle/EnterBattleSystem.hpp>
 #include <Systems/CameraSystem.hpp>
 #include <Systems/DebugDrawSystem.hpp>
 #include <Systems/GameStateSystem.hpp>
@@ -58,13 +59,22 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 using namespace Supergoon;
 static bool inGame = false;
 static void loadLevel() {
+  auto gamestateGameObject = GameObject::GetGameObjectWithComponents<GameState>();
+  assert(gamestateGameObject);
+  auto battleComponent = gamestateGameObject->HasComponent<BattleComponent>();
+  if (!battleComponent) {
+    auto battleComp = BattleComponent();
+    battleComp.BattleId = 0;
+    battleComp.BattleMapId = 0;
+    battleComp.EnteringBattle = false;
+    battleComp.InBattle = false;
+    battleComp.CurrentBattleState = BattleState::None;
+    gamestateGameObject->AddComponent<BattleComponent>(battleComp);
+  }
   LoadPlayers();
   LoadBattlers();
   LoadAnimationComponents();
   LoadTextInteractions();
-  StartPlayers();
-  StartBattlers();
-
   // Check if we should show the text at top
   auto display = Level::GetCurrentLevelProperty<std::string>("display");
   // auto ui = UI::UIInstance.get();
@@ -84,15 +94,11 @@ static void loadLevel() {
   } else {
     textPanel->SetVisible(false);
   }
-  auto gamestateGameObject = GameObject::GetGameObjectWithComponents<GameState>();
-  assert(gamestateGameObject);
-  auto battleComponent = gamestateGameObject->HasComponent<BattleComponent>();
-  if (!battleComponent) {
-    auto battleComp = BattleComponent();
-    battleComp.BattleId = 0;
-    battleComp.BattleMapId = 0;
-    gamestateGameObject->AddComponent<BattleComponent>(battleComp);
-  }
+
+  StartPlayers();
+  StartBattlers();
+  // InitializeBattleSystem();
+
   ContentRegistry::LoadAllContent();
   inGame = true;
 }
@@ -159,7 +165,8 @@ void BlackjackGame::Start() {
     Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup("debugTown"));
   }
   InitializeEvents();
-  InitializeCamera();
+  InitializeEnterBattleSystem();
+  // InitializeCamera();
 }
 
 void BlackjackGame::Update() {
@@ -169,6 +176,7 @@ void BlackjackGame::Update() {
     UpdateBattleZones();
     UpdateAnimationComponents();
     UpdateTextInteractions();
+    UpdateEnterBattleSystem();
     UpdateBattle();
     UpdateBattleUI();
     UpdateCamera();

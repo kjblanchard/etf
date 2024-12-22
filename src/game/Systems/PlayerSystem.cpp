@@ -2,6 +2,7 @@
 #include <SDL3/SDL_filesystem.h>
 #include <cmath>
 
+#include <Components/BattleComponent.hpp>
 #include <Components/PlayerComponent.hpp>
 #include <Components/PlayerExitComponent.hpp>
 #include <Components/PlayerInteractionComponent.hpp>
@@ -53,7 +54,7 @@ static void updateInteractionRect(PlayerComponent &player, PlayerInteractionComp
   }
 }
 
-static void loadPlayer(GameObject, PlayerSpawnComponent &playerSpawn, GameState &gameState) {
+static void loadPlayer(GameObject, PlayerSpawnComponent &playerSpawn, GameState &gameState, BattleComponent *battleComponent) {
   auto go = new GameObject();
   auto playerLocation = LocationComponent();
   auto playerComponent = PlayerComponent();
@@ -65,11 +66,12 @@ static void loadPlayer(GameObject, PlayerSpawnComponent &playerSpawn, GameState 
   playerComponent.PlayerNum = 0;
   playerComponent.Body = RectangleF{4, 21, 15, 15};
   // TODO, probably use this differently, this is hacked in basically.
-  if (gameState.ExitingBattle) {
+  if (battleComponent->CurrentBattleState == BattleState::Exiting) {
     playerLocation.Location.X = gameState.PlayerLoadLocation.X;
     playerLocation.Location.Y = gameState.PlayerLoadLocation.Y;
     playerComponent.Direction = (Directions)gameState.PlayerLoadDirection;
     gameState.CameraFollowTarget = true;
+    battleComponent->CurrentBattleState = BattleState::Initialized;
   } else {
     playerComponent.Direction = (Directions)playerSpawn.SpawnDirection;
     playerLocation.Location.X = playerSpawn.Location.X;
@@ -118,11 +120,12 @@ static void playerInput(GameObject go, PlayerComponent &player) {
   }
   auto state = GameObject::GetGameObjectWithComponents<GameState>();
   auto &stateComponent = state->GetComponent<GameState>();
+  auto battleComponent = GameObject::FindComponent<BattleComponent>();
   assert(state.has_value());
 
   auto &anim = go.GetComponent<AnimationComponent>();
-  anim.AnimationImage->SetVisible(!stateComponent.EnteringBattle);
-  if (stateComponent.Loading || stateComponent.EnteringBattle) {
+  anim.AnimationImage->SetVisible(!battleComponent->EnteringBattle);
+  if (stateComponent.Loading || battleComponent->EnteringBattle) {
     return;
   }
   auto vel = sgVector2{0, 0};
@@ -234,11 +237,11 @@ static void loadPlayerEach(GameObject go, PlayerSpawnComponent &ps) {
     return;
   }
   auto &stateComponent = state->GetComponent<GameState>();
-  if (ps.SpawnLocationId != stateComponent.PlayerSpawnLocation) {
+  auto battleComponent = GameObject::FindComponent<BattleComponent>();
+  if (ps.SpawnLocationId != stateComponent.PlayerSpawnLocation || !battleComponent) {
     return;
   }
-  loadPlayer(go, ps, stateComponent);
-  stateComponent.ExitingBattle = false;
+  loadPlayer(go, ps, stateComponent, battleComponent);
 }
 
 void Supergoon::StartPlayers() {
