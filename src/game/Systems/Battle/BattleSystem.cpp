@@ -14,6 +14,7 @@
 #include <Supergoon/Log.hpp>
 #include <Supergoon/Sound.hpp>
 #include <Systems/Battle/BattleAbilitySystem.hpp>
+#include <Systems/Battle/BattleDamageSystem.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
 #include <Systems/Battle/BattleUISystem.hpp>
 #include <Utilities/Events.hpp>
@@ -21,16 +22,13 @@
 #include <memory>
 using namespace Supergoon;
 using namespace std;
-static void startVictory(GameState *gamestate, BattleComponent *battleComponent);
 
 static shared_ptr<Sfx> menuMoveSfx = nullptr;
 static shared_ptr<Sfx> menuSelectSfx = nullptr;
 static shared_ptr<Sfx> playerTurnSfx = nullptr;
-static shared_ptr<Sfx> enemyDiedSfx = nullptr;
 static shared_ptr<Sfx> slashSfx = nullptr;
 static shared_ptr<Sfx> errorSfx = nullptr;
 static int currentBattler = -1;
-static Tween enemyDiedTween = Tween(1.0);
 static BattlerComponent *currentBattlerComp = nullptr;
 static AnimationComponent *currentBattlerAnimationComp = nullptr;
 
@@ -60,6 +58,7 @@ static bool isInBattle(GameState **state, BattleComponent **battleState) {
   return (*battleState)->InBattle;
 }
 
+// Updates all theh players atbs.
 static void updateATBs(GameState &gamestate, BattleComponent *battleComponent) {
   if (battleComponent->CurrentBattleState != BattleState::Battle) {
     return;
@@ -72,6 +71,7 @@ static void updateATBs(GameState &gamestate, BattleComponent *battleComponent) {
   });
 }
 
+// Tries to find a ready player battler.
 static int findReadyBattler() {
   auto battler = -1;
   bool foundBattler = false;
@@ -96,6 +96,8 @@ static int findReadyBattler() {
   }
   return battler;
 }
+
+// Starts the slash animation currently.
 static void battlerStartAnimation(void *userdata) {
   auto comp = (AnimationComponent *)userdata;
   assert(comp);
@@ -111,31 +113,19 @@ static void battlerStartAnimation(void *userdata) {
   auto args = new BattleCommandArgs{4, 1, 0};
   Events::PushEvent(EscapeTheFateEvents.BattleAbilityUsed, 0, (void *)args);
 }
-static void startVictory(GameState *gamestate, BattleComponent *battleComponent) {
-  Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup("victory"));
-  GameObject::ForEach<BattlerComponent, AnimationComponent>([](GameObject, BattlerComponent &battler, AnimationComponent &anim) {
-    if (!battler.IsPlayer) {
-      return;
-    }
-    anim.Animation->PlayAnimation("cheer1");
-  });
-  Events::PushEvent(EscapeTheFateEvents.VictoryStart, 0);
-  battleComponent->CurrentBattleState = BattleState::Victory;
-}
 
-static void EndBattle(GameState *gamestate, BattleComponent *battleComponent) {
-  Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, true, (void *)strdup((gamestate->PlayerLoadLevel.c_str())));
+static void endBattle(GameState *gamestate, BattleComponent *battleComponent) {
   Events::PushEvent(EscapeTheFateEvents.VictoryEnd, 0);
+  Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, true, (void *)strdup((gamestate->PlayerLoadLevel.c_str())));
   battleComponent->InBattle = false;
   gamestate->Loading = true;
-  // battleJustStarted = true;
   currentBattler = -1;
   battleComponent->CurrentBattleState = BattleState::Exiting;
 }
 
 static void victoryUpdate(GameState *gamestate, BattleComponent *battleComponent) {
   if (KeyJustPressed(KeyboardKeys::Key_SPACE)) {
-    EndBattle(gamestate, battleComponent);
+    endBattle(gamestate, battleComponent);
   }
 }
 
@@ -183,57 +173,21 @@ static void initializeBattleSystem(GameState *gamestate, BattleComponent *battle
       battleComponent->CurrentBattleState = BattleState::BattleJustStarted;
     }
   });
-  Events::RegisterEventHandler(EscapeTheFateEvents.BattleDamageEvent, [](int battlerId, void *damage, void *) {
-    GameObject::ForEach<BattlerComponent>([battlerId, &damage](GameObject, BattlerComponent &battlerComponent) {
-      if (battlerComponent.Id != battlerId) {
-        return;
-      }
-      // assert((u_int64_t)damage && "Cannot convert damage to int");
-      // auto damageInt = (u_int64_t)damage;
-      auto damageInt = 1;
-      battlerComponent.Stat.HP -= damageInt;
-      // If it's a enemy, we should play a sound and then victory.
-      if (battlerComponent.Stat.HP <= 0) {
-        Sound::Instance()->PlaySfx(enemyDiedSfx.get());
-        enemyDiedTween.Restart();
-      }
-      // TODO If it's a player, we should update the hp
-    });
-  });
   menuMoveSfx = ContentRegistry::CreateContent<Sfx>("menuMove");
   menuSelectSfx = ContentRegistry::CreateContent<Sfx>("menuSelect");
   playerTurnSfx = ContentRegistry::CreateContent<Sfx>("playerTurn");
   errorSfx = ContentRegistry::CreateContent<Sfx>("error1");
-  enemyDiedSfx = ContentRegistry::CreateContent<Sfx>("enemyDead");
   slashSfx = ContentRegistry::CreateContent<Sfx>("slash1");
-  enemyDiedTween = Tween(1.0);
-  enemyDiedTween.SetAutostart(false);
-  enemyDiedTween.EndFunc = [gamestate, battleComponent]() {
-    if (battleComponent->CurrentBattleState != BattleState::Battle) {
-      return;
-    }
-    bool allEnemiesDead = true;
-    GameObject::ForEach<BattlerComponent>([&allEnemiesDead](GameObject, BattlerComponent &battlerComp) {
-      if (battlerComp.IsPlayer) {
-        return;
-      }
-      if (battlerComp.Stat.HP > 0) {
-        allEnemiesDead = false;
-      }
-    });
-    if (allEnemiesDead) {
-      startVictory(gamestate, battleComponent);
-    }
-  };
+  // We need to make these for each of the enemy battlers.
   menuMoveSfx->LoadContent();
   menuSelectSfx->LoadContent();
   playerTurnSfx->LoadContent();
-  enemyDiedSfx->LoadContent();
   errorSfx->LoadContent();
   slashSfx->LoadContent();
   // This runs the initial initialization of the UI, that registers the event handlers.
   InitializeBattleUI();
   InitializeBattleAbilitySystem();
+  InitializeBattleDamageSystem(battleComponent);
   battleComponent->CurrentBattleState = BattleState::BattleJustStarted;
 }
 
@@ -273,9 +227,8 @@ void Supergoon::UpdateBattle() {
       currentBattleMenu = battleMenus::Commands;
       currentFingerPos = 0;
     }
-    // TODO , this is dumb, why do we even handle this here.
-    enemyDiedTween.Update();
     handlePlayerInputForBattler(gamestate, battleComponent);
+    UpdateBattleDamageSystem();
     UpdateBattleUI();
     break;
   case BattleState::Exiting:
