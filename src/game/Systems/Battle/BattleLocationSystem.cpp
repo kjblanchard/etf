@@ -33,8 +33,8 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     };
   } else {
     battlerAnimation.AnimationName = "blackBird";
-    battlerComponent.Stat.HP = 1;
-    battlerComponent.Stat.MaxHP = 1;
+    battlerComponent.Stat.HP = 2;
+    battlerComponent.Stat.MaxHP = 2;
     battlerComponent.Id = 4;
     battlerComponent.IsPlayer = false;
   }

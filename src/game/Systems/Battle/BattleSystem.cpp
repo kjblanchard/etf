@@ -109,7 +109,6 @@ static void battlerStartAnimation(void *userdata) {
       },
       slashSfx.get());
   sgStartCoroutine(co);
-
   auto args = new BattleCommandArgs{4, 1, 0};
   Events::PushEvent(EscapeTheFateEvents.BattleAbilityUsed, 0, (void *)args);
 }
@@ -120,6 +119,7 @@ static void endBattle(GameState *gamestate, BattleComponent *battleComponent) {
   battleComponent->InBattle = false;
   gamestate->Loading = true;
   currentBattler = -1;
+  EndBattleDamageSystem();
   battleComponent->CurrentBattleState = BattleState::Exiting;
 }
 

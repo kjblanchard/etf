@@ -3,6 +3,7 @@
 #include <Entities/Battle/BattleState.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Sfx.hpp>
+#include <Supergoon/Coroutine.h>
 #include <Supergoon/ECS/Components/AnimationComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Events.hpp>
@@ -13,7 +14,7 @@
 #include <memory>
 using namespace Supergoon;
 using namespace std;
-
+static int _alphaTweenInt = 0;
 static shared_ptr<Sfx> enemyDiedSfx = nullptr;
 static Tween enemyDiedTween = Tween(1.0);
 static void startVictory(BattleComponent *battleComponent) {
@@ -28,8 +29,8 @@ static void startVictory(BattleComponent *battleComponent) {
   battleComponent->CurrentBattleState = BattleState::Victory;
 }
 void Supergoon::InitializeBattleDamageSystem(BattleComponent *battleComponent) {
-  Events::RegisterEventHandler(EscapeTheFateEvents.BattleDamageEvent, [](int battlerId, void *damage, void *) {
-    GameObject::ForEach<BattlerComponent>([battlerId, &damage](GameObject, BattlerComponent &battlerComponent) {
+  Events::RegisterEventHandler(EscapeTheFateEvents.BattleDamageEvent, [battleComponent](int battlerId, void *damage, void *) {
+    GameObject::ForEach<BattlerComponent, AnimationComponent>([battlerId, battleComponent](GameObject, BattlerComponent &battlerComponent, AnimationComponent &animComponent) {
       if (battlerComponent.Id != battlerId) {
         return;
       }
@@ -39,35 +40,46 @@ void Supergoon::InitializeBattleDamageSystem(BattleComponent *battleComponent) {
       battlerComponent.Stat.HP -= damageInt;
       // If it's a enemy, we should play a sound and then victory.
       if (battlerComponent.Stat.HP <= 0) {
-        Sound::Instance()->PlaySfx(enemyDiedSfx.get());
-        enemyDiedTween.Restart();
+        enemyDiedTween = Tween(255, 0, 0.75, &_alphaTweenInt, Easings::Linear, 1);
+        enemyDiedTween.UpdateFunc = [animComponent]() {
+          animComponent.AnimationImage->SetAlpha(_alphaTweenInt);
+        };
+        enemyDiedTween.SetAutostart(false);
+        enemyDiedTween.EndFunc = [battleComponent]() {
+          if (battleComponent->CurrentBattleState != BattleState::Battle) {
+            return;
+          }
+          bool allEnemiesDead = true;
+          GameObject::ForEach<BattlerComponent>([&allEnemiesDead](GameObject, BattlerComponent &battlerComp) {
+            if (battlerComp.IsPlayer) {
+              return;
+            }
+            if (battlerComp.Stat.HP > 0) {
+              allEnemiesDead = false;
+            }
+          });
+          if (allEnemiesDead) {
+            // Should signal to start the victory to the battle system.
+            startVictory(battleComponent);
+          }
+        };
+        auto co = sgAddCoroutine(
+            0.5, [](void *) {
+              Sound::Instance()->PlaySfx(enemyDiedSfx.get());
+              enemyDiedTween.Restart();
+            },
+            nullptr);
+        sgStartCoroutine(co);
       }
       // TODO If it's a player, we should update the hp
     });
   });
-  enemyDiedTween = Tween(1.0);
-  enemyDiedTween.SetAutostart(false);
-  enemyDiedTween.EndFunc = [battleComponent]() {
-    if (battleComponent->CurrentBattleState != BattleState::Battle) {
-      return;
-    }
-    bool allEnemiesDead = true;
-    GameObject::ForEach<BattlerComponent>([&allEnemiesDead](GameObject, BattlerComponent &battlerComp) {
-      if (battlerComp.IsPlayer) {
-        return;
-      }
-      if (battlerComp.Stat.HP > 0) {
-        allEnemiesDead = false;
-      }
-    });
-    if (allEnemiesDead) {
-      // Should signal to start the victory to the battle system.
-      startVictory(battleComponent);
-    }
-  };
   enemyDiedSfx = ContentRegistry::CreateContent<Sfx>("enemyDead");
   enemyDiedSfx->LoadContent();
 }
 void Supergoon::UpdateBattleDamageSystem() {
   enemyDiedTween.Update();
+}
+void Supergoon::EndBattleDamageSystem() {
+  enemyDiedTween = Tween(1.0f);
 }
