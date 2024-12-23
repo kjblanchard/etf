@@ -141,23 +141,31 @@ static void battleUpdate() {
 }
 
 static void battleVictory() {
-  Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleBasePanel");
-  Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleCommandPanel");
-  battlePanel = nullptr;
-  battleCommandPanel = nullptr;
-  battleFinger = nullptr;
-  for (int i = 0; i < battleCommandsSize; ++i) {
-    battleCommandTexts[i] = nullptr;
-  }
+  battlePanel->SetVisible(false);
+  battleCommandPanel->SetVisible(false);
+  // Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleBasePanel");
+  // Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleCommandPanel");
+  // battlePanel = nullptr;
+  // battleCommandPanel = nullptr;
+  // battleFinger = nullptr;
+  // for (int i = 0; i < battleCommandsSize; ++i) {
+  //   battleCommandTexts[i] = nullptr;
+  // }
 }
 
 static void battleCleanup() {
   fingerPosChanged = false;
 }
 
+static void startBattleUI() {
+  battlePanel->SetVisible(true);
+  // battleCommandPanel->SetVisible(true);
+}
+
 void Supergoon::InitializeBattleUI() {
   Events::RegisterEventHandler(EscapeTheFateEvents.BattleFullyStarted, [](int, void *, void *) {
-    initializeBattleUI();
+    // initializeBattleUI();
+    startBattleUI();
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int, void *, void *) {
     battleCommandPanel->SetVisible(false);
@@ -171,7 +179,6 @@ void Supergoon::InitializeBattleUI() {
     }
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.commandCursorUpdate, [](int buttonLoc, void *, void *) {
-    return;
     if (!battlePanel || !battleFinger || !battleCommandPanel) {
       return;
     }
@@ -183,6 +190,7 @@ void Supergoon::InitializeBattleUI() {
   Events::RegisterEventHandler(EscapeTheFateEvents.VictoryEnd, [](int, void *, void *) {
     battleCleanup();
   });
+  initializeBattleUI();
 }
 
 void Supergoon::UpdateBattleUI() {
