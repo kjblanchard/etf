@@ -142,7 +142,7 @@ static void victoryUpdate(GameState *gamestate, BattleComponent *battleComponent
   }
 }
 
-void handlePlayerInputForBattler(GameState *gamestate, BattleComponent *) {
+void handlePlayerInputForBattler(GameState *, BattleComponent *) {
   // TODO currently this happens before the UI updates (1 frame off) when a players turn starts, is this bad?
   // If there is no battler ready, return
   if (currentBattler == -1) {
@@ -273,12 +273,18 @@ void Supergoon::UpdateBattle() {
     break;
   case BattleState::Battle:
     updateATBs(*gamestate, battleComponent);
+    // Check to see if there is a ready battler, if so se tthe finger pos to 0 and set to the commands menu
     if (currentBattler == -1 && (currentBattler = findReadyBattler()) != -1) {
       currentBattleMenu = battleMenus::Commands;
       currentFingerPos = 0;
     }
-    handlePlayerInputForBattler(gamestate, battleComponent);
+    // TODO , this is dumb, why do we even handle this here.
     enemyDiedTween.Update();
+    // If there is no battler, return, don't handle input
+    if (currentBattler == -1) {
+      return;
+    }
+    handlePlayerInputForBattler(gamestate, battleComponent);
     UpdateBattleUI();
     break;
   case BattleState::Exiting:
