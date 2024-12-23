@@ -3,8 +3,8 @@
 namespace Supergoon {
 struct BattleComponent {
   // Battle group ID of the next battle
-  int BattleId;
-  int BattleMapId;
+  int BattleId = 0;
+  int BattleMapId = 0;
   bool EnteringBattle = false;
   bool InBattle = false;
   BattleState CurrentBattleState = BattleState::None;

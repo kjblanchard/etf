@@ -6,10 +6,10 @@
 namespace Supergoon {
 class Text;
 struct TextInteractionComponent {
-	RectangleF InteractionRect;
-	bool InteractionPressed;
-	std::string DisplayText;
-	std::shared_ptr<Text> TextPtr;
+  RectangleF InteractionRect = {0, 0, 0, 0};
+  bool InteractionPressed = false;
+  std::string DisplayText = "";
+  std::shared_ptr<Text> TextPtr = nullptr;
 };
 
-}  // namespace Supergoon
+} // namespace Supergoon

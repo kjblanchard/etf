@@ -143,9 +143,8 @@ static void victoryUpdate(GameState *gamestate, BattleComponent *battleComponent
 }
 
 void handlePlayerInputForBattler(GameState *, BattleComponent *) {
-  // TODO currently this happens before the UI updates (1 frame off) when a players turn starts, is this bad?
   // If there is no battler ready, return
-  if (currentBattler == -1) {
+   if (currentBattler == -1) {
     return;
   }
   // If players turn, we should pop up the UI for the player and handle the input.
@@ -213,11 +212,10 @@ static void initializeBattleSystem(GameState *gamestate, BattleComponent *battle
   enemyDiedTween = Tween(1.0);
   enemyDiedTween.SetAutostart(false);
   enemyDiedTween.EndFunc = [gamestate, battleComponent]() {
-    if (battleComponent->CurrentBattleState == BattleState::Victory) {
+    if (battleComponent->CurrentBattleState != BattleState::Battle) {
       return;
     }
     bool allEnemiesDead = true;
-    sgLogWarn("Running endfunc");
     GameObject::ForEach<BattlerComponent>([&allEnemiesDead](GameObject, BattlerComponent &battlerComp) {
       if (battlerComp.IsPlayer) {
         return;
@@ -280,10 +278,6 @@ void Supergoon::UpdateBattle() {
     }
     // TODO , this is dumb, why do we even handle this here.
     enemyDiedTween.Update();
-    // If there is no battler, return, don't handle input
-    if (currentBattler == -1) {
-      return;
-    }
     handlePlayerInputForBattler(gamestate, battleComponent);
     UpdateBattleUI();
     break;
