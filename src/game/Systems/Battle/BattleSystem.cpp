@@ -29,8 +29,6 @@ static shared_ptr<Sfx> playerTurnSfx = nullptr;
 static shared_ptr<Sfx> enemyDiedSfx = nullptr;
 static shared_ptr<Sfx> slashSfx = nullptr;
 static shared_ptr<Sfx> errorSfx = nullptr;
-// static bool battleEnded = false;
-// static bool battleJustStarted = true;
 static int currentBattler = -1;
 static Tween enemyDiedTween = Tween(1.0);
 static BattlerComponent *currentBattlerComp = nullptr;
@@ -71,7 +69,6 @@ static void updateATBs(GameState &gamestate, BattleComponent *battleComponent) {
     if (battleComp.CurrentATB < battleComp.FullATB) {
       battleComp.CurrentATB += gamestate.DeltaTime * 1;
     }
-    // battleComp.CurrentATB = battleComp.CurrentATB < battleComp.FullATB ? battleComp.CurrentATB += gamestate.DeltaTime * 1 : battleComp.FullATB;
   });
 }
 
@@ -103,13 +100,13 @@ static void battlerStartAnimation(void *userdata) {
   auto comp = (AnimationComponent *)userdata;
   assert(comp);
   comp->Animation->PlayAnimation("slash2");
-  // auto co = sgAddCoroutine(
-  //     0.25, [](void *) {
-  //       // auto sfx = (Sfx *)udata;
-  //       Sound::Instance()->PlaySfx(slashSfx.get());
-  //     },
-  //     slashSfx.get());
-  // sgStartCoroutine(co);
+  auto co = sgAddCoroutine(
+      0.25, [](void *) {
+        // auto sfx = (Sfx *)udata;
+        Sound::Instance()->PlaySfx(slashSfx.get());
+      },
+      slashSfx.get());
+  sgStartCoroutine(co);
 
   auto args = new BattleCommandArgs{4, 1, 0};
   Events::PushEvent(EscapeTheFateEvents.BattleAbilityUsed, 0, (void *)args);
@@ -144,7 +141,7 @@ static void victoryUpdate(GameState *gamestate, BattleComponent *battleComponent
 
 void handlePlayerInputForBattler(GameState *, BattleComponent *) {
   // If there is no battler ready, return
-   if (currentBattler == -1) {
+  if (currentBattler == -1) {
     return;
   }
   // If players turn, we should pop up the UI for the player and handle the input.
@@ -167,9 +164,9 @@ void handlePlayerInputForBattler(GameState *, BattleComponent *) {
       currentBattlerComp->CurrentATB = 0;
       currentBattler = -1;
       // animation and sound should happen after a wait time.
-      // auto co = sgAddCoroutine(0.25, battlerStartAnimation, currentBattlerAnimationComp);
-      battlerStartAnimation(currentBattlerAnimationComp);
       auto co = sgAddCoroutine(0.25, battlerStartAnimation, currentBattlerAnimationComp);
+      // battlerStartAnimation(currentBattlerAnimationComp);
+      // auto co = sgAddCoroutine(0.25, battlerStartAnimation, currentBattlerAnimationComp);
       sgStartCoroutine(co);
       //
       Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, 0);
