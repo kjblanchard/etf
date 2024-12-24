@@ -26,11 +26,11 @@ using namespace std;
 static shared_ptr<Sfx> menuMoveSfx = nullptr;
 static shared_ptr<Sfx> menuSelectSfx = nullptr;
 static shared_ptr<Sfx> playerTurnSfx = nullptr;
-static shared_ptr<Sfx> slashSfx = nullptr;
 static shared_ptr<Sfx> errorSfx = nullptr;
 static int currentBattler = -1;
-static BattlerComponent *currentBattlerComp = nullptr;
-static AnimationComponent *currentBattlerAnimationComp = nullptr;
+static GameObject currentBattlerGameObject = GameObject(0);
+// static BattlerComponent *currentBattlerComp = nullptr;
+// static AnimationComponent *currentBattlerAnimationComp = nullptr;
 
 enum class battleMenus {
   None,
@@ -75,42 +75,29 @@ static void updateATBs(GameState &gamestate, BattleComponent *battleComponent) {
 static int findReadyBattler() {
   auto battler = -1;
   bool foundBattler = false;
-  BattlerComponent *comp = nullptr;
-  AnimationComponent *animComp = nullptr;
-  GameObject::ForEach<BattlerComponent, AnimationComponent>([&foundBattler, &battler, &comp, &animComp](GameObject, BattlerComponent &battleComponent, AnimationComponent &animComponent) {
+  GameObject battlerGameObject;
+  // BattlerComponent *comp = nullptr;
+  // AnimationComponent *animComp = nullptr;
+  // GameObject::ForEach<BattlerComponent, AnimationComponent>([&foundBattler, &battler, &comp, &animComp](GameObject go, BattlerComponent &battleComponent, AnimationComponent &animComponent) {
+  GameObject::ForEach<BattlerComponent, AnimationComponent>([&foundBattler, &battler, &battlerGameObject](GameObject go, BattlerComponent &battleComponent, AnimationComponent &animComponent) {
     if (foundBattler) {
       return;
     }
     if (battleComponent.IsPlayer && battleComponent.CurrentATB >= battleComponent.FullATB) {
       foundBattler = true;
-      comp = &battleComponent;
-      animComp = &animComponent;
+      battlerGameObject = go;
+      // comp = &battleComponent;
+      // animComp = &animComponent;
       battler = battleComponent.Id;
     }
   });
   if (battler != -1) {
     Sound::Instance()->PlaySfx(playerTurnSfx.get());
-    currentBattlerComp = comp;
-    currentBattlerAnimationComp = animComp;
+    // TODO this is weetaded
+    currentBattlerGameObject = GameObject(battlerGameObject);
     Events::PushEvent(EscapeTheFateEvents.PlayerBattlerTurnBegin, battler);
   }
   return battler;
-}
-
-// Starts the slash animation currently.
-static void battlerStartAnimation(void *userdata) {
-  auto comp = (AnimationComponent *)userdata;
-  assert(comp);
-  comp->Animation->PlayAnimation("slash2");
-  auto co = sgAddCoroutine(
-      0.25, [](void *) {
-        // auto sfx = (Sfx *)udata;
-        Sound::Instance()->PlaySfx(slashSfx.get());
-      },
-      slashSfx.get());
-  sgStartCoroutine(co);
-  auto args = new BattleCommandArgs{4, 1, 0};
-  Events::PushEvent(EscapeTheFateEvents.BattleAbilityUsed, 0, (void *)args);
 }
 
 static void endBattle(GameState *gamestate, BattleComponent *battleComponent) {
@@ -151,17 +138,29 @@ void handlePlayerInputForBattler(GameState *, BattleComponent *) {
     // We selected something, this should end our turn, resetting the atb and hiding the menu until the player is ready again.
     if (currentFingerPos == 0) {
       Sound::Instance()->PlaySfx(menuSelectSfx.get());
-      currentBattlerComp->CurrentATB = 0;
+      currentBattlerGameObject.GetComponent<BattlerComponent>().CurrentATB = 0;
+      // currentBattlerComp->CurrentATB = 0;
       currentBattler = -1;
-      // animation and sound should happen after a wait time.
-      auto co = sgAddCoroutine(0.25, battlerStartAnimation, currentBattlerAnimationComp);
-      // battlerStartAnimation(currentBattlerAnimationComp);
-      // auto co = sgAddCoroutine(0.25, battlerStartAnimation, currentBattlerAnimationComp);
+      // Determine the attacker and target and ability.
+      BattleCommandArgs *battleCommandArg = new BattleCommandArgs();
+      battleCommandArg->AbilityId = 0;
+      battleCommandArg->AttackingBattler = currentBattlerGameObject;
+      // How do we find the Target Battler Gameobject? for now, hack it.
+      GameObject targetGameObject;
+      GameObject::ForEach<BattlerComponent>([&targetGameObject](GameObject go, BattlerComponent battlerComp) {
+        if (battlerComp.Id == 4) {
+          targetGameObject = go;
+        }
+      });
+      battleCommandArg->TargetBattler = targetGameObject;
+      // battleCommandArg->TargetBattler =
+      auto co = sgAddCoroutine(
+          0.25, [](void *userdata) {
+            Events::PushEvent(EscapeTheFateEvents.BattleAbilityUsed, 0, (void *)userdata);
+          },
+          (void *)battleCommandArg);
       sgStartCoroutine(co);
-      //
       Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, 0);
-      currentBattlerAnimationComp = nullptr;
-      currentBattlerComp = nullptr;
     } else {
       Sound::Instance()->PlaySfx(errorSfx.get());
     }
@@ -177,13 +176,11 @@ static void initializeBattleSystem(GameState *gamestate, BattleComponent *battle
   menuSelectSfx = ContentRegistry::CreateContent<Sfx>("menuSelect");
   playerTurnSfx = ContentRegistry::CreateContent<Sfx>("playerTurn");
   errorSfx = ContentRegistry::CreateContent<Sfx>("error1");
-  slashSfx = ContentRegistry::CreateContent<Sfx>("slash1");
   // We need to make these for each of the enemy battlers.
   menuMoveSfx->LoadContent();
   menuSelectSfx->LoadContent();
   playerTurnSfx->LoadContent();
   errorSfx->LoadContent();
-  slashSfx->LoadContent();
   // This runs the initial initialization of the UI, that registers the event handlers.
   InitializeBattleUI();
   InitializeBattleAbilitySystem();
@@ -194,7 +191,6 @@ static void initializeBattleSystem(GameState *gamestate, BattleComponent *battle
 static void startBattle(GameState *, BattleComponent *battleComponent) {
   if (battleComponent->InBattle) {
     currentBattler = -1;
-    currentBattlerComp = nullptr;
     currentBattleMenu = battleMenus::None;
     // Load the battle ui next frame.
     Events::PushEvent(EscapeTheFateEvents.BattleFullyStarted, 0);

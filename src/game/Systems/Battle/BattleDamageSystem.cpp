@@ -1,5 +1,6 @@
 #include <Components/BattleComponent.hpp>
 #include <Components/BattlerComponent.hpp>
+#include <Entities/Battle/BattleCommandArgs.hpp>
 #include <Entities/Battle/BattleState.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Sfx.hpp>
@@ -29,13 +30,15 @@ static void startVictory(BattleComponent *battleComponent) {
   battleComponent->CurrentBattleState = BattleState::Victory;
 }
 void Supergoon::InitializeBattleDamageSystem(BattleComponent *battleComponent) {
-  Events::RegisterEventHandler(EscapeTheFateEvents.BattleDamageEvent, [battleComponent](int battlerId, void *damage, void *) {
+  Events::RegisterEventHandler(EscapeTheFateEvents.BattleDamageEvent, [battleComponent](int damage, void *abilityArgsVoid, void *) {
+    assert((BattleCommandArgs *)abilityArgsVoid && "Could not convert properly~!");
+    auto abilityArgs = (BattleCommandArgs *)abilityArgsVoid;
+    auto battlerId = abilityArgs->TargetBattler.GetComponent<BattlerComponent>().Id;
+    // auto targetAnim = abilityArgs->TargetBattler.GetComponent<AnimationComponent>();
     GameObject::ForEach<BattlerComponent, AnimationComponent>([battlerId, battleComponent](GameObject, BattlerComponent &battlerComponent, AnimationComponent &animComponent) {
       if (battlerComponent.Id != battlerId) {
         return;
       }
-      // assert((u_int64_t)damage && "Cannot convert damage to int");
-      // auto damageInt = (u_int64_t)damage;
       auto damageInt = 1;
       battlerComponent.Stat.HP -= damageInt;
       // If it's a enemy, we should play a sound and then victory.
@@ -73,6 +76,7 @@ void Supergoon::InitializeBattleDamageSystem(BattleComponent *battleComponent) {
       }
       // TODO If it's a player, we should update the hp
     });
+    delete (abilityArgs);
   });
   enemyDiedSfx = ContentRegistry::CreateContent<Sfx>("enemyDead");
   enemyDiedSfx->LoadContent();
