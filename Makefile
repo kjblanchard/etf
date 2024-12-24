@@ -29,6 +29,9 @@ install:
 	@cmake --install $(BUILD_DIR) --config $(BUILD_TYPE)
 run:
 	@open ./build/bin/$(EXECUTABLE_NAME).app || ./build/bin/$(EXECUTABLE_NAME)
+debug: build
+	@lldb -s breakpoints.lldb ./build/bin/$(EXECUTABLE_NAME).app/Contents/MacOS/$(EXECUTABLE_NAME)
+
 package:
 	$(PACKAGE_COMMAND)
 
@@ -64,4 +67,9 @@ bloaty:
 	bloaty -d compileunits SupergoonClient --debug-file SupergoonClient.dSYM/Contents/Resources/DWARF/SupergoonClient
 valgrind:
 	valgrind --track-origins=yes --leak-check=yes --leak-resolution=low --show-leak-kinds=definite ./build/bin/$(EXECUTABLE_NAME) 2>&1 | tee memcheck.txt
-
+findReplace:
+	grep -rlI "Vector2.hpp" .  | xargs sed -i '' 's/Vector2\.hpp/Vector2\.h/g'
+viclean:
+	find . -name '*.swo' | xargs rm -rf
+	find . -name '*.swp' | xargs rm -rf
+	find . -name '*.swn' | xargs rm -rf

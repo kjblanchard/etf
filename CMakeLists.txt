@@ -19,7 +19,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(imgui "Include ImGui support" ON)
 option(SYSTEM_PACKAGES "Use system packages if available" ON)
 option(BUILD_TESTING "Should we build test projects" OFF)
-option(DEBUG_CMAKE_VARIABLES "Print out all debug variables near end of configure" ON)
+option(DEBUG_CMAKE_VARIABLES "Print out all debug variables near end of configure" OFF)
 option(DEBUG_BUILD_TIME "Add in the pch that I think will be changing a bit" OFF)
 
 if(DEBUG_BUILD_TIME)
@@ -31,6 +31,7 @@ include(FetchContent)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(EXECUTABLE_TARGET_NAME EscapeTheFate)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_definitions(
     -DFLECS_CUSTOM_BUILD

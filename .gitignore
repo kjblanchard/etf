@@ -1,4 +1,5 @@
 .DS_Store
+.NERD*
 .vscode/
 build/
 imgui.ini
@@ -6,3 +7,7 @@ imgui.ini
 terraform.tfvars
 memcheck.txt
 engine/
+.cache/
+*.swp
+*.swn
+*.swo

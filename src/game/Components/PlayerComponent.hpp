@@ -4,10 +4,10 @@
 
 namespace Supergoon {
 struct PlayerComponent {
-	unsigned int PlayerNum;
-	RectangleF Body;
-	Directions Direction;
-	bool Moving = false;
+  unsigned int PlayerNum = 0;
+  RectangleF Body = {0, 0, 0, 0};
+  Directions Direction = Directions::North;
+  bool Moving = false;
 };
 
-}  // namespace Supergoon
+} // namespace Supergoon

@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "forest1.tmj",
+    "activeFile": "debugTown.tmj",
     "expandedProjectPaths": [
-        "templates",
-        "."
+        ".",
+        "templates"
     ],
     "fileStates": {
         "debugSouth.tmj": {
@@ -14,20 +14,20 @@
                 3
             ],
             "expandedObjectLayers": [
-                2,
-                5
+                5,
+                2
             ],
             "scale": 1.4199,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 239.45348263962254,
-                "y": 159.87041340939504
+                "x": 239.4534826396225,
+                "y": 155.64476371575464
             }
         },
         "debugTown.tmj": {
             "expandedObjectLayers": [
-                3,
-                5
+                5,
+                3
             ],
             "scale": 2.9504,
             "selectedLayer": 4,
@@ -77,7 +77,7 @@
             "scale": 1.363,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 247.982391782832,
+                "x": 255.31914893617022,
                 "y": 143.8004402054292
             }
         },
@@ -137,8 +137,8 @@
         "inside.tsj",
         "house.tsj",
         "debugTownHome.tmj",
-        "debugTown.tmj",
         "forest1.tmj",
+        "debugTown.tmj",
         "forest1..tmj",
         "forest1.tmx",
         "forest1 6.10.31 PM.tmx"

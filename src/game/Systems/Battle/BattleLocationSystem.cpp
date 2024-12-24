@@ -7,50 +7,65 @@
 #include <Systems/Battle/BattleLocationSystem.hpp>
 using namespace Supergoon;
 
-void loadBattlers(GameObject, BattleLocationComponent& battleLocation) {
-	if (battleLocation.BattleLocationId != 4 && battleLocation.BattleLocationId != 1) {
-		return;
-	}
-	auto go = new GameObject();
-	auto battleLocationComponent = BattleLocationComponent();
-	auto battleLocationLoc = LocationComponent();
-	auto battlerAnimation = AnimationComponent();
-	auto battlerComponent = BattlerComponent();
-	if (battleLocation.BattleLocationId == 1) {
-		battlerAnimation.AnimationName = "player1Battler";
-		battlerComponent.Id = 1;
-	} else {
-		battlerAnimation.AnimationName = "blackBird";
-		battlerComponent.Id = 4;
-	}
-	battlerAnimation.Offset = Point{0, 0};
-	battlerAnimation.AnimationSpeed = 1.0;
-	battleLocationLoc.Location.X = battleLocation.Location.X;
-	battleLocationLoc.Location.Y = battleLocation.Location.Y;
-	go->AddComponent<AnimationComponent>(battlerAnimation);
-	go->AddComponent<BattlerComponent>(battlerComponent);
-	go->AddComponent<LocationComponent>(battleLocationLoc);
-	Events::PushEvent(Events::BuiltinEvents.GameObjectAdd, true, (void*)go);
+void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
+  if (battleLocation.BattleLocationId != 4 && battleLocation.BattleLocationId != 1) {
+    return;
+  }
+  auto go = new GameObject();
+  //  auto battleLocationComponent = BattleLocationComponent();
+  auto battleLocationLoc = LocationComponent();
+  auto battlerAnimation = AnimationComponent();
+  auto battlerComponent = BattlerComponent();
+  battlerComponent.CurrentATB = 0;
+  battlerComponent.FullATB = 3;
+  battlerComponent.CurrentBattleLocation = battleLocation.BattleLocationId;
+  if (battleLocation.BattleLocationId == 1) {
+    battlerAnimation.AnimationName = "player1Battler";
+    battlerComponent.Id = 1;
+    battlerComponent.IsPlayer = true;
+    battlerComponent.Stat.HP = 10;
+    battlerComponent.Stat.MaxHP = 10;
+    // TODO we need to script this somehow,
+    battlerAnimation.OnAnimationEnd = [](AsepriteAnimation *anim, std::string animEnding) {
+      if (animEnding == "slash2") {
+        anim->PlayAnimation("idle1");
+      }
+    };
+  } else {
+    battlerAnimation.AnimationName = "blackBird";
+    battlerComponent.Stat.HP = 2;
+    battlerComponent.Stat.MaxHP = 2;
+    battlerComponent.Id = 4;
+    battlerComponent.IsPlayer = false;
+  }
+  battlerAnimation.Offset = {0, 0};
+  battlerAnimation.AnimationSpeed = 1.0;
+  battleLocationLoc.Location.X = battleLocation.Location.X;
+  battleLocationLoc.Location.Y = battleLocation.Location.Y;
+  go->AddComponent<AnimationComponent>(battlerAnimation);
+  go->AddComponent<BattlerComponent>(battlerComponent);
+  go->AddComponent<LocationComponent>(battleLocationLoc);
+  Events::PushEvent(Events::BuiltinEvents.GameObjectAdd, true, (void *)go);
 }
-void startBattlers(GameObject, BattlerComponent& battler, AnimationComponent& anim) {
-	if (battler.Id == 1) {
-		anim.Animation->PlayAnimation("idle1");
-		anim.Offset.X = -21;
-		anim.Offset.Y = -41;
-		anim.OverrideDrawSize = Point(72, 72);
-		anim.Playing = true;
-	} else {
-		anim.Offset.X = -15;
-		anim.Offset.Y = -26;
-		anim.Animation->PlayAnimation("idleR");
-		anim.Playing = true;
-	}
+void startBattlers(GameObject, BattlerComponent &battler, AnimationComponent &anim) {
+  if (battler.Id == 1) {
+    anim.Animation->PlayAnimation("idle1");
+    anim.Offset.X = -21;
+    anim.Offset.Y = -41;
+    anim.OverrideDrawSize = {72, 72};
+    anim.Playing = true;
+  } else {
+    anim.Offset.X = -15;
+    anim.Offset.Y = -26;
+    anim.Animation->PlayAnimation("idleR");
+    anim.Playing = true;
+  }
 }
 
 void Supergoon::LoadBattlers() {
-	GameObject::ForEach<BattleLocationComponent>(loadBattlers);
+  GameObject::ForEach<BattleLocationComponent>(loadBattlers);
 }
 
 void Supergoon::StartBattlers() {
-	GameObject::ForEach<BattlerComponent, AnimationComponent>(startBattlers);
+  GameObject::ForEach<BattlerComponent, AnimationComponent>(startBattlers);
 }

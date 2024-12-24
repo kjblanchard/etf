@@ -2,9 +2,10 @@
 #include <cstdint>
 namespace Supergoon {
 struct Stats {
-	uint8_t HP;
-	uint8_t Str;
-	uint8_t Def;
-	uint8_t Spd;
+  int HP = 0;
+  int MaxHP = 0;
+  int Str = 0;
+  int Def = 0;
+  int Spd = 0;
 };
-}  // namespace Supergoon
+} // namespace Supergoon
