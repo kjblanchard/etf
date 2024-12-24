@@ -1,6 +1,6 @@
 # Escape the Fate | Supergoon Engine
 
-- Cross Platform 2d RPG demo, using custom Engine written in C and C++
+- Cross Platform 2d RPG demo, using custom Engine written in C and C++ (currently converting engine to C)
 
 ## Details
 
@@ -11,7 +11,7 @@
 
 - ![Status Picture](https://github.com/kjblanchard/etf/blob/master/img/state.gif?raw=true)
 - Uses imgui for development debugging.
-  - hello2 ![Status Picture](https://github.com/kjblanchard/etf/blob/master/img/debug.gif?raw=true)
+  - ![Status Picture](https://github.com/kjblanchard/etf/blob/master/img/debug.gif?raw=true)
 
 ## Installation
 
@@ -30,8 +30,7 @@ make rebuild
 - vorbis
 - imgui
 - stb_image
-- png (deprecated)
-- entt
+- flecs
 
 ## Contributing
 
