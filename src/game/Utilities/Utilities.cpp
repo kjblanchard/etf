@@ -21,7 +21,7 @@ Panel *Supergoon::CreateUIBasePanel(std::string name, sgPoint screenLoc, sgPoint
   auto uiImageFull = ContentRegistry::CreateContent<Image>(path);
   uiImageFull->LoadContent();
   // Set the background
-  textBoxImage->Clear({80, 0, 80, (u_int8_t)alpha});
+  textBoxImage->Clear({80, 0, 80, (uint8_t)alpha});
   float sizeX = 8;
   float sizeY = 9;
   textBoxImage->SetAlpha(alpha);

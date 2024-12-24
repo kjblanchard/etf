@@ -12,11 +12,11 @@ jobs:
     strategy:
       matrix:
         include:
-          # - os: windows
-          #   make_cmd: wrebuild
-          #   suffix: zip
-          #   zlib: wzlib
-          #   name: win
+          - os: windows
+            make_cmd: wrebuild
+            suffix: zip
+            zlib: wzlib
+            name: win
           - os: macos
             make_cmd: xrebuild
             suffix: tgz
@@ -88,9 +88,9 @@ jobs:
     strategy:
       matrix:
         include:
-          # - os: win
-          #   artifact_name: EscapeTheFate.zip
-          #   asset_name: supergoon_win.zip
+          - os: win
+            artifact_name: EscapeTheFate.zip
+            asset_name: supergoon_win.zip
           - os: mac
             artifact_name: EscapeTheFate.tgz
             asset_name: supergoon_mac.tgz
