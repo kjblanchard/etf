@@ -21,7 +21,7 @@ static GameState *gamestate = nullptr;
 static BattleComponent *battleComponent = nullptr;
 static const int _numAbilities = 1;
 static BattleAbility _abilities[] = {
-    {0, DamageTypes::Physical, 0, 1.0f, "slash2", "slash1"}};
+    {0, DamageTypes::Physical, 0, 1.0f, "slash2", "slash1", "sword1"}};
 static shared_ptr<Sfx> slashSfx = nullptr;
 
 static int calculatePhysicalDamage(BattlerComponent *target, BattlerComponent *attacker, BattleAbility *ability) {
@@ -63,7 +63,7 @@ static void handleAbilityUsed(int, void *abilityArgs, void *) {
   // Start any animations of using this ability
   assert(abilityArg->AttackingBattler.HasComponent<AnimationComponent>() && "Battler doesn't have a animation component somehow");
   auto animComp = abilityArg->AttackingBattler.GetComponent<AnimationComponent>();
-  animComp.Animation->PlayAnimation(ability->AnimationName);
+  animComp.Animation->PlayAnimation(ability->CharAnimationName);
   auto co = sgAddCoroutine(
       0.25, [](void *name) {
         assert((const char *)name && "Could not convert name from void* for some reason");

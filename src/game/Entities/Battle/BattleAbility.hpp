@@ -18,6 +18,7 @@ struct BattleAbility {
   DamageTypes DamageType;
   unsigned int Flags;
   float Multiplier;
-  const char *AnimationName;
+  const char *CharAnimationName;
   const char *AbilitySFXName;
+  const char *AbilityAnimation;
 };
