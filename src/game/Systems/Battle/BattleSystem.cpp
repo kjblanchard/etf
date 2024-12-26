@@ -155,10 +155,10 @@ void handlePlayerInputForBattler(GameState *, BattleComponent *) {
       battleCommandArg->TargetBattler = targetGameObject;
       // battleCommandArg->TargetBattler =
       auto co = sgAddCoroutine(
-          0.25, [](void *userdata) {
+          0.25, [](void *userdata, void *) {
             Events::PushEvent(EscapeTheFateEvents.BattleAbilityUsed, 0, (void *)userdata);
           },
-          (void *)battleCommandArg);
+          (void *)battleCommandArg, nullptr);
       sgStartCoroutine(co);
       Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, 0);
     } else {
@@ -192,6 +192,8 @@ static void startBattle(GameState *, BattleComponent *battleComponent) {
   if (battleComponent->InBattle) {
     currentBattler = -1;
     currentBattleMenu = battleMenus::None;
+    // Load all the battle animations
+    // LoadBattleAbilities();
     // Load the battle ui next frame.
     Events::PushEvent(EscapeTheFateEvents.BattleFullyStarted, 0);
     battleComponent->CurrentBattleState = BattleState::Battle;

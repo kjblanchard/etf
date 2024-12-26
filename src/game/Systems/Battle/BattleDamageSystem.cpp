@@ -67,11 +67,11 @@ void Supergoon::InitializeBattleDamageSystem(BattleComponent *battleComponent) {
           }
         };
         auto co = sgAddCoroutine(
-            0.5, [](void *) {
+            0.5, [](void *, void *) {
               Sound::Instance()->PlaySfx(enemyDiedSfx.get());
               enemyDiedTween.Restart();
             },
-            nullptr);
+            nullptr, nullptr);
         sgStartCoroutine(co);
       }
       // TODO If it's a player, we should update the hp

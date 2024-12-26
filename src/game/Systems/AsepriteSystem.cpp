@@ -37,6 +37,14 @@ void Supergoon::DrawAnimationComponents() {
   auto cameraGO = GameObject::GetGameObjectWithComponents<CameraComponent>();
   auto &cameraComponent = cameraGO->GetComponent<CameraComponent>();
   GameObject::ForEach<AnimationComponent, LocationComponent>([&cameraComponent](GameObject, AnimationComponent &a, LocationComponent &l) {
+    if (!a.Visible) {
+      return;
+    }
+    if (!a.Animation) {
+      sgLogError("Animation not loaded for %s", a.AnimationName.c_str());
+      return;
+    }
+
     auto srcRect = a.Animation->FrameCoords();
     auto dWidth = a.OverrideDrawSize.X ? a.OverrideDrawSize.X : srcRect.W;
     auto dHeight = a.OverrideDrawSize.Y ? a.OverrideDrawSize.Y : srcRect.H;

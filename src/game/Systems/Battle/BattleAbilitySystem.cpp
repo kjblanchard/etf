@@ -7,6 +7,8 @@
 #include <Supergoon/Coroutine.h>
 #include <Supergoon/ECS/Components/AnimationComponent.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/KeepAliveComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Log.hpp>
@@ -21,7 +23,7 @@ static GameState *gamestate = nullptr;
 static BattleComponent *battleComponent = nullptr;
 static const int _numAbilities = 1;
 static BattleAbility _abilities[] = {
-    {0, DamageTypes::Physical, 0, 1.0f, "slash2", "slash1", "sword1"}};
+    {0, DamageTypes::Physical, 0, 1.0f, "slash2", "slash1", "sword1", nullptr}};
 static shared_ptr<Sfx> slashSfx = nullptr;
 
 static int calculatePhysicalDamage(BattlerComponent *target, BattlerComponent *attacker, BattleAbility *ability) {
@@ -60,19 +62,74 @@ static void handleAbilityUsed(int, void *abilityArgs, void *) {
   auto ability = &_abilities[abilityArg->AbilityId];
   auto damage = calculateDamage(&targetBattlerComponent, &attackingBattlerComponent, ability);
   Events::PushEvent(EscapeTheFateEvents.BattleDamageEvent, damage, abilityArgs);
-  // Start any animations of using this ability
+  // Start any player animations of using this ability
   assert(abilityArg->AttackingBattler.HasComponent<AnimationComponent>() && "Battler doesn't have a animation component somehow");
   auto animComp = abilityArg->AttackingBattler.GetComponent<AnimationComponent>();
   animComp.Animation->PlayAnimation(ability->CharAnimationName);
+  // Start any ability animations of using this ability
+  assert(abilityArg->TargetBattler.HasComponent<LocationComponent>() && abilityArg->TargetBattler.HasComponent<AnimationComponent>() && "Target battler doesn't have proper components");
+  auto targetAnimComponent = abilityArg->TargetBattler.GetComponent<AnimationComponent>();
+  auto targetLocationComponent = abilityArg->TargetBattler.GetComponent<LocationComponent>();
+  assert(_abilities[abilityArg->AbilityId].AnimationGameObject->HasComponent<AnimationComponent>() && _abilities[abilityArg->AbilityId].AnimationGameObject->HasComponent<LocationComponent>());
+  auto &abilityLocation = _abilities[abilityArg->AbilityId].AnimationGameObject->GetComponent<LocationComponent>();
+  auto &abilityAnim = _abilities[abilityArg->AbilityId].AnimationGameObject->GetComponent<AnimationComponent>();
+  auto abilityAnimLocationX = targetLocationComponent.Location.X + targetAnimComponent.Offset.X;
+  auto abilityAnimLocationY = targetLocationComponent.Location.Y + targetAnimComponent.Offset.Y;
+  abilityLocation.Location.X = abilityAnimLocationX;
+  abilityLocation.Location.Y = abilityAnimLocationY;
+  abilityAnim.Offset = {-27, -27};
+  abilityAnim.Animation->Load();
+  abilityAnim.OverrideDrawSize.X = 128;
+  abilityAnim.OverrideDrawSize.Y = 128;
+  auto slashCo = sgAddCoroutine(
+      0.20, [](void *name, void *animComponent) {
+        assert((const char *)name && (AnimationComponent *)animComponent && "Could not convert name from void* for some reason");
+        auto abilityAnim = (AnimationComponent *)animComponent;
+        auto animName = (const char *)name;
+        abilityAnim->Visible = true;
+        abilityAnim->Playing = true;
+        abilityAnim->Animation->PlayAnimation(animName);
+        abilityAnim->Animation->OnAnimationEnd = [animName, abilityAnim](AsepriteAnimation *, std::string animEnding) {
+          if (animEnding == animName) {
+            abilityAnim->Visible = false;
+          }
+        };
+      },
+      (void *)"slash1", (void *)&abilityAnim);
+  // Play SFX for this
   auto co = sgAddCoroutine(
-      0.25, [](void *name) {
+      0.25, [](void *name, void *) {
         assert((const char *)name && "Could not convert name from void* for some reason");
         Sound::Instance()->PlaySfxOneShot((const char *)name);
       },
-      (void *)_abilities[abilityArg->AbilityId].AbilitySFXName);
+      (void *)_abilities[abilityArg->AbilityId].AbilitySFXName, nullptr);
+  sgStartCoroutine(slashCo);
   sgStartCoroutine(co);
+}
+
+static void createAnimationGameObjects() {
+  for (size_t i = 0; i < _numAbilities; i++) {
+    if (_abilities[i].AnimationGameObject) {
+      continue;
+    }
+    auto go = new GameObject();
+    auto animationComp = AnimationComponent();
+    auto locationComp = LocationComponent();
+    auto keepAlive = KeepAliveComponent();
+    animationComp.AnimationName = _abilities[i].AbilityAnimation;
+    animationComp.AnimationSpeed = 1.0;
+    animationComp.Visible = false;
+    go->AddComponent<AnimationComponent>(animationComp);
+    go->AddComponent<LocationComponent>(locationComp);
+    go->AddComponent<KeepAliveComponent>(keepAlive);
+    _abilities[i].AnimationGameObject = go;
+    Events::PushEvent(Events::BuiltinEvents.GameObjectAdd, true, (void *)go);
+  }
 }
 
 void Supergoon::InitializeBattleAbilitySystem() {
   Events::RegisterEventHandler(EscapeTheFateEvents.BattleAbilityUsed, handleAbilityUsed);
+}
+void Supergoon::LoadBattleAbilities() {
+  createAnimationGameObjects();
 }
