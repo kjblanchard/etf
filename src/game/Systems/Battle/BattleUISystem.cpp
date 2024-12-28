@@ -38,24 +38,51 @@ static Sequence fingerSequence;
 static bool fingerPosChanged = false;
 struct PlayerUIPanel {
   unsigned int BattlerID;
+  UIHorizontalLayoutGroup *LayoutGroup;
   UIText *Name;
   UIText *HP;
   UIText *MP;
+  // UIText *Speed;
+  UIImage *ATBBar;
 };
 static PlayerUIPanel _playerUIPanels[3];
 
 static void createPlayersPanel(UIObject *parent) {
-  auto horizontalGroup = new UIHorizontalLayoutGroup(parent, "battlerhoriGroup");
-  horizontalGroup->XSpaceBetweenElements = 100;
   for (size_t i = 0; i < 3; i++) {
-    _playerUIPanels[i].Name = new UIText(horizontalGroup, "", to_string(i) + "name", 12);
-    _playerUIPanels[i].HP = new UIText(horizontalGroup, "", to_string(i) + "hp", 12);
-    _playerUIPanels[i].MP = new UIText(horizontalGroup, "", to_string(i) + "mp", 12);
+    _playerUIPanels[i].LayoutGroup = new UIHorizontalLayoutGroup(parent, to_string(i) + "battlerhoriGroup");
+    _playerUIPanels[i].LayoutGroup->XSpaceBetweenElements = 110;
+    _playerUIPanels[i].Name = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "name", 12);
+    _playerUIPanels[i].HP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "hp", 12);
+    _playerUIPanels[i].MP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "mp", 12);
+    auto path = std::string(SDL_GetBasePath()) + "assets/img/atbBar.png";
+    auto atbBar = ContentRegistry::CreateContent<Image>(path);
+    atbBar->LoadContent();
+    _playerUIPanels[i].ATBBar = new UIImage(_playerUIPanels[i].LayoutGroup, to_string(i) + "atb");
+    _playerUIPanels[i].ATBBar->ImagePtr = atbBar;
+    _playerUIPanels[i].ATBBar->Offset.Y = -6;
+    _playerUIPanels[i].ATBBar->Bounds.W = 64;
+    _playerUIPanels[i].ATBBar->Bounds.H = 32;
+    _playerUIPanels[i].ATBBar->ImageSourceRect = {0, 0, 16, 16};
+    _playerUIPanels[i].ATBBar->SetLayer(2);
+    _playerUIPanels[i].ATBBar->SetVisible(false);
   }
 }
 static void assignBattlersToPlayerPanels(int slot, int ID) {
   _playerUIPanels[slot].BattlerID = ID;
+  _playerUIPanels[slot].ATBBar->SetVisible(true);
 }
+
+static void updateSpeed() {
+  GameObject::ForEach<BattlerComponent>([](GameObject, BattlerComponent &battler) {
+    for (size_t i = 0; i < playerBattlerSize; i++) {
+      if (_playerUIPanels[i].BattlerID != battler.Id) {
+        continue;
+      }
+      // _playerUIPanels[i].Speed->UpdateText(to_string((int)(battler.CurrentATB / battler.FullATB * 100)));
+    }
+  });
+}
+
 static void updatePlayersPanel(BattlerComponent *comp) {
   for (size_t i = 0; i < playerBattlerSize; i++) {
     if (_playerUIPanels[i].BattlerID != comp->Id) {
@@ -70,7 +97,8 @@ static void updatePlayersPanel(BattlerComponent *comp) {
     stringBuilder.str("");
     stringBuilder << "MP: " << 0 << " | " << 0;
     _playerUIPanels[i].MP->UpdateText(stringBuilder.str());
-    stringBuilder.clear();
+    stringBuilder.str("");
+    stringBuilder << comp->CurrentATB / comp->FullATB;
   }
 }
 
@@ -161,19 +189,12 @@ static void battleUpdate() {
   if (fingerSequence.IsComplete()) {
     fingerSequence.Restart();
   };
+  updateSpeed();
 }
 
 static void battleVictory() {
   battlePanel->SetVisible(false);
   battleCommandPanel->SetVisible(false);
-  // Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleBasePanel");
-  // Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleCommandPanel");
-  // battlePanel = nullptr;
-  // battleCommandPanel = nullptr;
-  // battleFinger = nullptr;
-  // for (int i = 0; i < battleCommandsSize; ++i) {
-  //   battleCommandTexts[i] = nullptr;
-  // }
 }
 
 static void battleCleanup() {
@@ -181,21 +202,21 @@ static void battleCleanup() {
 }
 
 static void startBattleUI() {
+  static int num = 0;
   GameObject::ForEach<BattlerComponent>([](GameObject, BattlerComponent &battlerComp) {
     if (!battlerComp.IsPlayer) {
       return;
     }
-    static int num = 0;
     assignBattlersToPlayerPanels(num, battlerComp.Id);
     updatePlayersPanel(&battlerComp);
     ++num;
   });
+  num = 0;
   battlePanel->SetVisible(true);
 }
 
 void Supergoon::InitializeBattleUI() {
   Events::RegisterEventHandler(EscapeTheFateEvents.BattleFullyStarted, [](int, void *, void *) {
-    // initializeBattleUI();
     startBattleUI();
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int, void *, void *) {
