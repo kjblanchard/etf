@@ -61,7 +61,6 @@ static void handleAbilityUsed(int, void *abilityArgs, void *) {
   assert(abilityArg->AbilityId < _numAbilities && _abilities[abilityArg->AbilityId].ID == abilityArg->AbilityId && "Ability out of array bounds, or ability is not configured properly");
   auto ability = &_abilities[abilityArg->AbilityId];
   auto damage = calculateDamage(&targetBattlerComponent, &attackingBattlerComponent, ability);
-  Events::PushEvent(EscapeTheFateEvents.BattleDamageEvent, damage, abilityArgs);
   // Start any player animations of using this ability
   assert(abilityArg->AttackingBattler.HasComponent<AnimationComponent>() && "Battler doesn't have a animation component somehow");
   auto animComp = abilityArg->AttackingBattler.GetComponent<AnimationComponent>();
@@ -81,8 +80,15 @@ static void handleAbilityUsed(int, void *abilityArgs, void *) {
   abilityAnim.Animation->Load();
   abilityAnim.OverrideDrawSize.X = 128;
   abilityAnim.OverrideDrawSize.Y = 128;
+  auto damageCo = sgAddCoroutine(
+      0.5, [](void *damage, void *args) {
+        assert((BattleCommandArgs *)args && "Could not convert!");
+
+        Events::PushEvent(EscapeTheFateEvents.BattleDamageEvent, (intptr_t)damage, args);
+      },
+      (void *)damage, (void *)abilityArgs);
   auto slashCo = sgAddCoroutine(
-      0.20, [](void *name, void *animComponent) {
+      0.01, [](void *name, void *animComponent) {
         assert((const char *)name && (AnimationComponent *)animComponent && "Could not convert name from void* for some reason");
         auto abilityAnim = (AnimationComponent *)animComponent;
         auto animName = (const char *)name;
@@ -104,6 +110,7 @@ static void handleAbilityUsed(int, void *abilityArgs, void *) {
       },
       (void *)_abilities[abilityArg->AbilityId].AbilitySFXName, nullptr);
   sgStartCoroutine(slashCo);
+  sgStartCoroutine(damageCo);
   sgStartCoroutine(co);
 }
 
@@ -119,6 +126,7 @@ static void createAnimationGameObjects() {
     animationComp.AnimationName = _abilities[i].AbilityAnimation;
     animationComp.AnimationSpeed = 1.0;
     animationComp.Visible = false;
+    animationComp.Layer = 1;
     go->AddComponent<AnimationComponent>(animationComp);
     go->AddComponent<LocationComponent>(locationComp);
     go->AddComponent<KeepAliveComponent>(keepAlive);

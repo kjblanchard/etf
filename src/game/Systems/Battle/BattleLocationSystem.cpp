@@ -23,6 +23,7 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     battlerAnimation.AnimationName = "player1Battler";
     battlerComponent.Id = 1;
     battlerComponent.IsPlayer = true;
+    battlerComponent.Stat.Name = "Kevin";
     battlerComponent.Stat.HP = 10;
     battlerComponent.Stat.MaxHP = 10;
     // TODO we need to script this somehow,

@@ -5,6 +5,7 @@
 #include "SupergoonEngine/log.h"
 #include "Utilities/Events.hpp"
 #include <Components/BattleComponent.hpp>
+#include <Components/BattlerComponent.hpp>
 #include <Entities/Battle/BattleState.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
@@ -25,6 +26,7 @@
 #include <sstream>
 using namespace Supergoon;
 using namespace std;
+static const int playerBattlerSize = 3;
 static const int battleCommandsSize = 3;
 static const char *battleCommands[] = {"Attack", "Magic", "Item"};
 
@@ -34,20 +36,42 @@ static UIImage *battleFinger = nullptr;
 static UIText *battleCommandTexts[battleCommandsSize];
 static Sequence fingerSequence;
 static bool fingerPosChanged = false;
+struct PlayerUIPanel {
+  unsigned int BattlerID;
+  UIText *Name;
+  UIText *HP;
+  UIText *MP;
+};
+static PlayerUIPanel _playerUIPanels[3];
 
-static void createPlayersPanel(UIObject *parent, string name, int hp, int maxHp,
-                               int mp, int maxMp) {
-  auto horizontalGroup = new UIHorizontalLayoutGroup(parent, name + "horiGroup");
-  horizontalGroup->XSpaceBetweenElements = 90;
-  ostringstream stringBuilder;
-  stringBuilder << name << ":	";
-  new UIText(horizontalGroup, stringBuilder.str(), name + "NameDisplayText", 12);
-  stringBuilder.str("");
-  stringBuilder << "HP: " << hp << " | " << maxHp;
-  new UIText(horizontalGroup, stringBuilder.str(), name + "HPDisplayText", 12);
-  stringBuilder.str("");
-  stringBuilder << "MP: " << mp << " | " << maxMp;
-  new UIText(horizontalGroup, stringBuilder.str(), name + "MPDisplayText", 12);
+static void createPlayersPanel(UIObject *parent) {
+  auto horizontalGroup = new UIHorizontalLayoutGroup(parent, "battlerhoriGroup");
+  horizontalGroup->XSpaceBetweenElements = 100;
+  for (size_t i = 0; i < 3; i++) {
+    _playerUIPanels[i].Name = new UIText(horizontalGroup, "", to_string(i) + "name", 12);
+    _playerUIPanels[i].HP = new UIText(horizontalGroup, "", to_string(i) + "hp", 12);
+    _playerUIPanels[i].MP = new UIText(horizontalGroup, "", to_string(i) + "mp", 12);
+  }
+}
+static void assignBattlersToPlayerPanels(int slot, int ID) {
+  _playerUIPanels[slot].BattlerID = ID;
+}
+static void updatePlayersPanel(BattlerComponent *comp) {
+  for (size_t i = 0; i < playerBattlerSize; i++) {
+    if (_playerUIPanels[i].BattlerID != comp->Id) {
+      continue;
+    }
+    ostringstream stringBuilder;
+    stringBuilder << comp->Stat.Name << ":	";
+    _playerUIPanels[i].Name->UpdateText(stringBuilder.str());
+    stringBuilder.str("");
+    stringBuilder << "HP: " << comp->Stat.HP << " | " << comp->Stat.MaxHP;
+    _playerUIPanels[i].HP->UpdateText(stringBuilder.str());
+    stringBuilder.str("");
+    stringBuilder << "MP: " << 0 << " | " << 0;
+    _playerUIPanels[i].MP->UpdateText(stringBuilder.str());
+    stringBuilder.clear();
+  }
 }
 
 static void initializePlayerUI() {
@@ -82,15 +106,14 @@ static void initializeFinger() {
 }
 
 static void initializeBattleUI() {
+  // TODO this should happen on start, so that we can load the battlers ids properly.
   auto fullSize = sgPoint{435, 66};
   battlePanel = CreateUIBasePanel("battleBasePanel", {39, 222}, fullSize, 255);
   auto verticalLayoutGroup = new UIVerticalLayoutGroup(battlePanel, "battlersVerticalGroup");
   verticalLayoutGroup->SetLayer(1);
   verticalLayoutGroup->YSpaceBetweenElements = 16;
   verticalLayoutGroup->Offset = {9, 9};
-  createPlayersPanel(verticalLayoutGroup, "Kevin", 500, 500, 50, 50);
-  // createPlayersPanel(verticalLayoutGroup, "Quinn", 100, 100, 10, 20);
-  // createPlayersPanel(verticalLayoutGroup, "Misha", 300, 300, 100, 100);
+  createPlayersPanel(verticalLayoutGroup);
   initializePlayerUI();
   initializeFinger();
 }
@@ -158,8 +181,16 @@ static void battleCleanup() {
 }
 
 static void startBattleUI() {
+  GameObject::ForEach<BattlerComponent>([](GameObject, BattlerComponent &battlerComp) {
+    if (!battlerComp.IsPlayer) {
+      return;
+    }
+    static int num = 0;
+    assignBattlersToPlayerPanels(num, battlerComp.Id);
+    updatePlayersPanel(&battlerComp);
+    ++num;
+  });
   battlePanel->SetVisible(true);
-  // battleCommandPanel->SetVisible(true);
 }
 
 void Supergoon::InitializeBattleUI() {

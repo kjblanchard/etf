@@ -16,6 +16,7 @@
 #include <Systems/Battle/BattleAbilitySystem.hpp>
 #include <Systems/Battle/BattleDamageSystem.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
+#include <Systems/Battle/BattleTurnMarkerSystem.hpp>
 #include <Systems/Battle/BattleUISystem.hpp>
 #include <Utilities/Events.hpp>
 #include <cstdint>
@@ -185,6 +186,7 @@ static void initializeBattleSystem(GameState *gamestate, BattleComponent *battle
   InitializeBattleUI();
   InitializeBattleAbilitySystem();
   InitializeBattleDamageSystem(battleComponent);
+  InitializeBattleTurnMarkerSystem();
   battleComponent->CurrentBattleState = BattleState::BattleJustStarted;
 }
 
