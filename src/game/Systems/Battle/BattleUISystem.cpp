@@ -17,6 +17,7 @@
 #include <Supergoon/Tween/Tween.hpp>
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIHorizontalLayoutGroup.hpp>
+#include <Supergoon/UI/UIProgressBar.hpp>
 #include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/UI/UIVerticalLayoutGroup.hpp>
 #include <Systems/Battle/BattleUISystem.hpp>
@@ -43,7 +44,7 @@ struct PlayerUIPanel {
   UIText *HP;
   UIText *MP;
   // UIText *Speed;
-  UIImage *ATBBar;
+  UIProgressBar *ATBBar;
 };
 static PlayerUIPanel _playerUIPanels[3];
 
@@ -57,12 +58,16 @@ static void createPlayersPanel(UIObject *parent) {
     auto path = std::string(SDL_GetBasePath()) + "assets/img/atbBar.png";
     auto atbBar = ContentRegistry::CreateContent<Image>(path);
     atbBar->LoadContent();
-    _playerUIPanels[i].ATBBar = new UIImage(_playerUIPanels[i].LayoutGroup, to_string(i) + "atb");
-    _playerUIPanels[i].ATBBar->ImagePtr = atbBar;
+    _playerUIPanels[i].ATBBar = new UIProgressBar(_playerUIPanels[i].LayoutGroup, to_string(i) + "atb", "atbBar");
+    _playerUIPanels[i].ATBBar->SetLayer(3);
+    _playerUIPanels[i].ATBBar->BarOffset = {9, 13};
+    _playerUIPanels[i].ATBBar->BarSize = {46, 4};
+    _playerUIPanels[i].ATBBar->ProgressBarColor = {0, 140, 0, 255};
+
     _playerUIPanels[i].ATBBar->Offset.Y = -6;
-    _playerUIPanels[i].ATBBar->Bounds.W = 64;
-    _playerUIPanels[i].ATBBar->Bounds.H = 32;
-    _playerUIPanels[i].ATBBar->ImageSourceRect = {0, 0, 16, 16};
+    _playerUIPanels[i].ATBBar->ProgressBarImage->Bounds.W = 64;
+    _playerUIPanels[i].ATBBar->ProgressBarImage->Bounds.H = 32;
+    _playerUIPanels[i].ATBBar->ProgressBarImage->ImageSourceRect = {0, 0, 16, 16};
     _playerUIPanels[i].ATBBar->SetLayer(2);
     _playerUIPanels[i].ATBBar->SetVisible(false);
   }
@@ -78,6 +83,7 @@ static void updateSpeed() {
       if (_playerUIPanels[i].BattlerID != battler.Id) {
         continue;
       }
+      _playerUIPanels[i].ATBBar->SetBarPercent(battler.CurrentATB / battler.FullATB * 100);
       // _playerUIPanels[i].Speed->UpdateText(to_string((int)(battler.CurrentATB / battler.FullATB * 100)));
     }
   });
