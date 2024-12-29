@@ -140,13 +140,11 @@ void handlePlayerInputForBattler(GameState *, BattleComponent *) {
     if (currentFingerPos == 0) {
       Sound::Instance()->PlaySfx(menuSelectSfx.get());
       currentBattlerGameObject.GetComponent<BattlerComponent>().CurrentATB = 0;
-      // currentBattlerComp->CurrentATB = 0;
-      currentBattler = -1;
       // Determine the attacker and target and ability.
       BattleCommandArgs *battleCommandArg = new BattleCommandArgs();
       battleCommandArg->AbilityId = 0;
       battleCommandArg->AttackingBattler = currentBattlerGameObject;
-      // How do we find the Target Battler Gameobject? for now, hack it.
+      // TODO How do we find the Target Battler Gameobject? for now, hack it to be birb.
       GameObject targetGameObject;
       GameObject::ForEach<BattlerComponent>([&targetGameObject](GameObject go, BattlerComponent battlerComp) {
         if (battlerComp.Id == 4) {
@@ -154,14 +152,14 @@ void handlePlayerInputForBattler(GameState *, BattleComponent *) {
         }
       });
       battleCommandArg->TargetBattler = targetGameObject;
-      // battleCommandArg->TargetBattler =
       auto co = sgAddCoroutine(
           0.25, [](void *userdata, void *) {
             Events::PushEvent(EscapeTheFateEvents.BattleAbilityUsed, 0, (void *)userdata);
           },
           (void *)battleCommandArg, nullptr);
       sgStartCoroutine(co);
-      Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, 0);
+      Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, currentBattler);
+      currentBattler = -1;
     } else {
       Sound::Instance()->PlaySfx(errorSfx.get());
     }
@@ -194,8 +192,6 @@ static void startBattle(GameState *, BattleComponent *battleComponent) {
   if (battleComponent->InBattle) {
     currentBattler = -1;
     currentBattleMenu = battleMenus::None;
-    // Load all the battle animations
-    // LoadBattleAbilities();
     // Load the battle ui next frame.
     Events::PushEvent(EscapeTheFateEvents.BattleFullyStarted, 0);
     battleComponent->CurrentBattleState = BattleState::Battle;

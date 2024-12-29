@@ -16,6 +16,7 @@
 #include <Supergoon/Tween/Sequence.hpp>
 #include <Supergoon/Tween/Tween.hpp>
 #include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/UIAnimation.hpp>
 #include <Supergoon/UI/UIHorizontalLayoutGroup.hpp>
 #include <Supergoon/UI/UIProgressBar.hpp>
 #include <Supergoon/UI/UIText.hpp>
@@ -51,9 +52,10 @@ static PlayerUIPanel _playerUIPanels[3];
 static void createPlayersPanel(UIObject *parent) {
   for (size_t i = 0; i < 3; i++) {
     _playerUIPanels[i].LayoutGroup = new UIHorizontalLayoutGroup(parent, to_string(i) + "battlerhoriGroup");
-    _playerUIPanels[i].LayoutGroup->XSpaceBetweenElements = 110;
+    _playerUIPanels[i].LayoutGroup->XSpaceBetweenElements = 140;
     _playerUIPanels[i].Name = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "name", 12);
     _playerUIPanels[i].HP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "hp", 12);
+    _playerUIPanels[i].HP->Offset.X = 40;
     _playerUIPanels[i].MP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "mp", 12);
     auto path = std::string(SDL_GetBasePath()) + "assets/img/atbBar.png";
     auto atbBar = ContentRegistry::CreateContent<Image>(path);
@@ -63,11 +65,10 @@ static void createPlayersPanel(UIObject *parent) {
     _playerUIPanels[i].ATBBar->BarOffset = {9, 13};
     _playerUIPanels[i].ATBBar->BarSize = {46, 4};
     _playerUIPanels[i].ATBBar->ProgressBarColor = {0, 140, 0, 255};
-
+    _playerUIPanels[i].ATBBar->Offset.X = -65;
     _playerUIPanels[i].ATBBar->Offset.Y = -6;
-    _playerUIPanels[i].ATBBar->ProgressBarImage->Bounds.W = 64;
-    _playerUIPanels[i].ATBBar->ProgressBarImage->Bounds.H = 32;
-    _playerUIPanels[i].ATBBar->ProgressBarImage->ImageSourceRect = {0, 0, 16, 16};
+    _playerUIPanels[i].ATBBar->ProgressBarAnimation->OverrideDrawSize.X = 64;
+    _playerUIPanels[i].ATBBar->ProgressBarAnimation->OverrideDrawSize.Y = 32;
     _playerUIPanels[i].ATBBar->SetLayer(2);
     _playerUIPanels[i].ATBBar->SetVisible(false);
   }
@@ -110,7 +111,7 @@ static void updatePlayersPanel(BattlerComponent *comp) {
 
 static void initializePlayerUI() {
   auto fullSize = sgPoint{100, 65};
-  battleCommandPanel = CreateUIBasePanel("battleCommandPanel", {95, 215}, fullSize, 255);
+  battleCommandPanel = CreateUIBasePanel("battleCommandPanel", {110, 215}, fullSize, 255);
   battleCommandPanel->SetLayer(1);
   auto verticalLayoutGroup = new UIVerticalLayoutGroup(battleCommandPanel, "battleCommandVLG");
   verticalLayoutGroup->SetLayer(2);
@@ -209,6 +210,11 @@ static void battleCleanup() {
 
 static void startBattleUI() {
   static int num = 0;
+  // Set all ui battlers to 0 to start, then assign them all.
+  for (size_t i = 0; i < playerBattlerSize; i++) {
+    _playerUIPanels[i].BattlerID = 0;
+  }
+
   GameObject::ForEach<BattlerComponent>([](GameObject, BattlerComponent &battlerComp) {
     if (!battlerComp.IsPlayer) {
       return;
@@ -220,20 +226,38 @@ static void startBattleUI() {
   num = 0;
   battlePanel->SetVisible(true);
 }
+static void startBattlerATBAnim(int id) {
+  for (size_t i = 0; i < playerBattlerSize; i++) {
+    if (_playerUIPanels[i].BattlerID = id) {
+      _playerUIPanels[i].ATBBar->ProgressBarAnimation->Animation->PlayAnimation("turn");
+      _playerUIPanels[i].ATBBar->ProgressBarAnimation->Playing = true;
+    }
+  }
+}
+
+static void endBattlerATBAnim(int id) {
+  for (size_t i = 0; i < playerBattlerSize; i++) {
+    if (_playerUIPanels[i].BattlerID = id) {
+      _playerUIPanels[i].ATBBar->ProgressBarAnimation->Animation->PlayAnimation("idle");
+    }
+  }
+}
 
 void Supergoon::InitializeBattleUI() {
   Events::RegisterEventHandler(EscapeTheFateEvents.BattleFullyStarted, [](int, void *, void *) {
     startBattleUI();
   });
-  Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int, void *, void *) {
+  Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int battler, void *, void *) {
     battleCommandPanel->SetVisible(false);
     fingerPosChanged = true;
+    endBattlerATBAnim(battler);
   });
-  Events::RegisterEventHandler(EscapeTheFateEvents.PlayerBattlerTurnBegin, [](int, void *, void *) {
+  Events::RegisterEventHandler(EscapeTheFateEvents.PlayerBattlerTurnBegin, [](int battler, void *, void *) {
     if (battleCommandPanel && battleFinger) {
       battleCommandPanel->SetVisible(true);
       handleInput(0);
       battleCommandPanel->SetDirty();
+      startBattlerATBAnim(battler);
     }
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.commandCursorUpdate, [](int buttonLoc, void *, void *) {
