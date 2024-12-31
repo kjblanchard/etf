@@ -34,13 +34,12 @@ void Supergoon::InitializeBattleDamageSystem(BattleComponent *battleComponent) {
     assert((BattleCommandArgs *)abilityArgsVoid && "Could not convert properly~!");
     auto abilityArgs = (BattleCommandArgs *)abilityArgsVoid;
     auto battlerId = abilityArgs->TargetBattler.GetComponent<BattlerComponent>().Id;
-    // auto targetAnim = abilityArgs->TargetBattler.GetComponent<AnimationComponent>();
-    GameObject::ForEach<BattlerComponent, AnimationComponent>([battlerId, battleComponent](GameObject, BattlerComponent &battlerComponent, AnimationComponent &animComponent) {
+    GameObject::ForEach<BattlerComponent, AnimationComponent>([battlerId, battleComponent, damage](GameObject, BattlerComponent &battlerComponent, AnimationComponent &animComponent) {
       if (battlerComponent.Id != battlerId) {
         return;
       }
-      auto damageInt = 1;
-      battlerComponent.Stat.HP -= damageInt;
+      // auto damageInt = 1;
+      battlerComponent.Stat.HP -= damage;
       if (battlerComponent.IsPlayer) {
         Events::PushEvent(EscapeTheFateEvents.UpdatePlayerBattlerUIEvent, 0, (void *)&battlerComponent);
         animComponent.Animation->PlayAnimation("damage1");
@@ -80,7 +79,7 @@ void Supergoon::InitializeBattleDamageSystem(BattleComponent *battleComponent) {
         }
       }
     });
-    delete (abilityArgs);
+    Events::PushEvent(EscapeTheFateEvents.ShowBattleDamageTextEvent, damage, abilityArgsVoid);
   });
   enemyDiedSfx = ContentRegistry::CreateContent<Sfx>("enemyDead");
   enemyDiedSfx->LoadContent();

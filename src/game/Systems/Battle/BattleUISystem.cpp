@@ -6,10 +6,12 @@
 #include "Utilities/Events.hpp"
 #include <Components/BattleComponent.hpp>
 #include <Components/BattlerComponent.hpp>
+#include <Entities/Battle/BattleCommandArgs.hpp>
 #include <Entities/Battle/BattleState.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Input.hpp>
@@ -18,6 +20,7 @@
 #include <Supergoon/UI/UI.hpp>
 #include <Supergoon/UI/UIAnimation.hpp>
 #include <Supergoon/UI/UIHorizontalLayoutGroup.hpp>
+#include <Supergoon/UI/UIObjectAnimator.hpp>
 #include <Supergoon/UI/UIProgressBar.hpp>
 #include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/UI/UIVerticalLayoutGroup.hpp>
@@ -25,6 +28,7 @@
 #include <UI/Battle/BattlerDisplay.hpp>
 #include <Utilities/Utilities.hpp>
 #include <memory>
+#include <queue>
 #include <sstream>
 using namespace Supergoon;
 using namespace std;
@@ -48,6 +52,17 @@ struct PlayerUIPanel {
   UIProgressBar *ATBBar;
 };
 static PlayerUIPanel _playerUIPanels[3];
+static queue<UIText *> _damageTexts;
+
+static void createDamageText(UIObject *parent) {
+  auto text = new UIText(parent, "0");
+  // auto textAnimator = make_shared<UIObjectAnimatorBase>(255, 0, 0.5, text->AlphaHandle());
+  auto textAnimator = make_shared<UIObjectAnimatorBase>("texttweener");
+  auto tweener = new Tween(255, 0, 0.5, text->AlphaHandle(), Supergoon::Easings::Linear, 0);
+  textAnimator->AddUIObjectTween(tweener, text);
+  text->Animators.push_back(textAnimator);
+  _damageTexts.push(text);
+}
 
 static void createPlayersPanel(UIObject *parent) {
   for (size_t i = 0; i < 3; i++) {
@@ -151,6 +166,7 @@ static void initializeBattleUI() {
   createPlayersPanel(verticalLayoutGroup);
   initializePlayerUI();
   initializeFinger();
+  createDamageText(battlePanel);
 }
 
 static void handleInput(int loc) {
@@ -276,6 +292,24 @@ void Supergoon::InitializeBattleUI() {
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.VictoryEnd, [](int, void *, void *) {
     battleCleanup();
+  });
+  Events::RegisterEventHandler(EscapeTheFateEvents.ShowBattleDamageTextEvent, [](int damage, void *abilityArgsVoid, void *) {
+    assert((BattleCommandArgs *)abilityArgsVoid && "Could not convert properly~!");
+    auto abilityArgs = (BattleCommandArgs *)abilityArgsVoid;
+    auto battlerId = abilityArgs->TargetBattler.GetComponent<BattlerComponent>().Id;
+    auto location = abilityArgs->TargetBattler.GetComponent<LocationComponent>().Location;
+    if (battlerId == 4) {
+      if (_damageTexts.empty()) {
+        return;
+      }
+      auto text = _damageTexts.front();
+      text->UpdateText(to_string(damage));
+      text->SetDrawOverride({location.X - 4, location.Y - 6});
+      text->Animators[0]->Play();
+      text->Animators[0]->Restart();
+      _damageTexts.pop();
+    }
+    delete (abilityArgs);
   });
   initializeBattleUI();
 }

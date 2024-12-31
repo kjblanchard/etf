@@ -26,6 +26,7 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     battlerComponent.Stat.Name = "Kevin";
     battlerComponent.Stat.HP = 10;
     battlerComponent.Stat.MaxHP = 10;
+    battlerComponent.Stat.Str = 1;
     // TODO we need to script this somehow,
     battlerAnimation.OnAnimationEnd = [](AsepriteAnimation *anim, std::string animEnding) {
       if (animEnding == "slash2" || animEnding == "damage1") {
