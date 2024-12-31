@@ -39,7 +39,7 @@ static UIText *battleCommandTexts[battleCommandsSize];
 static Sequence fingerSequence;
 static bool fingerPosChanged = false;
 struct PlayerUIPanel {
-  unsigned int BattlerID;
+  int BattlerID;
   UIHorizontalLayoutGroup *LayoutGroup;
   UIText *Name;
   UIText *HP;
@@ -228,7 +228,7 @@ static void startBattleUI() {
 }
 static void startBattlerATBAnim(int id) {
   for (size_t i = 0; i < playerBattlerSize; i++) {
-    if (_playerUIPanels[i].BattlerID = id) {
+    if (_playerUIPanels[i].BattlerID == id) {
       _playerUIPanels[i].ATBBar->ProgressBarAnimation->Animation->PlayAnimation("turn");
       _playerUIPanels[i].ATBBar->ProgressBarAnimation->Playing = true;
     }
@@ -237,7 +237,7 @@ static void startBattlerATBAnim(int id) {
 
 static void endBattlerATBAnim(int id) {
   for (size_t i = 0; i < playerBattlerSize; i++) {
-    if (_playerUIPanels[i].BattlerID = id) {
+    if (_playerUIPanels[i].BattlerID == id) {
       _playerUIPanels[i].ATBBar->ProgressBarAnimation->Animation->PlayAnimation("idle");
     }
   }
@@ -251,6 +251,11 @@ void Supergoon::InitializeBattleUI() {
     battleCommandPanel->SetVisible(false);
     fingerPosChanged = true;
     endBattlerATBAnim(battler);
+  });
+  Events::RegisterEventHandler(EscapeTheFateEvents.UpdatePlayerBattlerUIEvent, [](int, void *battlerComp, void *) {
+    assert((BattlerComponent *)battlerComp);
+    auto comp = (BattlerComponent *)battlerComp;
+    updatePlayersPanel(comp);
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.PlayerBattlerTurnBegin, [](int battler, void *, void *) {
     if (battleCommandPanel && battleFinger) {

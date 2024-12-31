@@ -36,6 +36,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Systems/CameraSystem.cpp
     Systems/TextInteractionSystem.cpp
     Systems/Battle/EnterBattleSystem.cpp
+    Systems/Battle/EnemyBattlerAISystem.cpp
     Systems/Battle/BattleTurnMarkerSystem.cpp
     Systems/Battle/BattleZoneSystem.cpp
     Systems/Battle/BattleDamageSystem.cpp

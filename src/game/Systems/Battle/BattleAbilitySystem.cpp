@@ -83,7 +83,6 @@ static void handleAbilityUsed(int, void *abilityArgs, void *) {
   auto damageCo = sgAddCoroutine(
       0.5, [](void *damage, void *args) {
         assert((BattleCommandArgs *)args && "Could not convert!");
-
         Events::PushEvent(EscapeTheFateEvents.BattleDamageEvent, (intptr_t)damage, args);
       },
       (void *)damage, (void *)abilityArgs);

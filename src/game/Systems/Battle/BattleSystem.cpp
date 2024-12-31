@@ -18,6 +18,7 @@
 #include <Systems/Battle/BattleSystem.hpp>
 #include <Systems/Battle/BattleTurnMarkerSystem.hpp>
 #include <Systems/Battle/BattleUISystem.hpp>
+#include <Systems/Battle/EnemyBattlerAISystem.hpp>
 #include <Utilities/Events.hpp>
 #include <cstdint>
 #include <memory>
@@ -64,10 +65,14 @@ static void updateATBs(GameState &gamestate, BattleComponent *battleComponent) {
   if (battleComponent->CurrentBattleState != BattleState::Battle) {
     return;
   }
-  GameObject::ForEach<BattlerComponent>([&gamestate](GameObject, BattlerComponent &battleComp) {
+  GameObject::ForEach<BattlerComponent>([&gamestate](GameObject go, BattlerComponent &battleComp) {
     // TODO this could go over full atb currently, not sure if that matters
     if (battleComp.CurrentATB < battleComp.FullATB) {
       battleComp.CurrentATB += gamestate.DeltaTime * 1;
+    }
+    if (!battleComp.IsPlayer && battleComp.CurrentATB >= battleComp.FullATB) {
+      HandleEnemyBattler(go);
+      // enemy should attack.
     }
   });
 }

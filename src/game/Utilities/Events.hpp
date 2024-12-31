@@ -14,6 +14,7 @@ struct EscapeTheFateEvent {
   uint32_t PlayerBattlerTurnBegin;
   uint32_t BattleDamageEvent;
   uint32_t BattleAbilityUsed;
+  uint32_t UpdatePlayerBattlerUIEvent;
 };
 extern EscapeTheFateEvent EscapeTheFateEvents;
 void InitializeEvents();
