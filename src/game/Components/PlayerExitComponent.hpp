@@ -4,8 +4,8 @@
 #include <string>
 namespace Supergoon {
 struct PlayerExitComponent {
-	RectangleF BoundingBox;
-	int SpawnLocationId;
-	std::string NextMap;
+  RectangleF BoundingBox = {0, 0, 0, 0};
+  int SpawnLocationId = 0;
+  std::string NextMap = "";
 };
-}  // namespace Supergoon
+} // namespace Supergoon

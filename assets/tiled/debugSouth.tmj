@@ -212,6 +212,28 @@
                  "width":16,
                  "x":352,
                  "y":208
+                }, 
+                {
+                 "height":240,
+                 "id":21,
+                 "name":"BattleZone",
+                 "properties":[
+                        {
+                         "name":"battleId",
+                         "type":"string",
+                         "value":"1"
+                        }, 
+                        {
+                         "name":"encounterTime",
+                         "type":"float",
+                         "value":2
+                        }],
+                 "rotation":0,
+                 "type":"BattleZone",
+                 "visible":true,
+                 "width":384,
+                 "x":48,
+                 "y":16
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -220,7 +242,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":18,
+ "nextobjectid":22,
  "orientation":"orthogonal",
  "properties":[
         {

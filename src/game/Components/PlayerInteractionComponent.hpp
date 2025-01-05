@@ -4,8 +4,8 @@
 #include <memory>
 namespace Supergoon {
 struct PlayerInteractionComponent {
-	RectangleF InteractionRect;
-	std::shared_ptr<Image> InteractionImage;
-	bool ImageShowing;
+  RectangleF InteractionRect = {0, 0, 0, 0};
+  std::shared_ptr<Image> InteractionImage = nullptr;
+  bool ImageShowing = false;
 };
-}  // namespace Supergoon
+} // namespace Supergoon

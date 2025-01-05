@@ -1,0 +1,130 @@
+{ "frames": [
+   {
+    "filename": "blackBird 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   },
+   {
+    "filename": "blackBird 1.aseprite",
+    "frame": { "x": 61, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   },
+   {
+    "filename": "blackBird 2.aseprite",
+    "frame": { "x": 122, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   },
+   {
+    "filename": "blackBird 3.aseprite",
+    "frame": { "x": 183, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   },
+   {
+    "filename": "blackBird 4.aseprite",
+    "frame": { "x": 244, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   },
+   {
+    "filename": "blackBird 5.aseprite",
+    "frame": { "x": 305, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   },
+   {
+    "filename": "blackBird 6.aseprite",
+    "frame": { "x": 366, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   },
+   {
+    "filename": "blackBird 7.aseprite",
+    "frame": { "x": 427, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   },
+   {
+    "filename": "blackBird 8.aseprite",
+    "frame": { "x": 488, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   },
+   {
+    "filename": "blackBird 9.aseprite",
+    "frame": { "x": 549, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   },
+   {
+    "filename": "blackBird 10.aseprite",
+    "frame": { "x": 610, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   },
+   {
+    "filename": "blackBird 11.aseprite",
+    "frame": { "x": 671, "y": 0, "w": 61, "h": 57 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 61, "h": 57 },
+    "sourceSize": { "w": 61, "h": 57 },
+    "duration": 150
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.2-dev",
+  "image": "blackBird.png",
+  "format": "RGBA8888",
+  "size": { "w": 732, "h": 57 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idleD", "from": 0, "to": 2, "direction": "pingpong", "color": "#000000ff" },
+   { "name": "idleL", "from": 3, "to": 5, "direction": "pingpong", "color": "#000000ff" },
+   { "name": "idleR", "from": 6, "to": 8, "direction": "pingpong", "color": "#000000ff" },
+   { "name": "idleU", "from": 9, "to": 11, "direction": "pingpong", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
