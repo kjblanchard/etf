@@ -58,9 +58,12 @@ static void createDamageText(UIObject *parent) {
   auto text = new UIText(parent, "0");
   // auto textAnimator = make_shared<UIObjectAnimatorBase>(255, 0, 0.5, text->AlphaHandle());
   auto textAnimator = make_shared<UIObjectAnimatorBase>("texttweener");
-  auto tweener = new Tween(255, 0, 0.5, text->AlphaHandle(), Supergoon::Easings::Linear, 0);
+  auto tweener = new Tween(255, 0, 0.75, text->AlphaHandle(), Supergoon::Easings::Linear, 0);
   textAnimator->AddUIObjectTween(tweener, text);
   text->Animators.push_back(textAnimator);
+  tweener->EndFunc = [text]() {
+    _damageTexts.push(text);
+  };
   _damageTexts.push(text);
 }
 
@@ -304,9 +307,28 @@ void Supergoon::InitializeBattleUI() {
       }
       auto text = _damageTexts.front();
       text->UpdateText(to_string(damage));
-      text->SetDrawOverride({location.X - 4, location.Y - 6});
+      // text->SetDrawOverride({location.X - 6, location.Y + 8});
+      // Make it scroll up quickly?
+      text->SetDrawOverride({location.X - 12, location.Y + 20});
+      auto textAnimator = make_shared<UIObjectAnimatorBase>("texttweenery");
+      auto tweener = new Tween(location.Y + 15, location.Y + 10, 0.25, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
+      auto tweener2 = new Tween(location.Y + 10, location.Y + 15, 0.5, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
+      textAnimator->AddUIObjectTween(tweener, text);
+      textAnimator->AddUIObjectTween(tweener2, text);
+      text->Animators.push_back(textAnimator);
+      // TODO this is a memory leak, we keep growing this :)
+      auto numAnim = text->Animators.size() - 1;
+      // text->Animators[0]->AddUIObjectTween(tweener, text);
+      // if (text->Animators[0]->SequenceToPlay->Tweens.size() == 2) {
+      //   text->Animators[0]->SequenceToPlay->Tweens[1].;
+      // }
+      // text->Animators.push_back(textAnimator);
+      //
+
       text->Animators[0]->Play();
       text->Animators[0]->Restart();
+      text->Animators[numAnim]->Play();
+      text->Animators[numAnim]->Restart();
       _damageTexts.pop();
     }
     delete (abilityArgs);
