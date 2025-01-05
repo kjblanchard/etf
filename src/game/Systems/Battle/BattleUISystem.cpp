@@ -5,26 +5,34 @@
 #include "SupergoonEngine/log.h"
 #include "Utilities/Events.hpp"
 #include <Components/BattleComponent.hpp>
+#include <Components/BattlerComponent.hpp>
+#include <Entities/Battle/BattleCommandArgs.hpp>
 #include <Entities/Battle/BattleState.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
 #include <Supergoon/Content/Image.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
+#include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Events.hpp>
 #include <Supergoon/Input.hpp>
 #include <Supergoon/Tween/Sequence.hpp>
 #include <Supergoon/Tween/Tween.hpp>
 #include <Supergoon/UI/UI.hpp>
+#include <Supergoon/UI/UIAnimation.hpp>
 #include <Supergoon/UI/UIHorizontalLayoutGroup.hpp>
+#include <Supergoon/UI/UIObjectAnimator.hpp>
+#include <Supergoon/UI/UIProgressBar.hpp>
 #include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/UI/UIVerticalLayoutGroup.hpp>
 #include <Systems/Battle/BattleUISystem.hpp>
 #include <UI/Battle/BattlerDisplay.hpp>
 #include <Utilities/Utilities.hpp>
 #include <memory>
+#include <queue>
 #include <sstream>
 using namespace Supergoon;
 using namespace std;
+static const int playerBattlerSize = 3;
 static const int battleCommandsSize = 3;
 static const char *battleCommands[] = {"Attack", "Magic", "Item"};
 
@@ -34,25 +42,94 @@ static UIImage *battleFinger = nullptr;
 static UIText *battleCommandTexts[battleCommandsSize];
 static Sequence fingerSequence;
 static bool fingerPosChanged = false;
+struct PlayerUIPanel {
+  int BattlerID;
+  UIHorizontalLayoutGroup *LayoutGroup;
+  UIText *Name;
+  UIText *HP;
+  UIText *MP;
+  // UIText *Speed;
+  UIProgressBar *ATBBar;
+};
+static PlayerUIPanel _playerUIPanels[3];
+static queue<UIText *> _damageTexts;
 
-static void createPlayersPanel(UIObject *parent, string name, int hp, int maxHp,
-                               int mp, int maxMp) {
-  auto horizontalGroup = new UIHorizontalLayoutGroup(parent, name + "horiGroup");
-  horizontalGroup->XSpaceBetweenElements = 90;
-  ostringstream stringBuilder;
-  stringBuilder << name << ":	";
-  new UIText(horizontalGroup, stringBuilder.str(), name + "NameDisplayText", 12);
-  stringBuilder.str("");
-  stringBuilder << "HP: " << hp << " | " << maxHp;
-  new UIText(horizontalGroup, stringBuilder.str(), name + "HPDisplayText", 12);
-  stringBuilder.str("");
-  stringBuilder << "MP: " << mp << " | " << maxMp;
-  new UIText(horizontalGroup, stringBuilder.str(), name + "MPDisplayText", 12);
+static void createDamageText(UIObject *parent) {
+  auto text = new UIText(parent, "0");
+  // auto textAnimator = make_shared<UIObjectAnimatorBase>(255, 0, 0.5, text->AlphaHandle());
+  auto textAnimator = make_shared<UIObjectAnimatorBase>("texttweener");
+  auto tweener = new Tween(255, 0, 0.75, text->AlphaHandle(), Supergoon::Easings::Linear, 0);
+  textAnimator->AddUIObjectTween(tweener, text);
+  text->Animators.push_back(textAnimator);
+  tweener->EndFunc = [text]() {
+    _damageTexts.push(text);
+  };
+  _damageTexts.push(text);
+}
+
+static void createPlayersPanel(UIObject *parent) {
+  for (size_t i = 0; i < 3; i++) {
+    _playerUIPanels[i].LayoutGroup = new UIHorizontalLayoutGroup(parent, to_string(i) + "battlerhoriGroup");
+    _playerUIPanels[i].LayoutGroup->XSpaceBetweenElements = 140;
+    _playerUIPanels[i].Name = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "name", 12);
+    _playerUIPanels[i].HP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "hp", 12);
+    _playerUIPanels[i].HP->Offset.X = 40;
+    _playerUIPanels[i].MP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "mp", 12);
+    auto path = std::string(SDL_GetBasePath()) + "assets/img/atbBar.png";
+    auto atbBar = ContentRegistry::CreateContent<Image>(path);
+    atbBar->LoadContent();
+    _playerUIPanels[i].ATBBar = new UIProgressBar(_playerUIPanels[i].LayoutGroup, to_string(i) + "atb", "atbBar");
+    _playerUIPanels[i].ATBBar->SetLayer(3);
+    _playerUIPanels[i].ATBBar->BarOffset = {9, 13};
+    _playerUIPanels[i].ATBBar->BarSize = {46, 4};
+    _playerUIPanels[i].ATBBar->ProgressBarColor = {0, 140, 0, 255};
+    _playerUIPanels[i].ATBBar->Offset.X = -65;
+    _playerUIPanels[i].ATBBar->Offset.Y = -6;
+    _playerUIPanels[i].ATBBar->ProgressBarAnimation->OverrideDrawSize.X = 64;
+    _playerUIPanels[i].ATBBar->ProgressBarAnimation->OverrideDrawSize.Y = 32;
+    _playerUIPanels[i].ATBBar->SetLayer(2);
+    _playerUIPanels[i].ATBBar->SetVisible(false);
+  }
+}
+static void assignBattlersToPlayerPanels(int slot, int ID) {
+  _playerUIPanels[slot].BattlerID = ID;
+  _playerUIPanels[slot].ATBBar->SetVisible(true);
+}
+
+static void updateSpeed() {
+  GameObject::ForEach<BattlerComponent>([](GameObject, BattlerComponent &battler) {
+    for (size_t i = 0; i < playerBattlerSize; i++) {
+      if (_playerUIPanels[i].BattlerID != battler.Id) {
+        continue;
+      }
+      _playerUIPanels[i].ATBBar->SetBarPercent(battler.CurrentATB / battler.FullATB * 100);
+      // _playerUIPanels[i].Speed->UpdateText(to_string((int)(battler.CurrentATB / battler.FullATB * 100)));
+    }
+  });
+}
+
+static void updatePlayersPanel(BattlerComponent *comp) {
+  for (size_t i = 0; i < playerBattlerSize; i++) {
+    if (_playerUIPanels[i].BattlerID != comp->Id) {
+      continue;
+    }
+    ostringstream stringBuilder;
+    stringBuilder << comp->Stat.Name << ":	";
+    _playerUIPanels[i].Name->UpdateText(stringBuilder.str());
+    stringBuilder.str("");
+    stringBuilder << "HP: " << comp->Stat.HP << " | " << comp->Stat.MaxHP;
+    _playerUIPanels[i].HP->UpdateText(stringBuilder.str());
+    stringBuilder.str("");
+    stringBuilder << "MP: " << 0 << " | " << 0;
+    _playerUIPanels[i].MP->UpdateText(stringBuilder.str());
+    stringBuilder.str("");
+    stringBuilder << comp->CurrentATB / comp->FullATB;
+  }
 }
 
 static void initializePlayerUI() {
   auto fullSize = sgPoint{100, 65};
-  battleCommandPanel = CreateUIBasePanel("battleCommandPanel", {95, 215}, fullSize, 255);
+  battleCommandPanel = CreateUIBasePanel("battleCommandPanel", {110, 215}, fullSize, 255);
   battleCommandPanel->SetLayer(1);
   auto verticalLayoutGroup = new UIVerticalLayoutGroup(battleCommandPanel, "battleCommandVLG");
   verticalLayoutGroup->SetLayer(2);
@@ -82,17 +159,17 @@ static void initializeFinger() {
 }
 
 static void initializeBattleUI() {
+  // TODO this should happen on start, so that we can load the battlers ids properly.
   auto fullSize = sgPoint{435, 66};
   battlePanel = CreateUIBasePanel("battleBasePanel", {39, 222}, fullSize, 255);
   auto verticalLayoutGroup = new UIVerticalLayoutGroup(battlePanel, "battlersVerticalGroup");
   verticalLayoutGroup->SetLayer(1);
   verticalLayoutGroup->YSpaceBetweenElements = 16;
   verticalLayoutGroup->Offset = {9, 9};
-  createPlayersPanel(verticalLayoutGroup, "Kevin", 500, 500, 50, 50);
-  // createPlayersPanel(verticalLayoutGroup, "Quinn", 100, 100, 10, 20);
-  // createPlayersPanel(verticalLayoutGroup, "Misha", 300, 300, 100, 100);
+  createPlayersPanel(verticalLayoutGroup);
   initializePlayerUI();
   initializeFinger();
+  createDamageText(battlePanel);
 }
 
 static void handleInput(int loc) {
@@ -138,19 +215,12 @@ static void battleUpdate() {
   if (fingerSequence.IsComplete()) {
     fingerSequence.Restart();
   };
+  updateSpeed();
 }
 
 static void battleVictory() {
   battlePanel->SetVisible(false);
   battleCommandPanel->SetVisible(false);
-  // Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleBasePanel");
-  // Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"battleCommandPanel");
-  // battlePanel = nullptr;
-  // battleCommandPanel = nullptr;
-  // battleFinger = nullptr;
-  // for (int i = 0; i < battleCommandsSize; ++i) {
-  //   battleCommandTexts[i] = nullptr;
-  // }
 }
 
 static void battleCleanup() {
@@ -158,24 +228,60 @@ static void battleCleanup() {
 }
 
 static void startBattleUI() {
+  static int num = 0;
+  // Set all ui battlers to 0 to start, then assign them all.
+  for (size_t i = 0; i < playerBattlerSize; i++) {
+    _playerUIPanels[i].BattlerID = 0;
+  }
+
+  GameObject::ForEach<BattlerComponent>([](GameObject, BattlerComponent &battlerComp) {
+    if (!battlerComp.IsPlayer) {
+      return;
+    }
+    assignBattlersToPlayerPanels(num, battlerComp.Id);
+    updatePlayersPanel(&battlerComp);
+    ++num;
+  });
+  num = 0;
   battlePanel->SetVisible(true);
-  // battleCommandPanel->SetVisible(true);
+}
+static void startBattlerATBAnim(int id) {
+  for (size_t i = 0; i < playerBattlerSize; i++) {
+    if (_playerUIPanels[i].BattlerID == id) {
+      _playerUIPanels[i].ATBBar->ProgressBarAnimation->Animation->PlayAnimation("turn");
+      _playerUIPanels[i].ATBBar->ProgressBarAnimation->Playing = true;
+    }
+  }
+}
+
+static void endBattlerATBAnim(int id) {
+  for (size_t i = 0; i < playerBattlerSize; i++) {
+    if (_playerUIPanels[i].BattlerID == id) {
+      _playerUIPanels[i].ATBBar->ProgressBarAnimation->Animation->PlayAnimation("idle");
+    }
+  }
 }
 
 void Supergoon::InitializeBattleUI() {
   Events::RegisterEventHandler(EscapeTheFateEvents.BattleFullyStarted, [](int, void *, void *) {
-    // initializeBattleUI();
     startBattleUI();
   });
-  Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int, void *, void *) {
+  Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int battler, void *, void *) {
     battleCommandPanel->SetVisible(false);
     fingerPosChanged = true;
+    endBattlerATBAnim(battler);
   });
-  Events::RegisterEventHandler(EscapeTheFateEvents.PlayerBattlerTurnBegin, [](int, void *, void *) {
+  Events::RegisterEventHandler(EscapeTheFateEvents.UpdatePlayerBattlerUIEvent, [](int, void *battlerComp, void *) {
+    assert((BattlerComponent *)battlerComp);
+    auto comp = (BattlerComponent *)battlerComp;
+    updatePlayersPanel(comp);
+  });
+  Events::RegisterEventHandler(EscapeTheFateEvents.PlayerBattlerTurnBegin, [](int battler, void *, void *) {
     if (battleCommandPanel && battleFinger) {
       battleCommandPanel->SetVisible(true);
       handleInput(0);
       battleCommandPanel->SetDirty();
+      startBattlerATBAnim(battler);
     }
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.commandCursorUpdate, [](int buttonLoc, void *, void *) {
@@ -189,6 +295,43 @@ void Supergoon::InitializeBattleUI() {
   });
   Events::RegisterEventHandler(EscapeTheFateEvents.VictoryEnd, [](int, void *, void *) {
     battleCleanup();
+  });
+  Events::RegisterEventHandler(EscapeTheFateEvents.ShowBattleDamageTextEvent, [](int damage, void *abilityArgsVoid, void *) {
+    assert((BattleCommandArgs *)abilityArgsVoid && "Could not convert properly~!");
+    auto abilityArgs = (BattleCommandArgs *)abilityArgsVoid;
+    auto battlerId = abilityArgs->TargetBattler.GetComponent<BattlerComponent>().Id;
+    auto location = abilityArgs->TargetBattler.GetComponent<LocationComponent>().Location;
+    if (battlerId == 4) {
+      if (_damageTexts.empty()) {
+        return;
+      }
+      auto text = _damageTexts.front();
+      text->UpdateText(to_string(damage));
+      // text->SetDrawOverride({location.X - 6, location.Y + 8});
+      // Make it scroll up quickly?
+      text->SetDrawOverride({location.X - 12, location.Y + 20});
+      auto textAnimator = make_shared<UIObjectAnimatorBase>("texttweenery");
+      auto tweener = new Tween(location.Y + 15, location.Y + 10, 0.25, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
+      auto tweener2 = new Tween(location.Y + 10, location.Y + 15, 0.5, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
+      textAnimator->AddUIObjectTween(tweener, text);
+      textAnimator->AddUIObjectTween(tweener2, text);
+      text->Animators.push_back(textAnimator);
+      // TODO this is a memory leak, we keep growing this :)
+      auto numAnim = text->Animators.size() - 1;
+      // text->Animators[0]->AddUIObjectTween(tweener, text);
+      // if (text->Animators[0]->SequenceToPlay->Tweens.size() == 2) {
+      //   text->Animators[0]->SequenceToPlay->Tweens[1].;
+      // }
+      // text->Animators.push_back(textAnimator);
+      //
+
+      text->Animators[0]->Play();
+      text->Animators[0]->Restart();
+      text->Animators[numAnim]->Play();
+      text->Animators[numAnim]->Restart();
+      _damageTexts.pop();
+    }
+    delete (abilityArgs);
   });
   initializeBattleUI();
 }

@@ -501,7 +501,7 @@
    { "name": "slash2", "from": 12, "to": 14, "direction": "forward", "repeat": "1", "color": "#000000ff" },
    { "name": "cheer1", "from": 15, "to": 17, "direction": "pingpong", "color": "#000000ff" },
    { "name": "cheer2", "from": 18, "to": 20, "direction": "pingpong", "color": "#000000ff" },
-   { "name": "damage1", "from": 36, "to": 38, "direction": "forward", "color": "#000000ff" },
+   { "name": "damage1", "from": 36, "to": 38, "direction": "forward", "repeat": "1", "color": "#000000ff" },
    { "name": "damage2", "from": 45, "to": 47, "direction": "forward", "color": "#000000ff" },
    { "name": "clap1", "from": 48, "to": 49, "direction": "forward", "color": "#000000ff" },
    { "name": "dead1", "from": 51, "to": 53, "direction": "forward", "color": "#000000ff" }

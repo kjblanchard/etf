@@ -13,4 +13,6 @@ void Supergoon::InitializeEvents() {
   EscapeTheFateEvents.BattleDamageEvent = Events::RegisterEvent();
   EscapeTheFateEvents.BattleAbilityUsed = Events::RegisterEvent();
   EscapeTheFateEvents.StartEnteringBattle = Events::RegisterEvent();
+  EscapeTheFateEvents.UpdatePlayerBattlerUIEvent = Events::RegisterEvent();
+  EscapeTheFateEvents.ShowBattleDamageTextEvent = Events::RegisterEvent();
 }

@@ -17,17 +17,19 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
   auto battlerAnimation = AnimationComponent();
   auto battlerComponent = BattlerComponent();
   battlerComponent.CurrentATB = 0;
-  battlerComponent.FullATB = 3;
   battlerComponent.CurrentBattleLocation = battleLocation.BattleLocationId;
   if (battleLocation.BattleLocationId == 1) {
     battlerAnimation.AnimationName = "player1Battler";
     battlerComponent.Id = 1;
     battlerComponent.IsPlayer = true;
+    battlerComponent.FullATB = 3;
+    battlerComponent.Stat.Name = "Kevin";
     battlerComponent.Stat.HP = 10;
     battlerComponent.Stat.MaxHP = 10;
+    battlerComponent.Stat.Str = 1;
     // TODO we need to script this somehow,
     battlerAnimation.OnAnimationEnd = [](AsepriteAnimation *anim, std::string animEnding) {
-      if (animEnding == "slash2") {
+      if (animEnding == "slash2" || animEnding == "damage1") {
         anim->PlayAnimation("idle1");
       }
     };
@@ -36,6 +38,7 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     battlerComponent.Stat.HP = 2;
     battlerComponent.Stat.MaxHP = 2;
     battlerComponent.Id = 4;
+    battlerComponent.FullATB = 5;
     battlerComponent.IsPlayer = false;
   }
   battlerAnimation.Offset = {0, 0};

@@ -34,49 +34,52 @@ void Supergoon::InitializeBattleDamageSystem(BattleComponent *battleComponent) {
     assert((BattleCommandArgs *)abilityArgsVoid && "Could not convert properly~!");
     auto abilityArgs = (BattleCommandArgs *)abilityArgsVoid;
     auto battlerId = abilityArgs->TargetBattler.GetComponent<BattlerComponent>().Id;
-    // auto targetAnim = abilityArgs->TargetBattler.GetComponent<AnimationComponent>();
-    GameObject::ForEach<BattlerComponent, AnimationComponent>([battlerId, battleComponent](GameObject, BattlerComponent &battlerComponent, AnimationComponent &animComponent) {
+    GameObject::ForEach<BattlerComponent, AnimationComponent>([battlerId, battleComponent, damage](GameObject, BattlerComponent &battlerComponent, AnimationComponent &animComponent) {
       if (battlerComponent.Id != battlerId) {
         return;
       }
-      auto damageInt = 1;
-      battlerComponent.Stat.HP -= damageInt;
-      // If it's a enemy, we should play a sound and then victory.
-      if (battlerComponent.Stat.HP <= 0) {
-        enemyDiedTween = Tween(255, 0, 0.75, &_alphaTweenInt, Easings::Linear, 1);
-        enemyDiedTween.UpdateFunc = [animComponent]() {
-          animComponent.AnimationImage->SetAlpha(_alphaTweenInt);
-        };
-        enemyDiedTween.SetAutostart(false);
-        enemyDiedTween.EndFunc = [battleComponent]() {
-          if (battleComponent->CurrentBattleState != BattleState::Battle) {
-            return;
-          }
-          bool allEnemiesDead = true;
-          GameObject::ForEach<BattlerComponent>([&allEnemiesDead](GameObject, BattlerComponent &battlerComp) {
-            if (battlerComp.IsPlayer) {
+      // auto damageInt = 1;
+      battlerComponent.Stat.HP -= damage;
+      if (battlerComponent.IsPlayer) {
+        Events::PushEvent(EscapeTheFateEvents.UpdatePlayerBattlerUIEvent, 0, (void *)&battlerComponent);
+        animComponent.Animation->PlayAnimation("damage1");
+
+      } else {
+        if (battlerComponent.Stat.HP <= 0) {
+          enemyDiedTween = Tween(255, 0, 0.75, &_alphaTweenInt, Easings::Linear, 1);
+          enemyDiedTween.UpdateFunc = [animComponent]() {
+            animComponent.AnimationImage->SetAlpha(_alphaTweenInt);
+          };
+          enemyDiedTween.SetAutostart(false);
+          enemyDiedTween.EndFunc = [battleComponent]() {
+            if (battleComponent->CurrentBattleState != BattleState::Battle) {
               return;
             }
-            if (battlerComp.Stat.HP > 0) {
-              allEnemiesDead = false;
+            bool allEnemiesDead = true;
+            GameObject::ForEach<BattlerComponent>([&allEnemiesDead](GameObject, BattlerComponent &battlerComp) {
+              if (battlerComp.IsPlayer) {
+                return;
+              }
+              if (battlerComp.Stat.HP > 0) {
+                allEnemiesDead = false;
+              }
+            });
+            if (allEnemiesDead) {
+              // Should signal to start the victory to the battle system.
+              startVictory(battleComponent);
             }
-          });
-          if (allEnemiesDead) {
-            // Should signal to start the victory to the battle system.
-            startVictory(battleComponent);
-          }
-        };
-        auto co = sgAddCoroutine(
-            0.5, [](void *) {
-              Sound::Instance()->PlaySfx(enemyDiedSfx.get());
-              enemyDiedTween.Restart();
-            },
-            nullptr);
-        sgStartCoroutine(co);
+          };
+          auto co = sgAddCoroutine(
+              0.25, [](void *, void *) {
+                Sound::Instance()->PlaySfx(enemyDiedSfx.get());
+                enemyDiedTween.Restart();
+              },
+              nullptr, nullptr);
+          sgStartCoroutine(co);
+        }
       }
-      // TODO If it's a player, we should update the hp
     });
-    delete (abilityArgs);
+    Events::PushEvent(EscapeTheFateEvents.ShowBattleDamageTextEvent, damage, abilityArgsVoid);
   });
   enemyDiedSfx = ContentRegistry::CreateContent<Sfx>("enemyDead");
   enemyDiedSfx->LoadContent();

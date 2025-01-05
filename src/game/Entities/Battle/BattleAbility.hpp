@@ -1,4 +1,8 @@
 #pragma once
+namespace Supergoon {
+class GameObject;
+
+}
 enum class DamageTypes {
   None,
   Physical,
@@ -18,6 +22,8 @@ struct BattleAbility {
   DamageTypes DamageType;
   unsigned int Flags;
   float Multiplier;
-  const char *AnimationName;
+  const char *CharAnimationName;
   const char *AbilitySFXName;
+  const char *AbilityAnimation;
+  Supergoon::GameObject *AnimationGameObject;
 };

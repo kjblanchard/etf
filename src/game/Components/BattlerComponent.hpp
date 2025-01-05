@@ -9,4 +9,5 @@ struct BattlerComponent {
   float FullATB = 0;
   Stats Stat = {};
 };
+inline bool IsBattlerDead(BattlerComponent &battler) { return battler.Stat.HP <= 0; }
 } // namespace Supergoon

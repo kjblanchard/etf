@@ -36,14 +36,26 @@ void Supergoon::UpdateAnimationComponents() {
 void Supergoon::DrawAnimationComponents() {
   auto cameraGO = GameObject::GetGameObjectWithComponents<CameraComponent>();
   auto &cameraComponent = cameraGO->GetComponent<CameraComponent>();
-  GameObject::ForEach<AnimationComponent, LocationComponent>([&cameraComponent](GameObject, AnimationComponent &a, LocationComponent &l) {
-    auto srcRect = a.Animation->FrameCoords();
-    auto dWidth = a.OverrideDrawSize.X ? a.OverrideDrawSize.X : srcRect.W;
-    auto dHeight = a.OverrideDrawSize.Y ? a.OverrideDrawSize.Y : srcRect.H;
-    auto d = RectangleF{(float)(int)(l.Location.X + a.Offset.X) - (int)cameraComponent.Box.X,
-                        (float)(int)(l.Location.Y + a.Offset.Y) - (int)cameraComponent.Box.Y,
-                        (float)dWidth,
-                        (float)dHeight};
-    a.AnimationImage->Draw(srcRect, d);
-  });
+  // TODO this layer system is really hacked in :) just loops over them twice lol.
+  for (size_t i = 0; i < 2; i++) {
+    GameObject::ForEach<AnimationComponent, LocationComponent>([&cameraComponent, i](GameObject, AnimationComponent &a, LocationComponent &l) {
+      if (!a.Visible || a.Layer != i) {
+        return;
+      }
+      if (!a.Animation) {
+        sgLogError("Animation not loaded for %s", a.AnimationName.c_str());
+        return;
+      }
+
+      auto srcRect = a.Animation->FrameCoords();
+      auto dWidth = a.OverrideDrawSize.X ? a.OverrideDrawSize.X : srcRect.W;
+      auto dHeight = a.OverrideDrawSize.Y ? a.OverrideDrawSize.Y : srcRect.H;
+      auto d = RectangleF{(float)(int)(l.Location.X + a.Offset.X) - (int)cameraComponent.Box.X,
+                          (float)(int)(l.Location.Y + a.Offset.Y) - (int)cameraComponent.Box.Y,
+                          (float)dWidth,
+                          (float)dHeight};
+      a.AnimationImage->Draw(srcRect, d);
+      /* code */
+    });
+  }
 }

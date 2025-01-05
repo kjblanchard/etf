@@ -18,8 +18,10 @@
 #include <Supergoon/UI/UIText.hpp>
 #include <Supergoon/pch.hpp>
 #include <Systems/AsepriteSystem.hpp>
+#include <Systems/Battle/BattleAbilitySystem.hpp>
 #include <Systems/Battle/BattleLocationSystem.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
+#include <Systems/Battle/BattleTurnMarkerSystem.hpp>
 #include <Systems/Battle/BattleUISystem.hpp>
 #include <Systems/Battle/BattleZoneSystem.hpp>
 #include <Systems/Battle/EnterBattleSystem.hpp>
@@ -73,6 +75,8 @@ static void loadLevel() {
   }
   LoadPlayers();
   LoadBattlers();
+  LoadBattleAbilities();
+  LoadBattleTurnMarkerSystem();
   LoadAnimationComponents();
   LoadTextInteractions();
   // Check if we should show the text at top

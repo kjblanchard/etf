@@ -16,7 +16,9 @@
 #include <Systems/Battle/BattleAbilitySystem.hpp>
 #include <Systems/Battle/BattleDamageSystem.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
+#include <Systems/Battle/BattleTurnMarkerSystem.hpp>
 #include <Systems/Battle/BattleUISystem.hpp>
+#include <Systems/Battle/EnemyBattlerAISystem.hpp>
 #include <Utilities/Events.hpp>
 #include <cstdint>
 #include <memory>
@@ -63,10 +65,14 @@ static void updateATBs(GameState &gamestate, BattleComponent *battleComponent) {
   if (battleComponent->CurrentBattleState != BattleState::Battle) {
     return;
   }
-  GameObject::ForEach<BattlerComponent>([&gamestate](GameObject, BattlerComponent &battleComp) {
+  GameObject::ForEach<BattlerComponent>([&gamestate](GameObject go, BattlerComponent &battleComp) {
     // TODO this could go over full atb currently, not sure if that matters
     if (battleComp.CurrentATB < battleComp.FullATB) {
       battleComp.CurrentATB += gamestate.DeltaTime * 1;
+    }
+    if (!battleComp.IsPlayer && battleComp.CurrentATB >= battleComp.FullATB) {
+      HandleEnemyBattler(go);
+      // enemy should attack.
     }
   });
 }
@@ -139,13 +145,11 @@ void handlePlayerInputForBattler(GameState *, BattleComponent *) {
     if (currentFingerPos == 0) {
       Sound::Instance()->PlaySfx(menuSelectSfx.get());
       currentBattlerGameObject.GetComponent<BattlerComponent>().CurrentATB = 0;
-      // currentBattlerComp->CurrentATB = 0;
-      currentBattler = -1;
       // Determine the attacker and target and ability.
       BattleCommandArgs *battleCommandArg = new BattleCommandArgs();
       battleCommandArg->AbilityId = 0;
       battleCommandArg->AttackingBattler = currentBattlerGameObject;
-      // How do we find the Target Battler Gameobject? for now, hack it.
+      // TODO How do we find the Target Battler Gameobject? for now, hack it to be birb.
       GameObject targetGameObject;
       GameObject::ForEach<BattlerComponent>([&targetGameObject](GameObject go, BattlerComponent battlerComp) {
         if (battlerComp.Id == 4) {
@@ -153,14 +157,14 @@ void handlePlayerInputForBattler(GameState *, BattleComponent *) {
         }
       });
       battleCommandArg->TargetBattler = targetGameObject;
-      // battleCommandArg->TargetBattler =
       auto co = sgAddCoroutine(
-          0.25, [](void *userdata) {
+          0.25, [](void *userdata, void *) {
             Events::PushEvent(EscapeTheFateEvents.BattleAbilityUsed, 0, (void *)userdata);
           },
-          (void *)battleCommandArg);
+          (void *)battleCommandArg, nullptr);
       sgStartCoroutine(co);
-      Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, 0);
+      Events::PushEvent(EscapeTheFateEvents.BattleTurnFinished, currentBattler);
+      currentBattler = -1;
     } else {
       Sound::Instance()->PlaySfx(errorSfx.get());
     }
@@ -185,6 +189,7 @@ static void initializeBattleSystem(GameState *gamestate, BattleComponent *battle
   InitializeBattleUI();
   InitializeBattleAbilitySystem();
   InitializeBattleDamageSystem(battleComponent);
+  InitializeBattleTurnMarkerSystem();
   battleComponent->CurrentBattleState = BattleState::BattleJustStarted;
 }
 
