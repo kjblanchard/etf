@@ -12,31 +12,31 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: windows
+          - os: windows-2025
             make_cmd: wrebuild
             suffix: zip
             zlib: wzlib
             name: win
-          - os: macos
+          - os: macos-latest
             make_cmd: xrebuild
             suffix: tgz
             zlib: zlib
             name: mac
-          - os: macos
+          - os: macos-latest
             make_cmd: irebuild
             suffix: tgz
             zlib: zlib
             name: ios-simulator
-          - os: ubuntu
+          - os: ubuntu-latest
             make_cmd: brebuild
             suffix: tgz
             zlib: zlib
             name: linux
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.os }}
     environment: prod
     steps:
       - name: Install dependencies (Ubuntu only)
-        if: ${{ matrix.os == 'ubuntu' }}
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo apt update -y
           sudo apt-get install build-essential git make pkg-config cmake ninja-build gnome-desktop-testing libasound2-dev libpulse-dev libaudio-dev libjack-dev libsndio-dev libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev libxss-dev libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev libgles2-mesa-dev libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev fcitx-libs-dev
