@@ -14,16 +14,15 @@ using namespace Supergoon;
 void BattleWidget::ShowBattleWidget() {
   ImGuiWindowFlags window_flags = Widgets::GetDefaultWindowFlags();
   bool p_open;
-
-  if (!ImGui::Begin("Battle", &p_open, window_flags)) {
+  //  TODO, a lot of this shouldn't be on the gamestate component, probably make a battle component here, gamestate is just for things between scenes.
+  auto gamestateComponent = GameObject::FindComponent<GameState>();
+  auto battleComponent = GameObject::FindComponent<BattleComponent>();
+  // assert(gamestateComponent && battleComponent && "Could not find components for battle widget");
+  if (!ImGui::Begin("Battle", &p_open, window_flags) || !gamestateComponent || !battleComponent) {
     // Early out if the window is collapsed, as an optimization.
     ImGui::End();
     return;
   }
-  //  TODO, a lot of this shouldn't be on the gamestate component, probably make a battle component here, gamestate is just for things between scenes.
-  auto gamestateComponent = GameObject::FindComponent<GameState>();
-  auto battleComponent = GameObject::FindComponent<BattleComponent>();
-  assert(gamestateComponent && battleComponent && "Could not find components for battle widget");
   if (ImGui::Button("Start Battle")) {
     auto go = GameObject::GetGameObjectWithComponents<PlayerComponent>();
     assert(go.has_value() && go->HasComponent<LocationComponent>() && go->HasComponent<AnimationComponent>());
