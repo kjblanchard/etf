@@ -121,6 +121,7 @@ static void playLogos() {
   auto ui = UI::UIInstance.get();
   auto thing = (UIImage *)ui->GetChildByName("logoImage");
   auto thing2 = (UIImage *)ui->GetChildByName("logoImage2");
+  assert(thing && thing2 && "Thing is null somehow");
   auto animator = new UIObjectAnimatorBase("logo");
   auto animator2 = new UIObjectAnimatorBase("logo2");
   auto fadeInTween = new Tween(0, 255, 3.0, thing->AlphaHandle(), Supergoon::Easings::Linear);
