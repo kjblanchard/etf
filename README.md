@@ -46,10 +46,7 @@ Please make sure to update tests as appropriate.
 ## Credits
 
 - [Time Fantasy Sprites](https://finalbossblues.com/timefantasy/)
-- [Typing Text sound](https://freesound.org/people/Sky_Motion/sounds/416777/)
-Creative Commons
-- [Transition](https://freesound.org/people/distillerystudio/sounds/327754/) -
-distillerystudio
+- [Typing Text sound](https://freesound.org/people/Sky_Motion/sounds/416777/) -  Creative Commons
+- [Transition](https://freesound.org/people/distillerystudio/sounds/327754/) - distillerystudio
 - [Transition 2](https://freesound.org/people/newagesoup/sounds/462089/) - newagesoup
-- [HAP sfx pack](https://hunteraudio.itch.io/8bit-sfx-and-music-pack) -
- Hunter Audio Production
+- [HAP sfx pack](https://hunteraudio.itch.io/8bit-sfx-and-music-pack) - Hunter Audio Production
