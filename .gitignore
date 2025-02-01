@@ -1,7 +1,13 @@
 .DS_Store
+.NERD*
 .vscode/
 build/
 imgui.ini
 .terraform/
 terraform.tfvars
 memcheck.txt
+engine/
+.cache/
+*.swp
+*.swn
+*.swo
