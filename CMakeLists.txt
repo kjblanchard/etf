@@ -49,7 +49,9 @@ else()
     FetchContent_Declare(
         engine
         GIT_REPOSITORY https://github.com/kjblanchard/sgEngine
-        GIT_TAG c00f77f
+
+        # GIT_TAG c00f77f
+        GIT_TAG master
     )
     FetchContent_MakeAvailable(engine)
 endif(SYSTEM_PACKAGES)
