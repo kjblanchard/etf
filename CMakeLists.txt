@@ -45,12 +45,11 @@ endif(imgui)
 if(SYSTEM_PACKAGES)
     add_subdirectory(engine)
 else()
+    message(STATUS "Fetching supergoon engine from git..")
     FetchContent_Declare(
         engine
         GIT_REPOSITORY https://github.com/kjblanchard/sgEngine
-        GIT_TAG master
-
-        # EXCLUDE_FROM_ALL
+        GIT_TAG c00f77f
     )
     FetchContent_MakeAvailable(engine)
 endif(SYSTEM_PACKAGES)
