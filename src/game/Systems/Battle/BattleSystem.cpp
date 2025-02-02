@@ -85,7 +85,7 @@ static int findReadyBattler() {
   // BattlerComponent *comp = nullptr;
   // AnimationComponent *animComp = nullptr;
   // GameObject::ForEach<BattlerComponent, AnimationComponent>([&foundBattler, &battler, &comp, &animComp](GameObject go, BattlerComponent &battleComponent, AnimationComponent &animComponent) {
-  GameObject::ForEach<BattlerComponent, AnimationComponent>([&foundBattler, &battler, &battlerGameObject](GameObject go, BattlerComponent &battleComponent, AnimationComponent &animComponent) {
+  GameObject::ForEach<BattlerComponent, AnimationComponent>([&foundBattler, &battler, &battlerGameObject](GameObject go, BattlerComponent &battleComponent, AnimationComponent &) {
     if (foundBattler) {
       return;
     }
@@ -170,7 +170,7 @@ void handlePlayerInputForBattler(GameState *, BattleComponent *) {
     }
   }
 }
-static void initializeBattleSystem(GameState *gamestate, BattleComponent *battleComponent) {
+static void initializeBattleSystem(GameState *, BattleComponent *battleComponent) {
   Events::RegisterEventHandler(EscapeTheFateEvents.EnterBattleFinished, [battleComponent](int, void *, void *) {
     if (battleComponent->CurrentBattleState == BattleState::Initialized) {
       battleComponent->CurrentBattleState = BattleState::BattleJustStarted;

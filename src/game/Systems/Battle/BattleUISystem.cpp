@@ -30,6 +30,7 @@
 #include <memory>
 #include <queue>
 #include <sstream>
+#pragma clang diagnostic ignored "-Wsign-compare"
 using namespace Supergoon;
 using namespace std;
 static const int playerBattlerSize = 3;

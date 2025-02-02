@@ -7,6 +7,7 @@
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Events.hpp>
 #include <Systems/Battle/BattleTurnMarkerSystem.hpp>
+#pragma clang diagnostic ignored "-Wsign-compare"
 #include <Utilities/Events.hpp>
 using namespace Supergoon;
 
@@ -28,7 +29,7 @@ void Supergoon::InitializeBattleTurnMarkerSystem() {
         turnMarkerLoc.Location.Y = loc.Location.Y + anim.Offset.Y - turnMarkerAnim.AnimationImage->Height();
       }
     });
-    Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int battler, void *, void *) {
+    Events::RegisterEventHandler(EscapeTheFateEvents.BattleTurnFinished, [](int, void *, void *) {
       assert(turnMarkerGameObject && turnMarkerGameObject->HasComponent<LocationComponent>() && turnMarkerGameObject->HasComponent<AnimationComponent>() && "Bad components");
       auto &turnMarkerAnim = turnMarkerGameObject->GetComponent<AnimationComponent>();
       turnMarkerAnim.Visible = false;
