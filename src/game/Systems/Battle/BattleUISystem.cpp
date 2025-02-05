@@ -59,7 +59,7 @@ static deque<UIText *> _damageTexts;
 
 static void createDamageText(UIObject *parent) {
   for (size_t i = 0; i < numDamageTextsToLoad; i++) {
-    auto text = new UIText(parent, "0");
+    auto text = new UIText(parent, "0", std::string("damageText") + to_string(i), 12);
     // auto textAnimator = make_shared<UIObjectAnimatorBase>(255, 0, 0.5, text->AlphaHandle());
     auto textAnimator = make_shared<UIObjectAnimatorBase>("texttweener");
     auto tweener = new Tween(255, 0, 0.75, text->AlphaHandle(), Supergoon::Easings::Linear, 0);
@@ -81,13 +81,14 @@ static void clearDamageTextTweens() {
 }
 
 static void createPlayersPanel(UIObject *parent) {
+  auto uiTextSize = 12;
   for (size_t i = 0; i < 3; i++) {
     _playerUIPanels[i].LayoutGroup = new UIHorizontalLayoutGroup(parent, to_string(i) + "battlerhoriGroup");
     _playerUIPanels[i].LayoutGroup->XSpaceBetweenElements = 140;
-    _playerUIPanels[i].Name = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "name", 12);
-    _playerUIPanels[i].HP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "hp", 12);
+    _playerUIPanels[i].Name = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "name", uiTextSize);
+    _playerUIPanels[i].HP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "hp", uiTextSize);
     _playerUIPanels[i].HP->Offset.X = 40;
-    _playerUIPanels[i].MP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "mp", 12);
+    _playerUIPanels[i].MP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "mp", uiTextSize);
     auto path = std::string(SDL_GetBasePath()) + "assets/img/atbBar.png";
     auto atbBar = ContentRegistry::CreateContent<Image>(path);
     atbBar->LoadContent();
@@ -97,7 +98,7 @@ static void createPlayersPanel(UIObject *parent) {
     _playerUIPanels[i].ATBBar->BarSize = {46, 4};
     _playerUIPanels[i].ATBBar->ProgressBarColor = {0, 140, 0, 255};
     _playerUIPanels[i].ATBBar->Offset.X = -65;
-    _playerUIPanels[i].ATBBar->Offset.Y = -6;
+    _playerUIPanels[i].ATBBar->Offset.Y = -9;
     _playerUIPanels[i].ATBBar->ProgressBarAnimation->OverrideDrawSize.X = 64;
     _playerUIPanels[i].ATBBar->ProgressBarAnimation->OverrideDrawSize.Y = 32;
     _playerUIPanels[i].ATBBar->SetLayer(2);
@@ -319,10 +320,12 @@ void Supergoon::InitializeBattleUI() {
     }
     auto text = _damageTexts.front();
     text->UpdateText(to_string(damage));
-    text->SetDrawOverride({location.X - 12, location.Y + 20});
+    text->SetDrawOverride({location.X - 14, location.Y});
+    auto numJump = 4;
+    auto textStart = location.Y - 5;
     auto textAnimator = make_shared<UIObjectAnimatorBase>("texttweenery");
-    auto tweener = new Tween(location.Y + 15, location.Y + 10, 0.25, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
-    auto tweener2 = new Tween(location.Y + 10, location.Y + 15, 0.5, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
+    auto tweener = new Tween(textStart, textStart - numJump, 0.2, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
+    auto tweener2 = new Tween(textStart - numJump, textStart, 0.5, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
     textAnimator->AddUIObjectTween(tweener, text);
     textAnimator->AddUIObjectTween(tweener2, text);
     text->Animators.push_back(textAnimator);

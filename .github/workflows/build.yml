@@ -57,7 +57,7 @@ jobs:
     container:
       image: emscripten/emsdk:3.1.70
       env:
-        THING_ADD: <div><br>Use WASD to move<br>Built with github actions!<br>Press SPACE to interact.</div>
+        THING_ADD: <div><br>Use WASD to move<br>Built with github actions!<br>Press SPACE to interact.<br>https://github.com/kjblanchard/etf</div>
       credentials:
         username: ${{ vars.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
