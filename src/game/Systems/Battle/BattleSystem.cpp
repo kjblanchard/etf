@@ -72,6 +72,7 @@ static void updateATBs(GameState &gamestate, BattleComponent *battleComponent) {
     }
     if (!battleComp.IsPlayer && battleComp.CurrentATB >= battleComp.FullATB) {
       HandleEnemyBattler(go);
+      battleComp.CurrentATB = 0;
       // enemy should attack.
     }
   });
