@@ -12,12 +12,12 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     return;
   }
   auto go = new GameObject();
-  //  auto battleLocationComponent = BattleLocationComponent();
   auto battleLocationLoc = LocationComponent();
   auto battlerAnimation = AnimationComponent();
   auto battlerComponent = BattlerComponent();
   battlerComponent.CurrentATB = 0;
   battlerComponent.CurrentBattleLocation = battleLocation.BattleLocationId;
+  // TODO we should be loading this from a json file, for now hardcode the stats.
   if (battleLocation.BattleLocationId == 1) {
     battlerAnimation.AnimationName = "player1Battler";
     battlerComponent.Id = 1;
@@ -27,7 +27,7 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     battlerComponent.Stat.HP = 10;
     battlerComponent.Stat.MaxHP = 10;
     battlerComponent.Stat.Str = 1;
-    // TODO we need to script this somehow,
+    // TODO we need to script this somehow, added in a project card for anim transitions.
     battlerAnimation.OnAnimationEnd = [](AsepriteAnimation *anim, std::string animEnding) {
       if (animEnding == "slash2" || animEnding == "damage1") {
         anim->PlayAnimation("idle1");
@@ -35,6 +35,7 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     };
   } else {
     battlerAnimation.AnimationName = "blackBird";
+    battlerComponent.Stat.Name = "Black Bird";
     battlerComponent.Stat.HP = 2;
     battlerComponent.Stat.MaxHP = 2;
     battlerComponent.Id = 4;
@@ -51,6 +52,7 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
   Events::PushEvent(Events::BuiltinEvents.GameObjectAdd, true, (void *)go);
 }
 void startBattlers(GameObject, BattlerComponent &battler, AnimationComponent &anim) {
+  // TODO should be in json for these offsets, for now hardcode.
   if (battler.Id == 1) {
     anim.Animation->PlayAnimation("idle1");
     anim.Offset.X = -21;
