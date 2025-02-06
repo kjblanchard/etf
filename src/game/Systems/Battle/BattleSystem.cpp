@@ -31,8 +31,7 @@ static shared_ptr<Sfx> playerTurnSfx = nullptr;
 static shared_ptr<Sfx> errorSfx = nullptr;
 static int currentBattler = -1;
 static GameObject currentBattlerGameObject = GameObject(0);
-// static BattlerComponent *currentBattlerComp = nullptr;
-// static AnimationComponent *currentBattlerAnimationComp = nullptr;
+// static vector<BattlerComponent *> _currentBattleBattlers;
 
 enum class battleMenus {
   None,
@@ -60,7 +59,6 @@ static bool isInBattle(GameState **state, BattleComponent **battleState) {
   return (*battleState)->InBattle;
 }
 
-// Updates all theh players atbs.
 static void updateATBs(GameState &gamestate, BattleComponent *battleComponent) {
   if (battleComponent->CurrentBattleState != BattleState::Battle) {
     return;
@@ -73,7 +71,6 @@ static void updateATBs(GameState &gamestate, BattleComponent *battleComponent) {
     if (!battleComp.IsPlayer && battleComp.CurrentATB >= battleComp.FullATB) {
       HandleEnemyBattler(go);
       battleComp.CurrentATB = 0;
-      // enemy should attack.
     }
   });
 }
@@ -124,7 +121,6 @@ static void victoryUpdate(GameState *gamestate, BattleComponent *battleComponent
 }
 
 void handlePlayerInputForBattler(GameState *, BattleComponent *) {
-  // If there is no battler ready, return
   if (currentBattler == -1) {
     return;
   }
@@ -181,12 +177,10 @@ static void initializeBattleSystem(GameState *, BattleComponent *battleComponent
   menuSelectSfx = ContentRegistry::CreateContent<Sfx>("menuSelect");
   playerTurnSfx = ContentRegistry::CreateContent<Sfx>("playerTurn");
   errorSfx = ContentRegistry::CreateContent<Sfx>("error1");
-  // We need to make these for each of the enemy battlers.
   menuMoveSfx->LoadContent();
   menuSelectSfx->LoadContent();
   playerTurnSfx->LoadContent();
   errorSfx->LoadContent();
-  // This runs the initial initialization of the UI, that registers the event handlers.
   InitializeBattleUI();
   InitializeBattleAbilitySystem();
   InitializeBattleDamageSystem(battleComponent);
@@ -194,17 +188,33 @@ static void initializeBattleSystem(GameState *, BattleComponent *battleComponent
   battleComponent->CurrentBattleState = BattleState::BattleJustStarted;
 }
 
-static void startBattle(GameState *, BattleComponent *battleComponent) {
-  if (battleComponent->InBattle) {
-    currentBattler = -1;
-    currentBattleMenu = battleMenus::None;
-    // Load the battle ui next frame.
-    Events::PushEvent(EscapeTheFateEvents.BattleFullyStarted, 0);
-    battleComponent->CurrentBattleState = BattleState::Battle;
-  }
+static void cacheBattlers(BattleComponent *battleComponent) {
+  battleComponent->Battlers.clear();
+  GameObject::ForEach<BattlerComponent>([battleComponent](GameObject go, BattlerComponent &battlerComp) {
+    battleComponent->Battlers.push_back(&battlerComp);
+  });
 }
+
+static void startBattle(GameState *, BattleComponent *battleComponent) {
+  if (!battleComponent->InBattle) {
+    return;
+  }
+  cacheBattlers(battleComponent);
+  currentBattler = -1;
+  currentBattleMenu = battleMenus::None;
+  Events::PushEvent(EscapeTheFateEvents.BattleFullyStarted, 0);
+  battleComponent->CurrentBattleState = BattleState::Battle;
+}
+
 static void exiting(GameState *, BattleComponent *battleComponent) {
   battleComponent->CurrentBattleState = BattleState::Exiting;
+}
+
+static void updateFinger() {
+  if (currentBattler == -1 && (currentBattler = findReadyBattler()) != -1) {
+    currentBattleMenu = battleMenus::Commands;
+    currentFingerPos = 0;
+  }
 }
 
 void Supergoon::UpdateBattle() {
@@ -224,11 +234,7 @@ void Supergoon::UpdateBattle() {
     break;
   case BattleState::Battle:
     updateATBs(*gamestate, battleComponent);
-    // Check to see if there is a ready battler, if so se tthe finger pos to 0 and set to the commands menu
-    if (currentBattler == -1 && (currentBattler = findReadyBattler()) != -1) {
-      currentBattleMenu = battleMenus::Commands;
-      currentFingerPos = 0;
-    }
+    updateFinger();
     handlePlayerInputForBattler(gamestate, battleComponent);
     UpdateBattleDamageSystem();
     UpdateBattleUI();

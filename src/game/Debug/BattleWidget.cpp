@@ -1,4 +1,5 @@
 #include <Components/BattleComponent.hpp>
+#include <Components/BattlerComponent.hpp>
 #include <Components/PlayerComponent.hpp>
 #include <Debug/BattleWidget.hpp>
 #include <Supergoon/ECS/Components/AnimationComponent.hpp>
@@ -39,6 +40,10 @@ void BattleWidget::ShowBattleWidget() {
     gamestateComponent->PlayerLoadDirection = (int)player.Direction;
     gamestateComponent->CameraFollowTarget = false;
   }
+  for (auto battler : battleComponent->Battlers) {
+    ImGui::Text("ID: %d", battler->Id);
+  }
+
   ImGui::BeginDisabled(true);
   ImGui::Text("Current Battle State %d: %s", (int)battleComponent->CurrentBattleState, GetBattleStateText(battleComponent->CurrentBattleState));
   ImGui::EndDisabled();
