@@ -18,7 +18,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Should we include Imgui stuffs
 option(imgui "Include ImGui support" ON)
 option(SYSTEM_PACKAGES "Use system packages if available" ON)
-option(ENGINE_CACHED "Is the engine cloned locally in the ./engine directory or should it be downloaded" OFF)
+option(ENGINE_CACHED "Is the engine cloned locally in the ./engine directory or should it be downloaded" ON)
 option(BUILD_TESTING "Should we build test projects" OFF)
 option(DEBUG_CMAKE_VARIABLES "Print out all debug variables near end of configure" OFF)
 option(DEBUG_BUILD_TIME "Add in the pch that I think will be changing a bit" OFF)

@@ -87,8 +87,9 @@ static void createPlayersPanel(UIObject *parent) {
     _playerUIPanels[i].LayoutGroup->XSpaceBetweenElements = 140;
     _playerUIPanels[i].Name = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "name", uiTextSize);
     _playerUIPanels[i].HP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "hp", uiTextSize);
-    _playerUIPanels[i].HP->Offset.X = 40;
+    _playerUIPanels[i].HP->Offset.X = 27;
     _playerUIPanels[i].MP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "mp", uiTextSize);
+    _playerUIPanels[i].MP->Offset.X = -13;
     auto path = std::string(SDL_GetBasePath()) + "assets/img/atbBar.png";
     auto atbBar = ContentRegistry::CreateContent<Image>(path);
     atbBar->LoadContent();
@@ -97,8 +98,8 @@ static void createPlayersPanel(UIObject *parent) {
     _playerUIPanels[i].ATBBar->BarOffset = {9, 13};
     _playerUIPanels[i].ATBBar->BarSize = {46, 4};
     _playerUIPanels[i].ATBBar->ProgressBarColor = {0, 140, 0, 255};
-    _playerUIPanels[i].ATBBar->Offset.X = -65;
-    _playerUIPanels[i].ATBBar->Offset.Y = -9;
+    _playerUIPanels[i].ATBBar->Offset.X = -70;
+    _playerUIPanels[i].ATBBar->Offset.Y = -7;
     _playerUIPanels[i].ATBBar->ProgressBarAnimation->OverrideDrawSize.X = 64;
     _playerUIPanels[i].ATBBar->ProgressBarAnimation->OverrideDrawSize.Y = 32;
     _playerUIPanels[i].ATBBar->SetLayer(2);
@@ -128,7 +129,7 @@ static void updatePlayersPanel(BattlerComponent *comp) {
       continue;
     }
     ostringstream stringBuilder;
-    stringBuilder << comp->Stat.Name << ":	";
+    stringBuilder << comp->Stat.Name;
     _playerUIPanels[i].Name->UpdateText(stringBuilder.str());
     stringBuilder.str("");
     stringBuilder << "HP: " << comp->Stat.HP << " | " << comp->Stat.MaxHP;

@@ -31,6 +31,8 @@ static shared_ptr<Sfx> playerTurnSfx = nullptr;
 static shared_ptr<Sfx> errorSfx = nullptr;
 static int currentBattler = -1;
 static GameObject currentBattlerGameObject = GameObject(0);
+static GameState *gamestate = nullptr;
+static BattleComponent *battleComponent = nullptr;
 // static vector<BattlerComponent *> _currentBattleBattlers;
 
 enum class battleMenus {
@@ -43,30 +45,26 @@ static battleMenus currentBattleMenu = battleMenus::None;
 static const int numCommands = 3; // Attack, Magic, items
 static int currentFingerPos = 0;
 
-//  gets gamestate and checks if we are in battle.
-static bool isInBattle(GameState **state, BattleComponent **battleState) {
-  if (!*state) {
-    auto gamestate = GameObject::FindComponent<GameState>();
-    if (!gamestate) {
-      return false;
-    }
-    *state = gamestate;
-  }
-  if (!*battleState) {
-    auto battlestate = GameObject::FindComponent<BattleComponent>();
-    *battleState = battlestate;
-  }
-  return (*battleState)->InBattle;
+// Creates the battle component
+static void createBattleComponent() {
+  auto go = GameObject::GetGameObjectWithComponents<GameState>();
+  auto battleComp = BattleComponent();
+  battleComp.BattleId = 0;
+  battleComp.BattleMapId = 0;
+  battleComp.EnteringBattle = false;
+  battleComp.InBattle = false;
+  battleComp.CurrentBattleState = BattleState::None;
+  go->AddComponent<BattleComponent>(battleComp);
 }
 
-static void updateATBs(GameState &gamestate, BattleComponent *battleComponent) {
+static void updateATBs(GameState *gamestate, BattleComponent *battleComponent) {
   if (battleComponent->CurrentBattleState != BattleState::Battle) {
     return;
   }
-  GameObject::ForEach<BattlerComponent>([&gamestate](GameObject go, BattlerComponent &battleComp) {
+  GameObject::ForEach<BattlerComponent>([gamestate](GameObject go, BattlerComponent &battleComp) {
     // TODO this could go over full atb currently, not sure if that matters
     if (battleComp.CurrentATB < battleComp.FullATB) {
-      battleComp.CurrentATB += gamestate.DeltaTime * 1;
+      battleComp.CurrentATB += gamestate->DeltaTime * 1;
     }
     if (!battleComp.IsPlayer && battleComp.CurrentATB >= battleComp.FullATB) {
       HandleEnemyBattler(go);
@@ -190,7 +188,7 @@ static void initializeBattleSystem(GameState *, BattleComponent *battleComponent
 
 static void cacheBattlers(BattleComponent *battleComponent) {
   battleComponent->Battlers.clear();
-  GameObject::ForEach<BattlerComponent>([battleComponent](GameObject go, BattlerComponent &battlerComp) {
+  GameObject::ForEach<BattlerComponent>([battleComponent](GameObject, BattlerComponent &battlerComp) {
     battleComponent->Battlers.push_back(&battlerComp);
   });
 }
@@ -216,11 +214,15 @@ static void updateFinger() {
     currentFingerPos = 0;
   }
 }
+void Supergoon::InitializeBattleSystem() {
+  gamestate = GameObject::FindComponent<GameState>();
+  createBattleComponent();
+}
 
 void Supergoon::UpdateBattle() {
-  GameState *gamestate = nullptr;
-  BattleComponent *battleComponent = nullptr;
-  if (!isInBattle(&gamestate, &battleComponent)) {
+  gamestate = GameObject::FindComponent<GameState>();
+  battleComponent = GameObject::FindComponent<BattleComponent>();
+  if (!battleComponent->InBattle) {
     return;
   }
   switch (battleComponent->CurrentBattleState) {
@@ -233,7 +235,7 @@ void Supergoon::UpdateBattle() {
     startBattle(gamestate, battleComponent);
     break;
   case BattleState::Battle:
-    updateATBs(*gamestate, battleComponent);
+    updateATBs(gamestate, battleComponent);
     updateFinger();
     handlePlayerInputForBattler(gamestate, battleComponent);
     UpdateBattleDamageSystem();

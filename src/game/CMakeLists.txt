@@ -23,12 +23,14 @@ endif(EMSCRIPTEN)
 add_executable(${EXECUTABLE_TARGET_NAME}
     ${IS_BUNDLE} ${IS_WIN32}
     EscapeTheFate.cpp
+    Entities/Entities.cpp
     Entities/PlayerStart.cpp
     Entities/PlayerExit.cpp
     Entities/TextInteraction.cpp
     Entities/Battle/BattleZone.cpp
     Entities/Battle/BattleLocation.cpp
     Entities/Battle/BattleState.cpp
+    Systems/Systems.cpp
     Systems/PlayerSystem.cpp
     Systems/ImageSystem.cpp
     Systems/AsepriteSystem.cpp
@@ -44,6 +46,7 @@ add_executable(${EXECUTABLE_TARGET_NAME}
     Systems/Battle/BattleSystem.cpp
     Systems/Battle/BattleUISystem.cpp
     Systems/Battle/BattleAbilitySystem.cpp
+    UI/Logos/Logos.cpp
     Utilities/Utilities.cpp
     Utilities/Events.cpp
     ${DEBUG_FILES}
