@@ -46,7 +46,6 @@ void UpdateSystems() {
   UpdateTextInteractions();
   UpdateEnterBattleSystem();
   UpdateBattle();
-  UpdateBattleUI();
   UpdateCamera();
 }
 
