@@ -6,6 +6,7 @@
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Events.hpp>
+#include <Supergoon/UI/UI.hpp>
 #include <Supergoon/World/Level.hpp>
 #include <Supergoon/pch.hpp>
 #include <Systems/Battle/BattleZoneSystem.hpp>
@@ -50,6 +51,11 @@ void updateBattleZones(GameObject go, PlayerComponent &player, LocationComponent
       Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup("battle1"));
       anim.Playing = false;
       currentTime = 0;
+      // TODO Disable the screen transition screen if you enter a battle quickly.  Should probably just make a event for this that UI listens to.
+      auto displayTransitionUI = UI::UIInstance->GetChildByName("screen");
+      if (displayTransitionUI && displayTransitionUI->Visible()) {
+        displayTransitionUI->SetVisible(false);
+      }
       return;
     }
   });

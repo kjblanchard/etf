@@ -27,11 +27,14 @@
 #include <Systems/Battle/BattleUISystem.hpp>
 #include <UI/Battle/BattlerDisplay.hpp>
 #include <Utilities/Utilities.hpp>
+#include <deque>
 #include <memory>
 #include <queue>
 #include <sstream>
+#pragma clang diagnostic ignored "-Wsign-compare"
 using namespace Supergoon;
 using namespace std;
+static const int numDamageTextsToLoad = 10;
 static const int playerBattlerSize = 3;
 static const int battleCommandsSize = 3;
 static const char *battleCommands[] = {"Attack", "Magic", "Item"};
@@ -52,29 +55,41 @@ struct PlayerUIPanel {
   UIProgressBar *ATBBar;
 };
 static PlayerUIPanel _playerUIPanels[3];
-static queue<UIText *> _damageTexts;
+static deque<UIText *> _damageTexts;
 
 static void createDamageText(UIObject *parent) {
-  auto text = new UIText(parent, "0");
-  // auto textAnimator = make_shared<UIObjectAnimatorBase>(255, 0, 0.5, text->AlphaHandle());
-  auto textAnimator = make_shared<UIObjectAnimatorBase>("texttweener");
-  auto tweener = new Tween(255, 0, 0.75, text->AlphaHandle(), Supergoon::Easings::Linear, 0);
-  textAnimator->AddUIObjectTween(tweener, text);
-  text->Animators.push_back(textAnimator);
-  tweener->EndFunc = [text]() {
-    _damageTexts.push(text);
-  };
-  _damageTexts.push(text);
+  for (size_t i = 0; i < numDamageTextsToLoad; i++) {
+    auto text = new UIText(parent, "0", std::string("damageText") + to_string(i), 12);
+    // auto textAnimator = make_shared<UIObjectAnimatorBase>(255, 0, 0.5, text->AlphaHandle());
+    auto textAnimator = make_shared<UIObjectAnimatorBase>("texttweener");
+    auto tweener = new Tween(255, 0, 0.75, text->AlphaHandle(), Supergoon::Easings::Linear, 0);
+    textAnimator->AddUIObjectTween(tweener, text);
+    text->Animators.push_back(textAnimator);
+    tweener->EndFunc = [text]() {
+      text->SetVisible(false);
+      _damageTexts.push_back(text);
+      // _damageTexts.push(text);
+    };
+    _damageTexts.push_back(text);
+    // _damageTexts.push(text);
+  }
+}
+static void clearDamageTextTweens() {
+  for (auto &&damageText : _damageTexts) {
+    damageText->Animators.erase(damageText->Animators.begin() + 1, damageText->Animators.end());
+  }
 }
 
 static void createPlayersPanel(UIObject *parent) {
+  auto uiTextSize = 12;
   for (size_t i = 0; i < 3; i++) {
     _playerUIPanels[i].LayoutGroup = new UIHorizontalLayoutGroup(parent, to_string(i) + "battlerhoriGroup");
     _playerUIPanels[i].LayoutGroup->XSpaceBetweenElements = 140;
-    _playerUIPanels[i].Name = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "name", 12);
-    _playerUIPanels[i].HP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "hp", 12);
-    _playerUIPanels[i].HP->Offset.X = 40;
-    _playerUIPanels[i].MP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "mp", 12);
+    _playerUIPanels[i].Name = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "name", uiTextSize);
+    _playerUIPanels[i].HP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "hp", uiTextSize);
+    _playerUIPanels[i].HP->Offset.X = 27;
+    _playerUIPanels[i].MP = new UIText(_playerUIPanels[i].LayoutGroup, "", to_string(i) + "mp", uiTextSize);
+    _playerUIPanels[i].MP->Offset.X = -13;
     auto path = std::string(SDL_GetBasePath()) + "assets/img/atbBar.png";
     auto atbBar = ContentRegistry::CreateContent<Image>(path);
     atbBar->LoadContent();
@@ -83,8 +98,8 @@ static void createPlayersPanel(UIObject *parent) {
     _playerUIPanels[i].ATBBar->BarOffset = {9, 13};
     _playerUIPanels[i].ATBBar->BarSize = {46, 4};
     _playerUIPanels[i].ATBBar->ProgressBarColor = {0, 140, 0, 255};
-    _playerUIPanels[i].ATBBar->Offset.X = -65;
-    _playerUIPanels[i].ATBBar->Offset.Y = -6;
+    _playerUIPanels[i].ATBBar->Offset.X = -70;
+    _playerUIPanels[i].ATBBar->Offset.Y = -7;
     _playerUIPanels[i].ATBBar->ProgressBarAnimation->OverrideDrawSize.X = 64;
     _playerUIPanels[i].ATBBar->ProgressBarAnimation->OverrideDrawSize.Y = 32;
     _playerUIPanels[i].ATBBar->SetLayer(2);
@@ -114,7 +129,7 @@ static void updatePlayersPanel(BattlerComponent *comp) {
       continue;
     }
     ostringstream stringBuilder;
-    stringBuilder << comp->Stat.Name << ":	";
+    stringBuilder << comp->Stat.Name;
     _playerUIPanels[i].Name->UpdateText(stringBuilder.str());
     stringBuilder.str("");
     stringBuilder << "HP: " << comp->Stat.HP << " | " << comp->Stat.MaxHP;
@@ -225,6 +240,7 @@ static void battleVictory() {
 
 static void battleCleanup() {
   fingerPosChanged = false;
+  clearDamageTextTweens();
 }
 
 static void startBattleUI() {
@@ -299,38 +315,29 @@ void Supergoon::InitializeBattleUI() {
   Events::RegisterEventHandler(EscapeTheFateEvents.ShowBattleDamageTextEvent, [](int damage, void *abilityArgsVoid, void *) {
     assert((BattleCommandArgs *)abilityArgsVoid && "Could not convert properly~!");
     auto abilityArgs = (BattleCommandArgs *)abilityArgsVoid;
-    auto battlerId = abilityArgs->TargetBattler.GetComponent<BattlerComponent>().Id;
     auto location = abilityArgs->TargetBattler.GetComponent<LocationComponent>().Location;
-    if (battlerId == 4) {
-      if (_damageTexts.empty()) {
-        return;
-      }
-      auto text = _damageTexts.front();
-      text->UpdateText(to_string(damage));
-      // text->SetDrawOverride({location.X - 6, location.Y + 8});
-      // Make it scroll up quickly?
-      text->SetDrawOverride({location.X - 12, location.Y + 20});
-      auto textAnimator = make_shared<UIObjectAnimatorBase>("texttweenery");
-      auto tweener = new Tween(location.Y + 15, location.Y + 10, 0.25, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
-      auto tweener2 = new Tween(location.Y + 10, location.Y + 15, 0.5, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
-      textAnimator->AddUIObjectTween(tweener, text);
-      textAnimator->AddUIObjectTween(tweener2, text);
-      text->Animators.push_back(textAnimator);
-      // TODO this is a memory leak, we keep growing this :)
-      auto numAnim = text->Animators.size() - 1;
-      // text->Animators[0]->AddUIObjectTween(tweener, text);
-      // if (text->Animators[0]->SequenceToPlay->Tweens.size() == 2) {
-      //   text->Animators[0]->SequenceToPlay->Tweens[1].;
-      // }
-      // text->Animators.push_back(textAnimator);
-      //
-
-      text->Animators[0]->Play();
-      text->Animators[0]->Restart();
-      text->Animators[numAnim]->Play();
-      text->Animators[numAnim]->Restart();
-      _damageTexts.pop();
+    if (_damageTexts.empty()) {
+      return;
     }
+    auto text = _damageTexts.front();
+    text->UpdateText(to_string(damage));
+    text->SetDrawOverride({location.X - 14, location.Y});
+    auto numJump = 4;
+    auto textStart = location.Y - 5;
+    auto textAnimator = make_shared<UIObjectAnimatorBase>("texttweenery");
+    auto tweener = new Tween(textStart, textStart - numJump, 0.2, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
+    auto tweener2 = new Tween(textStart - numJump, textStart, 0.5, text->DrawOverrideYHandle(), Supergoon::Easings::Linear, 0);
+    textAnimator->AddUIObjectTween(tweener, text);
+    textAnimator->AddUIObjectTween(tweener2, text);
+    text->Animators.push_back(textAnimator);
+    auto numAnim = text->Animators.size() - 1;
+    // animator[0] is the fade, so it never changes.. numanim is the movement of the text.
+    text->Animators[0]->Play();
+    text->Animators[0]->Restart();
+    text->Animators[numAnim]->Play();
+    text->Animators[numAnim]->Restart();
+    text->SetVisible(true);
+    _damageTexts.pop_front();
     delete (abilityArgs);
   });
   initializeBattleUI();

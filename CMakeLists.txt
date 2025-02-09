@@ -18,6 +18,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Should we include Imgui stuffs
 option(imgui "Include ImGui support" ON)
 option(SYSTEM_PACKAGES "Use system packages if available" ON)
+option(ENGINE_CACHED "Is the engine cloned locally in the ./engine directory or should it be downloaded" ON)
 option(BUILD_TESTING "Should we build test projects" OFF)
 option(DEBUG_CMAKE_VARIABLES "Print out all debug variables near end of configure" OFF)
 option(DEBUG_BUILD_TIME "Add in the pch that I think will be changing a bit" OFF)
@@ -42,7 +43,7 @@ if(imgui)
     add_definitions(-Dimgui)
 endif(imgui)
 
-if(SYSTEM_PACKAGES)
+if(ENGINE_CACHED AND SYSTEM_PACKAGES)
     add_subdirectory(engine)
 else()
     message(STATUS "Fetching supergoon engine from git..")
@@ -50,11 +51,13 @@ else()
         engine
         GIT_REPOSITORY https://github.com/kjblanchard/sgEngine
 
-        # GIT_TAG c00f77f
-        GIT_TAG master
+        # Use master for development, otherwise make sure to pin to proper engine tag for releases
+        GIT_TAG c55aa25
+
+        # GIT_TAG master
     )
     FetchContent_MakeAvailable(engine)
-endif(SYSTEM_PACKAGES)
+endif(ENGINE_CACHED AND SYSTEM_PACKAGES)
 
 add_subdirectory(src/game)
 

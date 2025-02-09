@@ -77,8 +77,12 @@ Panel *Supergoon::CreateUIBasePanel(std::string name, sgPoint screenLoc, sgPoint
 }
 // 200/70 for textbox
 Panel *Supergoon::CreateUITextbox(std::string name, sgPoint screenLoc, sgPoint size, bool screen) {
+  // TODO wasted call if it already is created.
+  auto uibox = UI::UIInstance->GetChildByName(name);
+  if (uibox) {
+    return nullptr;
+  }
   auto textPanel = CreateUIBasePanel(name, screenLoc, size);
-  // auto ui = UI::UIInstance.get();
   auto text = new UIText(textPanel, "Hello world!", "textman" + name);
   text->SetLayer(1);
   text->Offset = {8, 8};

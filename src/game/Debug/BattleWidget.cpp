@@ -1,4 +1,5 @@
 #include <Components/BattleComponent.hpp>
+#include <Components/BattlerComponent.hpp>
 #include <Components/PlayerComponent.hpp>
 #include <Debug/BattleWidget.hpp>
 #include <Supergoon/ECS/Components/AnimationComponent.hpp>
@@ -10,6 +11,7 @@
 #include <Supergoon/World/Level.hpp>
 #include <Supergoon/pch.hpp>
 using namespace Supergoon;
+using namespace std;
 
 void BattleWidget::ShowBattleWidget() {
   ImGuiWindowFlags window_flags = Widgets::GetDefaultWindowFlags();
@@ -39,6 +41,28 @@ void BattleWidget::ShowBattleWidget() {
     gamestateComponent->PlayerLoadDirection = (int)player.Direction;
     gamestateComponent->CameraFollowTarget = false;
   }
+  for (auto battler : battleComponent->Battlers) {
+    auto playerDisplayName = battler->Stat.Name + string("## ") + to_string(battler->Id);
+    if (ImGui::TreeNode(playerDisplayName.c_str())) {
+      ImGui::Text("ID: %d", battler->Id);
+      ImGui::Text("ATB: %f", battler->CurrentATB);
+      ImGui::SameLine();
+      ImGui::Text(" / : %f", battler->FullATB);
+      ImGui::Text("Battle Location %d", battler->CurrentBattleLocation);
+      ImGui::Text("Player:  %d", battler->IsPlayer);
+      ImGui::TreePop();
+      auto statName = "Stats ##" + to_string(battler->Id);
+      if (ImGui::TreeNode(statName.c_str())) {
+        ImGui::Text("HP: %d", battler->Stat.HP);
+        ImGui::Text("Max HP: %d", battler->Stat.MaxHP);
+        ImGui::Text("Str: %d", battler->Stat.Str);
+        ImGui::Text("Def: %d", battler->Stat.Def);
+        ImGui::Text("Spd: %d", battler->Stat.Spd);
+        ImGui::TreePop();
+      }
+    }
+  }
+
   ImGui::BeginDisabled(true);
   ImGui::Text("Current Battle State %d: %s", (int)battleComponent->CurrentBattleState, GetBattleStateText(battleComponent->CurrentBattleState));
   ImGui::EndDisabled();
