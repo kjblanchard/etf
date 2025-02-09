@@ -33,6 +33,9 @@ static void loadLevel() {
     initializeEscapeTheFateSystems();
     initialized = true;
   }
+  CreateUITextbox("screen", {145, 15}, {200, 48}, true);
+  // TODO this shouldn't be here, waste of a call Maybe this is needed after we create the uitextbox?
+  ContentRegistry::LoadAllContent();
   auto gamestateGameObject = GameObject::GetGameObjectWithComponents<GameState>();
   assert(gamestateGameObject);
   StartSystems();
@@ -59,7 +62,6 @@ void EscapeTheFateGame::Start() {
   bool skipLogos = configData["skipLogos"];
   string startingScreen = configData["startingScreen"];
   if (skipLogos) {
-    CreateUITextbox("screen", {145, 15}, {200, 48}, true);
     Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup(startingScreen.c_str()));
   } else {
     CreateLogoUI(startingScreen);

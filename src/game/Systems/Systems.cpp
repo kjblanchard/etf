@@ -57,6 +57,7 @@ void DrawSystems() {
 }
 
 void DrawSystemsDebugWidgets() {
+#ifdef imgui
   if (GlobalWidget::ShowDebugBoxSolid) {
     DrawDebugBoxesSolid();
   }
@@ -74,6 +75,7 @@ void DrawSystemsDebugWidgets() {
   if (PlayerWidget::ShowInteractionDebugBox) {
     DrawDebugBoxesTextInteractionBox();
   }
+#endif
 }
 
 } // namespace Supergoon

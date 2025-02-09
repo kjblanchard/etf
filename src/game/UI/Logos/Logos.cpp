@@ -23,7 +23,7 @@ void CreateLogoUI(string levelToSwitchTo) {
     animator2->Play();
   };
   fadeOutTween2->EndFunc = [levelToSwitchTo]() {
-    CreateUITextbox("screen", {145, 15}, {200, 48}, true);
+    // CreateUITextbox("screen", {145, 15}, {200, 48}, true);
     // InitializeTextInteractionUI();
     Events::PushEvent(Events::BuiltinEvents.LevelChangeEvent, 0, (void *)strdup(levelToSwitchTo.c_str()));
     Events::PushEvent(Events::BuiltinEvents.UiDestroyObject, 0, (void *)"logoImage");
