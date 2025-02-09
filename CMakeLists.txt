@@ -51,8 +51,10 @@ else()
         engine
         GIT_REPOSITORY https://github.com/kjblanchard/sgEngine
 
-        # GIT_TAG c00f77f
-        GIT_TAG master
+        # Use master for development, otherwise make sure to pin to proper engine tag for releases
+        GIT_TAG c55aa25
+
+        # GIT_TAG master
     )
     FetchContent_MakeAvailable(engine)
 endif(ENGINE_CACHED AND SYSTEM_PACKAGES)
