@@ -9,6 +9,7 @@
         "y": 288
     },
     "skipLogos": false,
-    "mute": false
+    "mute": false,
+    "startingScreen": "debugTown"
 }
 

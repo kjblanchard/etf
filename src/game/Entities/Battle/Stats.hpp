@@ -2,7 +2,7 @@
 #include <cstdint>
 namespace Supergoon {
 struct Stats {
-  const char *Name;
+  const char *Name = "";
   int HP = 0;
   int MaxHP = 0;
   int Str = 0;

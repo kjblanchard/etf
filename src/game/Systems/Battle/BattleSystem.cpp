@@ -1,18 +1,18 @@
-#include "Components/BattlerComponent.hpp"
-#include "Supergoon/Content/ContentRegistry.hpp"
-#include "Supergoon/Content/Sfx.hpp"
-#include "Supergoon/ECS/Components/AnimationComponent.hpp"
-#include "Supergoon/Events.hpp"
-#include "Supergoon/Tween/Tween.hpp"
 #include <Components/BattleComponent.hpp>
+#include <Components/BattlerComponent.hpp>
 #include <Entities/Battle/BattleCommandArgs.hpp>
 #include <Entities/Battle/BattleState.hpp>
+#include <Supergoon/Content/ContentRegistry.hpp>
+#include <Supergoon/Content/Sfx.hpp>
 #include <Supergoon/Coroutine.h>
+#include <Supergoon/ECS/Components/AnimationComponent.hpp>
 #include <Supergoon/ECS/Components/GameStateComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
+#include <Supergoon/Events.hpp>
 #include <Supergoon/Input.hpp>
 #include <Supergoon/Log.hpp>
 #include <Supergoon/Sound.hpp>
+#include <Supergoon/Tween/Tween.hpp>
 #include <Systems/Battle/BattleAbilitySystem.hpp>
 #include <Systems/Battle/BattleDamageSystem.hpp>
 #include <Systems/Battle/BattleSystem.hpp>
@@ -31,8 +31,6 @@ static shared_ptr<Sfx> playerTurnSfx = nullptr;
 static shared_ptr<Sfx> errorSfx = nullptr;
 static int currentBattler = -1;
 static GameObject currentBattlerGameObject = GameObject(0);
-// static BattlerComponent *currentBattlerComp = nullptr;
-// static AnimationComponent *currentBattlerAnimationComp = nullptr;
 
 enum class battleMenus {
   None,
@@ -44,35 +42,28 @@ static battleMenus currentBattleMenu = battleMenus::None;
 static const int numCommands = 3; // Attack, Magic, items
 static int currentFingerPos = 0;
 
-//  gets gamestate and checks if we are in battle.
-static bool isInBattle(GameState **state, BattleComponent **battleState) {
-  if (!*state) {
-    auto gamestate = GameObject::FindComponent<GameState>();
-    if (!gamestate) {
-      return false;
-    }
-    *state = gamestate;
-  }
-  if (!*battleState) {
-    auto battlestate = GameObject::FindComponent<BattleComponent>();
-    *battleState = battlestate;
-  }
-  return (*battleState)->InBattle;
+static void createBattleComponent() {
+  auto go = GameObject::GetGameObjectWithComponents<GameState>();
+  auto battleComp = BattleComponent();
+  battleComp.BattleId = 0;
+  battleComp.BattleMapId = 0;
+  battleComp.EnteringBattle = false;
+  battleComp.InBattle = false;
+  battleComp.CurrentBattleState = BattleState::None;
+  go->AddComponent<BattleComponent>(battleComp);
 }
 
-// Updates all theh players atbs.
-static void updateATBs(GameState &gamestate, BattleComponent *battleComponent) {
+static void updateATBs(GameState *gamestate, BattleComponent *battleComponent) {
   if (battleComponent->CurrentBattleState != BattleState::Battle) {
     return;
   }
-  GameObject::ForEach<BattlerComponent>([&gamestate](GameObject go, BattlerComponent &battleComp) {
-    // TODO this could go over full atb currently, not sure if that matters
+  GameObject::ForEach<BattlerComponent>([gamestate](GameObject go, BattlerComponent &battleComp) {
     if (battleComp.CurrentATB < battleComp.FullATB) {
-      battleComp.CurrentATB += gamestate.DeltaTime * 1;
+      battleComp.CurrentATB = min(battleComp.CurrentATB += gamestate->DeltaTime * 1, battleComp.FullATB);
     }
     if (!battleComp.IsPlayer && battleComp.CurrentATB >= battleComp.FullATB) {
       HandleEnemyBattler(go);
-      // enemy should attack.
+      battleComp.CurrentATB = 0;
     }
   });
 }
@@ -82,18 +73,13 @@ static int findReadyBattler() {
   auto battler = -1;
   bool foundBattler = false;
   GameObject battlerGameObject;
-  // BattlerComponent *comp = nullptr;
-  // AnimationComponent *animComp = nullptr;
-  // GameObject::ForEach<BattlerComponent, AnimationComponent>([&foundBattler, &battler, &comp, &animComp](GameObject go, BattlerComponent &battleComponent, AnimationComponent &animComponent) {
-  GameObject::ForEach<BattlerComponent, AnimationComponent>([&foundBattler, &battler, &battlerGameObject](GameObject go, BattlerComponent &battleComponent, AnimationComponent &animComponent) {
+  GameObject::ForEach<BattlerComponent, AnimationComponent>([&foundBattler, &battler, &battlerGameObject](GameObject go, BattlerComponent &battleComponent, AnimationComponent &) {
     if (foundBattler) {
       return;
     }
     if (battleComponent.IsPlayer && battleComponent.CurrentATB >= battleComponent.FullATB) {
       foundBattler = true;
       battlerGameObject = go;
-      // comp = &battleComponent;
-      // animComp = &animComponent;
       battler = battleComponent.Id;
     }
   });
@@ -123,14 +109,12 @@ static void victoryUpdate(GameState *gamestate, BattleComponent *battleComponent
 }
 
 void handlePlayerInputForBattler(GameState *, BattleComponent *) {
-  // If there is no battler ready, return
   if (currentBattler == -1) {
     return;
   }
   // If players turn, we should pop up the UI for the player and handle the input.
   else if (KeyJustPressed(KeyboardKeys::Key_W)) {
     Sound::Instance()->PlaySfx(menuMoveSfx.get());
-    // currentFingerPos = --currentFingerPos < 0 ? numCommands - 1 : currentFingerPos;
     --currentFingerPos;
     if (currentFingerPos < 0) {
       currentFingerPos = numCommands - 1;
@@ -170,7 +154,7 @@ void handlePlayerInputForBattler(GameState *, BattleComponent *) {
     }
   }
 }
-static void initializeBattleSystem(GameState *gamestate, BattleComponent *battleComponent) {
+static void initializeBattleSystem(GameState *, BattleComponent *battleComponent) {
   Events::RegisterEventHandler(EscapeTheFateEvents.EnterBattleFinished, [battleComponent](int, void *, void *) {
     if (battleComponent->CurrentBattleState == BattleState::Initialized) {
       battleComponent->CurrentBattleState = BattleState::BattleJustStarted;
@@ -180,12 +164,10 @@ static void initializeBattleSystem(GameState *gamestate, BattleComponent *battle
   menuSelectSfx = ContentRegistry::CreateContent<Sfx>("menuSelect");
   playerTurnSfx = ContentRegistry::CreateContent<Sfx>("playerTurn");
   errorSfx = ContentRegistry::CreateContent<Sfx>("error1");
-  // We need to make these for each of the enemy battlers.
   menuMoveSfx->LoadContent();
   menuSelectSfx->LoadContent();
   playerTurnSfx->LoadContent();
   errorSfx->LoadContent();
-  // This runs the initial initialization of the UI, that registers the event handlers.
   InitializeBattleUI();
   InitializeBattleAbilitySystem();
   InitializeBattleDamageSystem(battleComponent);
@@ -193,51 +175,69 @@ static void initializeBattleSystem(GameState *gamestate, BattleComponent *battle
   battleComponent->CurrentBattleState = BattleState::BattleJustStarted;
 }
 
-static void startBattle(GameState *, BattleComponent *battleComponent) {
-  if (battleComponent->InBattle) {
-    currentBattler = -1;
-    currentBattleMenu = battleMenus::None;
-    // Load the battle ui next frame.
-    Events::PushEvent(EscapeTheFateEvents.BattleFullyStarted, 0);
-    battleComponent->CurrentBattleState = BattleState::Battle;
-  }
+static void cacheBattlers(BattleComponent *battleComponent) {
+  battleComponent->Battlers.clear();
+  GameObject::ForEach<BattlerComponent>([battleComponent](GameObject, BattlerComponent &battlerComp) {
+    battleComponent->Battlers.push_back(&battlerComp);
+  });
 }
+
+static void startBattle(GameState *, BattleComponent *battleComponent) {
+  if (!battleComponent->InBattle) {
+    return;
+  }
+  cacheBattlers(battleComponent);
+  currentBattler = -1;
+  currentBattleMenu = battleMenus::None;
+  Events::PushEvent(EscapeTheFateEvents.BattleFullyStarted, 0);
+  battleComponent->CurrentBattleState = BattleState::Battle;
+}
+
 static void exiting(GameState *, BattleComponent *battleComponent) {
   battleComponent->CurrentBattleState = BattleState::Exiting;
 }
 
-void Supergoon::UpdateBattle() {
-  GameState *gamestate = nullptr;
-  BattleComponent *battleComponent = nullptr;
-  if (!isInBattle(&gamestate, &battleComponent)) {
+static void updateFinger() {
+  if (currentBattler == -1 && (currentBattler = findReadyBattler()) != -1) {
+    currentBattleMenu = battleMenus::Commands;
+    currentFingerPos = 0;
+  }
+}
+
+static void updateBattle(GameObject, GameState &gamestate, BattleComponent &battleComponent) {
+  if (!battleComponent.InBattle) {
     return;
   }
-  switch (battleComponent->CurrentBattleState) {
+  // TODO not sure why we use pointers for all of these functions, probably go through these and clean them up.
+  switch (battleComponent.CurrentBattleState) {
   case BattleState::None:
-    initializeBattleSystem(gamestate, battleComponent);
+    initializeBattleSystem(&gamestate, &battleComponent);
     break;
   case BattleState::Initialized:
     break;
   case BattleState::BattleJustStarted:
-    startBattle(gamestate, battleComponent);
+    startBattle(&gamestate, &battleComponent);
     break;
   case BattleState::Battle:
-    updateATBs(*gamestate, battleComponent);
-    // Check to see if there is a ready battler, if so se tthe finger pos to 0 and set to the commands menu
-    if (currentBattler == -1 && (currentBattler = findReadyBattler()) != -1) {
-      currentBattleMenu = battleMenus::Commands;
-      currentFingerPos = 0;
-    }
-    handlePlayerInputForBattler(gamestate, battleComponent);
+    updateATBs(&gamestate, &battleComponent);
+    updateFinger();
+    handlePlayerInputForBattler(&gamestate, &battleComponent);
     UpdateBattleDamageSystem();
     UpdateBattleUI();
     break;
   case BattleState::Exiting:
-    exiting(gamestate, battleComponent);
+    exiting(&gamestate, &battleComponent);
     break;
   case BattleState::Victory:
-    victoryUpdate(gamestate, battleComponent);
+    victoryUpdate(&gamestate, &battleComponent);
   default:
     break;
   }
+}
+void Supergoon::InitializeBattleSystem() {
+  createBattleComponent();
+}
+
+void Supergoon::UpdateBattle() {
+  GameObject::ForEach<GameState, BattleComponent>(updateBattle);
 }

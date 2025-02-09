@@ -24,7 +24,6 @@ void Supergoon::HandleEnemyBattler(GameObject battler) {
     return;
   }
   auto args = new BattleCommandArgs();
-  battlerComp.CurrentATB = 0;
   args->AbilityId = 0;
   args->AttackingBattler = battler;
   args->TargetBattler = determineTarget();
