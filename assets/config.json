@@ -8,8 +8,8 @@
         "x": 512,
         "y": 288
     },
-    "skipLogos": false,
-    "mute": false,
+    "skipLogos": true,
+    "mute": true,
     "startingScreen": "debugTown"
 }
 

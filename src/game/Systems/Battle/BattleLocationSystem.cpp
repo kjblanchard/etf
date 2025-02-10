@@ -1,5 +1,6 @@
 #include <Components/BattleLocationComponent.hpp>
 #include <Components/BattlerComponent.hpp>
+#include <Components/EnemyBattlerBlinkComponent.hpp>
 #include <Supergoon/ECS/Components/AnimationComponent.hpp>
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
@@ -41,6 +42,10 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     battlerComponent.Id = 4;
     battlerComponent.FullATB = 5;
     battlerComponent.IsPlayer = false;
+    auto blinkComponent = EnemyBattlerBlinkComponent();
+    blinkComponent.Blinks = 0;
+    blinkComponent.CurrentTime = 0;
+    go->AddComponent<EnemyBattlerBlinkComponent>(blinkComponent);
   }
   battlerAnimation.Offset = {0, 0};
   battlerAnimation.AnimationSpeed = 1.0;
