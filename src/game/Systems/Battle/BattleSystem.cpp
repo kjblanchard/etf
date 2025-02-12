@@ -207,21 +207,21 @@ static void updateFinger() {
 
 // TODO this should probably be it's own system
 static void blinkEnemyBattlers(float deltaTime, BattleComponent &battleComponent) {
-  GameObject::ForEach<EnemyBattlerBlinkComponent>([deltaTime](GameObject go, EnemyBattlerBlinkComponent blinkComponent) {
+  GameObject::ForEach<EnemyBattlerBlinkComponent>([deltaTime](GameObject go, EnemyBattlerBlinkComponent &blinkComponent) {
     if (!blinkComponent.IsPlaying) {
       return;
     }
     blinkComponent.CurrentTime += deltaTime;
-    if (blinkComponent.CurrentTime >= 0.1) {
+    if (blinkComponent.CurrentTime >= 0.15) {
       auto &animComp = go.GetComponent<AnimationComponent>();
       // Blink this quickly by changing the color
-      auto color = sgColor{0, 0, 0, 255};
+      auto color = sgColor{150, 150, 150, 255};
       if (blinkComponent.Blinks % 2 != 0) {
         color.R = 255;
         color.B = 255;
         color.G = 255;
       }
-      ++blinkComponent.Blinks;
+      blinkComponent.Blinks += 1;
       animComp.AnimationImage->SetImageColor(color);
       blinkComponent.CurrentTime = 0;
     }
