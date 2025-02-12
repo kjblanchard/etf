@@ -31,7 +31,7 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
     // TODO we need to script this somehow, added in a project card for anim transitions.
     battlerAnimation.OnAnimationEnd = [](AsepriteAnimation *anim, std::string animEnding) {
       if (animEnding == "slash2" || animEnding == "damage1") {
-        anim->PlayAnimation("idle1");
+        anim->PlayAnimation("idleR");
       }
     };
   } else {
@@ -59,17 +59,15 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
 void startBattlers(GameObject, BattlerComponent &battler, AnimationComponent &anim) {
   // TODO should be in json for these offsets, for now hardcode.
   if (battler.Id == 1) {
-    anim.Animation->PlayAnimation("idle1");
     anim.Offset.X = -21;
     anim.Offset.Y = -41;
     anim.OverrideDrawSize = {72, 72};
-    anim.Playing = true;
   } else {
     anim.Offset.X = -15;
     anim.Offset.Y = -26;
-    anim.Animation->PlayAnimation("idleR");
-    anim.Playing = true;
   }
+  anim.Animation->PlayAnimation("idleR");
+  anim.Playing = true;
 }
 
 void Supergoon::LoadBattlers() {
