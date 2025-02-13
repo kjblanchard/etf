@@ -1,5 +1,5 @@
-[
-    {
+{
+    "1": {
         "Id": 1,
         "AnimationName": "player1Battler",
         "Speed": 3,
@@ -7,7 +7,7 @@
         "MaxHP": 10,
         "Strength": 1
     },
-    {
+    "4": {
         "Id": 4,
         "AnimationName": "blackBird",
         "Speed": 5,
@@ -15,4 +15,4 @@
         "MaxHP": 2,
         "Strength": 0
     }
-]
+}

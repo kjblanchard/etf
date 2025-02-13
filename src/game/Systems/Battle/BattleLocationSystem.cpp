@@ -1,12 +1,28 @@
 #include <Components/BattleLocationComponent.hpp>
 #include <Components/BattlerComponent.hpp>
 #include <Components/EnemyBattlerBlinkComponent.hpp>
+// TODO remove this..
+#include <SDL3/SDL_filesystem.h>
 #include <Supergoon/ECS/Components/AnimationComponent.hpp>
 #include <Supergoon/ECS/Components/LocationComponent.hpp>
 #include <Supergoon/ECS/Gameobject.hpp>
 #include <Supergoon/Events.hpp>
+#include <Supergoon/Filesystem.hpp>
+#include <Supergoon/Log.hpp>
+#include <SupergoonEngine/nlohmann/json.hpp>
 #include <Systems/Battle/BattleLocationSystem.hpp>
+#include <string>
 using namespace Supergoon;
+using namespace std;
+using json = nlohmann::json;
+json battleStats;
+
+void loadStats() {
+  // TODO we should make this not have to include SDL_Getbasepath
+  std::string filename = SDL_GetBasePath() + std::string("assets/battle/stats.json");
+  auto fileStream = SafeLoadFile(filename);
+  battleStats = json::parse(fileStream);
+}
 
 void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
   if (battleLocation.BattleLocationId != 4 && battleLocation.BattleLocationId != 1) {
@@ -18,16 +34,11 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
   auto battlerComponent = BattlerComponent();
   battlerComponent.CurrentATB = 0;
   battlerComponent.CurrentBattleLocation = battleLocation.BattleLocationId;
-  // TODO we should be loading this from a json file, for now hardcode the stats.
+  // TODO we should use the battle zone to get the ids.
+  // id1 is player, id4 is blackbird for now.
+  auto id = 0;
   if (battleLocation.BattleLocationId == 1) {
-    battlerAnimation.AnimationName = "player1Battler";
-    battlerComponent.Id = 1;
-    battlerComponent.IsPlayer = true;
-    battlerComponent.FullATB = 3;
-    battlerComponent.Stat.Name = "Kevin";
-    battlerComponent.Stat.HP = 10;
-    battlerComponent.Stat.MaxHP = 10;
-    battlerComponent.Stat.Str = 1;
+    id = 1;
     // TODO we need to script this somehow, added in a project card for anim transitions.
     battlerAnimation.OnAnimationEnd = [](AsepriteAnimation *anim, std::string animEnding) {
       if (animEnding == "slash2" || animEnding == "damage1") {
@@ -35,18 +46,25 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
       }
     };
   } else {
-    battlerAnimation.AnimationName = "blackBird";
-    battlerComponent.Stat.Name = "Black Bird";
-    battlerComponent.Stat.HP = 2;
-    battlerComponent.Stat.MaxHP = 2;
-    battlerComponent.Id = 4;
-    battlerComponent.FullATB = 5;
-    battlerComponent.IsPlayer = false;
+    id = 4;
     auto blinkComponent = EnemyBattlerBlinkComponent();
     blinkComponent.Blinks = 0;
     blinkComponent.CurrentTime = 0;
     go->AddComponent<EnemyBattlerBlinkComponent>(blinkComponent);
   }
+  auto jsonStatIter = battleStats.find(to_string(id));
+  if (jsonStatIter == battleStats.end()) {
+    sgLogError("Could not find stat for %d, what the", id);
+  }
+  auto jsonStat = *jsonStatIter;
+  battlerAnimation.AnimationName = jsonStat["AnimationName"];
+  battlerComponent.Stat.Name = jsonStat.at("Name").get<string>();
+  battlerComponent.Stat.HP = jsonStat["MaxHP"];
+  battlerComponent.Stat.MaxHP = jsonStat["MaxHP"];
+  battlerComponent.Stat.Str = jsonStat["Strength"];
+  battlerComponent.Id = jsonStat["Id"];
+  battlerComponent.FullATB = jsonStat["Speed"];
+  battlerComponent.IsPlayer = id == 1 ? true : false;
   battlerAnimation.Offset = {0, 0};
   battlerAnimation.AnimationSpeed = 1.0;
   battleLocationLoc.Location.X = battleLocation.Location.X;
@@ -68,6 +86,10 @@ void startBattlers(GameObject, BattlerComponent &battler, AnimationComponent &an
   }
   anim.Animation->PlayAnimation("idleR");
   anim.Playing = true;
+}
+
+void Supergoon::InitializeStats() {
+  loadStats();
 }
 
 void Supergoon::LoadBattlers() {

@@ -25,6 +25,7 @@ void InitializeSystems() {
   InitializeTextInteractionUI();
   InitializeBattleSystem();
   InitializeEnterBattleSystem();
+  InitializeStats();
 }
 
 void StartSystems() {
