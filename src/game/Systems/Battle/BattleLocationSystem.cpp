@@ -1,3 +1,4 @@
+#include <Components/BattleComponent.hpp>
 #include <Components/BattleLocationComponent.hpp>
 #include <Components/BattlerComponent.hpp>
 #include <Components/EnemyBattlerBlinkComponent.hpp>
@@ -16,15 +17,21 @@ using namespace Supergoon;
 using namespace std;
 using json = nlohmann::json;
 json battleStats;
+json battleGroups;
+static int battleGroup = 0;
 
 void loadStats() {
   // TODO we should make this not have to include SDL_Getbasepath
   std::string filename = SDL_GetBasePath() + std::string("assets/battle/stats.json");
   auto fileStream = SafeLoadFile(filename);
   battleStats = json::parse(fileStream);
+  filename = SDL_GetBasePath() + std::string("assets/battle/battleGroups.json");
+  fileStream = SafeLoadFile(filename);
+  battleGroups = json::parse(fileStream);
 }
 
 void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
+  // we want to load in the battlers from the current battle group and the players.  For now, lets load only one player in 1
   if (battleLocation.BattleLocationId != 4 && battleLocation.BattleLocationId != 1) {
     return;
   }
@@ -46,7 +53,14 @@ void loadBattlers(GameObject, BattleLocationComponent &battleLocation) {
       }
     };
   } else {
-    id = 4;
+    auto jsonBattleGroupIter = battleGroups.find(to_string(battleGroup));
+    // TODO we need to handle loading more than one enemy, instead of just doing this.
+    if (jsonBattleGroupIter == battleGroups.end()) {
+      sgLogError("Could not find enemy id for %d, what the", id);
+    }
+    auto jsonBattleGroupEnemies = *jsonBattleGroupIter;
+    auto battlers = jsonBattleGroupEnemies.at("Battlers").get<vector<int>>();
+    id = battlers[0];
     auto blinkComponent = EnemyBattlerBlinkComponent();
     blinkComponent.Blinks = 0;
     blinkComponent.CurrentTime = 0;
@@ -93,6 +107,9 @@ void Supergoon::InitializeStats() {
 }
 
 void Supergoon::LoadBattlers() {
+  auto battleComponent = GameObject::FindComponent<BattleComponent>();
+  assert(battleComponent && "No battle component found!");
+  battleGroup = battleComponent->BattleId;
   GameObject::ForEach<BattleLocationComponent>(loadBattlers);
 }
 

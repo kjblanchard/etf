@@ -47,6 +47,7 @@ void updateBattleZones(GameObject go, PlayerComponent &player, LocationComponent
       stateComponent.PlayerLoadLevel = Level::GetName();
       stateComponent.CameraFollowTarget = false;
       battleComponent->EnteringBattle = true;
+      battleComponent->BattleId = zone.BattleId;
       stateComponent.PlayerLoadDirection = (int)player.Direction;
       Events::PushEvent(Events::BuiltinEvents.PlayBgmEvent, 0, (void *)strdup("battle1"));
       anim.Playing = false;

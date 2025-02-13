@@ -1,12 +1,12 @@
-[
-    {
+{
+    "0": {
         "Id": 0,
-        "Battlers": [ 1 ],
+        "Battlers": [ 4 ],
         "Location": 1
     },
-    {
+    "1": {
         "Id": 1,
-        "Battlers": [ 1 ],
+        "Battlers": [ 4 ],
         "Location": 1
     }
-]
+}
