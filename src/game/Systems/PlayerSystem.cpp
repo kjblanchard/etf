@@ -133,25 +133,23 @@ static void playerInput(GameObject go, PlayerComponent &player) {
   auto speed = 100;
   auto moved = false;
   auto newDirection = player.Direction;
-  //
-  // Handle button presses
   if (!stateComponent.Interacting) {
-    if (KeyDown(KeyboardKeys::Key_S)) {
+    if (KeyDown(KeyboardKeys::Key_S) || KeyDown(GameControllerButton::GameControllerButtonDPAD_DOWN, 0) || geGamepadLeftAxisYFloat(0) > 0) {
       vel.Y += speed;
       moved = true;
       newDirection = Directions::South;
     }
-    if (KeyDown(KeyboardKeys::Key_D)) {
+    if (KeyDown(KeyboardKeys::Key_D) || KeyDown(GameControllerButton::GameControllerButtonDPAD_RIGHT, 0) || geGamepadLeftAxisXFloat(0) > 0) {
       vel.X += speed;
       moved = true;
       newDirection = Directions::East;
     }
-    if (KeyDown(KeyboardKeys::Key_W)) {
+    if (KeyDown(KeyboardKeys::Key_W) || KeyDown(GameControllerButton::GameControllerButtonDPAD_UP, 0) || geGamepadLeftAxisYFloat(0) < 0) {
       vel.Y -= speed;
       moved = true;
       newDirection = Directions::North;
     }
-    if (KeyDown(KeyboardKeys::Key_A)) {
+    if (KeyDown(KeyboardKeys::Key_A) || KeyDown(GameControllerButton::GameControllerButtonDPAD_LEFT, 0) || geGamepadLeftAxisXFloat(0) < 0) {
       vel.X -= speed;
       moved = true;
       newDirection = Directions::West;
@@ -227,7 +225,7 @@ static void playerInput(GameObject go, PlayerComponent &player) {
     return;
   }
   // Check for interactions if we pressed space.
-  auto interactionKeyPressed = KeyJustPressed(KeyboardKeys::Key_SPACE);
+  auto interactionKeyPressed = KeyJustPressed(KeyboardKeys::Key_SPACE) || KeyJustPressed(GameControllerButton::GameControllerButtonA, 0);
   interactionHandler(interaction, stateComponent, interactionKeyPressed);
 }
 
