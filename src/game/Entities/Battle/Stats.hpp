@@ -1,8 +1,8 @@
 #pragma once
-#include <cstdint>
+#include <string>
 namespace Supergoon {
 struct Stats {
-  const char *Name = "";
+  std::string Name = "";
   int HP = 0;
   int MaxHP = 0;
   int Str = 0;

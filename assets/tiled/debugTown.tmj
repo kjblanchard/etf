@@ -215,7 +215,7 @@
                  "y":107
                 }, 
                 {
-                 "height":25.4902386117137,
+                 "height":15.9999999999997,
                  "id":24,
                  "name":"",
                  "rotation":0,
@@ -223,7 +223,7 @@
                  "visible":true,
                  "width":16,
                  "x":48,
-                 "y":214.509761388286
+                 "y":224
                 }, 
                 {
                  "height":20.75,
@@ -282,7 +282,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 

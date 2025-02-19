@@ -1,5 +1,6 @@
 #include <Components/BattleComponent.hpp>
 #include <Components/BattlerComponent.hpp>
+#include <Components/EnemyBattlerBlinkComponent.hpp>
 #include <Entities/Battle/BattleCommandArgs.hpp>
 #include <Entities/Battle/BattleState.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
@@ -204,6 +205,34 @@ static void updateFinger() {
   }
 }
 
+// TODO this should probably be it's own system
+static void blinkEnemyBattlers(float deltaTime, BattleComponent &battleComponent) {
+  GameObject::ForEach<EnemyBattlerBlinkComponent>([deltaTime](GameObject go, EnemyBattlerBlinkComponent &blinkComponent) {
+    if (!blinkComponent.IsPlaying) {
+      return;
+    }
+    blinkComponent.CurrentTime += deltaTime;
+    if (blinkComponent.CurrentTime >= 0.15) {
+      auto &animComp = go.GetComponent<AnimationComponent>();
+      // Blink this quickly by changing the color
+      auto color = sgColor{150, 150, 150, 255};
+      if (blinkComponent.Blinks % 2 != 0) {
+        color.R = 255;
+        color.B = 255;
+        color.G = 255;
+      }
+      blinkComponent.Blinks += 1;
+      animComp.AnimationImage->SetImageColor(color);
+      blinkComponent.CurrentTime = 0;
+    }
+    if (blinkComponent.Blinks >= 4) {
+      blinkComponent.IsPlaying = false;
+      blinkComponent.Blinks = 0;
+      blinkComponent.CurrentTime = 0;
+    }
+  });
+}
+
 static void updateBattle(GameObject, GameState &gamestate, BattleComponent &battleComponent) {
   if (!battleComponent.InBattle) {
     return;
@@ -224,6 +253,7 @@ static void updateBattle(GameObject, GameState &gamestate, BattleComponent &batt
     handlePlayerInputForBattler(&gamestate, &battleComponent);
     UpdateBattleDamageSystem();
     UpdateBattleUI();
+    blinkEnemyBattlers(gamestate.DeltaTime, battleComponent);
     break;
   case BattleState::Exiting:
     exiting(&gamestate, &battleComponent);

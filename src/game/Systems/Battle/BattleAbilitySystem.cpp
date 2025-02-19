@@ -1,5 +1,6 @@
 #include <Components/BattleComponent.hpp>
 #include <Components/BattlerComponent.hpp>
+#include <Components/EnemyBattlerBlinkComponent.hpp>
 #include <Entities/Battle/BattleAbility.hpp>
 #include <Entities/Battle/BattleCommandArgs.hpp>
 #include <Supergoon/Content/ContentRegistry.hpp>
@@ -42,25 +43,8 @@ static int calculateDamage(BattlerComponent *target, BattlerComponent *attacker,
   }
 }
 
-static void handleAbilityUsed(int, void *abilityArgs, void *) {
-  if (!gamestate) {
-    gamestate = GameObject::FindComponent<GameState>();
-  }
-  if (!battleComponent) {
-    battleComponent = GameObject::FindComponent<BattleComponent>();
-  }
-  assert((BattleCommandArgs *)abilityArgs && "Bad battle command arg event passed");
-  auto abilityArg = (BattleCommandArgs *)abilityArgs;
-  if (!battleComponent->InBattle || !abilityArg || !gamestate) {
-    return;
-  }
-  // Calculate the damage
-  assert(abilityArg->AttackingBattler.HasComponent<BattlerComponent>() && abilityArg->TargetBattler.HasComponent<BattlerComponent>() && "Gameobjects passed to ability system do not have battler components");
-  auto attackingBattlerComponent = abilityArg->AttackingBattler.GetComponent<BattlerComponent>();
-  auto targetBattlerComponent = abilityArg->TargetBattler.GetComponent<BattlerComponent>();
-  assert(abilityArg->AbilityId < _numAbilities && _abilities[abilityArg->AbilityId].ID == abilityArg->AbilityId && "Ability out of array bounds, or ability is not configured properly");
-  auto ability = &_abilities[abilityArg->AbilityId];
-  auto damage = calculateDamage(&targetBattlerComponent, &attackingBattlerComponent, ability);
+// TODO these should both be ptrs or refs.
+static void handlePlayerAbilityAnimation(BattleCommandArgs *abilityArg, BattleAbility *ability) {
   // Start any player animations of using this ability
   assert(abilityArg->AttackingBattler.HasComponent<AnimationComponent>() && "Battler doesn't have a animation component somehow");
   auto animComp = abilityArg->AttackingBattler.GetComponent<AnimationComponent>();
@@ -80,12 +64,6 @@ static void handleAbilityUsed(int, void *abilityArgs, void *) {
   abilityAnim.Animation->Load();
   abilityAnim.OverrideDrawSize.X = 128;
   abilityAnim.OverrideDrawSize.Y = 128;
-  auto damageCo = sgAddCoroutine(
-      0.5, [](void *damage, void *args) {
-        assert((BattleCommandArgs *)args && "Could not convert!");
-        Events::PushEvent(EscapeTheFateEvents.BattleDamageEvent, (intptr_t)damage, args);
-      },
-      (void *)damage, (void *)abilityArgs);
   auto slashCo = sgAddCoroutine(
       0.01, [](void *name, void *animComponent) {
         assert((const char *)name && (AnimationComponent *)animComponent && "Could not convert name from void* for some reason");
@@ -101,6 +79,46 @@ static void handleAbilityUsed(int, void *abilityArgs, void *) {
         };
       },
       (void *)"slash1", (void *)&abilityAnim);
+  sgStartCoroutine(slashCo);
+}
+
+static void handleEnemyAnimation(BattleCommandArgs *abilityArg, BattleAbility *ability) {
+  assert(abilityArg->AttackingBattler.HasComponent<AnimationComponent>() && "Battler doesn't have a animation component somehow");
+  auto &blinkComp = abilityArg->AttackingBattler.GetComponent<EnemyBattlerBlinkComponent>();
+  // Blink this quickly by changing the color
+  blinkComp.IsPlaying = true;
+}
+
+static void handleAbilityUsed(int, void *abilityArgs, void *) {
+  if (!gamestate) {
+    gamestate = GameObject::FindComponent<GameState>();
+  }
+  if (!battleComponent) {
+    battleComponent = GameObject::FindComponent<BattleComponent>();
+  }
+  assert((BattleCommandArgs *)abilityArgs && "Bad battle command arg event passed");
+  auto abilityArg = (BattleCommandArgs *)abilityArgs;
+  if (!battleComponent->InBattle || !abilityArg || !gamestate) {
+    return;
+  }
+  // Calculate the damage
+  assert(abilityArg->AttackingBattler.HasComponent<BattlerComponent>() && abilityArg->TargetBattler.HasComponent<BattlerComponent>() && "Gameobjects passed to ability system do not have battler components");
+  auto attackingBattlerComponent = abilityArg->AttackingBattler.GetComponent<BattlerComponent>();
+  auto targetBattlerComponent = abilityArg->TargetBattler.GetComponent<BattlerComponent>();
+  assert(abilityArg->AbilityId < _numAbilities && _abilities[abilityArg->AbilityId].ID == abilityArg->AbilityId && "Ability out of array bounds, or ability is not configured properly");
+  auto ability = &_abilities[abilityArg->AbilityId];
+  auto damage = calculateDamage(&targetBattlerComponent, &attackingBattlerComponent, ability);
+  if (attackingBattlerComponent.IsPlayer) {
+    handlePlayerAbilityAnimation(abilityArg, ability);
+  } else {
+    handleEnemyAnimation(abilityArg, ability);
+  }
+  auto damageCo = sgAddCoroutine(
+      0.5, [](void *damage, void *args) {
+        assert((BattleCommandArgs *)args && "Could not convert!");
+        Events::PushEvent(EscapeTheFateEvents.BattleDamageEvent, (intptr_t)damage, args);
+      },
+      (void *)damage, (void *)abilityArgs);
   // Play SFX for this
   auto co = sgAddCoroutine(
       0.25, [](void *name, void *) {
@@ -108,7 +126,6 @@ static void handleAbilityUsed(int, void *abilityArgs, void *) {
         Sound::Instance()->PlaySfxOneShot((const char *)name);
       },
       (void *)_abilities[abilityArg->AbilityId].AbilitySFXName, nullptr);
-  sgStartCoroutine(slashCo);
   sgStartCoroutine(damageCo);
   sgStartCoroutine(co);
 }
