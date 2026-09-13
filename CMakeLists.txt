@@ -2,10 +2,8 @@
 cmake_minimum_required(VERSION 3.28)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#set(CMAKE_CXX_STANDARD 23)
-#set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(GAME_VERSION "0.1.0" CACHE STRING "Game version string")
 set(STEAM_APP_ID 4393160)
 project("Escape The Fate" LANGUAGES C CXX VERSION ${GAME_VERSION})
@@ -13,7 +11,6 @@ option(SYSTEM_PACKAGES "Use system packages if available" ON)
 option(ENGINE_CACHED "Is the engine cloned locally in the ./engine directory or should it be downloaded" ON)
 option(DEBUG_CMAKE_VARIABLES "Print out all debug variables near end of configure" OFF)
 option(LINK_M "Should we link against the M, only useful on linux builds locally")
-option(IMGUI_DEBUGGING "Should we build with imgui enabled" OFF)
 # option(PRELOAD_ALL_ASSETS "Preload everything at beginning, useful for EMSCRIPTEN" ON)
 # If ON, gives a debug message when building about vm space or something, nanomalloc. If ON, Memory shows super high
 # usage.. it's wild, to get an accurate reading switch to off.
@@ -39,21 +36,6 @@ set(EXECUTABLE_SOURCE_FILES_CORE
   src/main.c
 )
 
-if(IMGUI_DEBUGGING)
-  set(IMGUI_SRC 
-    external/imgui.cpp
-    external/imgui_demo.cpp
-    external/imgui_draw.cpp
-    external/imgui_impl_opengl3.cpp
-    external/imgui_tables.cpp
-    external/imgui_impl_sdl3.cpp
-    external/imgui_widgets.cpp
-  )
-  list(APPEND EXECUTABLE_SOURCE_FILES_CORE ${IMGUI_SRC})
-  add_definitions(-Dimgui)
-  #Ignore source file warnings from external imgui  
-  set_source_files_properties( ${IMGUI_SRC} PROPERTIES COMPILE_FLAGS "-w" )
-endif(IMGUI_DEBUGGING)
 set(ASSET_FILE_LOCATION etf.sg)
 
 if(APPLE)
