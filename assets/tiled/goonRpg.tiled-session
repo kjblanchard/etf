@@ -1,0 +1,295 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "forest2.tmj",
+    "expandedProjectPaths": [
+        "templates",
+        "old-delete",
+        "."
+    ],
+    "exportAsImage.includeBackgroundColor": true,
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/Users/kevin/git/misc/etfSnes/assets/tiled/tiled.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1.8312499999999998,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 112.76450511945393,
+                "y": 10.375426621160415
+            }
+        },
+        "/Users/kevin/git/misc/etfSnes/assets/tiled/tiled.tmx#tiles": {
+            "scaleInDock": 1,
+            "scaleInEditor": 4
+        },
+        "/Users/kevin/pvsneslib/snes-examples/objects/mapandobjects/tiledMario.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 0.52587890625,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 1685.74930362117,
+                "y": 121.7010213556174
+            }
+        },
+        "/Users/kevin/pvsneslib/snes-examples/objects/mapandobjects/tiledMario.tmx#tiles": {
+            "scaleInDock": 1
+        },
+        "/Users/kevin/pvsneslib/snes-examples/objects/nogravityobject/mapzelda.tmx": {
+            "scale": 1.0873046874999999,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 539.4072211244837,
+                "y": 217.05047601940004
+            }
+        },
+        "/Users/kevin/pvsneslib/snes-examples/objects/nogravityobject/mapzelda.tmx#tiles": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 5.5
+        },
+        "cloud.tmj": {
+            "expandedGroupLayers": [
+                3
+            ],
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 194.75,
+                "y": 174.25
+            }
+        },
+        "cloud.tmj#cloud": {
+            "scaleInDock": 1
+        },
+        "cloud.tsj": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 2
+        },
+        "cloud.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 2
+        },
+        "debugSouth.tmj": {
+            "expandedGroupLayers": [
+                3
+            ],
+            "scale": 2,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 240,
+                "y": 157
+            }
+        },
+        "debugSouth.tmj#outside": {
+            "scaleInDock": 1
+        },
+        "debugSouth.tmj#terrain": {
+            "scaleInDock": 1
+        },
+        "debugTown.tmj": {
+            "expandedGroupLayers": [
+                6
+            ],
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 303.75,
+                "y": 141.25
+            }
+        },
+        "debugTown.tmj#house": {
+            "scaleInDock": 1
+        },
+        "debugTown.tmj#outside": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "debugTown.tmj#terrain": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "debugTownHome.tmj": {
+            "expandedGroupLayers": [
+                4
+            ],
+            "expandedObjectLayers": [
+                5,
+                6
+            ],
+            "scale": 3,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 128,
+                "y": 37.33333333333333
+            }
+        },
+        "debugTownHome.tmj#inside": {
+            "scaleInDock": 1
+        },
+        "forest1 6.10.31 PM.tmx": {
+            "scale": 2.6904296875,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 256.27876588021775,
+                "y": 144.21488203266787
+            }
+        },
+        "forest1..tmj": {
+            "scale": 2.6904296875,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 256.27876588021775,
+                "y": 144.21488203266787
+            }
+        },
+        "forest1.tmj": {
+            "expandedGroupLayers": [
+                2
+            ],
+            "scale": 1.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 280.33333333333326,
+                "y": 211
+            }
+        },
+        "forest1.tmj#outside": {
+            "scaleInDock": 1
+        },
+        "forest1.tmj#terrain": {
+            "scaleInDock": 1
+        },
+        "forest1.tmx": {
+            "expandedGroupLayers": [
+                2
+            ],
+            "scale": 1.0533,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 256.8119244279883,
+                "y": 144.3083641887402
+            }
+        },
+        "forest2.tmj": {
+            "expandedGroupLayers": [
+                6
+            ],
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 298.33333333333326,
+                "y": 130.33333333333334
+            }
+        },
+        "forest2.tmj#cloud": {
+            "scaleInDock": 1
+        },
+        "forest2.tmj#outside": {
+            "scaleInDock": 1
+        },
+        "forest2.tmj#terrain": {
+            "scaleInDock": 1
+        },
+        "house.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
+        "inside.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
+        "old-delete/cloud.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
+        "old-delete/untitled.tmj": {
+            "scale": 1.6862499999999998,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 240.17790956263906,
+                "y": 136.10081541882877
+            }
+        },
+        "outside.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
+        "terrain.tsj": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 2
+        },
+        "untitled.tmj": {
+            "expandedGroupLayers": [
+                3
+            ],
+            "scale": 2,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 240,
+                "y": 136.25
+            }
+        }
+    },
+    "frame.defaultDuration": 200,
+    "last.exportedFilePath": "/Users/kevin/git/cpp/EscapeTheFate/assets/tiled",
+    "last.externalTilesetPath": "/Users/kevin/git/c/etf/assets/tiled",
+    "last.imagePath": "/Users/kevin/git/c/etf/assets/img",
+    "last.objectTemplatePath": "/home/kevin/git/EscapeTheFate/assets/tiled/templates",
+    "lastUsedTilesetExportFilter": "JSON tileset files (*.tsj *.json)",
+    "map.height": 18,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "json",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 32,
+    "openFiles": [
+        "debugSouth.tmj",
+        "debugTown.tmj",
+        "debugTownHome.tmj",
+        "forest1.tmj",
+        "inside.tsj",
+        "house.tsj",
+        "outside.tsj",
+        "terrain.tsj",
+        "cloud.tsj",
+        "cloud.tmj",
+        "forest2.tmj"
+    ],
+    "project": "goonRpg.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+        "debugSouth.tmj",
+        "debugTown.tmj",
+        "debugTownHome.tmj",
+        "forest1.tmj",
+        "inside.tsj",
+        "house.tsj",
+        "outside.tsj",
+        "terrain.tsj",
+        "cloud.tsj",
+        "cloud.tmj",
+        "forest2.tmj",
+        "old-delete/untitled.tmj"
+    ],
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "json",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.useTransparentColor": true
+}

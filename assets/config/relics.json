@@ -1,0 +1,20 @@
+[
+    {
+        "id": 6,
+        "name": "Damage Relic",
+        "description": "+1 to all damage",
+        "imageName": "relicPlaceholder"
+    },
+    {
+        "id": 7,
+        "name": "Speed Relic",
+        "description": "+2 SPD (2 turns)",
+        "imageName": "relicPlaceholder"
+    },
+    {
+        "id": 8,
+        "name": "Shield Relic",
+        "description": "Absorb 5 dmg",
+        "imageName": "relicPlaceholder"
+    }
+]

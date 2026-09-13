@@ -1,0 +1,369 @@
+{ "compressionlevel":-1,
+ "height":11,
+ "infinite":false,
+ "layers":[
+        {
+         "id":4,
+         "layers":[
+                {
+                 "data":[271, 272, 273, 274, 271, 272, 273, 274, 271, 272, 273, 274, 271, 272, 273, 274,
+                    319, 320, 321, 322, 319, 320, 321, 322, 319, 320, 321, 322, 319, 320, 321, 322,
+                    367, 368, 369, 370, 367, 368, 369, 370, 367, 368, 369, 370, 367, 368, 369, 370,
+                    415, 416, 417, 418, 415, 416, 417, 418, 415, 416, 417, 418, 415, 416, 417, 418,
+                    651, 652, 652, 652, 652, 652, 652, 652, 652, 652, 652, 652, 652, 652, 652, 653,
+                    699, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 701,
+                    699, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 701,
+                    699, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 701,
+                    699, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 701,
+                    747, 748, 748, 748, 748, 748, 748, 700, 700, 748, 748, 748, 748, 748, 748, 749,
+                    0, 0, 0, 0, 0, 0, 0, 1357, 1357, 0, 0, 0, 0, 0, 0, 0],
+                 "height":11,
+                 "id":1,
+                 "name":"Tile Layer 1",
+                 "opacity":1,
+                 "type":"tilelayer",
+                 "visible":true,
+                 "width":16,
+                 "x":0,
+                 "y":0
+                }, 
+                {
+                 "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    1027, 1028, 1029, 0, 1052, 1053, 0, 0, 1050, 1051, 0, 0, 0, 0, 0, 0,
+                    1075, 1076, 1077, 0, 1100, 1101, 0, 0, 1098, 1099, 0, 1231, 1232, 1233, 1225, 0,
+                    1123, 1124, 1125, 1037, 0, 0, 0, 1560, 1561, 1562, 1563, 1279, 1280, 1281, 1273, 0,
+                    1171, 1172, 1173, 1085, 0, 0, 0, 1608, 1609, 1610, 1611, 1327, 1328, 1329, 1321, 0,
+                    0, 0, 0, 0, 0, 0, 0, 1656, 1657, 1658, 1659, 0, 0, 0, 0, 1135,
+                    1460, 1461, 1462, 1463, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1183,
+                    1508, 1509, 1510, 1511, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1532, 1533,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1580, 1581,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1628, 1629,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 "height":11,
+                 "id":2,
+                 "name":"Tile Layer 2",
+                 "opacity":1,
+                 "type":"tilelayer",
+                 "visible":true,
+                 "width":16,
+                 "x":0,
+                 "y":0
+                }, 
+                {
+                 "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 1239, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    1364, 1365, 1366, 1367, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1460, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1508, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 "height":11,
+                 "id":3,
+                 "name":"Tile Layer 3",
+                 "opacity":1,
+                 "type":"tilelayer",
+                 "visible":true,
+                 "width":16,
+                 "x":0,
+                 "y":0
+                }],
+         "name":"bg1",
+         "opacity":1,
+         "type":"group",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":6,
+         "name":"solid",
+         "objects":[
+                {
+                 "height":16,
+                 "id":18,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":256,
+                 "x":0,
+                 "y":48
+                }, 
+                {
+                 "height":27,
+                 "id":19,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":31,
+                 "x":136,
+                 "y":60
+                }, 
+                {
+                 "height":22.5454545454545,
+                 "id":30,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":0,
+                 "y":96
+                }, 
+                {
+                 "height":16,
+                 "id":31,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":192.727272727273,
+                 "y":134.181818181818
+                }, 
+                {
+                 "height":37.0909090909091,
+                 "id":35,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":224.181818181818,
+                 "y":115.636363636364
+                }, 
+                {
+                 "height":16,
+                 "id":36,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":239,
+                 "y":88
+                }, 
+                {
+                 "height":12.9090909090909,
+                 "id":37,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":224,
+                 "y":64
+                }, 
+                {
+                 "height":7.63636363636363,
+                 "id":38,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":27.6363636363636,
+                 "x":186,
+                 "y":64
+                }, 
+                {
+                 "height":16,
+                 "id":39,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":112.181818181818,
+                 "y":68.5454545454545
+                }, 
+                {
+                 "height":9.27272727272728,
+                 "id":40,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":47.0909090909091,
+                 "x":0,
+                 "y":64
+                }, 
+                {
+                 "height":16,
+                 "id":41,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":48,
+                 "y":64
+                }, 
+                {
+                 "height":19.875,
+                 "id":44,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":109.16011339825,
+                 "x":0,
+                 "y":154
+                }, 
+                {
+                 "height":19.625,
+                 "id":45,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":109.79119930975,
+                 "x":146.20880069025,
+                 "y":154
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":5,
+         "name":"entities",
+         "objects":[
+                {
+                 "height":11.8979415752496,
+                 "id":17,
+                 "name":"Exit0",
+                 "properties":[
+                        {
+                         "name":"loadLocation",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"loadMap",
+                         "type":"string",
+                         "value":"debugTown"
+                        }],
+                 "rotation":0,
+                 "type":"2Exit",
+                 "visible":true,
+                 "width":47.1460618760015,
+                 "x":103.164797238999,
+                 "y":163.1554295575
+                }, 
+                {
+                 "height":16,
+                 "id":43,
+                 "name":"Start1",
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "propertytype":"Direction",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"loadLocation",
+                         "type":"int",
+                         "value":1
+                        }],
+                 "rotation":0,
+                 "type":"4Start",
+                 "visible":true,
+                 "width":16,
+                 "x":118.310859115001,
+                 "y":125.79119930975
+                }, 
+                {
+                 "height":30.6666666666667,
+                 "id":46,
+                 "name":"BedText",
+                 "properties":[
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"bed"
+                        }],
+                 "template":"templates\/Dialog",
+                 "type":"5TextInteraction",
+                 "width":26.6666666666667,
+                 "x":226,
+                 "y":118.666666666667
+                }, 
+                {
+                 "height":17.3333666666666,
+                 "id":47,
+                 "name":"PotsText",
+                 "properties":[
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"pots"
+                        }],
+                 "template":"templates\/Dialog",
+                 "type":"5TextInteraction",
+                 "width":66.6667,
+                 "x":0.333316666666676,
+                 "y":100.66665
+                }, 
+                {
+                 "height":16.6667333333333,
+                 "id":48,
+                 "name":"FireplaceText",
+                 "properties":[
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"fireplace"
+                        }],
+                 "template":"templates\/Dialog",
+                 "type":"5TextInteraction",
+                 "width":20.6667,
+                 "x":14.3333166666666,
+                 "y":55.9999666666667
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":7,
+ "nextobjectid":49,
+ "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"bgm",
+         "type":"string",
+         "value":"town2"
+        }],
+ "renderorder":"right-down",
+ "tiledversion":"1.11.2",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "columns":48,
+         "firstgid":1,
+         "image":"..\/img\/inside.png",
+         "imageheight":560,
+         "imagewidth":768,
+         "margin":0,
+         "name":"inside",
+         "spacing":0,
+         "tilecount":1680,
+         "tileheight":16,
+         "tilewidth":16
+        }],
+ "tilewidth":16,
+ "type":"map",
+ "version":"1.11",
+ "width":16
+}

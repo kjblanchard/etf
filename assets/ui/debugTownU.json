@@ -1,0 +1,164 @@
+{
+	"DebugTownPanel": {
+		"doNotDestroy": true,
+		"children": {
+			"DialogBox": {
+				"type": "nineSlice",
+				"file": "uibase",
+				"scale": 1.0,
+				"color": { "R": 80, "G": 0, "B": 120, "A": 235 },
+				"rect": { "x": 60, "y": 60, "w": 156, "h": 70 },
+				"srcRect": { "x": 0, "y": 0, "w": 64, "h": 64 },
+				"camera": true,
+				"visible": false,
+				"priority": 1,
+				"xOffset": 8,
+				"yOffset": 9,
+				"children": {
+					"DialogBoxText": {
+						"type": "text",
+						"font": "PressStart2P",
+						"fontSize": 8,
+						"rect": { "x": 8, "y": 8, "w": 140, "h": 54 },
+						"text": "HelloWorld!",
+						"centeredX": true,
+						"centeredY": true,
+						"wordWrap": true,
+						"numCharsToDraw": 100
+					}
+				}
+			},
+			"PlayersGuide": {
+				"rect": { "x": 180, "y": 0, "w": 100, "h": 40 },
+				"file": "uibase",
+				"type": "nineSlice",
+				"visible": false,
+				"scale": 1.0,
+				"color": { "R": 80, "G": 0, "B": 120, "A": 150 },
+				"srcRect": { "x": 0, "y": 0, "w": 64, "h": 64 },
+				"xOffset": 8,
+				"yOffset": 9,
+				"camera": false,
+				"children": {
+					"Player1": {
+						"rect": { "x": 15, "y": 5, "w": 0, "h": 0 },
+						"children": {
+							"MainText": {
+								"type": "text",
+								"font": "PressStart2P",
+								"fontSize": 8,
+								"rect": { "x": 0, "y": -10, "w": 32, "h": 32 },
+								"color": { "R": 255, "G": 0, "B": 255, "A": 255 },
+								"text": "P1",
+								"centeredX": true,
+								"centeredY": true,
+								"wordWrap": true,
+								"numCharsToDraw": 10,
+								"priority": 0
+
+							},
+							"P1Line": {
+								"type": "line",
+								"rect": { "x": 0, "y": 5, "w": 32, "h": 32 },
+								"x1": 0,
+								"x2": 40,
+								"y1": 5,
+								"y2": 5,
+								"thickness": 2,
+								"priority": 1,
+								"color": { "R": 255, "G": 0, "B": 255, "A": 255 }
+							},
+							"ControllerImage": {
+								"type": "image",
+								"file": "gamecontroller",
+								"visible": true,
+								"scale": 1.0,
+								"color": { "R": 255, "G": 255, "B": 255, "A": 255 },
+								"rect": { "x": 0, "y": 13, "w": 16, "h": 16 },
+								"srcRect": { "x": 0, "y": 0, "w": 16, "h": 16 },
+								"camera": false,
+								"priority": 0
+							},
+							"KeyboardImage": {
+								"type": "image",
+								"file": "keyboard",
+								"visible": true,
+								"scale": 1.0,
+								"color": { "R": 255, "G": 255, "B": 255, "A": 255 },
+								"rect": { "x": 16, "y": 10, "w": 16, "h": 16 },
+								"srcRect": { "x": 0, "y": 0, "w": 16, "h": 16 },
+								"camera": false,
+								"priority": 0
+							}
+						}
+					},
+					"Player2": {
+						"rect": { "x": 50, "y": 5, "w": 0, "h": 0 },
+						"children": {
+							"MainText": {
+								"type": "text",
+								"font": "PressStart2P",
+								"fontSize": 8,
+								"rect": { "x": 0, "y": -10, "w": 32, "h": 32 },
+								"color": { "R": 255, "G": 0, "B": 255, "A": 255 },
+								"text": "P2",
+								"centeredX": true,
+								"centeredY": true,
+								"wordWrap": true,
+								"numCharsToDraw": 10,
+								"priority": 0
+
+							},
+							"P1Line": {
+								"type": "line",
+								"rect": { "x": 0, "y": 5, "w": 32, "h": 32 },
+								"x1": 0,
+								"x2": 30,
+								"y1": 5,
+								"y2": 5,
+								"thickness": 2,
+								"priority": 1,
+								"color": { "R": 255, "G": 0, "B": 255, "A": 255 }
+
+							},
+							"SpawnButtonImage": {
+								"type": "animation",
+								"file": "padButtonsExport",
+								"visible": true,
+								"scale": 1.0,
+								"color": { "R": 255, "G": 255, "B": 255, "A": 255 },
+								"rect": { "x": 30, "y": 0, "w": 16, "h": 16 },
+								"srcRect": { "x": 0, "y": 0, "w": 16, "h": 16 },
+								"camera": false,
+								"priority": 2
+							},
+
+							"ControllerImage": {
+								"type": "image",
+								"file": "gamecontroller",
+								"visible": true,
+								"scale": 1.0,
+								"color": { "R": 255, "G": 255, "B": 255, "A": 255 },
+								"rect": { "x": 10, "y": 13, "w": 16, "h": 16 },
+								"srcRect": { "x": 0, "y": 0, "w": 16, "h": 16 },
+								"camera": false,
+								"priority": 0
+							}
+						}
+					},
+					"SeparatorLine": {
+						"type": "line",
+						"rect": { "x": 50, "y": 5, "w": 32, "h": 32 },
+						"x1": 0,
+						"x2": 0,
+						"y1": 0,
+						"y2": 30,
+						"thickness": 1,
+						"priority": 1,
+						"color": { "R": 255, "G": 0, "B": 255, "A": 255 }
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,109 @@
+{
+    "CloudPanel": {
+        "doNotDestroy": false,
+        "children": {
+            "TitleNineSlice": {
+                "type": "nineSlice",
+                "file": "uibase",
+                "visible": false,
+                "scale": 1.0,
+                "color": { "R": 80, "G": 0, "B": 120, "A": 235 },
+                "rect": { "x": 90, "y": 60, "w": 300, "h": 40 },
+                "srcRect": { "x": 0, "y": 0, "w": 64, "h": 64 },
+                "camera": false,
+                "priority": 1,
+                "xOffset": 8,
+                "yOffset": 8,
+                "children": {
+                    "TitleText": {
+                        "type": "text",
+                        "font": "PressStart2P",
+                        "fontSize": 8,
+                        "rect": { "x": 0, "y": 0, "w": 300, "h": 40 },
+                        "text": "Escape The Fate",
+                        "centeredX": true,
+                        "centeredY": true,
+                        "numCharsToDraw": 100
+                    }
+                }
+            },
+            "MenuNineSlice": {
+                "type": "nineSlice",
+                "file": "uibase",
+                "visible": false,
+                "scale": 1.0,
+                "color": { "R": 80, "G": 0, "B": 120, "A": 235 },
+                "rect": { "x": 160, "y": 115, "w": 160, "h": 75 },
+                "srcRect": { "x": 0, "y": 0, "w": 64, "h": 64 },
+                "camera": false,
+                "priority": 1,
+                "xOffset": 8,
+                "yOffset": 8,
+                "children": {
+                    "MenuVLG": {
+                        "type": "vlg",
+                        "spacing": "15",
+                        "visible": true,
+                        "rect": { "x": 16, "y": 10, "w": 128, "h": 12 },
+                        "children": {
+                            "NewGameText": {
+                                "type": "text",
+                                "font": "PressStart2P",
+                                "fontSize": 8,
+                                "rect": { "x": 0, "y": 0, "w": 128, "h": 12 },
+                                "text": "New Game",
+                                "centeredX": true,
+                                "centeredY": true,
+                                "numCharsToDraw": 100
+                            },
+                            "MultiplayerText": {
+                                "type": "text",
+                                "font": "PressStart2P",
+                                "fontSize": 8,
+                                "rect": { "x": 0, "y": 0, "w": 128, "h": 12 },
+                                "text": "Multiplayer",
+                                "color": { "R": 100, "G": 100, "B": 100, "A": 255 },
+                                "centeredX": true,
+                                "centeredY": true,
+                                "numCharsToDraw": 100
+                            },
+                            "LoadText": {
+                                "type": "text",
+                                "font": "PressStart2P",
+                                "fontSize": 8,
+                                "rect": { "x": 0, "y": 0, "w": 128, "h": 12 },
+                                "text": "Load",
+                                "centeredX": true,
+                                "centeredY": true,
+                                "numCharsToDraw": 100,
+                                "color": { "R": 100, "G": 100, "B": 100, "A": 255 }
+                            },
+                            "OptionsText": {
+                                "type": "text",
+                                "font": "PressStart2P",
+                                "fontSize": 8,
+                                "rect": { "x": 0, "y": 0, "w": 128, "h": 12 },
+                                "text": "Options",
+                                "centeredX": true,
+                                "centeredY": true,
+                                "numCharsToDraw": 100,
+                                "color": { "R": 100, "G": 100, "B": 100, "A": 255 }
+                            }
+                        }
+                    }
+                }
+            },
+            "MenuFinger": {
+                "type": "image",
+                "file": "fingers",
+                "visible": false,
+                "scale": 1.0,
+                "color": { "R": 255, "G": 255, "B": 255, "A": 255 },
+                "rect": { "x": 152, "y": 128, "w": 16, "h": 16 },
+                "srcRect": { "x": 16, "y": 48, "w": 16, "h": 16 },
+                "camera": false,
+                "priority": 2
+            }
+        }
+    }
+}

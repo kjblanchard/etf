@@ -1,0 +1,22 @@
+e all with f4<F4>DS_Store
+**/._.DS_Store
+.vim/
+.vscode/
+build/
+.terraform/
+terraform.tfvars
+.cache/
+*.swp
+*.swn
+*.swo
+*errors.log
+out.folded
+out.perf
+perf.data
+test.svg
+perf.data.old
+imgui.ini
+steam_appid.txt
+*.sg
+external/redistributable_bin/
+external/steam/

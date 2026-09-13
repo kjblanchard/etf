@@ -1,0 +1,65 @@
+[
+    {
+        "id": 0,
+        "name": "Attack",
+        "animFile": "sword1",
+        "animTag": "slash",
+        "playerAnim": "slash2",
+        "sfx": "slash1",
+        "baseDamage": 1,
+        "friendly": false,
+        "apCost": 1,
+        "description": "Slash foe"
+    },
+    {
+        "id": 1,
+        "name": "Cure",
+        "animFile": "heal",
+        "animTag": "heal2",
+        "playerAnim": "cheer2",
+        "sfx": "heal1",
+        "baseDamage": -3,
+        "friendly": true,
+        "apCost": 2,
+        "description": "Heals ally"
+    },
+    {
+        "id": 2,
+        "name": "Enemy Slash",
+        "animFile": "claw_bite",
+        "animTag": "slash1",
+        "playerAnim": "",
+        "sfx": "slash2",
+        "baseDamage": 1,
+        "friendly": false,
+        "apCost": 1,
+        "description": ""
+    },
+    {
+        "id": 3,
+        "name": "Enemy Slash",
+        "animFile": "sword1",
+        "animTag": "slash",
+        "playerAnim": "",
+        "sfx": "slash2",
+        "baseDamage": 2,
+        "friendly": false,
+        "apCost": 2,
+        "description": ""
+    },
+    {
+        "id": 4,
+        "name": "PSlsh",
+        "animFile": "sword1",
+        "animTag": "slash",
+        "playerAnim": "",
+        "sfx": "slash2",
+        "baseDamage": 1,
+        "friendly": false,
+        "apCost": 2,
+        "description": "Poison and slash",
+        "statusEffects": [
+            { "id": 1, "percent": 100.0 }
+        ]
+    }
+]

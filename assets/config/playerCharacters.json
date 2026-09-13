@@ -1,0 +1,44 @@
+[
+    {
+        "id": 0,
+        "name": "Warrior",
+        "description": "Focused on dealing and tanking damage.",
+        "nick": "WAR",
+        "overworldSprite": "player1",
+        "battleSprite": "player1Battler",
+        "portrait": "portrait1",
+        "portraitRect": { "x": 0, "y": 0, "w": 48, "h": 48 },
+        "idle": "idle1",
+        "battlerDBIndex": 0,
+        "overworldFrameW": 26,
+        "overworldFrameH": 36
+    },
+    {
+        "id": 1,
+        "name": "Red Mage",
+        "description": "Debuffing, Buffing, Status Effects",
+        "nick": "RDM",
+        "overworldSprite": "player2",
+        "battleSprite": "player2Battler",
+        "portrait": "portrait2",
+        "portraitRect": { "x": 48, "y": 0, "w": 48, "h": 48 },
+        "idle": "idle1",
+        "battlerDBIndex": 2,
+        "overworldFrameW": 26,
+        "overworldFrameH": 36
+    },
+    {
+        "id": 2,
+        "name": "Gunblade",
+        "description": "Fast and nimble, daggers and guns",
+        "nick": "GNB",
+        "overworldSprite": "player3",
+        "battleSprite": "player3Battler",
+        "portrait": "portrait3",
+        "portraitRect": { "x": 0, "y": 48, "w": 48, "h": 48 },
+        "idle": "idle1",
+        "battlerDBIndex": 3,
+        "overworldFrameW": 26,
+        "overworldFrameH": 36
+    }
+]

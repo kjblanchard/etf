@@ -1,0 +1,5 @@
+local e = require("engine")
+local c = require("gameconfig")
+e.Graphics.SetLogicalWorld(c.WorldWidth, c.WorldHeight)
+e.Game.LoadScene(c.DefaultScene)
+e.Sound.PlayBgm("battle1", 1.0)

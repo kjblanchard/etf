@@ -1,0 +1,3 @@
+[submodule "SupergoonEngine"]
+	path = SupergoonEngine
+	url = git@github.com:kjblanchard/SupergoonEngine.git

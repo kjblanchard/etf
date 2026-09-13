@@ -1,0 +1,61 @@
+{
+    "logos": [],
+    "audio": {
+        "bgmVolume": 1.0,
+        "sfxVolume": 1.0
+    },
+    "window": {
+        "x": 480,
+        "y": 270,
+        "xWin": 1920,
+        "yWin": 1080,
+        "title": "Escape The Fate"
+    },
+    "scene": {
+        "defaultScene": "cloud",
+        "scenes": [
+            {
+                "MapName": "debugTown",
+                "UIName": "debugTownU",
+                "BGMName": "town2",
+                "BGMVolume": 1.0,
+                "DisplayName": "Debug Town"
+            },
+            {
+                "MapName": "debugSouth",
+                "UIName": "",
+                "BGMName": "forest1",
+                "BGMVolume": 1.0,
+                "DisplayName": "Shotka Trail"
+            },
+            {
+                "MapName": "debugTownHome",
+                "UIName": "",
+                "BGMName": "town2",
+                "BGMVolume": 1.0,
+                "DisplayName": ""
+            },
+            {
+                "MapName": "forest1",
+                "UIName": "battleU",
+                "BGMName": "battle1",
+                "BGMVolume": 1.0,
+                "DisplayName": ""
+            },
+            {
+                "MapName": "forest2",
+                "UIName": "battleU",
+                "BGMName": "battle1",
+                "BGMVolume": 1.0,
+                "DisplayName": ""
+            },
+            {
+                "MapName": "cloud",
+                "UIName": "cloudU",
+                "BGMName": "town1",
+                "BGMVolume": 1.0,
+                "DisplayName": ""
+            }
+        ]
+    }
+}
