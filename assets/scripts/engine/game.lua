@@ -15,4 +15,13 @@ function game.LoadScene(n)
   end
 end
 
+function game.GetGameObjectsFromTiledMap()
+  return Scene.GetGameObjectData()
+end
+
+function game.DebugSetBreak()
+  local d = require 'debugger'
+  d()
+end
+
 return game
