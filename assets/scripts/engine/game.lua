@@ -1,15 +1,21 @@
 local c = require("gameconfig")
 local s = require("engine.sound")
+local l = require("engine.log")
 local game = {}
 
--- local cachedMaps = {}
+local cachedMaps = {}
 
 ---Loads a scene from the gameconfig scene table
----@param n string name of the key in the table
-function game.LoadScene(n)
-  local scene = c.Scenes[n]
+---@param name string name of the key in the table
+function game.LoadScene(name)
+  local scene = c.Scenes[name]
   if not scene then return end
-  Scene.LoadScene(n)
+  if cachedMaps[name] then
+    Scene.LoadSceneFromMap(cachedMaps[name])
+  else
+    cachedMaps[name] = Scene.LoadScene(name)
+    if not cachedMaps[name] then l.Critical("Could not load map, we shoudl quit bois") end
+  end
   if scene.BGM then
     s.PlayBgm(scene.BGM, scene.BGMVolume, -1)
   end

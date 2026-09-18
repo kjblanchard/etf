@@ -4,4 +4,5 @@ engine.Sound = require("engine.sound")
 engine.Game = require("engine.game")
 engine.Coroutine = require("engine.coroutine")
 engine.Log = require("engine.log")
+engine.GameObject = require("engine.gameobject")
 return engine
