@@ -12,7 +12,7 @@ e.Animator.PreloadAnimatorData()
 e.Game.LoadScene(c.DefaultScene)
 e.GameObject.LoadGameObjectsFromTiledMap()
 --Testing UI
-local root = e.UI.CreateObject("Root", { 0, 0, 24, 24 }, nil, 0)
+local root = e.UI.CreateObject("Root", { 50, 0, 24, 24 }, nil, 0)
 e.UI.SetRoot(root)
 gs.RootUI = root
 local thing1Obj = e.UI.CreateObject("Thing1", { 20, 20, 12, 12 }, root, 0)
