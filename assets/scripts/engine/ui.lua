@@ -16,6 +16,10 @@ function ui.CreateImage(o, sprite)
   return UI.CreateUIImage(o, sprite)
 end
 
+function ui.CreateAnimator(o, sprite, animator)
+  return UI.CreateUIAnimator(o, sprite, animator)
+end
+
 function ui.DrawObject(o)
   UI.DrawUIObject(o)
 end

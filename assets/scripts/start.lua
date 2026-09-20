@@ -18,4 +18,6 @@ local thing2 = e.UI.CreateObject("Thing2", { 21, 20, 12, 12 }, root, 0)
 
 local tx = e.Graphics.LoadTextureFromPng("player1")
 local sprite = e.Sprite.Create(0, 0, tx, { 0, 0, 26, 36 }, { 0, 0, 26, 36 })
-e.UI.CreateImage(thing2, sprite)
+local anim = e.Animator.Create("player1", sprite)
+e.UI.CreateAnimator(thing2, sprite, anim)
+e.Animator.PlayAnimation(anim, "walkD", -1)
