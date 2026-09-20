@@ -8,16 +8,21 @@ e.GameObject.GameObjectLoadFuncs[cn.ObjectTypePlayer] = p.Create -- add to the g
 
 e.Graphics.SetLogicalWorld(c.WorldWidth, c.WorldHeight)
 e.Graphics.PreloadTextures()
+e.Animator.PreloadAnimatorData()
 e.Game.LoadScene(c.DefaultScene)
 e.GameObject.LoadGameObjectsFromTiledMap()
+--Testing UI
 local root = e.UI.CreateObject("Root", { 0, 0, 24, 24 }, nil, 0)
 e.UI.SetRoot(root)
 gs.RootUI = root
-local _ = e.UI.CreateObject("Thing1", { 20, 20, 12, 12 }, root, 0)
-local thing2 = e.UI.CreateObject("Thing2", { 21, 20, 12, 12 }, root, 0)
-
+local thing1Obj = e.UI.CreateObject("Thing1", { 20, 20, 12, 12 }, root, 0)
 local tx = e.Graphics.LoadTextureFromPng("player1")
+local thing2Sprite = e.Sprite.Create(0, 0, tx, { 0, 0, 26, 36 }, { 0, 0, 26, 36 })
+local thing2SpriteObject = e.UI.CreateImage(thing1Obj, thing2Sprite)
+
+
+local thing2 = e.UI.CreateObject("Thing2", { 21, 20, 12, 12 }, root, 0)
 local sprite = e.Sprite.Create(0, 0, tx, { 0, 0, 26, 36 }, { 0, 0, 26, 36 })
 local anim = e.Animator.Create("player1", sprite)
-e.UI.CreateAnimator(thing2, sprite, anim)
+local _ = e.UI.CreateAnimator(thing2, sprite, anim)
 e.Animator.PlayAnimation(anim, "walkD", -1)
