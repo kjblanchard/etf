@@ -23,6 +23,10 @@ static void startEngine(void) {
 	LuaRunFileFromBuffer("start.lua");
 }
 
+static void drawEngine(void) {
+	LuaRunFileFromBuffer("draw.lua");
+}
+
 static void updateGame(void) {
 	// set lua deltatimes
 	LuaPushTableFromGlobal(luaGlobalState, "package");
@@ -39,4 +43,5 @@ void InitializeEngineFunctions(void) {
 	SetInitializeFunction(initialize);
 	SetUpdateFunction(updateGame);
 	SetStartFunction(startEngine);
+	SetDrawFunction(drawEngine);
 }
