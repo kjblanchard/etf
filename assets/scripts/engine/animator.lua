@@ -20,6 +20,7 @@ function a.PreloadAnimatorData()
 end
 
 function a.PlayAnimation(animator, name, loops)
+  if not animator then return end
   Animator.PlayAnimation(animator, name, loops)
 end
 
