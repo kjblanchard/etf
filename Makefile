@@ -20,6 +20,7 @@ PACKAGE_COMMAND ?= cpack --config build/CPackConfig.cmake -C $(BUILD_TYPE)
 ADDITIONAL_OPTIONS ?=
 ADDITIONAL_BUILD_COMMANDS ?=
 IOS_BUILD_COMMANDS = "-- -allowProvisioningUpdates"
+GCC_VERSION ?= 16
 SGFORGE ?= sgforge
 # default, should be used after a rebuild of some sort.
 UNAME_S := $(shell uname -s 2>/dev/null)
@@ -80,6 +81,8 @@ wsteamrebuild:
 	$(MAKE) CMAKE_GENERATOR=$(WINDOWS_GENERATOR) STEAM_ENABLED=ON STEAM_APPID_FILE=OFF configure build install
 bsteamrebuild:
 	@$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) STEAM_ENABLED=ON STEAM_APPID_FILE=OFF clean configure build install
+leakrebuild:
+	@$(MAKE) CMAKE_GENERATOR=$(DEFAULT_GENERATOR) CC=/opt/homebrew/bin/gcc-$(GCC_VERSION) CXX=/opt/homebrew/bin/g++-$(GCC_VERSION) ADDITIONAL_OPTIONS="-DDEBUG_LSAN=ON" clean configure build
 erebuild:
 	@$(MAKE) CMAKE_GENERATOR=$(BACKUP_GENERATOR) CONFIGURE_COMMAND=$(EMSCRIPTEN_CONFIGURE_COMMAND) clean configure build
 irebuild:

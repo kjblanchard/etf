@@ -15,6 +15,7 @@ option(LINK_M "Should we link against the M, only useful on linux builds locally
 # If ON, gives a debug message when building about vm space or something, nanomalloc. If ON, Memory shows super high
 # usage.. it's wild, to get an accurate reading switch to off.
 option(DEBUG_ASAN "Use asan for leak and address sanitization checks when debug mode" ON)
+option(DEBUG_LSAN "Use leak sanitizer (requires real GCC, not Apple Clang)" OFF)
 option(SDL_BACKEND "Does this use SDL backend?" ON)
 option(SDL_GL "Does this use SDL GL backend?" ON)
 option(SDL_RENDERER "Does this use SDL renderer backend?" OFF)
@@ -99,6 +100,9 @@ if(DEBUG_ASAN AND CMAKE_BUILD_TYPE STREQUAL "Debug")
   if(NOT (APPLE AND (CMAKE_SYSTEM_NAME STREQUAL "iOS" OR CMAKE_SYSTEM_NAME STREQUAL "iossimulator")) AND NOT (CMAKE_SYSTEM_NAME STREQUAL "Emscripten"))
     message(STATUS "Enabling AddressSanitizer in Debug mode")
     set(ASAN_FLAGS "-fsanitize=address -fno-omit-frame-pointer")
+    if(DEBUG_LSAN)
+      set(ASAN_FLAGS "${ASAN_FLAGS} -fsanitize=leak")
+    endif()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${ASAN_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ASAN_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${ASAN_FLAGS}")
