@@ -11,12 +11,17 @@
 #include <sgforge/unpack.h>
 #include <sgtools/log.h>
 
+static int updatefunc;
+static int drawfunc;
+
 static void initialize(void) {
 	sgSetLogLevel(sgLogLevelWarn);
 	const char* filePath = GetBasePath();
 	String fullFile = StringConcat(filePath, "data/etf.sg");
 	AssetDirectory = LoadDirectoryFromFile(fullFile.Data);
 	LuaRunFileFromBuffer("init.lua");
+	updatefunc = LuaRefFileFromBuffer(luaGlobalState, "update.lua");
+	drawfunc = LuaRefFileFromBuffer(luaGlobalState, "draw.lua");
 }
 
 static void startEngine(void) {
@@ -24,7 +29,7 @@ static void startEngine(void) {
 }
 
 static void drawEngine(void) {
-	LuaRunFileFromBuffer("draw.lua");
+	LuaRunRefFunction(luaGlobalState, drawfunc);
 }
 
 static void updateGame(void) {
@@ -35,7 +40,7 @@ static void updateGame(void) {
 	LuaPushFloatToTable(luaGlobalState, "DeltaTimeSeconds", DeltaTimeSeconds);
 	LuaPushFloatToTable(luaGlobalState, "DeltaTimeMilliseconds", DeltaTimeMilliseconds);
 	LuaClearStack(luaGlobalState);
-	LuaRunFileFromBuffer("update.lua");
+	LuaRunRefFunction(luaGlobalState, updatefunc);
 }
 
 // wire our functions to the engine, as engine calls this func

@@ -1,12 +1,15 @@
 local gs = require("gamestate")
 local gfx = require("engine.graphics")
-local game = require("engine.game")
 local sprite = require("engine.sprite")
 local anim = require("engine.animator")
 local ui = {}
 
 local gameUI = {}
 
+---Gets a UI object by name, recursive search so try and cache result
+---@param name string name of the object key
+---@param currentObjTable table|nil used by recursive lookup, to search from root send nil
+---@return table|nil the object or nil if not found
 function ui.GetUIObject(name, currentObjTable)
   local start = currentObjTable or gameUI
   --Check current level
@@ -36,6 +39,10 @@ function ui.CreateObject(name, rect, parent, priority)
   return UI.CreateUIObject(name, rect, parent, priority)
 end
 
+---Creates a UIImage from the object passed in
+---@param o userdata ptr to object already created
+---@param sp userdata ptr to a sprite that is already created
+---@return userdata the uiimage, likely the same ptr passed in with o
 function ui.CreateImage(o, sp)
   return UI.CreateUIImage(o, sp)
 end

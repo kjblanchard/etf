@@ -95,6 +95,17 @@ if(APPLE)
   set_source_files_properties(etf.sg PROPERTIES MACOSX_PACKAGE_LOCATION Resources/data)
 endif(APPLE)
 
+if(DEBUG_ASAN AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+  if(NOT (APPLE AND (CMAKE_SYSTEM_NAME STREQUAL "iOS" OR CMAKE_SYSTEM_NAME STREQUAL "iossimulator")) AND NOT (CMAKE_SYSTEM_NAME STREQUAL "Emscripten"))
+    message(STATUS "Enabling AddressSanitizer in Debug mode")
+    set(ASAN_FLAGS "-fsanitize=address -fno-omit-frame-pointer")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${ASAN_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ASAN_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${ASAN_FLAGS}")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${ASAN_FLAGS}")
+  endif()
+endif()
+
 if(ENGINE_CACHED STREQUAL "ON")
   add_subdirectory(SupergoonEngine)
 else()
@@ -115,16 +126,6 @@ target_include_directories(${EXECUTABLE_TARGET_NAME} PRIVATE
   ${CMAKE_SOURCE_DIR}/SupergoonEngine/include
 )
 
-if(DEBUG_ASAN AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-  if(NOT (APPLE AND (CMAKE_SYSTEM_NAME STREQUAL "iOS" OR CMAKE_SYSTEM_NAME STREQUAL "iossimulator")) AND NOT (CMAKE_SYSTEM_NAME STREQUAL "Emscripten"))
-    message(STATUS "Enabling AddressSanitizer in Debug mode")
-    set(ASAN_FLAGS "-fsanitize=address -fno-omit-frame-pointer")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${ASAN_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ASAN_FLAGS}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${ASAN_FLAGS}")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${ASAN_FLAGS}")
-  endif()
-endif()
 
 target_link_libraries(${EXECUTABLE_TARGET_NAME} PRIVATE SupergoonEngine)
 
