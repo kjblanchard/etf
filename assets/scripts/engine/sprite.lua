@@ -1,6 +1,6 @@
 local sprite = {}
-function sprite.Create(x, y, tex, offsetszrect, txsrcrect)
-  local s = Sprite.CreateSprite(x, y, tex, offsetszrect, txsrcrect)
+function sprite.Create(location, tex, txsrcrect)
+  local s = Sprite.CreateSprite(location, tex, txsrcrect)
   return s
 end
 

@@ -9,7 +9,7 @@
 
 ## Details
 
-- A roguelike JRPGlike boardgamelike pixelart game
+- A roguelike JRPGlike pixelart game
 - BGMs created by me in Garageband
 - Sprites are mostly purchased from TimeFantasy sprites.
 - Currently no developer signature, will need to allow in macos/windows in
@@ -19,7 +19,7 @@
 
 - Cross platform cmake
 - Package with cmake for installing on desktops
-- C/Cpp practice
+- C/Lua practice
 - Learn OpenGL, or at least fake it until you make it
 - Better with vim for full IDE
 - Release a game on steam instead of remaking the same thing every year :)
@@ -32,6 +32,14 @@
     ```bash
     make rebuild
     ```
+
+## Debugging and profiling
+
+- make debug for lldb
+- for lua use engine.Game.SetDebugBreak()
+- for leaks, use instruments without ASAN on and set runlocation to repo and
+run the .app
+- for perf, use make perf
 
 ## Contributing
 

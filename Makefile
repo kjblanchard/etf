@@ -7,7 +7,7 @@ WINDOWS_GENERATOR ?= "Visual Studio 18 2026"
 APPLE_GENERATOR ?= Xcode
 CONFIGURE_COMMAND ?= "cmake"
 EMSCRIPTEN_CONFIGURE_COMMAND = "emcmake cmake"
-IMGUI_DEBUGGING ?= OFF
+IMGUI_DEBUGGING ?= ON
 STEAM_ENABLED ?= OFF
 STEAM_SDK_DIR ?=
 STEAM_APPID_FILE ?= ON
@@ -159,3 +159,4 @@ steam:
 
 
 
+ /* MallocStackLogging=1 leaks --atExit -- ./build/Debug/EscapeTheFate.app/Contents/MacOS/EscapeTheFate | tee output.txt */

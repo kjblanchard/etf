@@ -6,7 +6,7 @@ return {
         file = "player1",
         priority = 1,
         color = { 80, 0, 120, 235 },
-        rect = { 0, 0, 8, 8 },
+        rect = { 5, 5, 8, 8 },
         srcRect = { 0, 0, 26, 36 }
       },
       thing2 = {

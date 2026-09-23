@@ -19,7 +19,7 @@ function p.Create(args)
   player.PlayerNum = 1
   --Get Sprite for player based on player num / gamestate selection
   local tx = gfx.LoadTextureFromPng("player1")
-  player.Sprite = s.Create(player.X, player.Y, tx, { 0, 0, 26, 36 }, { 0, 0, 26, 36 })
+  player.Sprite = s.Create({ player.X, player.Y, 26, 36 }, tx, { 0, 0, 26, 36 })
   -- If we are exiting from battle, we need to update our coordinates and direction from where we saved them from, and if p2, offset by 3px on x
   --Start animation so that we are facing the proper direction
   -- Set follow target, or update camera if we are the follow target

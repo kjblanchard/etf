@@ -9,6 +9,7 @@ e.GameObject.GameObjectLoadFuncs[cn.ObjectTypePlayer] = p.Create -- add to the g
 e.Graphics.SetLogicalWorld(c.WorldWidth, c.WorldHeight)
 e.Graphics.PreloadTextures()
 e.Animator.PreloadAnimatorData()
+e.Sound.SetGameVolume(c.BGMVolume)
 e.Game.LoadScene(c.DefaultScene)
 e.GameObject.LoadGameObjectsFromTiledMap()
 --Testing UI

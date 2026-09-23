@@ -1,6 +1,6 @@
 local config = {}
 config.Logos = {}
-config.BGMVolume = 1.0
+config.BGMVolume = 0.0
 config.SFXVolume = 1.0
 config.WorldWidth = 480
 config.WorldHeight = 270

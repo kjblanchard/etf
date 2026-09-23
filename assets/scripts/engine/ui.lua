@@ -70,7 +70,7 @@ end
 local function handleUIImageCreation(data, objectTable)
   objectTable.t = "image"
   local tx = gfx.LoadTextureFromPng(data.file)
-  local s = sprite.Create(0, 0, tx, data.rect, data.srcRect)
+  local s = sprite.Create(data.rect, tx, data.srcRect)
   objectTable.sprite = s
   ui.CreateImage(objectTable.userdata, s)
 end
@@ -78,7 +78,7 @@ end
 local function handleUIAnimatorCreation(data, objectTable)
   objectTable.t = "anim"
   local tx = gfx.LoadTextureFromPng(data.file)
-  local s = sprite.Create(0, 0, tx, data.rect, data.srcRect)
+  local s = sprite.Create(data.rect, tx, data.srcRect)
   objectTable.sprite = s
   local a = anim.Create(data.file, s)
   objectTable.animator = a
