@@ -10,6 +10,9 @@
 #include <sgforge/directory.h>
 #include <sgforge/unpack.h>
 #include <sgtools/log.h>
+#ifdef imgui
+#include <debug.hpp>
+#endif
 
 static int updatefunc;
 static int drawfunc;
@@ -25,6 +28,9 @@ static void initialize(void) {
 }
 
 static void startEngine(void) {
+#ifdef imgui
+	InitializeDebugUI();
+#endif
 	LuaRunFileFromBuffer("start.lua");
 }
 

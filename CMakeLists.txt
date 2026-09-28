@@ -37,6 +37,12 @@ set(EXECUTABLE_SOURCE_FILES_CORE
   src/main.c
 )
 
+if(IMGUI_DEBUGGING)
+  add_definitions(-Dimgui)
+  set(IMGUI_SRC src/debug.cpp)
+  list(APPEND EXECUTABLE_SOURCE_FILES_CORE ${IMGUI_SRC})
+endif(IMGUI_DEBUGGING)
+
 set(ASSET_FILE_LOCATION etf.sg)
 
 if(APPLE)

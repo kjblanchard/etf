@@ -9,18 +9,6 @@ config.WindowHeight = 1080
 config.WindowTitle = "EscapeTheFate"
 config.DefaultScene = "debugTown"
 config.Scenes = {
-  debugTown = {
-    UI = "debugTownU",
-    BGM = "town2",
-    BGMVolume = 1.0,
-    Display = "Debug Town"
-  },
-  debugSouth = {
-    UI = "",
-    BGM = "forest1",
-    BGMVolume = 1.0,
-    Display = "Shotka Trail"
-  },
   debugTownHome = {
     UI = "",
     BGM = "town2",
@@ -32,6 +20,18 @@ config.Scenes = {
     BGM = "town1",
     BGMVolume = 1.0,
     Display = ""
+  },
+  debugTown = {
+    UI = "debugTownU",
+    BGM = "town2",
+    BGMVolume = 1.0,
+    Display = "Debug Town"
+  },
+  debugSouth = {
+    UI = "",
+    BGM = "forest1",
+    BGMVolume = 1.0,
+    Display = "Shotka Trail"
   },
 }
 return config

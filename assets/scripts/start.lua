@@ -2,13 +2,13 @@ local e = require("engine")
 local c = require("gameconfig")
 local cn = require("constants")
 local p = require("gameobjects.localplayer")
-local gs = require("gamestate")
 
 e.GameObject.GameObjectLoadFuncs[cn.ObjectTypePlayer] = p.Create -- add to the gameobject create functions
 
 e.Graphics.SetLogicalWorld(c.WorldWidth, c.WorldHeight)
 e.Graphics.PreloadTextures()
 e.Animator.PreloadAnimatorData()
+e.Game.PreloadAllScenes()
 e.Sound.SetGameVolume(c.BGMVolume)
 e.Game.LoadScene(c.DefaultScene)
 e.GameObject.LoadGameObjectsFromTiledMap()

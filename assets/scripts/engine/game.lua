@@ -5,6 +5,15 @@ local game = {}
 
 local cachedMaps = {}
 
+function game.PreloadAllScenes()
+  --Load all the maps
+  for sceneName, _ in pairs(c.Scenes) do
+    if not cachedMaps[sceneName] then
+      cachedMaps[sceneName] = Scene.LoadScene(sceneName)
+    end
+  end
+end
+
 ---Loads a scene from the gameconfig scene table
 ---@param name string name of the key in the table
 function game.LoadScene(name)
