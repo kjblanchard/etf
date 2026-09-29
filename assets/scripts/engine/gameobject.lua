@@ -1,10 +1,13 @@
 local g = {}
 local l = require("engine.log")
-local game = require("engine.game")
 local gameobjects = {}
 
 ---Should add a key of tile object type, and value of a function that takes an object args as param.
 g.GameObjectLoadFuncs = {}
+
+function g.GetGameObjectsFromTiledMap()
+  return Scene.GetGameObjectData()
+end
 
 ---Gets all gameobjects loaded
 ---@return table keys are object type, value is lua table of object
@@ -17,7 +20,7 @@ function g.GetGameObjectsOfType(t) return gameobjects[t] end
 
 ---Gets all object entities from the tield map, and loads them all if we have a gameobject load func for them.
 function g.LoadGameObjectsFromTiledMap()
-  local o = game.GetGameObjectsFromTiledMap()
+  local o = g.GetGameObjectsFromTiledMap()
   for _, value in ipairs(o) do
     if g.GameObjectLoadFuncs[value.ObjectType] then g.GameObjectLoadFuncs[value.ObjectType](value) end
   end

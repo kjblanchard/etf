@@ -6,16 +6,29 @@ local ui = {}
 
 local gameUI = {}
 
+function ui.SetVisible(o, isVisible)
+  isVisible = isVisible ~= nil and isVisible or false
+  UI.SetUIObjectVisible(o, isVisible)
+end
+
+function ui.GetFullUI()
+  return gameUI
+end
+
 ---Gets a UI object by name, recursive search so try and cache result
 ---@param name string name of the object key
 ---@param currentObjTable table|nil used by recursive lookup, to search from root send nil
 ---@return table|nil the object or nil if not found
-function ui.GetUIObject(name, currentObjTable)
+function ui.GetUIObject(name, currentObjTable, recursive)
+  recursive = recursive == nil and true or false
   local start = currentObjTable or gameUI
+  -- local d = require 'debugger'
+  -- d()
   --Check current level
   for panelName, panelValue in pairs(start) do
     if panelName == name then return panelValue end
   end
+  if not recursive then return nil end
   --Check children
   for _, panelValue in pairs(start) do
     if not panelValue.children then goto continue end
@@ -30,12 +43,14 @@ end
 
 ---Creates a UI object, and adds it to the parent listed
 ---@param name string name of the ui object
----@param rect table rect
+---@param rect table|nil rect
 ---@param parent userdata|nil the thing to attach it to
 ---@param priority integer|nil higher priority is better
 ---@return userdata the object created
 function ui.CreateObject(name, rect, parent, priority)
   priority = priority or 0
+  parent = parent or gs.RootUI
+  rect = rect or { 0, 0, 0, 0 }
   return UI.CreateUIObject(name, rect, parent, priority)
 end
 
@@ -105,6 +120,13 @@ local function createUIObjectsRecursive(data, parentTable)
     if panelObj.children then
       createUIObjectsRecursive(panelObj.children, currentObjectTable)
     end
+  end
+end
+
+function ui.SetTopLevelNotVisible()
+  if not gameUI.root.children then return end
+  for _, value in pairs(gameUI.root.children) do
+    ui.SetVisible(value.userdata, false)
   end
 end
 

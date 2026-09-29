@@ -37,21 +37,21 @@
             },
             {
                 "MapName": "forest1",
-                "UIName": "battleU",
+                "UIName": "",
                 "BGMName": "battle1",
                 "BGMVolume": 1.0,
                 "DisplayName": ""
             },
             {
                 "MapName": "forest2",
-                "UIName": "battleU",
+                "UIName": "",
                 "BGMName": "battle1",
                 "BGMVolume": 1.0,
                 "DisplayName": ""
             },
             {
                 "MapName": "cloud",
-                "UIName": "cloudU",
+                "UIName": "",
                 "BGMName": "town1",
                 "BGMVolume": 1.0,
                 "DisplayName": ""

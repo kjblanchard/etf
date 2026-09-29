@@ -1,5 +1,4 @@
 local c = require("constants")
-local d = require("engine.game")
 local graphics = {}
 local cachedTextures = {}
 ---Sets window settings

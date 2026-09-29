@@ -1,16 +1,25 @@
 local c = require("gameconfig")
 local s = require("engine.sound")
 local l = require("engine.log")
+local ui = require("engine.ui")
+local go = require("engine.gameobject")
 local game = {}
 
 local cachedMaps = {}
+local cachedUIFiles = {}
 
 function game.PreloadAllScenes()
   --Load all the maps
-  for sceneName, _ in pairs(c.Scenes) do
+  for sceneName, sceneObject in pairs(c.Scenes) do
     if not cachedMaps[sceneName] then
       cachedMaps[sceneName] = Scene.LoadScene(sceneName)
     end
+    if sceneObject.UI ~= "" and not cachedUIFiles[sceneObject.UI] then
+      l.Debug("caching ui" .. sceneObject.UI)
+      ui.CreateUIFromLuaFile("ui." .. sceneObject.UI)
+      cachedUIFiles[sceneObject.UI] = true
+    end
+    ui.SetTopLevelNotVisible()
   end
 end
 
@@ -28,11 +37,9 @@ function game.LoadScene(name)
   if scene.BGM then
     s.PlayBgm(scene.BGM, scene.BGMVolume, -1)
   end
+  go.LoadGameObjectsFromTiledMap()
 end
 
-function game.GetGameObjectsFromTiledMap()
-  return Scene.GetGameObjectData()
-end
 
 function game.DebugSetBreak()
   local d = require 'debugger'

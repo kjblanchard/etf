@@ -8,13 +8,10 @@ e.GameObject.GameObjectLoadFuncs[cn.ObjectTypePlayer] = p.Create -- add to the g
 e.Graphics.SetLogicalWorld(c.WorldWidth, c.WorldHeight)
 e.Graphics.PreloadTextures()
 e.Animator.PreloadAnimatorData()
-e.Game.PreloadAllScenes()
 e.Sound.SetGameVolume(c.BGMVolume)
+e.UI.SetRoot(e.UI.CreateObject("Root", { 0, 0, 0, 0 }, nil, 0))
+e.Game.PreloadAllScenes()
 e.Game.LoadScene(c.DefaultScene)
-e.GameObject.LoadGameObjectsFromTiledMap()
---Testing UI
-local root = e.UI.CreateObject("Root", { 0, 0, 0, 0 }, nil, 0)
-e.UI.SetRoot(root)
-e.UI.CreateUIFromLuaFile("ui.debugTown")
+--Testing playing an animation
 local obj = e.UI.GetUIObject("thing2")
-e.Animator.PlayAnimation(obj.animator, "walkD", -1)
+e.Animator.PlayAnimation(obj.animator, "walkD")

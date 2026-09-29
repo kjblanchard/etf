@@ -19,8 +19,13 @@ function a.PreloadAnimatorData()
   end
 end
 
+---Plays a ui animation
+---@param animator lightuserdata the animator
+---@param name string anim name
+---@param loops integer|nil how many loops, -1 is loop forever and is defaulted
 function a.PlayAnimation(animator, name, loops)
-  if not animator then return end
+  if not animator or not name then return end
+  loops = loops or -1
   Animator.PlayAnimation(animator, name, loops)
 end
 

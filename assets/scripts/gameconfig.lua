@@ -16,19 +16,19 @@ config.Scenes = {
     Display = ""
   },
   cloud = {
-    UI = "cloudU",
+    UI = "",
     BGM = "town1",
     BGMVolume = 1.0,
     Display = ""
   },
   debugTown = {
-    UI = "debugTownU",
+    UI = "debugTown",
     BGM = "town2",
     BGMVolume = 1.0,
     Display = "Debug Town"
   },
   debugSouth = {
-    UI = "",
+    UI = "debugTown",
     BGM = "forest1",
     BGMVolume = 1.0,
     Display = "Shotka Trail"
