@@ -66,6 +66,12 @@ function ui.CreateAnimator(o, sp, animator)
   return UI.CreateUIAnimator(o, sp, animator)
 end
 
+function ui.CreateNineslice(o, tx, color, offset)
+  color = color or { 255, 255, 255, 255 }
+  offset = offset or { 8, 9 }
+  return UI.CreateNineSlice(o, tx, color, offset)
+end
+
 function ui.DrawObject(o)
   UI.DrawUIObject(o)
 end
@@ -100,14 +106,24 @@ local function handleUIAnimatorCreation(data, objectTable)
   ui.CreateAnimator(objectTable.userdata, s, a)
 end
 
+local function handleUINinesliceCreation(data, objectTable)
+  objectTable.t = "nineslice"
+  local tx = gfx.LoadTextureFromPng(data.file)
+  local nineslice = ui.CreateNineslice(objectTable.userdata, tx, data.color)
+  objectTable.nineslice = nineslice
+end
+
 local function handlUITypeCreation(data, objectTable)
   local t = data.t or "panel"
   if t == "image" then
     handleUIImageCreation(data, objectTable)
   elseif t == "anim" then
     handleUIAnimatorCreation(data, objectTable)
+  elseif t == "nineslice" then
+    handleUINinesliceCreation(data, objectTable)
   end
 end
+
 
 local function createUIObjectsRecursive(data, parentTable)
   for panelKey, panelObj in pairs(data) do

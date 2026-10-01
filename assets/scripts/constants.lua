@@ -1,5 +1,5 @@
 local c            = {}
-c.PreloadTextures  = { "player1" }
+c.PreloadTextures  = { "player1", "uibase" }
 c.PreloadAnimators = { "player1" }
 c.ObjectTypePlayer = 4
 

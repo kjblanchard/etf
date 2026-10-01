@@ -1,13 +1,21 @@
 return {
   DebugTownPanel = {
     children = {
-      thing1 = {
-        t = "image",
-        file = "player1",
-        priority = 1,
-        color = { 80, 0, 120, 235 },
-        rect = { 5, 5, 8, 8 },
-        srcRect = { 0, 0, 26, 36 }
+      testniner = {
+        t = "nineslice",
+        file = "uibase",
+        color = { 60, 0, 100, 245 },
+        rect = { 0, 0, 30, 30 },
+        children = {
+          thing1 = {
+            t = "image",
+            file = "player1",
+            priority = 1,
+            color = { 255, 255, 255, 235 },
+            rect = { 5, 5, 8, 8 },
+            srcRect = { 0, 0, 26, 36 }
+          },
+        },
       },
       thing2 = {
         t = "anim",
