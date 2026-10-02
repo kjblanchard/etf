@@ -15,6 +15,15 @@ return {
             rect = { 5, 5, 8, 8 },
             srcRect = { 0, 0, 26, 36 }
           },
+          thing3 = {
+            t = "text",
+            text = "Hello world!",
+            size = 16,
+            priority = 0,
+            color = { 255, 255, 255, 255 },
+            rect = { 0, 0, 144, 144 },
+            centered = true
+          }
         },
       },
       thing2 = {

@@ -2,6 +2,7 @@ local gs = require("gamestate")
 local gfx = require("engine.graphics")
 local sprite = require("engine.sprite")
 local anim = require("engine.animator")
+local constants = require("constants")
 local ui = {}
 
 local gameUI = {}
@@ -66,6 +67,14 @@ function ui.CreateAnimator(o, sp, animator)
   return UI.CreateUIAnimator(o, sp, animator)
 end
 
+function ui.CreateText(o, tx, sz, font, centered, color)
+  font = font or constants.DefaultFontName
+  centered = centered == nil and true or centered
+  color = color or { 255, 255, 255, 255 }
+  sz = sz or 12
+  return UI.CreateUIText(o, tx, font, sz, centered, color)
+end
+
 function ui.CreateNineslice(o, tx, color, offset)
   color = color or { 255, 255, 255, 255 }
   offset = offset or { 8, 9 }
@@ -96,6 +105,12 @@ local function handleUIImageCreation(data, objectTable)
   ui.CreateImage(objectTable.userdata, s)
 end
 
+local function handleUITextCreation(data, objectTable)
+  objectTable.t = "text"
+  local tx = ui.CreateText(objectTable.userdata, data.text, data.size, data.font, data.centered, data.color)
+  objectTable.text = tx
+end
+
 local function handleUIAnimatorCreation(data, objectTable)
   objectTable.t = "anim"
   local tx = gfx.LoadTextureFromPng(data.file)
@@ -121,6 +136,8 @@ local function handlUITypeCreation(data, objectTable)
     handleUIAnimatorCreation(data, objectTable)
   elseif t == "nineslice" then
     handleUINinesliceCreation(data, objectTable)
+  elseif t == "text" then
+    handleUITextCreation(data, objectTable)
   end
 end
 
